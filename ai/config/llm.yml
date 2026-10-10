@@ -1,0 +1,13 @@
+profiles:
+  default:
+    provider: gemini
+    model: gemini-2.5-flash
+    api_key_env: GEMINI_API_KEY
+  deepseek:
+    provider: deepseek
+    model: deepseek-chat
+    api_key_env: DEEPSEEK_API_KEY
+  openai:
+    provider: openai
+    model: gpt-4o
+    api_key_env: OPENAI_API_KEY

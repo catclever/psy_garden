@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soul Garden - Warm Aesthetics</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-layout">
+        
+        <!-- 环境滤镜层 (全局暖光/天气/时间) -->
+        <div class="env-filter-overlay time-sunset"></div>
+
+        <!-- 层级 1: 世界层 (The Garden, 2.5D 透视) -->
+        <div class="layer-world">
+            <div class="world-3d-container">
+                <!-- 纯背景网格层，带有渐隐遮罩 (单独抽离以防打破3D上下文) -->
+                <div class="grid-bg"></div>
+                
+                <!-- 香炉依然是固定在中间的地标 -->
+                <div class="incense-node" style="top: 50%; left: 50%;">
+                    [燃香实体]
+                </div>
+                
+                <!-- 动态花园种植床 -->
+                <div id="world-plants"></div>
+            </div>
+        </div>
+
+        <!-- 层级 2: HUD 最高层 -->
+        <div class="layer-hud">
+            
+            <!-- 魔法变色控制台 -->
+            <div class="ui-magic-buttons">
+                <button class="magic-btn" onclick="randomizeGarden()">🎲 重新随机生成花园 (30株)</button>
+                <button class="magic-btn" onclick="setGlobalTint('tint-gold')">全局染：金色回想</button>
+                <button class="magic-btn" onclick="setGlobalTint('tint-cyan')">全局沉浸：开启心流模式 ✨</button>
+            </div>
+        </div>
+
+        <!-- 层级 3: 终极沉浸模式 (Ambient Glass Backdrop) -->
+        <div id="focus-mode-ui" class="ambient-glass-overlay">
+            <button class="magic-btn close-focus-btn" onclick="document.getElementById('focus-mode-ui').style.display='none'">退出心流模式</button>
+            
+            <!-- 左侧：记忆之池 (History Stream) -->
+            <div class="focus-history-col">
+                <div class="focus-history-stream">
+                    <!-- 虚构的对话记录用于排版演示 -->
+                    <div class="focus-msg ai">在这个赛博花园里，每一株植物都映射着一段情绪的碎片。</div>
+                    <div class="focus-msg user">我今天终于把那个纠结了很久的问题想清楚了，感觉心里一块石头落地。</div>
+                    <div class="focus-msg ai">我感受到了一束明亮的金光。我已经将它化作一颗种子。</div>
+                    <div class="focus-msg user">所以那些双色的竹林，其实是我过去的记忆？</div>
+                    <div class="focus-msg ai">是的，你随时可以回到这里，它们会一直在霓虹中呼吸。</div>
+                </div>
+            </div>
+            
+            <!-- 右侧：心流输入舱 (Flow Input Area) -->
+            <div class="focus-input-col">
+                <textarea class="flow-textarea" placeholder="把你的思绪投射到这片发光的环境中... (支持长文书写)"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const splitTemplates = ["plant-banana-split", "plant-bamboo-split", "plant-mushroom-split", "plant-fern-split", "plant-bonsai-split", "plant-lily-split"];
+        const tints = ["tint-gold", "tint-cyan", "tint-magenta", "tint-ghost", "tint-emerald"];
+
+        function randomizeGarden() {
+            const gardenBed = document.getElementById("world-plants");
+            gardenBed.innerHTML = ''; // 清空现有植物
+
+            // 种下 30 棵多层组合植物
+            for (let i = 0; i < 30; i++) {
+                const species = splitTemplates[Math.floor(Math.random() * splitTemplates.length)];
+                
+                // 坐标随机散布
+                const top = 15 + Math.random() * 70;
+                const left = 10 + Math.random() * 80;
+                const zIndex = Math.floor(top * 10);
+
+                const plant = document.createElement("div");
+                plant.className = "plant-node";
+                plant.style.top = `${top}%`;
+                plant.style.left = `${left}%`;
+                plant.style.zIndex = zIndex;
+
+                const sprite = document.createElement("div");
+                sprite.className = `plant-sprite ${species}`;
+                
+                // 给每个通道分配随机滤镜
+                const t1 = tints[Math.floor(Math.random() * tints.length)];
+                const t2 = tints[Math.floor(Math.random() * tints.length)];
+                const t3 = tints[Math.floor(Math.random() * tints.length)];
+
+                if (species === "plant-banana-split") {
+                    // 香蕉树有三个通道：树干(Red), 叶子(Green), 香蕉(Blue)
+                    sprite.innerHTML = `
+                        <div class="sprite-layer layer-red ${t1}"></div>
+                        <div class="sprite-layer layer-green ${t2}"></div>
+                        <div class="sprite-layer layer-blue ${t3}"></div>
+                    `;
+                } else if (species === "plant-lily-split") {
+                    sprite.innerHTML = `
+                        <div class="sprite-layer layer-stem ${t1}"></div>
+                        <div class="sprite-layer layer-flower ${t2}"></div>
+                    `;
+                } else {
+                    // 其他植物只有两个通道：Red 和 Green
+                    sprite.innerHTML = `
+                        <div class="sprite-layer layer-red ${t1}"></div>
+                        <div class="sprite-layer layer-green ${t2}"></div>
+                    `;
+                }
+                
+                plant.appendChild(sprite);
+                gardenBed.appendChild(plant);
+            }
+        }
+
+        function setGlobalTint(targetTint) {
+            if (targetTint === 'tint-cyan') {
+                document.getElementById('focus-mode-ui').style.display = 'flex';
+                return;
+            }
+            const sprites = document.querySelectorAll('#world-plants .plant-sprite');
+            sprites.forEach(sprite => {
+                const species = Array.from(sprite.classList).find(c => c.startsWith('plant-') && c !== 'plant-sprite');
+                sprite.className = `plant-sprite ${species} ${targetTint}`;
+            });
+        }
+
+        // 初始化时立刻生成一波
+        document.addEventListener("DOMContentLoaded", randomizeGarden);
+    </script>
+</body>
+</html>

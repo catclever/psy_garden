@@ -1,0 +1,398 @@
+/* 全局基础重置 */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body, html {
+    width: 100%;
+    height: 100%;
+    /* 背景色改为去除了红相的干草/原野黄土色 (Hue 45) */
+    background: linear-gradient(to bottom, #b4a578 0%, #82734b 100%); 
+    color: #3b2a1a; /* 保持深褐色文字以保证可读性 */
+    font-family: "Noto Serif SC", serif; /* 优雅的字体 */
+    overflow: hidden;
+}
+
+.app-layout {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+/* =========================================
+   全局环境与时间滤镜 (为后续天气/时间预留)
+========================================= */
+.env-filter-overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 20; /* 覆盖在所有事物之上，进行全局调色 */
+}
+
+/* 模拟“暖光/黄昏”的滤镜 */
+.time-sunset {
+    background: linear-gradient(135deg, rgba(255, 170, 100, 0.15) 0%, rgba(255, 100, 50, 0.1) 100%);
+    mix-blend-mode: soft-light;
+}
+
+/* =========================================
+   层级 1: 世界层 (2.5D 立体感核心)
+========================================= */
+.layer-world {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    perspective: 1200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+/* 承担 3D 旋转的父容器，必须保留 3D 属性 */
+.world-3d-container {
+    position: absolute;
+    width: 200vw;
+    height: 200vh;
+    transform: rotateX(60deg) rotateZ(45deg);
+    transform-style: preserve-3d;
+}
+
+/* 动态植物群落的父级包裹，必须透传 3D 属性！否则子元素会被降维拍平 */
+#world-plants {
+    position: absolute;
+    inset: 0;
+    transform-style: preserve-3d;
+    pointer-events: none;
+}
+#world-plants .plant-node {
+    pointer-events: auto;
+}
+
+/* 专门用来画网格和遮罩的底板，被拍平也没关系，因为它就是平的 */
+.grid-bg {
+    position: absolute;
+    inset: 0;
+    
+    /* 调整为超细密微型网格 (10px)，赋予极高的摆放自由度 */
+    background-image: 
+        linear-gradient(rgba(180, 140, 100, 0.15) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(180, 140, 100, 0.15) 1px, transparent 1px);
+    background-size: 10px 10px;
+    background-position: center;
+    
+    /* 径向渐隐，只作用于背景层，不会破坏兄弟节点的 3D 空间 */
+    mask-image: radial-gradient(circle at center, white 10%, transparent 50%);
+    -webkit-mask-image: radial-gradient(circle at center, white 10%, transparent 50%);
+}
+
+/* 共用 Billboard 抗畸变属性 */
+.billboard-object {
+    position: absolute;
+    transform-origin: bottom center;
+    /* 修复“倒立”问题：顺序调整为先反转 Z 再反转 X */
+    transform: translate(-50%, -100%) rotateZ(-45deg) rotateX(-60deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    font-family: sans-serif;
+}
+
+/* 植物节点 (视觉呈现高度，不需要物理 3D 盒子) */
+/* =========================================
+   架构升级：物理占地(Anchor) 与 视觉立绘(Sprite) 分离
+========================================= */
+
+/* 1. 占地锚点：仅负责在网格上的定位，没有物理宽高，是一个纯粹的坐标原点 */
+.plant-node {
+    position: absolute;
+    width: 0;
+    height: 0;
+    /* 必须透传 3D！否则子元素立绘在这一层会被无情地拍平！ */
+    transform-style: preserve-3d;
+}
+
+/* 2. 视觉立绘精灵图：从锚点处生长出来，并进行 3D 逆向旋转以面对镜头 */
+.plant-sprite {
+    position: absolute;
+    bottom: 0; /* 根部对齐坐标原点 */
+    left: 50%;
+    transform-origin: bottom center;
+    /* 核心 2.5D 奥秘：由于锚点本身在倾斜的网格里，立绘必须反向旋转Z和X以面朝镜头 */
+    transform: translate(-50%, 0) rotateZ(-45deg) rotateX(-60deg);
+    transition: transform 0.3s ease, filter 0.3s ease;
+    cursor: pointer;
+    
+    background-size: contain;
+    background-position: bottom center;
+    background-repeat: no-repeat;
+    
+    /* 悬浮时的呼吸感 */
+    animation: plantHover 4s infinite ease-in-out alternate;
+}
+
+.plant-sprite:hover {
+    transform: translate(-50%, 0) rotateZ(-45deg) rotateX(-60deg) scale(1.05);
+    filter: brightness(1.2);
+}
+
+@keyframes plantHover {
+    from { transform: translate(-50%, 0) rotateZ(-45deg) rotateX(-60deg) translateY(0px); }
+    to { transform: translate(-50%, 0) rotateZ(-45deg) rotateX(-60deg) translateY(-8px); }
+}
+
+/* 各类植物的精灵图具体宽高 (这就是纯视觉大小，体现物种自身的比例) */
+/* 🍄 蘑菇：最小，占地 1x1 格 (按新微型网格比例缩小) */
+/* MISSING ASSET: .plant-sprite.plant-mushroom { background-image: url('assets/plants/mushroom/v_uncut/plant_mushroom.png'); width: 40px; height: 40px; } */
+/* 🌸 百合：单株花卉，比蘑菇稍高 */
+/* MISSING ASSET: .plant-sprite.plant-lily     { background-image: url('assets/plants/lily/v_uncut/plant_lily.png');     width: 45px; height: 60px; } */
+/* 🌸👑 双色百合 (RGB语义拆分测试版) */
+.plant-sprite.plant-lily-split { width: 50px; height: 75px; } 
+.plant-sprite.plant-lily-split .layer-flower { background-image: url('assets/plants/lily/v_rgb/plant_lily_multi_red.png'); }
+.plant-sprite.plant-lily-split .layer-stem   { background-image: url('assets/plants/lily/v_rgb/plant_lily_multi_green.png'); }
+
+/* RGB Split classes for all plants */
+.plant-sprite.plant-banana-split { width: 125px; height: 150px; }
+.plant-sprite.plant-banana-split .layer-red { background-image: url('assets/plants/banana/v_rgb/plant_banana_multi_red.png'); }
+.plant-sprite.plant-banana-split .layer-green { background-image: url('assets/plants/banana/v_rgb/plant_banana_multi_green.png'); }
+.plant-sprite.plant-banana-split .layer-blue { background-image: url('assets/plants/banana/v_rgb/plant_banana_multi_blue.png'); }
+
+.plant-sprite.plant-bamboo-split { width: 175px; height: 210px; }
+.plant-sprite.plant-bamboo-split .layer-red { background-image: url('assets/plants/bamboo/v_rgb/plant_bamboo_multi_red.png'); }
+.plant-sprite.plant-bamboo-split .layer-green { background-image: url('assets/plants/bamboo/v_rgb/plant_bamboo_multi_green.png'); }
+
+.plant-sprite.plant-mushroom-split { width: 40px; height: 40px; }
+.plant-sprite.plant-mushroom-split .layer-red { background-image: url('assets/plants/mushroom/v_rgb/plant_mushroom_multi_red.png'); }
+.plant-sprite.plant-mushroom-split .layer-green { background-image: url('assets/plants/mushroom/v_rgb/plant_mushroom_multi_green.png'); }
+
+.plant-sprite.plant-fern-split { width: 60px; height: 80px; }
+.plant-sprite.plant-fern-split .layer-red { background-image: url('assets/plants/fern/v_rgb/plant_fern_multi_red.png'); }
+.plant-sprite.plant-fern-split .layer-green { background-image: url('assets/plants/fern/v_rgb/plant_fern_multi_green.png'); }
+
+.plant-sprite.plant-bonsai-split { width: 90px; height: 90px; }
+.plant-sprite.plant-bonsai-split .layer-red { background-image: url('assets/plants/bonsai/v_rgb/plant_bonsai_multi_red.png'); }
+.plant-sprite.plant-bonsai-split .layer-green { background-image: url('assets/plants/bonsai/v_rgb/plant_bonsai_multi_green.png'); }
+
+/* Generic layer properties */
+.sprite-layer, .layer-flower, .layer-stem, .layer-red, .layer-green, .layer-blue {
+    position: absolute;
+    inset: 0;
+    background-size: contain;
+    background-position: bottom center;
+    background-repeat: no-repeat;
+    transition: filter 1.5s ease-in-out;
+}
+
+
+
+/* 高级材质染色滤镜：由于现在底图是真实的灰度素描，只需简单的 sepia 和 hue-rotate 就能完美上色 */
+.tint-gold    { filter: drop-shadow(0 0 8px rgba(255, 200, 0, 0.4))   sepia(1) hue-rotate(0deg)   saturate(4) brightness(1.1); }
+.tint-cyan    { filter: drop-shadow(0 0 8px rgba(0, 255, 255, 0.4))  sepia(1) hue-rotate(150deg) saturate(4) brightness(1.1); }
+.tint-magenta { filter: drop-shadow(0 0 8px rgba(255, 0, 255, 0.4))  sepia(1) hue-rotate(270deg) saturate(4) brightness(1.1); }
+.tint-emerald { filter: drop-shadow(0 0 8px rgba(0, 255, 100, 0.4))  sepia(1) hue-rotate(90deg)  saturate(4) brightness(1.1); }
+.tint-ghost   { filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.6)) grayscale(1) brightness(1.5); }
+
+/* 多部位精确涂色魔法 (Gradient Masking) */
+.color-overlay {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 1s ease;
+    /* 核心：用遮罩约束形状，用混合模式叠加颜色 */
+    mix-blend-mode: color;
+    -webkit-mask-image: url('assets/plants/banana/v_uncut/plant_banana.png');
+    -webkit-mask-size: contain;
+    -webkit-mask-position: bottom center;
+    -webkit-mask-repeat: no-repeat;
+}
+
+/* 当赋予 tint-multi 时，清除全局 filter，显示渐变叠加层 */
+.plant-sprite.plant-banana.tint-multi { filter: none; }
+.plant-sprite.plant-banana.tint-multi .color-overlay {
+    opacity: 1;
+    /* 颜色分布：0-30% 是树干的深褐色，40-60% 是香蕉果实的明黄色，60-100% 是宽叶的荧光绿 */
+    background: linear-gradient(to top, #5c3a21 0%, #5c3a21 30%, #ffcc00 50%, #00ff66 80%);
+}
+
+/* 燃香节点 */
+.incense-node {
+    position: absolute;
+    transform-origin: bottom center;
+    transform: translate(-50%, -100%) rotateZ(-45deg) rotateX(-60deg);
+    
+    width: 20px;
+    height: 250px;
+    background: rgba(200, 100, 80, 0.2);
+    border: 2px solid #c86450;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    writing-mode: vertical-rl;
+    color: #c86450;
+    font-size: 1rem;
+    letter-spacing: 4px;
+    box-shadow: 0 20px 40px rgba(200, 100, 80, 0.3);
+}
+
+/* =========================================
+   层级 2: HUD 最高层
+========================================= */
+.layer-hud {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    pointer-events: none; 
+}
+
+/* 魔法变色按钮样式 */
+.ui-magic-buttons {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    pointer-events: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.magic-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-family: serif;
+    backdrop-filter: blur(5px);
+    transition: all 0.3s;
+}
+
+.magic-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+/* =========================================
+   层级 3: 终极沉浸模式 (Ambient Glass Focus Mode)
+========================================= */
+.ambient-glass-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    /* 更亮、更绿的高透明玻璃板 */
+    background: rgba(20, 95, 45, 0.35); 
+    /* 降低了模糊强度，保留更多背后植物的轮廓，避免完全打散成色块 */
+    backdrop-filter: blur(24px) saturate(150%);
+    -webkit-backdrop-filter: blur(24px) saturate(150%);
+    
+    display: none; /* 默认隐藏，通过按钮 flex 显示 */
+    align-items: stretch; /* 左右两栏撑满高度 */
+    
+    /* 优雅的淡入动画 */
+    animation: fadeInFocus 0.6s ease-out forwards;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    
+    /* 可选：加一点极细的内部高光边缘，增强“玻璃罩”的物理质感 */
+    box-shadow: inset 0 0 100px rgba(10, 120, 50, 0.25);
+}
+
+@keyframes fadeInFocus {
+    from { opacity: 0; backdrop-filter: blur(0px) saturate(100%); }
+    to { opacity: 1; backdrop-filter: blur(24px) saturate(150%); }
+}
+
+.close-focus-btn {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    z-index: 1010;
+}
+
+/* 左侧：记忆之池 */
+.focus-history-col {
+    flex: 1; /* 占据左侧 50% */
+    padding: 80px 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; /* 从下往上排布 */
+    
+    /* 渐隐遮罩魔法：顶部 15% 区域平滑渐隐 */
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 100%);
+    mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 100%);
+    
+    /* 中间的柔和分割线 */
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.focus-history-stream {
+    max-height: 100%;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    scrollbar-width: none; /* Firefox 隐藏滚动条 */
+}
+.focus-history-stream::-webkit-scrollbar { display: none; } /* Chrome 隐藏滚动条 */
+
+.focus-msg {
+    font-size: 16px;
+    line-height: 1.7;
+    max-width: 85%;
+    letter-spacing: 0.5px;
+}
+
+.focus-msg.user {
+    align-self: flex-end;
+    color: rgba(255, 255, 255, 0.95);
+    background: rgba(255, 255, 255, 0.1);
+    padding: 16px 24px;
+    border-radius: 20px 20px 4px 20px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.focus-msg.ai {
+    align-self: flex-start;
+    color: rgba(255, 255, 255, 0.7);
+    text-shadow: 0 2px 10px rgba(255, 255, 255, 0.1);
+}
+
+/* 右侧：心流输入舱 */
+.focus-input-col {
+    flex: 1; /* 占据右侧 50% */
+    padding: 0;
+    display: flex;
+}
+
+.flow-textarea {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: rgba(255, 255, 255, 0.95);
+    font-size: 20px;
+    line-height: 2;
+    resize: none;
+    padding: 80px 60px;
+    font-family: inherit;
+    /* 给文字轻微的投影，确保在背后光晕极亮时依然可读 */
+    text-shadow: 0 2px 8px rgba(0,0,0,0.6); 
+}
+
+.flow-textarea::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+    text-shadow: none;
+}
+
+/* CSS Output for plant_0000 (Variant: 1791079136) */
+.plant-sprite.plant-plant_0000-v1791079136 { width: 125px; height: 125px; }
+.plant-sprite.plant-plant_0000-v1791079136 .layer-red { background-image: url('assets/plants/plant_0000/1791079136/layer_red.png'); }
+.plant-sprite.plant-plant_0000-v1791079136 .layer-green { background-image: url('assets/plants/plant_0000/1791079136/layer_green.png'); }
+
+/* CSS Output for plant_0009 (Variant: 1791079165) */
+.plant-sprite.plant-plant_0009-v1791079165 { width: 106px; height: 125px; }
+.plant-sprite.plant-plant_0009-v1791079165 .layer-red { background-image: url('assets/plants/plant_0009/1791079165/layer_red.png'); }
+.plant-sprite.plant-plant_0009-v1791079165 .layer-green { background-image: url('assets/plants/plant_0009/1791079165/layer_green.png'); }

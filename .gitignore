@@ -1,0 +1,10 @@
+.DS_Store
+.agent/
+.agents/
+.vscode
+tools/.venv/
+raw_assets/
+
+#dev
+docs/
+dev/

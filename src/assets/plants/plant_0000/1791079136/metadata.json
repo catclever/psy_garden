@@ -1,0 +1,11 @@
+{
+    "name": "plant_0000",
+    "variant_id": "1791079136",
+    "width": 250,
+    "height": 250,
+    "layers": [
+        "layer-red",
+        "layer-green"
+    ],
+    "created_at": 1791079136
+}
