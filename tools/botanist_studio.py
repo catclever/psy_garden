@@ -14,21 +14,29 @@ PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CANDIDATES_DIR = os.path.join(PROJECT_ROOT, 'tools', 'candidates')
 TRASH_DIR = os.path.join(PROJECT_ROOT, 'tools', 'trash')
 PLANTS_DIR = os.path.join(PROJECT_ROOT, 'src', 'assets', 'plants')
+CONFIRMED_CANDIDATES_FILE = os.path.join(PROJECT_ROOT, 'tools', 'confirmed_candidates.json')
 CONFIRMED_PLANTS_FILE = os.path.join(PROJECT_ROOT, 'tools', 'confirmed_plants.json')
 
-def get_confirmed_plants():
-    if os.path.exists(CONFIRMED_PLANTS_FILE):
+def get_confirmed_candidates():
+    target_file = CONFIRMED_CANDIDATES_FILE if os.path.exists(CONFIRMED_CANDIDATES_FILE) else CONFIRMED_PLANTS_FILE
+    if os.path.exists(target_file):
         try:
-            with open(CONFIRMED_PLANTS_FILE, 'r', encoding='utf-8') as f:
+            with open(target_file, 'r', encoding='utf-8') as f:
                 return json.load(f)
         except Exception:
             return {}
     return {}
 
-def save_confirmed_plants(data):
-    os.makedirs(os.path.dirname(CONFIRMED_PLANTS_FILE), exist_ok=True)
-    with open(CONFIRMED_PLANTS_FILE, 'w', encoding='utf-8') as f:
+def save_confirmed_candidates(data):
+    os.makedirs(os.path.dirname(CONFIRMED_CANDIDATES_FILE), exist_ok=True)
+    with open(CONFIRMED_CANDIDATES_FILE, 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
+    # Also sync to confirmed_plants.json for backward compatibility
+    try:
+        with open(CONFIRMED_PLANTS_FILE, 'w', encoding='utf-8') as f:
+            json.dump(data, f, ensure_ascii=False, indent=2)
+    except Exception:
+        pass
 
 HTML_CONTENT = """
 <!DOCTYPE html>
@@ -412,9 +420,12 @@ HTML_CONTENT = """
                     <button id="tabCandidatesBtn" class="tab-btn active" onclick="switchLeftTab('candidates')">📥 备选审批区 <span id="candidateCount" class="badge">0</span></button>
                     <button id="tabTrashBtn" class="tab-btn" onclick="switchLeftTab('trash')">🗑️ 回收区 <span id="trashCount" class="badge">0</span></button>
                 </div>
-                <button id="emptyTrashBtn" class="btn-danger" style="display:none; padding:6px 12px; flex:none; font-size:12px;" onclick="purgeAllTrash()">🧹 一键清空</button>
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <span id="confirmedCandidateBadge" class="badge" style="background:#f2cc6022; color:#f2cc60; border:1px solid #f2cc6044;">已确认: <span id="confirmedCount">0</span></span>
+                    <button id="emptyTrashBtn" class="btn-danger" style="display:none; padding:6px 12px; flex:none; font-size:12px;" onclick="purgeAllTrash()">🧹 一键清空</button>
+                </div>
             </div>
-            <p class="subtitle" id="leftSubtitle">由 Agent 生成的原始画作，点击入库或移入回收区。</p>
+            <p class="subtitle" id="leftSubtitle">单击植物图片可切换【已确认】（金色高亮）；后台持久化记录，自动化脚本可精准读取处理。</p>
             <div class="gallery" id="candidatesGallery">
                 <div class="empty-state">正在加载...</div>
             </div>
@@ -428,11 +439,10 @@ HTML_CONTENT = """
             <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #30363d; padding-bottom:12px; margin-bottom:15px;">
                 <h1 style="border:none; margin:0; padding:0; font-size:20px;">📦 资产画廊 (Asset Gallery)</h1>
                 <div style="display:flex; align-items:center; gap:8px;">
-                    <span class="badge" style="background:#f2cc6022; color:#f2cc60; border:1px solid #f2cc6044;">已确认: <span id="confirmedCount">0</span></span>
                     <span class="badge" id="assetsTotalCount">0 资产</span>
                 </div>
             </div>
-            <p class="subtitle">单击植物图片可标记为【确认资产】（金色边框并持久化记录）；点击图层标牌可拆解检视各层。</p>
+            <p class="subtitle">已切片入库资产；点击图层标牌可拆解检视各独立分层。</p>
             <div class="gallery" id="assetsGallery">
                 <div class="empty-state">正在加载...</div>
             </div>
@@ -491,6 +501,7 @@ HTML_CONTENT = """
 
     <script>
         let currentLeftTab = 'candidates';
+        let confirmedCandidates = {};
 
         function switchLeftTab(tab) {
             currentLeftTab = tab;
@@ -499,6 +510,7 @@ HTML_CONTENT = """
             const cBtn = document.getElementById('tabCandidatesBtn');
             const tBtn = document.getElementById('tabTrashBtn');
             const emptyBtn = document.getElementById('emptyTrashBtn');
+            const confBadge = document.getElementById('confirmedCandidateBadge');
             const subtitle = document.getElementById('leftSubtitle');
 
             if (tab === 'candidates') {
@@ -507,45 +519,56 @@ HTML_CONTENT = """
                 cBtn.classList.add('active');
                 tBtn.classList.remove('active');
                 emptyBtn.style.display = 'none';
-                subtitle.innerText = '由 Agent 生成的原始画作，点击入库或移入回收区。';
+                if (confBadge) confBadge.style.display = 'inline-flex';
+                subtitle.innerText = '单击植物图片可切换【已确认】（金色高亮）；后台持久化记录，自动化脚本可精准读取处理。';
             } else {
                 cGal.style.display = 'none';
                 tGal.style.display = 'grid';
                 cBtn.classList.remove('active');
                 tBtn.classList.add('active');
                 emptyBtn.style.display = 'block';
+                if (confBadge) confBadge.style.display = 'none';
                 subtitle.innerText = '已移入回收区的草稿，可点击恢复重新待审，或彻底抹除。';
             }
         }
 
-        let confirmedPlants = {};
-
         function loadData() {
-            // Load Candidates
-            fetch('/api/candidates')
-                .then(res => res.json())
-                .then(data => {
-                    document.getElementById('candidateCount').innerText = data.length;
-                    const cGal = document.getElementById('candidatesGallery');
-                    cGal.innerHTML = '';
-                    if (data.length === 0) {
-                        cGal.innerHTML = '<div class="empty-state">暂无备选图，前往聊天框输入 /plant 召唤 Agent 画图</div>';
-                        return;
-                    }
-                    data.forEach(img => {
-                        const card = document.createElement('div');
-                        card.className = 'card';
-                        card.innerHTML = `
-                            <div class="img-container"><img src="/tools/candidates/${img}" /></div>
-                            <div class="title">${img}</div>
-                            <div class="action-row">
-                                <button onclick="openModal('${img}')">入库</button>
-                                <button class="btn-danger" onclick="deleteCandidate('${img}')">删除</button>
-                            </div>
-                        `;
-                        cGal.appendChild(card);
-                    });
+            // Load Candidates & Confirmed concurrently
+            Promise.all([
+                fetch('/api/candidates').then(res => res.json()),
+                fetch('/api/confirmed_candidates').then(res => res.json())
+            ]).then(([candidates, confirmed]) => {
+                confirmedCandidates = confirmed || {};
+                document.getElementById('candidateCount').innerText = candidates.length;
+                document.getElementById('confirmedCount').innerText = Object.keys(confirmedCandidates).length;
+                
+                const cGal = document.getElementById('candidatesGallery');
+                cGal.innerHTML = '';
+                if (candidates.length === 0) {
+                    cGal.innerHTML = '<div class="empty-state">暂无备选图，前往聊天框输入 /plant 召唤 Agent 画图</div>';
+                    return;
+                }
+                candidates.forEach(img => {
+                    const isConfirmed = !!confirmedCandidates[img];
+                    const card = document.createElement('div');
+                    card.className = 'card' + (isConfirmed ? ' confirmed' : '');
+                    card.style.cursor = 'pointer';
+                    card.title = '单击切换【已确认】选中状态';
+                    card.innerHTML = `
+                        <div class="confirmed-star" style="display:${isConfirmed ? 'block' : 'none'};">★ 已确认</div>
+                        <div class="img-container"><img src="/tools/candidates/${img}" /></div>
+                        <div class="title">${img}</div>
+                        <div class="action-row">
+                            <button onclick="event.stopPropagation(); openModal('${img}')">入库</button>
+                            <button class="btn-danger" onclick="event.stopPropagation(); deleteCandidate('${img}')">删除</button>
+                        </div>
+                    `;
+                    card.onclick = () => toggleConfirmCandidate(img, card);
+                    cGal.appendChild(card);
                 });
+            }).catch(err => {
+                console.error("加载备选图失败:", err);
+            });
 
             // Load Trash
             fetch('/api/trash')
@@ -573,92 +596,77 @@ HTML_CONTENT = """
                     });
                 });
                 
-            // Load Assets & Confirmed Plants concurrently
-            Promise.all([
-                fetch('/api/assets').then(r => r.json()),
-                fetch('/api/confirmed_plants').then(r => r.json())
-            ]).then(([assets, confirmed]) => {
-                confirmedPlants = confirmed || {};
-                const confirmedKeys = Object.keys(confirmedPlants);
-                document.getElementById('confirmedCount').innerText = confirmedKeys.length;
-                document.getElementById('assetsTotalCount').innerText = `${assets.length} 资产`;
-                
-                const aGal = document.getElementById('assetsGallery');
-                aGal.innerHTML = '';
-                if (assets.length === 0) {
-                    aGal.innerHTML = '<div class="empty-state">资产库为空</div>';
-                    return;
-                }
-                
-                assets.forEach(variant => {
-                    const cardKey = `${variant.plant_name}/${variant.variant_id}`;
-                    const isConfirmed = !!confirmedPlants[cardKey];
+            // Load Assets
+            fetch('/api/assets')
+                .then(res => res.json())
+                .then(assets => {
+                    document.getElementById('assetsTotalCount').innerText = `${assets.length} 资产`;
                     
-                    const card = document.createElement('div');
-                    card.className = 'card' + (isConfirmed ? ' confirmed' : '');
-                    card.style.cursor = 'pointer';
-                    card.title = '单击切换【已确认】选中状态';
+                    const aGal = document.getElementById('assetsGallery');
+                    aGal.innerHTML = '';
+                    if (assets.length === 0) {
+                        aGal.innerHTML = '<div class="empty-state">资产库为空</div>';
+                        return;
+                    }
                     
-                    let imagesHtml = '';
-                    let colorIndex = 0;
-                    const fallbackColors = ['layer-red', 'layer-green', 'layer-blue'];
-                    variant.layers.forEach(layer => {
-                        let cssClass = '';
-                        if (layer.includes('red') || layer.includes('flower') || layer.includes('cap') || layer.includes('leaves')) {
-                            cssClass = 'layer-red';
-                        } else if (layer.includes('green') || layer.includes('stem') || layer.includes('trunk')) {
-                            cssClass = 'layer-green';
-                        } else if (layer.includes('blue') || layer.includes('accent')) {
-                            cssClass = 'layer-blue';
-                        } else {
-                            cssClass = fallbackColors[colorIndex % 3];
-                            colorIndex++;
-                        }
+                    assets.forEach(variant => {
+                        const card = document.createElement('div');
+                        card.className = 'card';
+                        card.style.cursor = 'pointer';
                         
-                        imagesHtml += `<img src="/assets/plants/${variant.path_prefix}/${layer}" class="${cssClass}" />`;
-                    });
-                    
-                    const hasAlias = variant.display_name && variant.display_name !== variant.plant_name;
-                    const titleHtml = hasAlias 
-                        ? `${variant.display_name} <span style="font-size:11px; color:#8b949e; font-weight:normal;">(${variant.plant_name})</span>` 
-                        : variant.plant_name;
-                    
-                    const variantDataStr = JSON.stringify(variant).replace(/"/g, '&quot;');
+                        let imagesHtml = '';
+                        let colorIndex = 0;
+                        const fallbackColors = ['layer-red', 'layer-green', 'layer-blue'];
+                        variant.layers.forEach(layer => {
+                            let cssClass = '';
+                            if (layer.includes('red') || layer.includes('flower') || layer.includes('cap') || layer.includes('leaves')) {
+                                cssClass = 'layer-red';
+                            } else if (layer.includes('green') || layer.includes('stem') || layer.includes('trunk')) {
+                                cssClass = 'layer-green';
+                            } else if (layer.includes('blue') || layer.includes('accent')) {
+                                cssClass = 'layer-blue';
+                            } else {
+                                cssClass = fallbackColors[colorIndex % 3];
+                                colorIndex++;
+                            }
+                            
+                            imagesHtml += `<img src="/assets/plants/${variant.path_prefix}/${layer}" class="${cssClass}" />`;
+                        });
+                        
+                        const hasAlias = variant.display_name && variant.display_name !== variant.plant_name;
+                        const titleHtml = hasAlias 
+                            ? `${variant.display_name} <span style="font-size:11px; color:#8b949e; font-weight:normal;">(${variant.plant_name})</span>` 
+                            : variant.plant_name;
+                        
+                        const variantDataStr = JSON.stringify(variant).replace(/"/g, '&quot;');
 
-                    card.innerHTML = `
-                        <div class="confirmed-star" style="display:${isConfirmed ? 'block' : 'none'};">★ 已确认</div>
-                        <div class="img-container">${imagesHtml}</div>
-                        <div class="title" style="margin-top:2px;">${titleHtml}</div>
-                        <div class="subtitle" style="margin-top:2px;">Variant: ${variant.variant_id}</div>
-                        <div style="margin-top:6px;">
-                            <span class="layer-badge-btn" onclick="event.stopPropagation(); openLayerModal(${variantDataStr})">
-                                🧩 ${variant.layers.length} 个独立图层 ↗
-                            </span>
-                        </div>
-                    `;
-                    
-                    card.onclick = () => toggleConfirmPlant(variant, card);
-                    aGal.appendChild(card);
+                        card.innerHTML = `
+                            <div class="img-container">${imagesHtml}</div>
+                            <div class="title" style="margin-top:2px;">${titleHtml}</div>
+                            <div class="subtitle" style="margin-top:2px;">Variant: ${variant.variant_id}</div>
+                            <div style="margin-top:6px;">
+                                <span class="layer-badge-btn" onclick="event.stopPropagation(); openLayerModal(${variantDataStr})">
+                                    🧩 ${variant.layers.length} 个独立图层 ↗
+                                </span>
+                            </div>
+                        `;
+                        
+                        card.onclick = () => openLayerModal(variant);
+                        aGal.appendChild(card);
+                    });
+                }).catch(err => {
+                    console.error("加载资产失败:", err);
                 });
-            }).catch(err => {
-                console.error("加载资产失败:", err);
-            });
         }
         
-        function toggleConfirmPlant(variant, card) {
-            const cardKey = `${variant.plant_name}/${variant.variant_id}`;
-            fetch('/api/toggle_confirm_plant', {
+        function toggleConfirmCandidate(filename, card) {
+            fetch('/api/toggle_confirm_candidate', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({
-                    key: cardKey,
-                    plant_name: variant.plant_name,
-                    variant_id: variant.variant_id,
-                    display_name: variant.display_name || variant.plant_name
-                })
+                body: JSON.stringify({ filename: filename })
             }).then(res => res.json()).then(res => {
                 if (res.status === 'success') {
-                    confirmedPlants = res.confirmed || {};
+                    confirmedCandidates = res.confirmed || {};
                     const isConfirmed = res.is_confirmed;
                     if (isConfirmed) {
                         card.classList.add('confirmed');
@@ -667,7 +675,7 @@ HTML_CONTENT = """
                     }
                     const star = card.querySelector('.confirmed-star');
                     if (star) star.style.display = isConfirmed ? 'block' : 'none';
-                    document.getElementById('confirmedCount').innerText = Object.keys(confirmedPlants).length;
+                    document.getElementById('confirmedCount').innerText = Object.keys(confirmedCandidates).length;
                 } else {
                     alert('切换确认状态失败: ' + (res.error || ''));
                 }
@@ -902,11 +910,11 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(json.dumps(files).encode('utf-8'))
             
-        elif self.path == '/api/confirmed_plants':
+        elif self.path in ('/api/confirmed_candidates', '/api/confirmed_plants'):
             self.send_response(200)
             self.send_header('Content-type', 'application/json; charset=utf-8')
             self.end_headers()
-            self.wfile.write(json.dumps(get_confirmed_plants()).encode('utf-8'))
+            self.wfile.write(json.dumps(get_confirmed_candidates()).encode('utf-8'))
 
         elif self.path == '/api/assets':
             os.makedirs(PLANTS_DIR, exist_ok=True)
@@ -1020,6 +1028,12 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
                 if os.path.exists(input_path):
                     shutil.move(input_path, trash_path)
                     
+                # Clean from confirmed candidates if present
+                conf = get_confirmed_candidates()
+                if filename in conf:
+                    del conf[filename]
+                    save_confirmed_candidates(conf)
+                    
                 self.send_response(200)
                 self.send_header('Content-type', 'application/json')
                 self.end_headers()
@@ -1084,30 +1098,28 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
                 self.end_headers()
                 self.wfile.write(json.dumps({"status": "error", "error": str(e)}).encode('utf-8'))
 
-        elif self.path == '/api/toggle_confirm_plant':
+        elif self.path in ('/api/toggle_confirm_candidate', '/api/toggle_confirm_plant'):
             content_length = int(self.headers['Content-Length'])
             post_data = self.rfile.read(content_length)
             
             try:
                 data = json.loads(post_data.decode('utf-8'))
-                key = data.get('key')
-                if not key:
-                    raise Exception("Missing plant key")
+                filename = data.get('filename') or data.get('key')
+                if not filename:
+                    raise Exception("Missing candidate filename")
                 
-                confirmed_data = get_confirmed_plants()
-                if key in confirmed_data:
-                    del confirmed_data[key]
+                confirmed_data = get_confirmed_candidates()
+                if filename in confirmed_data:
+                    del confirmed_data[filename]
                     is_confirmed = False
                 else:
-                    confirmed_data[key] = {
-                        "plant_name": data.get("plant_name"),
-                        "variant_id": data.get("variant_id"),
-                        "display_name": data.get("display_name"),
+                    confirmed_data[filename] = {
+                        "filename": filename,
                         "confirmed_at": int(time.time())
                     }
                     is_confirmed = True
                 
-                save_confirmed_plants(confirmed_data)
+                save_confirmed_candidates(confirmed_data)
                 
                 self.send_response(200)
                 self.send_header('Content-type', 'application/json')
@@ -1148,6 +1160,12 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
                 if result.returncode == 0:
                     print(f"✅ 处理成功！清理备选图: {filename}")
                     os.remove(input_path)
+                    
+                    # Clean from confirmed candidates if present
+                    conf = get_confirmed_candidates()
+                    if filename in conf:
+                        del conf[filename]
+                        save_confirmed_candidates(conf)
                     
                     self.send_response(200)
                     self.send_header('Content-type', 'application/json')
