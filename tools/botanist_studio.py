@@ -697,7 +697,7 @@ HTML_CONTENT = """
 
             const fallbackColors = ['layer-red', 'layer-green', 'layer-blue'];
             const fallbackTags = ['tag-red', 'tag-green', 'tag-blue'];
-            const fallbackLabels = ['红通道 (花叶/顶盖)', '绿通道 (茎枝/主干)', '蓝通道 (细节点缀)'];
+            const fallbackLabels = ['红通道', '绿通道', '蓝通道'];
 
             variant.layers.forEach((layer, idx) => {
                 let cssClass = '';
@@ -707,15 +707,15 @@ HTML_CONTENT = """
                 if (layer.includes('red') || layer.includes('flower') || layer.includes('cap') || layer.includes('leaves')) {
                     cssClass = 'layer-red';
                     tagClass = 'tag-red';
-                    label = '红通道 (花叶/顶盖)';
+                    label = '红通道';
                 } else if (layer.includes('green') || layer.includes('stem') || layer.includes('trunk')) {
                     cssClass = 'layer-green';
                     tagClass = 'tag-green';
-                    label = '绿通道 (茎枝/主干)';
+                    label = '绿通道';
                 } else if (layer.includes('blue') || layer.includes('accent')) {
                     cssClass = 'layer-blue';
                     tagClass = 'tag-blue';
-                    label = '蓝通道 (细节点缀)';
+                    label = '蓝通道';
                 } else {
                     cssClass = fallbackColors[idx % 3];
                     tagClass = fallbackTags[idx % 3];

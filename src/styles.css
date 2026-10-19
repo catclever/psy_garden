@@ -459,10 +459,6 @@ body, html {
 .plant-sprite.plant-plant_0092-v01 .layer-red { background-image: url('assets/plants/plant_0092/01/layer_red.png'); }
 .plant-sprite.plant-plant_0092-v01 .layer-green { background-image: url('assets/plants/plant_0092/01/layer_green.png'); }
 
-/* CSS Output for plant_0033 (秋水仙, Variant: 02) */
-.plant-sprite.plant-plant_0033-v02 { width: 88px; height: 125px; }
-.plant-sprite.plant-plant_0033-v02 .layer-red { background-image: url('assets/plants/plant_0033/02/layer_red.png'); }
-.plant-sprite.plant-plant_0033-v02 .layer-green { background-image: url('assets/plants/plant_0033/02/layer_green.png'); }
 
 /* CSS Output for plant_0155 (牛眼馬錢, Variant: 01) */
 .plant-sprite.plant-plant_0155-v01 { width: 111px; height: 125px; }
@@ -523,10 +519,6 @@ body, html {
 .plant-sprite.plant-plant_0071-v01 .layer-red { background-image: url('assets/plants/plant_0071/01/layer_red.png'); }
 .plant-sprite.plant-plant_0071-v01 .layer-green { background-image: url('assets/plants/plant_0071/01/layer_green.png'); }
 
-/* CSS Output for plant_0155 (牛眼馬錢, Variant: 02) */
-.plant-sprite.plant-plant_0155-v02 { width: 111px; height: 125px; }
-.plant-sprite.plant-plant_0155-v02 .layer-red { background-image: url('assets/plants/plant_0155/02/layer_red.png'); }
-.plant-sprite.plant-plant_0155-v02 .layer-green { background-image: url('assets/plants/plant_0155/02/layer_green.png'); }
 
 /* CSS Output for plant_0000 (孔雀竹芋, Variant: 01) */
 .plant-sprite.plant-plant_0000-v01 { width: 113px; height: 125px; }
@@ -539,11 +531,6 @@ body, html {
 .plant-sprite.plant-plant_0140-v01 .layer-red { background-image: url('assets/plants/plant_0140/01/layer_red.png'); }
 .plant-sprite.plant-plant_0140-v01 .layer-green { background-image: url('assets/plants/plant_0140/01/layer_green.png'); }
 
-/* CSS Output for plant_0044 (牛至, Variant: 02) */
-.plant-sprite.plant-plant_0044-v02 { width: 122px; height: 125px; }
-.plant-sprite.plant-plant_0044-v02 .layer-red { background-image: url('assets/plants/plant_0044/02/layer_red.png'); }
-.plant-sprite.plant-plant_0044-v02 .layer-green { background-image: url('assets/plants/plant_0044/02/layer_green.png'); }
-.plant-sprite.plant-plant_0044-v02 .layer-blue { background-image: url('assets/plants/plant_0044/02/layer_blue.png'); }
 
 /* CSS Output for plant_0072 (藍花丹, Variant: 01) */
 .plant-sprite.plant-plant_0072-v01 { width: 133px; height: 125px; }
@@ -551,16 +538,7 @@ body, html {
 .plant-sprite.plant-plant_0072-v01 .layer-green { background-image: url('assets/plants/plant_0072/01/layer_green.png'); }
 .plant-sprite.plant-plant_0072-v01 .layer-blue { background-image: url('assets/plants/plant_0072/01/layer_blue.png'); }
 
-/* CSS Output for plant_0166 (光果苏铁, Variant: 02) */
-.plant-sprite.plant-plant_0166-v02 { width: 137px; height: 125px; }
-.plant-sprite.plant-plant_0166-v02 .layer-red { background-image: url('assets/plants/plant_0166/02/layer_red.png'); }
-.plant-sprite.plant-plant_0166-v02 .layer-green { background-image: url('assets/plants/plant_0166/02/layer_green.png'); }
 
-/* CSS Output for plant_0000 (孔雀竹芋, Variant: 02) */
-.plant-sprite.plant-plant_0000-v02 { width: 113px; height: 125px; }
-.plant-sprite.plant-plant_0000-v02 .layer-red { background-image: url('assets/plants/plant_0000/02/layer_red.png'); }
-.plant-sprite.plant-plant_0000-v02 .layer-green { background-image: url('assets/plants/plant_0000/02/layer_green.png'); }
-.plant-sprite.plant-plant_0000-v02 .layer-blue { background-image: url('assets/plants/plant_0000/02/layer_blue.png'); }
 
 /* CSS Output for plant_0039 (毒魚豆, Variant: 01) */
 .plant-sprite.plant-plant_0039-v01 { width: 86px; height: 125px; }
