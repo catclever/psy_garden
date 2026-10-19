@@ -474,7 +474,10 @@ HTML_CONTENT = """
                     <h2 id="layerModalTitle" style="margin:0; color:#58a6ff; font-size:18px;">🌱 植物图层检视</h2>
                     <div id="layerModalSubtitle" style="color:#8b949e; font-size:12px; margin-top:4px;"></div>
                 </div>
-                <button class="modal-close-btn" onclick="closeLayerModal()">&times;</button>
+                <div style="display:flex; align-items:center; gap:12px;">
+                    <button id="modalRemoveAssetBtn" class="btn-danger" style="padding:6px 12px; border-radius:6px; font-size:12px;">移出资产</button>
+                    <button class="modal-close-btn" onclick="closeLayerModal()">&times;</button>
+                </div>
             </div>
             <div class="layer-modal-body">
                 <!-- Left: Composite Preview & Controls -->
@@ -640,14 +643,16 @@ HTML_CONTENT = """
                         
                         const variantDataStr = JSON.stringify(variant).replace(/"/g, '&quot;');
 
+                        const displayTitleStr = hasAlias ? `${variant.display_name} (${variant.plant_name})` : variant.plant_name;
                         card.innerHTML = `
                             <div class="img-container">${imagesHtml}</div>
                             <div class="title" style="margin-top:2px;">${titleHtml}</div>
                             <div class="subtitle" style="margin-top:2px;">Variant: ${variant.variant_id}</div>
-                            <div style="margin-top:6px;">
-                                <span class="layer-badge-btn" onclick="event.stopPropagation(); openLayerModal(${variantDataStr})">
+                            <div style="margin-top:6px; display:flex; gap:6px; justify-content:center; width:100%;">
+                                <span class="layer-badge-btn" style="flex:1; justify-content:center;" onclick="event.stopPropagation(); openLayerModal(${variantDataStr})">
                                     🧩 ${variant.layers.length} 个独立图层 ↗
                                 </span>
+                                <button class="btn-danger" style="padding:3px 10px; font-size:11px; border-radius:12px; border:1px solid #da3633; margin-top:6px;" onclick="event.stopPropagation(); removeAsset('${variant.plant_name}', '${variant.variant_id}', '${displayTitleStr.replace(/'/g, "\\'")}')">移出</button>
                             </div>
                         `;
                         
@@ -687,6 +692,14 @@ HTML_CONTENT = """
             const titleText = hasAlias ? `${variant.display_name} (${variant.plant_name})` : variant.plant_name;
             document.getElementById('layerModalTitle').innerText = `🌱 ${titleText} · Variant: ${variant.variant_id}`;
             document.getElementById('layerModalSubtitle').innerText = `路径: assets/plants/${variant.path_prefix} | 共 ${variant.layers.length} 个独立分层切片`;
+
+            const removeBtn = document.getElementById('modalRemoveAssetBtn');
+            if (removeBtn) {
+                removeBtn.onclick = () => {
+                    closeLayerModal();
+                    removeAsset(variant.plant_name, variant.variant_id, titleText);
+                };
+            }
 
             const compositeBox = document.getElementById('compositePreviewBox');
             compositeBox.innerHTML = '';
@@ -777,6 +790,23 @@ HTML_CONTENT = """
             document.getElementById('plantNameInput').focus();
         }
         
+        
+        function removeAsset(plantName, variantId, displayName) {
+            if (confirm(`确定要移出资产 [${displayName}] 并召回原图到待审区吗？\n注意：这将从物理目录及样式表中彻底删除该资产变体。`)) {
+                fetch('/api/remove_asset', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ plant_name: plantName, variant_id: variantId })
+                }).then(res => res.json()).then(res => {
+                    if(res.status === 'success') {
+                        loadData();
+                    } else {
+                        alert('移出资产失败: ' + (res.error || ''));
+                    }
+                }).catch(err => alert('网络错误: ' + err));
+            }
+        }
+
         function deleteCandidate(filename) {
             fetch('/api/delete_candidate', {
                 method: 'POST',
@@ -1138,6 +1168,67 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
                 self.end_headers()
                 self.wfile.write(json.dumps({"status": "error", "error": str(e)}).encode('utf-8'))
 
+
+        elif self.path == '/api/remove_asset':
+            content_length = int(self.headers['Content-Length'])
+            post_data = self.rfile.read(content_length)
+            
+            try:
+                data = json.loads(post_data.decode('utf-8'))
+                plant_name = data.get('plant_name')
+                variant_id = data.get('variant_id')
+                
+                if not plant_name or not variant_id:
+                    raise Exception("Missing plant_name or variant_id")
+                
+                # 1. Recall original image
+                recalled = False
+                processed_dir = os.path.join(CANDIDATES_DIR, 'processed')
+                if os.path.exists(processed_dir):
+                    import shutil
+                    for f in os.listdir(processed_dir):
+                        if plant_name in f:
+                            src_path = os.path.join(processed_dir, f)
+                            if os.path.isfile(src_path) or os.path.islink(src_path):
+                                dst_path = os.path.join(CANDIDATES_DIR, f)
+                                shutil.move(src_path, dst_path)
+                                recalled = True
+                
+                # 2. Delete asset directory
+                variant_dir = os.path.join(PLANTS_DIR, plant_name, variant_id)
+                if os.path.exists(variant_dir):
+                    import shutil
+                    shutil.rmtree(variant_dir)
+                
+                plant_dir = os.path.join(PLANTS_DIR, plant_name)
+                if os.path.exists(plant_dir) and not os.listdir(plant_dir):
+                    os.rmdir(plant_dir)
+                    
+                # 3. Clean CSS
+                css_path = os.path.join(PROJECT_ROOT, 'src', 'styles.css')
+                if os.path.exists(css_path):
+                    with open(css_path, 'r', encoding='utf-8') as f:
+                        css_content = f.read()
+                    
+                    import re
+                    pattern = r"\n*/\* CSS Output for " + re.escape(plant_name) + r" [^\n]*Variant: " + re.escape(variant_id) + r"\)[^\n]*\n(?:\.plant-sprite\.plant-" + re.escape(plant_name) + r"-v" + re.escape(variant_id) + r"[^\n]*\n*)+"
+                    new_css_content = re.sub(pattern, "\n", css_content)
+                    
+                    with open(css_path, 'w', encoding='utf-8') as f:
+                        f.write(new_css_content)
+                
+                self.send_response(200)
+                self.send_header('Content-type', 'application/json')
+                self.end_headers()
+                self.wfile.write(json.dumps({"status": "success", "recalled_candidate": recalled}).encode('utf-8'))
+            except Exception as e:
+                import traceback
+                traceback.print_exc()
+                self.send_response(500)
+                self.send_header('Content-type', 'application/json')
+                self.end_headers()
+                self.wfile.write(json.dumps({"status": "error", "error": str(e)}).encode('utf-8'))
+
         elif self.path == '/api/process':
             content_length = int(self.headers['Content-Length'])
             post_data = self.rfile.read(content_length)
@@ -1161,8 +1252,10 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
                 result = subprocess.run(cmd, cwd=os.path.join(PROJECT_ROOT, 'tools'), capture_output=True, text=True)
                 
                 if result.returncode == 0:
-                    print(f"✅ 处理成功！清理备选图: {filename}")
-                    os.remove(input_path)
+                    print(f"✅ 处理成功！归档备选图: {filename}")
+                    processed_dir = os.path.join(CANDIDATES_DIR, 'processed')
+                    os.makedirs(processed_dir, exist_ok=True)
+                    shutil.move(input_path, os.path.join(processed_dir, filename))
                     
                     # Clean from confirmed candidates if present
                     conf = get_confirmed_candidates()
