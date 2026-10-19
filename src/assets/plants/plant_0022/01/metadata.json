@@ -1,0 +1,12 @@
+{
+    "name": "plant_0022",
+    "display_name": "西藏红豆杉",
+    "variant_id": "01",
+    "width": 267,
+    "height": 250,
+    "layers": [
+        "layer-red",
+        "layer-green"
+    ],
+    "created_at": 1792399819
+}

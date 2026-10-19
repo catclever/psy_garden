@@ -1,0 +1,13 @@
+{
+    "name": "plant_0340",
+    "display_name": "落地生根",
+    "variant_id": "01",
+    "width": 235,
+    "height": 250,
+    "layers": [
+        "layer-red",
+        "layer-green",
+        "layer-blue"
+    ],
+    "created_at": 1792399815
+}

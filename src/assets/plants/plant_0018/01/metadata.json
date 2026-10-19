@@ -1,0 +1,12 @@
+{
+    "name": "plant_0018",
+    "display_name": "黃扇鳶尾",
+    "variant_id": "01",
+    "width": 164,
+    "height": 250,
+    "layers": [
+        "layer-red",
+        "layer-green"
+    ],
+    "created_at": 1792399823
+}

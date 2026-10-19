@@ -1,0 +1,12 @@
+{
+    "name": "plant_0166",
+    "display_name": "光果苏铁",
+    "variant_id": "01",
+    "width": 275,
+    "height": 250,
+    "layers": [
+        "layer-red",
+        "layer-green"
+    ],
+    "created_at": 1792399825
+}

@@ -1,0 +1,12 @@
+{
+    "name": "plant_0164",
+    "display_name": "灰幹蘇鐵",
+    "variant_id": "01",
+    "width": 250,
+    "height": 250,
+    "layers": [
+        "layer-red",
+        "layer-green"
+    ],
+    "created_at": 1792399815
+}

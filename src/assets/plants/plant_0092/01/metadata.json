@@ -1,0 +1,12 @@
+{
+    "name": "plant_0092",
+    "display_name": "翠綠龍舌蘭",
+    "variant_id": "01",
+    "width": 144,
+    "height": 250,
+    "layers": [
+        "layer-red",
+        "layer-green"
+    ],
+    "created_at": 1792399819
+}

@@ -1,0 +1,13 @@
+{
+    "name": "plant_0353",
+    "display_name": "翠錦竹芋",
+    "variant_id": "01",
+    "width": 260,
+    "height": 250,
+    "layers": [
+        "layer-red",
+        "layer-green",
+        "layer-blue"
+    ],
+    "created_at": 1792399834
+}

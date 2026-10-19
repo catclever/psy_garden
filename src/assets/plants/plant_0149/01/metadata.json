@@ -1,0 +1,12 @@
+{
+    "name": "plant_0149",
+    "display_name": "香茅屬",
+    "variant_id": "01",
+    "width": 248,
+    "height": 250,
+    "layers": [
+        "layer-red",
+        "layer-green"
+    ],
+    "created_at": 1792399818
+}

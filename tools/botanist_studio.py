@@ -1008,7 +1008,10 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
                 self.send_header('Content-type', 'image/jpeg')
             self.end_headers()
             with open(file_path, 'rb') as f:
-                self.wfile.write(f.read())
+                try:
+                    self.wfile.write(f.read())
+                except (BrokenPipeError, ConnectionResetError):
+                    pass
         else:
             self.send_response(404)
             self.end_headers()

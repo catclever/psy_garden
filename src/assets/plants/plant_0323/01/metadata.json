@@ -1,0 +1,12 @@
+{
+    "name": "plant_0323",
+    "display_name": "馬纓丹",
+    "variant_id": "01",
+    "width": 209,
+    "height": 250,
+    "layers": [
+        "layer-red",
+        "layer-green"
+    ],
+    "created_at": 1792399834
+}

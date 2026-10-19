@@ -1,0 +1,13 @@
+{
+    "name": "plant_0188",
+    "display_name": "苏铁属",
+    "variant_id": "01",
+    "width": 248,
+    "height": 250,
+    "layers": [
+        "layer-red",
+        "layer-green",
+        "layer-blue"
+    ],
+    "created_at": 1792399821
+}

@@ -1,0 +1,12 @@
+{
+    "name": "plant_0033",
+    "display_name": "秋水仙",
+    "variant_id": "02",
+    "width": 177,
+    "height": 250,
+    "layers": [
+        "layer-red",
+        "layer-green"
+    ],
+    "created_at": 1792399820
+}

@@ -1,0 +1,12 @@
+{
+    "name": "plant_0155",
+    "display_name": "牛眼馬錢",
+    "variant_id": "02",
+    "width": 222,
+    "height": 250,
+    "layers": [
+        "layer-red",
+        "layer-green"
+    ],
+    "created_at": 1792399827
+}

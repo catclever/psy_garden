@@ -1,0 +1,12 @@
+{
+    "name": "plant_0151",
+    "display_name": "蘆莖樹蘭",
+    "variant_id": "01",
+    "width": 224,
+    "height": 250,
+    "layers": [
+        "layer-red",
+        "layer-green"
+    ],
+    "created_at": 1792399832
+}

@@ -1,0 +1,13 @@
+{
+    "name": "plant_0331",
+    "display_name": "垂序商陆",
+    "variant_id": "01",
+    "width": 234,
+    "height": 250,
+    "layers": [
+        "layer-red",
+        "layer-green",
+        "layer-blue"
+    ],
+    "created_at": 1792399832
+}

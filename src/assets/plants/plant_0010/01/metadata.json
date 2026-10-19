@@ -1,0 +1,12 @@
+{
+    "name": "plant_0010",
+    "display_name": "射干",
+    "variant_id": "01",
+    "width": 154,
+    "height": 250,
+    "layers": [
+        "layer-red",
+        "layer-green"
+    ],
+    "created_at": 1792399831
+}

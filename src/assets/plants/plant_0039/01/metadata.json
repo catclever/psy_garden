@@ -1,0 +1,13 @@
+{
+    "name": "plant_0039",
+    "display_name": "毒魚豆",
+    "variant_id": "01",
+    "width": 172,
+    "height": 250,
+    "layers": [
+        "layer-red",
+        "layer-green",
+        "layer-blue"
+    ],
+    "created_at": 1792399831
+}

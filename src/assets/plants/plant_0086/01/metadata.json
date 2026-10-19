@@ -1,0 +1,13 @@
+{
+    "name": "plant_0086",
+    "display_name": "皮爾蘭斯蘆薈",
+    "variant_id": "01",
+    "width": 238,
+    "height": 250,
+    "layers": [
+        "layer-red",
+        "layer-green",
+        "layer-blue"
+    ],
+    "created_at": 1792399825
+}

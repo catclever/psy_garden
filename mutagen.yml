@@ -1,0 +1,33 @@
+# Generated automatically by setup-mutagen skill
+sync:
+  defaults:
+    mode: "two-way-resolved"
+    ignore:
+      vcs: true
+      paths:
+        - ".DS_Store"
+        - ".AppleDouble"
+        - ".LSOverride"
+        - "Thumbs.db"
+        - ".idea/"
+        - ".vscode/"
+        - "*.swp"
+        - "*.swo"
+        - "*~"
+        - ".agent/"
+        - ".gemini/"
+        - ".codex/"
+        - "*.log"
+        - "tmp/"
+        - "temp/"
+        - "tools/.venv/"
+        - "**/.venv/"
+        - "**/__pycache__/"
+        - ".ruby-lsp/"
+        - "**/vendor/bundle/"
+    symlink:
+      mode: "posix-raw"
+
+  psy-garden:
+    alpha: "."
+    beta: "Antigravity:/root/Projects/psy_garden"

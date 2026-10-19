@@ -1,0 +1,13 @@
+{
+    "name": "plant_0114",
+    "display_name": "仙客来",
+    "variant_id": "01",
+    "width": 250,
+    "height": 250,
+    "layers": [
+        "layer-red",
+        "layer-green",
+        "layer-blue"
+    ],
+    "created_at": 1792399822
+}

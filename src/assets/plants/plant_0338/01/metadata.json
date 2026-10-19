@@ -1,0 +1,13 @@
+{
+    "name": "plant_0338",
+    "display_name": "野藍薊",
+    "variant_id": "01",
+    "width": 178,
+    "height": 250,
+    "layers": [
+        "layer-red",
+        "layer-green",
+        "layer-blue"
+    ],
+    "created_at": 1792399833
+}

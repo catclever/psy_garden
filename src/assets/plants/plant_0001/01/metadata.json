@@ -1,0 +1,12 @@
+{
+    "name": "plant_0001",
+    "display_name": "大戟",
+    "variant_id": "01",
+    "width": 233,
+    "height": 250,
+    "layers": [
+        "layer-red",
+        "layer-green"
+    ],
+    "created_at": 1792399817
+}

@@ -1,0 +1,13 @@
+{
+    "name": "plant_0071",
+    "display_name": "鵝鑾鼻燈籠草",
+    "variant_id": "02",
+    "width": 237,
+    "height": 250,
+    "layers": [
+        "layer-red",
+        "layer-green",
+        "layer-blue"
+    ],
+    "created_at": 1792399835
+}

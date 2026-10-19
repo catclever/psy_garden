@@ -1,0 +1,13 @@
+{
+    "name": "plant_0072",
+    "display_name": "藍花丹",
+    "variant_id": "01",
+    "width": 266,
+    "height": 250,
+    "layers": [
+        "layer-red",
+        "layer-green",
+        "layer-blue"
+    ],
+    "created_at": 1792399829
+}

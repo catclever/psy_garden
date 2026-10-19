@@ -1,0 +1,12 @@
+{
+    "name": "plant_0152",
+    "display_name": "硬斗柯",
+    "variant_id": "01",
+    "width": 203,
+    "height": 250,
+    "layers": [
+        "layer-red",
+        "layer-green"
+    ],
+    "created_at": 1792399824
+}
