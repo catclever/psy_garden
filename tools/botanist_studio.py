@@ -8,6 +8,7 @@ import traceback
 import urllib.parse
 import shutil
 import time
+import re
 
 PORT = int(os.environ.get("PORT", 18087))
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -92,6 +93,18 @@ def find_source_image_for_asset(plant_name, variant_id=None):
                     if target_num_padded in f or target_num_int in f:
                         return os.path.join(sdir, f)
                         
+    # 4. Check legacy / v_uncut demo plants
+    demo_uncut = {
+        'banana': os.path.join(PROJECT_ROOT, 'src', 'assets', 'plants', 'banana', 'v_uncut', 'plant_banana.png'),
+        'lily': os.path.join(PROJECT_ROOT, 'src', 'assets', 'plants', 'lily', 'v_uncut', 'plant_lily.png'),
+        'mushroom': os.path.join(PROJECT_ROOT, 'src', 'assets', 'plants', 'mushroom', 'v_uncut', 'plant_mushroom.png'),
+        'bamboo': os.path.join(PROJECT_ROOT, 'legacy', 'plant_bamboo.png'),
+        'bonsai': os.path.join(PROJECT_ROOT, 'legacy', 'plant_bonsai.png'),
+        'fern': os.path.join(PROJECT_ROOT, 'legacy', 'plant_fern.png'),
+    }
+    if plant_name in demo_uncut and os.path.exists(demo_uncut[plant_name]):
+        return demo_uncut[plant_name]
+
     return None
 
 def run_build_asset(input_path, plant_name, variant_id, display_name=None):
@@ -1694,7 +1707,6 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
                 recalled = False
                 processed_dir = os.path.join(CANDIDATES_DIR, 'processed')
                 if os.path.exists(processed_dir):
-                    import shutil
                     for f in os.listdir(processed_dir):
                         if plant_name in f:
                             src_path = os.path.join(processed_dir, f)
@@ -1706,7 +1718,6 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
                 # 2. Delete asset directory
                 variant_dir = os.path.join(PLANTS_DIR, plant_name, variant_id)
                 if os.path.exists(variant_dir):
-                    import shutil
                     shutil.rmtree(variant_dir)
                 
                 plant_dir = os.path.join(PLANTS_DIR, plant_name)
@@ -1719,7 +1730,6 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
                     with open(css_path, 'r', encoding='utf-8') as f:
                         css_content = f.read()
                     
-                    import re
                     pattern = r"\n*/\* CSS Output for " + re.escape(plant_name) + r" [^\n]*Variant: " + re.escape(variant_id) + r"\)[^\n]*\n(?:\.plant-sprite\.plant-" + re.escape(plant_name) + r"-v" + re.escape(variant_id) + r"[^\n]*\n*)+"
                     new_css_content = re.sub(pattern, "\n", css_content)
                     
@@ -1731,7 +1741,6 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
                 self.end_headers()
                 self.wfile.write(json.dumps({"status": "success", "recalled_candidate": recalled}).encode('utf-8'))
             except Exception as e:
-                import traceback
                 traceback.print_exc()
                 self.send_response(500)
                 self.send_header('Content-type', 'application/json')
