@@ -1,0 +1,15 @@
+{
+    "name": "plant_0005",
+    "display_name": "plant_0005",
+    "variant_id": "1",
+    "width": 292,
+    "height": 250,
+    "layers": [
+        "layer-red",
+        "layer-green"
+    ],
+    "source_image": "candidate_plant_0005_羅漢松.jpg",
+    "true_color": false,
+    "has_normal": true,
+    "created_at": 1792499997
+}

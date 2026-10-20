@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2.5D Lighting & Normal Map Demo</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #000; /* Will be covered by three.js */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #fff;
+        }
+        #canvas-container {
+            width: 100vw;
+            height: 100vh;
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+        #hud {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 10;
+            background: rgba(30, 30, 30, 0.8);
+            backdrop-filter: blur(5px);
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.1);
+            min-width: 250px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+        .hud-section {
+            margin-bottom: 20px;
+        }
+        .hud-section h3 {
+            margin: 0 0 10px 0;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #ccc;
+        }
+        .preset-btn {
+            background: #333;
+            color: #fff;
+            border: 1px solid #555;
+            padding: 8px 12px;
+            margin: 0 5px 5px 0;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+        .preset-btn:hover {
+            background: #444;
+        }
+        .preset-btn.active {
+            background: #5c8ae6;
+            border-color: #7aa2f7;
+        }
+        .color-picker-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .color-picker-group label {
+            flex: 1;
+            font-size: 13px;
+        }
+        .color-picker-group input[type="color"] {
+            border: none;
+            width: 30px;
+            height: 30px;
+            padding: 0;
+            background: transparent;
+            cursor: pointer;
+        }
+    </style>
+    <!-- Import Three.js -->
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+</head>
+<body>
+    <div id="canvas-container"></div>
+
+    <div id="hud">
+        <div class="hud-section">
+            <h3>Environment</h3>
+            <button class="preset-btn active" data-preset="daylight">Daylight</button>
+            <button class="preset-btn" data-preset="sunset">Sunset</button>
+            <button class="preset-btn" data-preset="overcast">Overcast</button>
+            <button class="preset-btn" data-preset="moonlight">Moonlight</button>
+        </div>
+
+        <div class="hud-section">
+            <h3>Plant Tints</h3>
+            <div class="color-picker-group">
+                <label for="tint-red">Layer Red (Main):</label>
+                <input type="color" id="tint-red" value="#5c8ae6">
+            </div>
+            <div class="color-picker-group">
+                <label for="tint-green">Layer Green (Acc):</label>
+                <input type="color" id="tint-green" value="#8c6d46">
+            </div>
+            <div class="color-picker-group">
+                <label for="tint-blue">Layer Blue (Ext):</label>
+                <input type="color" id="tint-blue" value="#e6c35c">
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import * as THREE from 'three';
+
+        // 1. Basic Scene Setup
+        const container = document.getElementById('canvas-container');
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x222222);
+
+        // 2. Setup OrthographicCamera for 2.5D isometric view
+        // Matches rotateX(60deg) rotateZ(45deg)
+        const aspect = window.innerWidth / window.innerHeight;
+        const frustumSize = 1000;
+        const camera = new THREE.OrthographicCamera(
+            frustumSize * aspect / - 2,
+            frustumSize * aspect / 2,
+            frustumSize / 2,
+            frustumSize / - 2,
+            1, 2000
+        );
+
+        // Position camera for isometric view
+        camera.position.set(500, 500, 500);
+        camera.lookAt(0, 0, 0);
+
+        // 3. Renderer Setup
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        container.appendChild(renderer.domElement);
+
+        // 4. Add a ground plane
+        const groundGeometry = new THREE.PlaneGeometry(2000, 2000);
+        const groundMaterial = new THREE.MeshStandardMaterial({
+            color: 0x333333,
+            roughness: 0.8,
+            metalness: 0.2
+        });
+        const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+        ground.rotation.x = -Math.PI / 2;
+        ground.receiveShadow = true;
+        scene.add(ground);
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            const aspect = window.innerWidth / window.innerHeight;
+            camera.left = -frustumSize * aspect / 2;
+            camera.right = frustumSize * aspect / 2;
+            camera.top = frustumSize / 2;
+            camera.bottom = -frustumSize / 2;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Basic animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        // 5. Load textures and create custom material
+        const textureLoader = new THREE.TextureLoader();
+
+        // Create Plant Material Generator
+        function createPlantMaterial(basePath, plantData) {
+            // Load available layers
+            const layerRed = textureLoader.load(`${basePath}/layer_red.png`);
+            const layerGreen = textureLoader.load(`${basePath}/layer_green.png`);
+
+            let layerBlue = null;
+            if (plantData.hasBlue) {
+                layerBlue = textureLoader.load(`${basePath}/layer_blue.png`);
+            }
+
+            // Load normal map
+            const normalMap = textureLoader.load(`${basePath}/normal.png`);
+
+            // We use MeshStandardMaterial and patch its shaders to inject our multi-layer logic
+            const material = new THREE.MeshStandardMaterial({
+                transparent: true,
+                roughness: 0.6,
+                metalness: 0.1,
+                normalMap: normalMap,
+                normalScale: new THREE.Vector2(1, 1),
+                side: THREE.FrontSide
+            });
+
+            material.userData = {
+                tintRed: { value: new THREE.Color('#5c8ae6') },
+                tintGreen: { value: new THREE.Color('#8c6d46') },
+                tintBlue: { value: new THREE.Color('#e6c35c') }
+            };
+
+            material.onBeforeCompile = (shader) => {
+                shader.uniforms.tLayerRed = { value: layerRed };
+                shader.uniforms.tLayerGreen = { value: layerGreen };
+                if (layerBlue) shader.uniforms.tLayerBlue = { value: layerBlue };
+
+                shader.uniforms.tintRed = material.userData.tintRed;
+                shader.uniforms.tintGreen = material.userData.tintGreen;
+                shader.uniforms.tintBlue = material.userData.tintBlue;
+
+                // Inject uniforms
+                shader.fragmentShader = `
+                    uniform sampler2D tLayerRed;
+                    uniform sampler2D tLayerGreen;
+                    ${layerBlue ? 'uniform sampler2D tLayerBlue;' : ''}
+
+                    uniform vec3 tintRed;
+                    uniform vec3 tintGreen;
+                    uniform vec3 tintBlue;
+                ` + shader.fragmentShader;
+
+                // Replace map lookup with our layered blending
+                const mapChunk = `
+                    vec4 texRed = texture2D(tLayerRed, vUv);
+                    vec4 texGreen = texture2D(tLayerGreen, vUv);
+
+                    // Multiply luminance by target tint
+                    vec3 colRed = texRed.rgb * tintRed;
+                    vec3 colGreen = texGreen.rgb * tintGreen;
+
+                    // Use diffuseColor, which is already defined by Three.js
+                    // diffuseColor = vec4(1.0); // usually initialized by three.js
+
+                    vec4 myDiffuse = vec4(0.0);
+
+                    // Blend layers based on alpha
+                    myDiffuse.rgb = mix(myDiffuse.rgb, colRed, texRed.a);
+                    myDiffuse.a = max(myDiffuse.a, texRed.a);
+
+                    myDiffuse.rgb = mix(myDiffuse.rgb, colGreen, texGreen.a);
+                    myDiffuse.a = max(myDiffuse.a, texGreen.a);
+
+                    ${layerBlue ? `
+                        vec4 texBlue = texture2D(tLayerBlue, vUv);
+                        vec3 colBlue = texBlue.rgb * tintBlue;
+                        myDiffuse.rgb = mix(myDiffuse.rgb, colBlue, texBlue.a);
+                        myDiffuse.a = max(myDiffuse.a, texBlue.a);
+                    ` : ''}
+
+                    if (myDiffuse.a < 0.1) discard;
+
+                    diffuseColor = myDiffuse;
+                `;
+
+                shader.fragmentShader = shader.fragmentShader.replace(
+                    '#include <map_fragment>',
+                    mapChunk
+                );
+
+                // Add vUv if it's missing (sometimes Three.js doesn't declare it if map is null initially)
+                if (!shader.fragmentShader.includes('varying vec2 vUv;')) {
+                    shader.fragmentShader = 'varying vec2 vUv;\n' + shader.fragmentShader;
+                    shader.vertexShader = 'varying vec2 vUv;\n' + shader.vertexShader;
+                    shader.vertexShader = shader.vertexShader.replace(
+                        '#include <uv_vertex>',
+                        '#include <uv_vertex>\n vUv = uv;'
+                    );
+                }
+            };
+
+            return material;
+        }
+
+        // 6. Spawn some plants
+        const plants = [];
+        const spawnPlant = (x, z, basePath, plantData) => {
+            const material = createPlantMaterial(basePath, plantData);
+            // Size based on metadata if available, otherwise default
+            const width = 100;
+            const height = 100;
+            const geometry = new THREE.PlaneGeometry(width, height);
+
+            const mesh = new THREE.Mesh(geometry, material);
+            mesh.position.set(x, height/2, z);
+
+            // To make it a billboard, it needs to face the camera.
+            // Since camera is isometric, we can just rotate the plane to look at the camera.
+            mesh.lookAt(camera.position);
+
+            mesh.castShadow = true;
+            mesh.receiveShadow = true;
+
+            scene.add(mesh);
+            plants.push(mesh);
+            return mesh;
+        };
+
+        // We will spawn the assets we built
+        spawnPlant(0, 0, 'assets/plants/bamboo_single/1', { hasBlue: false });
+        spawnPlant(-150, 100, 'assets/plants/plant_0003/1', { hasBlue: false });
+        spawnPlant(150, -100, 'assets/plants/plant_0005/1', { hasBlue: false });
+
+        // 7. Dynamic Lighting System
+        const dirLight = new THREE.DirectionalLight(0xffffff, 1);
+        dirLight.castShadow = true;
+        dirLight.shadow.mapSize.width = 1024;
+        dirLight.shadow.mapSize.height = 1024;
+        dirLight.shadow.camera.near = 10;
+        dirLight.shadow.camera.far = 2000;
+        dirLight.shadow.camera.left = -500;
+        dirLight.shadow.camera.right = 500;
+        dirLight.shadow.camera.top = 500;
+        dirLight.shadow.camera.bottom = -500;
+        scene.add(dirLight);
+
+        const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444, 0.6);
+        scene.add(hemiLight);
+
+        const weatherPresets = {
+            daylight: {
+                dirColor: 0xfff0dd,
+                dirIntensity: 1.2,
+                dirPos: new THREE.Vector3(300, 500, 200),
+                hemiSky: 0xffffff,
+                hemiGround: 0x888888,
+                hemiIntensity: 0.8,
+                bg: 0x87CEEB // Sky blue
+            },
+            sunset: {
+                dirColor: 0xff7b3a,
+                dirIntensity: 1.5,
+                dirPos: new THREE.Vector3(-400, 100, 400), // Low angle, top-left ish relative to isometric
+                hemiSky: 0x4a3b5c,
+                hemiGround: 0x221122,
+                hemiIntensity: 0.6,
+                bg: 0x4a3b5c // Purple twilight
+            },
+            overcast: {
+                dirColor: 0xdddddd,
+                dirIntensity: 0.3,
+                dirPos: new THREE.Vector3(0, 500, 0),
+                hemiSky: 0xb8c4cc,
+                hemiGround: 0x444444,
+                hemiIntensity: 1.0,
+                bg: 0x8899a6 // Gray cyan
+            },
+            moonlight: {
+                dirColor: 0x7aa2f7,
+                dirIntensity: 0.8,
+                dirPos: new THREE.Vector3(400, 300, -200),
+                hemiSky: 0x141b2d,
+                hemiGround: 0x050510,
+                hemiIntensity: 0.4,
+                bg: 0x0a0f1d // Deep blue
+            }
+        };
+
+        function setWeather(presetName) {
+            const preset = weatherPresets[presetName];
+            if (!preset) return;
+
+            dirLight.color.setHex(preset.dirColor);
+            dirLight.intensity = preset.dirIntensity;
+            dirLight.position.copy(preset.dirPos);
+
+            hemiLight.color.setHex(preset.hemiSky);
+            hemiLight.groundColor.setHex(preset.hemiGround);
+            hemiLight.intensity = preset.hemiIntensity;
+
+            scene.background = new THREE.Color(preset.bg);
+        }
+
+        // Initialize default
+        setWeather('daylight');
+
+        // Link HUD buttons to weather presets
+        document.querySelectorAll('.preset-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                setWeather(e.target.dataset.preset);
+            });
+        });
+
+        // 8. Local Point Lights
+
+        // Incense PointLight
+        const incenseLight = new THREE.PointLight(0xff9944, 2.0, 300);
+        incenseLight.position.set(0, 30, 0); // Ground level, center
+        scene.add(incenseLight);
+
+        // Visual indicator for incense
+        const incenseGeo = new THREE.SphereGeometry(5, 16, 16);
+        const incenseMat = new THREE.MeshBasicMaterial({ color: 0xff5500 });
+        const incenseMesh = new THREE.Mesh(incenseGeo, incenseMat);
+        incenseMesh.position.copy(incenseLight.position);
+        scene.add(incenseMesh);
+
+        // Interactive Mouse PointLight
+        const mouseLight = new THREE.PointLight(0xffffff, 1.5, 400);
+        scene.add(mouseLight);
+
+        const mouseGeo = new THREE.SphereGeometry(3, 16, 16);
+        const mouseMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+        const mouseMesh = new THREE.Mesh(mouseGeo, mouseMat);
+        scene.add(mouseMesh);
+
+        // Raycaster for mouse light
+        const raycaster = new THREE.Raycaster();
+        const mouse = new THREE.Vector2();
+
+        // Invisible plane for raycasting at ground level
+        const hitPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
+
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+
+            raycaster.setFromCamera(mouse, camera);
+            const target = new THREE.Vector3();
+            raycaster.ray.intersectPlane(hitPlane, target);
+
+            if (target) {
+                // Raise light a bit above ground
+                mouseLight.position.set(target.x, 80, target.z);
+                mouseMesh.position.copy(mouseLight.position);
+            }
+        });
+
+        // Add simple animation for incense flickering in the animation loop
+        const originalAnimate = animate;
+        window.animate = function() {
+            // Modify the global animate func defined at top if possible, or just hook in
+        };
+        // Hook into animation loop by patching the existing one or using Three.js Clock
+        const clock = new THREE.Clock();
+        function customAnimate() {
+            requestAnimationFrame(customAnimate);
+
+            const time = clock.getElapsedTime();
+            // Flicker incense
+            incenseLight.intensity = 2.0 + Math.sin(time * 15) * 0.5 + Math.random() * 0.2;
+
+            renderer.render(scene, camera);
+        }
+        // Override original animate loop
+        // We will just let the custom one run, replacing the old one logic
+        // But since requestAnimationFrame(animate) was already called,
+        // we might get double rendering. We'll just hook the original if we can,
+        // but for a demo, simply overriding renderer.render in a new loop is fine,
+        // or actually patching the original is safer.
+
+        // Actually, let's redefine the global renderer behavior to include flicker
+        scene.onBeforeRender = function() {
+            const time = Date.now() * 0.001;
+            incenseLight.intensity = 2.0 + Math.sin(time * 15) * 0.5 + Math.random() * 0.2;
+        };
+
+        // Link HUD colors to materials
+        document.getElementById('tint-red').addEventListener('input', (e) => {
+            const color = new THREE.Color(e.target.value);
+            plants.forEach(p => p.material.userData.tintRed.value.copy(color));
+        });
+        document.getElementById('tint-green').addEventListener('input', (e) => {
+            const color = new THREE.Color(e.target.value);
+            plants.forEach(p => p.material.userData.tintGreen.value.copy(color));
+        });
+        document.getElementById('tint-blue').addEventListener('input', (e) => {
+            const color = new THREE.Color(e.target.value);
+            plants.forEach(p => p.material.userData.tintBlue.value.copy(color));
+        });
+
+
+        // Export variables for other parts of the demo
+        window.demoContext = { scene, camera, renderer, THREE, plants };
+    </script>
+</body>
+</html>

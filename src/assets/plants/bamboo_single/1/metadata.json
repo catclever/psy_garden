@@ -1,0 +1,15 @@
+{
+    "name": "bamboo_single",
+    "display_name": "bamboo_single",
+    "variant_id": "1",
+    "width": 106,
+    "height": 250,
+    "layers": [
+        "layer-red",
+        "layer-green"
+    ],
+    "source_image": "zen_bamboo_single_green_1790953780550.jpg",
+    "true_color": false,
+    "has_normal": true,
+    "created_at": 1792499817
+}

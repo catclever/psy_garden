@@ -1,0 +1,15 @@
+{
+    "name": "plant_0003",
+    "display_name": "plant_0003",
+    "variant_id": "1",
+    "width": 243,
+    "height": 250,
+    "layers": [
+        "layer-red",
+        "layer-green"
+    ],
+    "source_image": "candidate_plant_0003_虞美人.jpg",
+    "true_color": false,
+    "has_normal": true,
+    "created_at": 1792499982
+}

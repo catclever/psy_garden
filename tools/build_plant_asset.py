@@ -3,6 +3,77 @@ import os
 import json
 import time
 from PIL import Image
+import numpy as np
+from scipy import ndimage
+
+def generate_normal_map(cropped_img):
+    """
+    Pure CPU Fast Normal Map Generator
+    Macro curvature: SDF from Alpha boundary
+    Micro texture: Sobel gradients on brightness
+    """
+    img_data = np.array(cropped_img)
+    alpha = img_data[:, :, 3]
+
+    # 1. Macro curvature (Signed Distance Field)
+    mask = alpha > 0
+    # edt gives distance to nearest 0 (outside object)
+    sdf = ndimage.distance_transform_edt(mask)
+
+    # Normalize SDF to create a nice domed shape
+    max_sdf = sdf.max()
+    if max_sdf > 0:
+        sdf_norm = sdf / max_sdf
+        # Shape it using a curve (e.g. sqrt to make edges steeper)
+        height_macro = np.sqrt(sdf_norm) * 50.0  # scale height
+    else:
+        height_macro = sdf
+
+    # 2. Micro texture (Brightness gradients)
+    # Convert RGB to grayscale (luminance)
+    luminance = 0.299 * img_data[:, :, 0] + 0.587 * img_data[:, :, 1] + 0.114 * img_data[:, :, 2]
+
+    # Scale luminance slightly so it doesn't overpower the macro shape
+    height_micro = luminance * 0.1
+
+    # Combine heights
+    height_map = height_macro + height_micro
+
+    # 3. Compute gradients (Nx, Ny)
+    dy, dx = np.gradient(height_map)
+
+    # Nx = -dz/dx, Ny = -dz/dy, Nz = 1.0
+    nx = -dx
+    ny = -dy
+    nz = np.ones_like(nx)
+
+    # Normalize normal vectors
+    length = np.sqrt(nx**2 + ny**2 + nz**2)
+
+    # Avoid division by zero
+    length[length == 0] = 1.0
+
+    nx = nx / length
+    ny = ny / length
+    nz = nz / length
+
+    # 4. Encode to standard normal map format (0-255)
+    r = ((nx * 0.5 + 0.5) * 255).astype(np.uint8)
+    g = ((ny * 0.5 + 0.5) * 255).astype(np.uint8)
+    b = ((nz * 0.5 + 0.5) * 255).astype(np.uint8)
+
+    # Create normal map image, masking transparent areas with neutral normal (128, 128, 255, 0)
+    normal_img_data = np.zeros((img_data.shape[0], img_data.shape[1], 4), dtype=np.uint8)
+    normal_img_data[:, :, 0] = r
+    normal_img_data[:, :, 1] = g
+    normal_img_data[:, :, 2] = b
+    normal_img_data[:, :, 3] = alpha
+
+    # Apply mask
+    normal_img_data[~mask] = [128, 128, 255, 0]
+
+    return Image.fromarray(normal_img_data, mode="RGBA")
+
 
 def build_asset(input_path, plant_name, variant_id, output_dir, project_root, display_name=None):
     img = Image.open(input_path).convert("RGBA")
@@ -83,49 +154,52 @@ def build_asset(input_path, plant_name, variant_id, output_dir, project_root, di
             blue_layer.append((0, 0, 0, 0))
             continue
             
-        # Preserve original true color with edge de-matting
+        # Convert to un-premultiplied RGB
         if is_white_bg and 0 < alpha < 255:
             a_norm = alpha / 255.0
             r_un = max(0, min(255, int((r - 255 * (1 - a_norm)) / a_norm)))
             g_un = max(0, min(255, int((g - 255 * (1 - a_norm)) / a_norm)))
             b_un = max(0, min(255, int((b - 255 * (1 - a_norm)) / a_norm)))
-            pixel = (r_un, g_un, b_un, alpha)
         elif (not is_white_bg) and 0 < alpha < 255:
             a_norm = alpha / 255.0
             r_un = max(0, min(255, int(r / a_norm)))
             g_un = max(0, min(255, int(g / a_norm)))
             b_un = max(0, min(255, int(b / a_norm)))
-            pixel = (r_un, g_un, b_un, alpha)
         else:
-            pixel = (r, g, b, alpha)
+            r_un, g_un, b_un = r, g, b
+
+        # Convert RGB to grayscale (luminance)
+        lum = int(0.299 * r_un + 0.587 * g_un + 0.114 * b_un)
+        lum = max(0, min(255, lum))
+        lum_pixel = (lum, lum, lum, alpha)
         
         # Determine dominant channel based on original RGB hue
         if r > g + 15 and r > b + 15:
-            red_layer.append(pixel)
+            red_layer.append(lum_pixel)
             green_layer.append((0, 0, 0, 0))
             blue_layer.append((0, 0, 0, 0))
         elif g > r + 15 and g > b + 15:
             red_layer.append((0, 0, 0, 0))
-            green_layer.append(pixel)
+            green_layer.append(lum_pixel)
             blue_layer.append((0, 0, 0, 0))
         elif b > r + 15 and b > g + 15:
             red_layer.append((0, 0, 0, 0))
             green_layer.append((0, 0, 0, 0))
-            blue_layer.append(pixel)
+            blue_layer.append(lum_pixel)
             has_blue = True
         else:
             if r >= g and r >= b:
-                red_layer.append(pixel)
+                red_layer.append(lum_pixel)
                 green_layer.append((0, 0, 0, 0))
                 blue_layer.append((0, 0, 0, 0))
             elif g >= r and g >= b:
                 red_layer.append((0, 0, 0, 0))
-                green_layer.append(pixel)
+                green_layer.append(lum_pixel)
                 blue_layer.append((0, 0, 0, 0))
             else:
                 red_layer.append((0, 0, 0, 0))
                 green_layer.append((0, 0, 0, 0))
-                blue_layer.append(pixel)
+                blue_layer.append(lum_pixel)
                 has_blue = True
                 
     # Save layers
@@ -150,6 +224,12 @@ def build_asset(input_path, plant_name, variant_id, output_dir, project_root, di
         img_blue.save(out_blue)
         layers_created.append("layer-blue")
         
+    # Generate Normal Map
+    print("Generating normal map...")
+    normal_map_img = generate_normal_map(cropped_img)
+    out_normal = os.path.join(output_dir, "normal.png")
+    normal_map_img.save(out_normal)
+
     # Write metadata
     metadata = {
         "name": plant_name,
@@ -159,7 +239,8 @@ def build_asset(input_path, plant_name, variant_id, output_dir, project_root, di
         "height": c_height,
         "layers": layers_created,
         "source_image": os.path.basename(input_path),
-        "true_color": True,
+        "true_color": False, # Changed to False since it's luminance now
+        "has_normal": True,
         "created_at": int(time.time())
     }
     
