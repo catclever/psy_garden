@@ -1060,7 +1060,7 @@ HTML_CONTENT = """
                             : `<span class="badge-grayscale" title="旧版灰度提取">⚪ 灰度</span>`;
 
                         card.innerHTML = `
-                            <input type="checkbox" class="asset-select-cb" data-key="${key}" data-plant-name="${variant.plant_name}" data-variant-id="${variant.variant_id}" data-true-color="${variant.true_color ? 'true' : 'false'}" data-title="${displayTitleStr.replace(/"/g, '&quot;')}" ${isSelected ? 'checked' : ''} onclick="event.stopPropagation(); handleAssetSelect(this, '${variant.plant_name}', '${variant.variant_id}', '${displayTitleStr.replace(/'/g, "\\'")}')" />
+                            <input type="checkbox" class="asset-select-cb" data-key="${key}" data-plant-name="${variant.plant_name}" data-variant-id="${variant.variant_id}" data-true-color="${variant.true_color ? 'true' : 'false'}" data-title="${displayTitleStr.replace(/"/g, '&quot;')}" ${isSelected ? 'checked' : ''} onclick="event.stopPropagation(); handleAssetSelect(this)" />
                             <button class="card-close-btn" title="移出资产并召回原图" onclick="event.stopPropagation(); removeAsset('${variant.plant_name}', '${variant.variant_id}', '${displayTitleStr.replace(/'/g, "\\'")}')">&times;</button>
                             <div class="img-container">${imagesHtml}</div>
                             <div style="display:flex; justify-content:center; align-items:center; gap:6px; margin-top:2px;">
@@ -1298,7 +1298,7 @@ HTML_CONTENT = """
             if (rules.length === 0) {
                 cssBox.innerText = '/* 当前所有通道保持原生色彩 (filter: none) */';
             } else {
-                cssBox.innerText = rules.join('\n');
+                cssBox.innerText = rules.join('\\n');
             }
         }
 
