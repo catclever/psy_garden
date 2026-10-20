@@ -8,3 +8,5 @@ raw_assets/
 #dev
 docs/
 dev/
+call_mcp.py
+tools/trash/

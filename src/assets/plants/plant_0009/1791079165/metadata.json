@@ -1,11 +1,14 @@
 {
     "name": "plant_0009",
+    "display_name": "plant_0009",
     "variant_id": "1791079165",
-    "width": 212,
+    "width": 243,
     "height": 250,
     "layers": [
         "layer-red",
         "layer-green"
     ],
-    "created_at": 1791079166
+    "source_image": "candidate_plant_0009_酒瓶兰.jpg",
+    "true_color": true,
+    "created_at": 1792466861
 }

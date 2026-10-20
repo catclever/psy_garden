@@ -387,6 +387,63 @@ HTML_CONTENT = """
             transform: none;
         }
 
+        @keyframes spin-anim {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .img-spinner-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(13, 17, 23, 0.78);
+            backdrop-filter: blur(2px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            z-index: 25;
+            border-radius: 4px;
+            pointer-events: none;
+        }
+        .spinner-circle {
+            width: 28px;
+            height: 28px;
+            border: 3px solid rgba(88, 166, 255, 0.25);
+            border-top: 3px solid #58a6ff;
+            border-radius: 50%;
+            animation: spin-anim 0.8s linear infinite;
+        }
+        .spinner-mini {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid #ffffff;
+            border-radius: 50%;
+            animation: spin-anim 0.8s linear infinite;
+            vertical-align: -1px;
+            margin-right: 6px;
+        }
+        .spinner-text {
+            font-size: 11px;
+            color: #58a6ff;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        .reslicing-locked .card {
+            pointer-events: none !important;
+            cursor: not-allowed !important;
+            user-select: none !important;
+            filter: brightness(0.9);
+        }
+        .card.is-upgrading {
+            border-color: #58a6ff !important;
+            box-shadow: 0 0 16px rgba(88, 166, 255, 0.4) !important;
+        }
+
         .layer-control-card {
             background: #0d1117;
             border: 1px solid #30363d;
@@ -723,7 +780,11 @@ HTML_CONTENT = """
     
     <!-- Modal: Process -->
     <div id="processModal" class="modal-overlay">
-        <div class="modal-content">
+        <div class="modal-content" style="position:relative;">
+            <div id="processModalSpinner" class="img-spinner-overlay" style="display:none; border-radius:8px;">
+                <div class="spinner-circle"></div>
+                <span class="spinner-text">正在智能切片打包入库...</span>
+            </div>
             <h2 style="margin-top:0; color:#58a6ff;">入库打包</h2>
             <p style="color:#8b949e; font-size:13px; margin:0 0 4px 0;">1. 英文资产代号 (必填，唯一标识):</p>
             <input type="text" id="plantNameInput" placeholder="例如: bamboo / glowing_mushroom" />
@@ -788,8 +849,45 @@ HTML_CONTENT = """
         let selectedAssets = {};
         let activeModalVariant = null;
         let modalLayerFilters = [];
+        let isReslicingInProgress = false;
+
+        function setReslicingState(inProgress, targetKeys = []) {
+            isReslicingInProgress = inProgress;
+            const aGal = document.getElementById('assetsGallery');
+            if (aGal) {
+                if (inProgress) {
+                    aGal.classList.add('reslicing-locked');
+                } else {
+                    aGal.classList.remove('reslicing-locked');
+                }
+            }
+
+            if (!inProgress) {
+                document.querySelectorAll('.img-spinner-overlay').forEach(el => el.remove());
+                document.querySelectorAll('.card.is-upgrading').forEach(el => el.classList.remove('is-upgrading'));
+                return;
+            }
+
+            targetKeys.forEach(key => {
+                const card = document.querySelector(`.card[data-asset-key="${key}"]`);
+                if (card) {
+                    card.classList.add('is-upgrading');
+                    const imgWrap = card.querySelector('.img-container');
+                    if (imgWrap && !imgWrap.querySelector('.img-spinner-overlay')) {
+                        const overlay = document.createElement('div');
+                        overlay.className = 'img-spinner-overlay';
+                        overlay.innerHTML = `
+                            <div class="spinner-circle"></div>
+                            <span class="spinner-text">真彩升级中...</span>
+                        `;
+                        imgWrap.appendChild(overlay);
+                    }
+                }
+            });
+        }
 
         function toggleSelectAssetCard(plantName, variantId, isTrueColor, title, card) {
+            if (isReslicingInProgress) return;
             const key = `${plantName}__${variantId}`;
             if (selectedAssets[key]) {
                 delete selectedAssets[key];
@@ -826,6 +924,7 @@ HTML_CONTENT = """
         }
 
         function resliceSelectedGrayscaleAssets() {
+            if (isReslicingInProgress) return;
             const grayscaleItems = Object.values(selectedAssets).filter(a => !a.true_color);
             if (grayscaleItems.length === 0) return;
             if (!confirm(`确定将选中的 ${grayscaleItems.length} 个灰度资产升级为真彩切片吗？\n（已是真彩的资产会自动跳过）`)) {
@@ -836,6 +935,9 @@ HTML_CONTENT = """
             btn.innerText = `⏳ 正在升级 0/${grayscaleItems.length}...`;
             btn.disabled = true;
 
+            const targetKeys = grayscaleItems.map(item => `${item.plant_name}__${item.variant_id}`);
+            setReslicingState(true, targetKeys);
+
             fetch('/api/reslice_batch', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
@@ -843,13 +945,15 @@ HTML_CONTENT = """
             }).then(res => res.json()).then(res => {
                 if (res.status === 'success') {
                     alert(`🎉 升级完成！成功: ${res.succeeded} 个，失败: ${res.failed} 个。`);
-                    selectedAssets = {};
-                    updateSelectedAssetsUI();
-                    loadData();
+                    window.location.reload();
                 } else {
                     alert('❌ 批量升级失败: ' + (res.error || ''));
+                    setReslicingState(false);
                 }
-            }).catch(err => alert('网络错误: ' + err))
+            }).catch(err => {
+                alert('网络错误: ' + err);
+                setReslicingState(false);
+            })
             .finally(() => {
                 btn.innerHTML = origHtml;
                 btn.disabled = false;
@@ -858,6 +962,7 @@ HTML_CONTENT = """
         }
 
         function resliceSingleAsset(plantName, variantId, titleText) {
+            if (isReslicingInProgress) return;
             if (!confirm(`确定要将 [${titleText}] (Variant: ${variantId}) 升级切片为真彩模式吗？\n系统将自动匹配原始图像，保留 RGB 色彩并执行边缘去白边消隐。`)) {
                 return;
             }
@@ -866,6 +971,21 @@ HTML_CONTENT = """
                 btn.innerText = '正在真彩切片...';
                 btn.disabled = true;
             }
+
+            const assetKey = `${plantName}__${variantId}`;
+            setReslicingState(true, [assetKey]);
+
+            const modalBox = document.getElementById('compositePreviewBox');
+            if (modalBox && !modalBox.querySelector('.img-spinner-overlay')) {
+                const overlay = document.createElement('div');
+                overlay.className = 'img-spinner-overlay';
+                overlay.innerHTML = `
+                    <div class="spinner-circle"></div>
+                    <span class="spinner-text">真彩升级中...</span>
+                `;
+                modalBox.appendChild(overlay);
+            }
+
             fetch('/api/reslice_asset', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
@@ -873,12 +993,15 @@ HTML_CONTENT = """
             }).then(res => res.json()).then(res => {
                 if (res.status === 'success') {
                     alert('🎉 升级成功！已转为真彩高保真切片。');
-                    closeLayerModal();
-                    loadData();
+                    window.location.reload();
                 } else {
                     alert('❌ 升级失败: ' + (res.error || '未知错误'));
+                    setReslicingState(false);
                 }
-            }).catch(err => alert('网络错误: ' + err))
+            }).catch(err => {
+                alert('网络错误: ' + err);
+                setReslicingState(false);
+            })
             .finally(() => {
                 if (btn) {
                     btn.disabled = false;
@@ -1296,6 +1419,15 @@ HTML_CONTENT = """
             document.getElementById('candidateFilename').value = filename;
             document.getElementById('plantNameInput').value = '';
             document.getElementById('plantTitleInput').value = '';
+            const spinnerOverlay = document.getElementById('processModalSpinner');
+            if (spinnerOverlay) spinnerOverlay.style.display = 'none';
+            const btn = document.getElementById('confirmBtn');
+            if (btn) {
+                btn.innerText = '自动切片并入库';
+                btn.disabled = false;
+            }
+            const cancelBtn = document.getElementById('cancelBtn');
+            if (cancelBtn) cancelBtn.disabled = false;
             document.getElementById('processModal').style.display = 'flex';
             document.getElementById('plantNameInput').focus();
         }
@@ -1396,8 +1528,28 @@ HTML_CONTENT = """
             if(!name) return alert('请输入植物英文代号');
             
             const btn = document.getElementById('confirmBtn');
-            btn.innerText = '处理中...';
+            const cancelBtn = document.getElementById('cancelBtn');
+            const spinnerOverlay = document.getElementById('processModalSpinner');
+            
+            btn.innerHTML = '<span class="spinner-mini"></span> 正在切片入库...';
             btn.disabled = true;
+            if (cancelBtn) cancelBtn.disabled = true;
+            if (spinnerOverlay) spinnerOverlay.style.display = 'flex';
+            
+            // Also find the card in candidatesGallery and show spinner on its thumbnail
+            const candidateCard = Array.from(document.querySelectorAll('#candidatesGallery .card')).find(c => {
+                const title = c.querySelector('.title');
+                return title && title.innerText.trim() === filename;
+            });
+            if (candidateCard) {
+                const imgWrap = candidateCard.querySelector('.img-container');
+                if (imgWrap && !imgWrap.querySelector('.img-spinner-overlay')) {
+                    const overlay = document.createElement('div');
+                    overlay.className = 'img-spinner-overlay';
+                    overlay.innerHTML = `<div class="spinner-circle"></div><span class="spinner-text">入库中...</span>`;
+                    imgWrap.appendChild(overlay);
+                }
+            }
             
             fetch('/api/process', {
                 method: 'POST',
@@ -1414,6 +1566,12 @@ HTML_CONTENT = """
             .finally(() => {
                 btn.innerText = '自动切片并入库';
                 btn.disabled = false;
+                if (cancelBtn) cancelBtn.disabled = false;
+                if (spinnerOverlay) spinnerOverlay.style.display = 'none';
+                if (candidateCard) {
+                    const overlay = candidateCard.querySelector('.img-spinner-overlay');
+                    if (overlay) overlay.remove();
+                }
             });
         }
         
