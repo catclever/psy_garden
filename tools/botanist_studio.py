@@ -350,6 +350,33 @@ HTML_CONTENT = """
             transform: none;
         }
 
+        .btn-reslice-secondary {
+            background: #21262d;
+            color: #7ee787;
+            border: 1px solid #238636;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .btn-reslice-secondary:hover {
+            background: #23863622;
+            border-color: #3fb950;
+            color: #aff5b4;
+            transform: scale(1.02);
+        }
+        .btn-reslice-secondary:disabled {
+            background: #30363d;
+            color: #8b949e;
+            cursor: not-allowed;
+            transform: none;
+        }
+
         .layer-control-card {
             background: #0d1117;
             border: 1px solid #30363d;
@@ -674,6 +701,7 @@ HTML_CONTENT = """
                     <span class="badge" id="assetsTotalCount">0 资产</span>
                 </div>
                 <div style="display:flex; align-items:center; gap:8px;">
+                    <button id="selectUnconvertedBtn" style="background:#21262d; border:1px solid #30363d; padding:6px 12px; font-size:12px; border-radius:6px; color:#58a6ff; cursor:pointer;" onclick="selectUnconvertedAssets()" title="一键勾选所有尚未完成真彩升级的资产">⚡ 仅选未升级(灰度)</button>
                     <button id="selectAllAssetsBtn" style="background:#21262d; border:1px solid #30363d; padding:6px 12px; font-size:12px; border-radius:6px; color:#c9d1d9; cursor:pointer;" onclick="toggleSelectAllAssets()">全选/取消</button>
                     <button id="batchResliceBtn" class="btn-reslice" style="display:none; padding:6px 12px; font-size:12px;" onclick="resliceSelectedAssets()">🎨 批量升级真彩 (<span id="selectedAssetsCount">0</span>)</button>
                 </div>
@@ -781,6 +809,29 @@ HTML_CONTENT = """
             });
         }
 
+        function selectUnconvertedAssets() {
+            selectedAssets = {};
+            const cbs = document.querySelectorAll('.asset-select-cb');
+            let count = 0;
+            cbs.forEach(cb => {
+                const isTrueColor = cb.getAttribute('data-true-color') === 'true';
+                if (!isTrueColor) {
+                    cb.checked = true;
+                    const pName = cb.getAttribute('data-plant-name');
+                    const vId = cb.getAttribute('data-variant-id');
+                    const title = cb.getAttribute('data-title');
+                    selectedAssets[`${pName}__${vId}`] = { plant_name: pName, variant_id: vId, title: title };
+                    count++;
+                } else {
+                    cb.checked = false;
+                }
+            });
+            updateSelectedAssetsUI();
+            if (count === 0) {
+                alert('所有入库资产均已完成真彩升级！🎉');
+            }
+        }
+
         function toggleSelectAllAssets() {
             const keys = Object.keys(selectedAssets);
             const cbs = document.querySelectorAll('.asset-select-cb');
@@ -832,7 +883,11 @@ HTML_CONTENT = """
         }
 
         function resliceSingleAsset(plantName, variantId, titleText) {
-            if (!confirm(`确定要将 [${titleText}] (Variant: ${variantId}) 重新切片为真彩模式吗？\n系统将自动匹配原始图像，保留 RGB 色彩并执行边缘去白边消隐。`)) {
+            const isAlreadyTrue = activeModalVariant && activeModalVariant.true_color;
+            const promptMsg = isAlreadyTrue
+                ? `[${titleText}] (Variant: ${variantId}) 已经是真彩切片。\n确定要使用最新算法再次重新切片覆盖吗？`
+                : `确定要将 [${titleText}] (Variant: ${variantId}) 升级切片为真彩模式吗？\n系统将自动匹配原始图像，保留 RGB 色彩并执行边缘去白边消隐。`;
+            if (!confirm(promptMsg)) {
                 return;
             }
             const btn = document.getElementById('modalResliceAssetBtn');
@@ -855,7 +910,6 @@ HTML_CONTENT = """
             }).catch(err => alert('网络错误: ' + err))
             .finally(() => {
                 if (btn) {
-                    btn.innerText = '🎨 重新切片(升级真彩)';
                     btn.disabled = false;
                 }
             });
@@ -1006,7 +1060,7 @@ HTML_CONTENT = """
                             : `<span class="badge-grayscale" title="旧版灰度提取">⚪ 灰度</span>`;
 
                         card.innerHTML = `
-                            <input type="checkbox" class="asset-select-cb" data-key="${key}" data-plant-name="${variant.plant_name}" data-variant-id="${variant.variant_id}" data-title="${displayTitleStr.replace(/"/g, '&quot;')}" ${isSelected ? 'checked' : ''} onclick="event.stopPropagation(); handleAssetSelect(this, '${variant.plant_name}', '${variant.variant_id}', '${displayTitleStr.replace(/'/g, "\\'")}')" />
+                            <input type="checkbox" class="asset-select-cb" data-key="${key}" data-plant-name="${variant.plant_name}" data-variant-id="${variant.variant_id}" data-true-color="${variant.true_color ? 'true' : 'false'}" data-title="${displayTitleStr.replace(/"/g, '&quot;')}" ${isSelected ? 'checked' : ''} onclick="event.stopPropagation(); handleAssetSelect(this, '${variant.plant_name}', '${variant.variant_id}', '${displayTitleStr.replace(/'/g, "\\'")}')" />
                             <button class="card-close-btn" title="移出资产并召回原图" onclick="event.stopPropagation(); removeAsset('${variant.plant_name}', '${variant.variant_id}', '${displayTitleStr.replace(/'/g, "\\'")}')">&times;</button>
                             <div class="img-container">${imagesHtml}</div>
                             <div style="display:flex; justify-content:center; align-items:center; gap:6px; margin-top:2px;">
@@ -1063,6 +1117,15 @@ HTML_CONTENT = """
 
             const resliceBtn = document.getElementById('modalResliceAssetBtn');
             if (resliceBtn) {
+                if (variant.true_color) {
+                    resliceBtn.innerHTML = '✨ 已是真彩 (再次重切)';
+                    resliceBtn.className = 'btn-reslice-secondary';
+                    resliceBtn.title = '该资产已完成真彩升级，点击可使用最新算法再次覆盖生成';
+                } else {
+                    resliceBtn.innerHTML = '🎨 升级真彩切片';
+                    resliceBtn.className = 'btn-reslice';
+                    resliceBtn.title = '使用真实色彩保留与边缘消隐去白边算法重新切片';
+                }
                 resliceBtn.onclick = () => resliceSingleAsset(variant.plant_name, variant.variant_id, titleText);
             }
 
