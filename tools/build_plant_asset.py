@@ -83,36 +83,49 @@ def build_asset(input_path, plant_name, variant_id, output_dir, project_root, di
             blue_layer.append((0, 0, 0, 0))
             continue
             
-        # v is the intensity of the stroke in the final layer
-        v = v_alpha
+        # Preserve original true color with edge de-matting
+        if is_white_bg and 0 < alpha < 255:
+            a_norm = alpha / 255.0
+            r_un = max(0, min(255, int((r - 255 * (1 - a_norm)) / a_norm)))
+            g_un = max(0, min(255, int((g - 255 * (1 - a_norm)) / a_norm)))
+            b_un = max(0, min(255, int((b - 255 * (1 - a_norm)) / a_norm)))
+            pixel = (r_un, g_un, b_un, alpha)
+        elif (not is_white_bg) and 0 < alpha < 255:
+            a_norm = alpha / 255.0
+            r_un = max(0, min(255, int(r / a_norm)))
+            g_un = max(0, min(255, int(g / a_norm)))
+            b_un = max(0, min(255, int(b / a_norm)))
+            pixel = (r_un, g_un, b_un, alpha)
+        else:
+            pixel = (r, g, b, alpha)
         
         # Determine dominant channel based on original RGB hue
         if r > g + 15 and r > b + 15:
-            red_layer.append((v, v, v, alpha))
+            red_layer.append(pixel)
             green_layer.append((0, 0, 0, 0))
             blue_layer.append((0, 0, 0, 0))
         elif g > r + 15 and g > b + 15:
             red_layer.append((0, 0, 0, 0))
-            green_layer.append((v, v, v, alpha))
+            green_layer.append(pixel)
             blue_layer.append((0, 0, 0, 0))
         elif b > r + 15 and b > g + 15:
             red_layer.append((0, 0, 0, 0))
             green_layer.append((0, 0, 0, 0))
-            blue_layer.append((v, v, v, alpha))
+            blue_layer.append(pixel)
             has_blue = True
         else:
             if r >= g and r >= b:
-                red_layer.append((v, v, v, alpha))
+                red_layer.append(pixel)
                 green_layer.append((0, 0, 0, 0))
                 blue_layer.append((0, 0, 0, 0))
             elif g >= r and g >= b:
                 red_layer.append((0, 0, 0, 0))
-                green_layer.append((v, v, v, alpha))
+                green_layer.append(pixel)
                 blue_layer.append((0, 0, 0, 0))
             else:
                 red_layer.append((0, 0, 0, 0))
                 green_layer.append((0, 0, 0, 0))
-                blue_layer.append((v, v, v, alpha))
+                blue_layer.append(pixel)
                 has_blue = True
                 
     # Save layers
@@ -145,6 +158,8 @@ def build_asset(input_path, plant_name, variant_id, output_dir, project_root, di
         "width": c_width,
         "height": c_height,
         "layers": layers_created,
+        "source_image": os.path.basename(input_path),
+        "true_color": True,
         "created_at": int(time.time())
     }
     
@@ -167,8 +182,16 @@ def build_asset(input_path, plant_name, variant_id, output_dir, project_root, di
     print("Auto-injecting CSS into src/styles.css...")
     css_path = os.path.join(project_root, "src", "styles.css")
     if os.path.exists(css_path):
-        with open(css_path, "a", encoding="utf-8") as f:
-            f.write(css_code)
+        import re
+        with open(css_path, "r", encoding="utf-8") as f:
+            css_content = f.read()
+        pattern = r"\n*/\* CSS Output for " + re.escape(plant_name) + r" [^\n]*Variant: " + re.escape(variant_id) + r"\)[^\n]*\n(?:\.plant-sprite\.plant-" + re.escape(plant_name) + r"-v" + re.escape(variant_id) + r"[^\n]*\n*)+"
+        if re.search(pattern, css_content):
+            new_css = re.sub(pattern, css_code, css_content)
+        else:
+            new_css = css_content + css_code
+        with open(css_path, "w", encoding="utf-8") as f:
+            f.write(new_css)
         print("CSS injected successfully!")
     else:
         print(f"Warning: styles.css not found at {css_path}")

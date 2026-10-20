@@ -38,6 +38,96 @@ def save_confirmed_candidates(data):
     except Exception:
         pass
 
+def find_source_image_for_asset(plant_name, variant_id=None):
+    if variant_id:
+        v_meta = os.path.join(PLANTS_DIR, plant_name, variant_id, 'metadata.json')
+        if os.path.exists(v_meta):
+            try:
+                with open(v_meta, 'r', encoding='utf-8') as f:
+                    m = json.load(f)
+                    src = m.get('source_image')
+                    if src:
+                        for sdir in [os.path.join(CANDIDATES_DIR, 'processed'), CANDIDATES_DIR]:
+                            p = os.path.join(sdir, src)
+                            if os.path.exists(p):
+                                return p
+            except Exception:
+                pass
+    
+    display_name = None
+    if variant_id:
+        v_meta = os.path.join(PLANTS_DIR, plant_name, variant_id, 'metadata.json')
+        if os.path.exists(v_meta):
+            try:
+                with open(v_meta, 'r', encoding='utf-8') as f:
+                    m = json.load(f)
+                    display_name = m.get('display_name')
+            except Exception:
+                pass
+
+    num_part = plant_name.replace('plant_', '')
+    search_dirs = [os.path.join(CANDIDATES_DIR, 'processed'), CANDIDATES_DIR]
+    
+    for sdir in search_dirs:
+        if not os.path.exists(sdir):
+            continue
+        files = os.listdir(sdir)
+        # 1. Exact match with plant_name
+        for f in files:
+            if f.lower().endswith(('.png', '.jpg', '.jpeg')):
+                if plant_name in f:
+                    return os.path.join(sdir, f)
+        # 2. Match with display_name
+        if display_name:
+            for f in files:
+                if f.lower().endswith(('.png', '.jpg', '.jpeg')):
+                    if display_name in f:
+                        return os.path.join(sdir, f)
+        # 3. Match numeric part e.g. plant_0084 -> _0084_ or _84_
+        if num_part.isdigit():
+            target_num_padded = f'_{num_part}_'
+            target_num_int = f'_{int(num_part)}_'
+            for f in files:
+                if f.lower().endswith(('.png', '.jpg', '.jpeg')):
+                    if target_num_padded in f or target_num_int in f:
+                        return os.path.join(sdir, f)
+                        
+    return None
+
+def run_build_asset(input_path, plant_name, variant_id, display_name=None):
+    # Try direct import first if Pillow is installed in Python environment
+    try:
+        import sys
+        tools_path = os.path.join(PROJECT_ROOT, 'tools')
+        if tools_path not in sys.path:
+            sys.path.insert(0, tools_path)
+        import build_plant_asset
+        out_dir = os.path.join(PLANTS_DIR, plant_name, variant_id)
+        if build_plant_asset.build_asset(input_path, plant_name, variant_id, out_dir, PROJECT_ROOT, display_name):
+            return True
+    except Exception as e:
+        print(f"Direct build_asset failed ({e}), falling back to subprocess...")
+    
+    build_script = os.path.join(PROJECT_ROOT, 'tools', 'build_plant_asset.py')
+    cmd = ["uv", "run", "python", build_script, input_path, plant_name, str(variant_id)]
+    if display_name:
+        cmd.append(display_name)
+    print(f"⚙️ 正在执行切片脚本: {' '.join(cmd)}")
+    result = subprocess.run(cmd, cwd=os.path.join(PROJECT_ROOT, 'tools'), capture_output=True, text=True)
+    if result.returncode == 0:
+        return True
+    
+    # Try fallback to python3 if uv has sandbox or path issues
+    cmd2 = ["python3", build_script, input_path, plant_name, str(variant_id)]
+    if display_name:
+        cmd2.append(display_name)
+    result2 = subprocess.run(cmd2, cwd=os.path.join(PROJECT_ROOT, 'tools'), capture_output=True, text=True)
+    if result2.returncode == 0:
+        return True
+        
+    raise Exception(f"切片脚本执行失败:\n[uv]: {result.stderr}\n[python3]: {result2.stderr}")
+
+
 HTML_CONTENT = """
 <!DOCTYPE html>
 <html>
@@ -126,6 +216,36 @@ HTML_CONTENT = """
             pointer-events: none;
             z-index: 2;
         }
+        .card-close-btn {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: rgba(22, 27, 34, 0.85);
+            border: 1px solid #30363d;
+            color: #8b949e;
+            font-size: 14px;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.2s ease;
+            opacity: 0;
+            padding: 0;
+        }
+        .card:hover .card-close-btn, .card-close-btn:focus {
+            opacity: 1;
+        }
+        .card-close-btn:hover {
+            background: #da3633;
+            color: #ffffff;
+            border-color: #f85149;
+            transform: scale(1.1);
+        }
         .layer-badge-btn {
             font-size: 11px;
             color: #58a6ff;
@@ -167,9 +287,121 @@ HTML_CONTENT = """
             object-fit: contain;
         }
         
-        .layer-red { filter: sepia(1) saturate(5) hue-rotate(-50deg); }
-        .layer-green { filter: sepia(1) saturate(5) hue-rotate(50deg); }
-        .layer-blue { filter: sepia(1) saturate(5) hue-rotate(180deg); }
+        /* 真彩图层：保留原图 RGB 自然色相与消隐后的 alpha 通道 */
+        .layer-red, .layer-green, .layer-blue {
+            /* 保持原色呈现 */
+        }
+        
+        .card.selected-asset {
+            border-color: #388bfd !important;
+            box-shadow: 0 0 14px rgba(56, 139, 253, 0.45) !important;
+        }
+        .asset-select-cb {
+            position: absolute;
+            top: 7px;
+            left: 7px;
+            width: 18px;
+            height: 18px;
+            accent-color: #1f6feb;
+            cursor: pointer;
+            z-index: 10;
+        }
+        .badge-truecolor {
+            background: rgba(35, 134, 54, 0.2);
+            color: #3fb950;
+            border: 1px solid rgba(63, 185, 80, 0.4);
+            font-size: 10px;
+            padding: 1px 6px;
+            border-radius: 10px;
+            display: inline-block;
+        }
+        .badge-grayscale {
+            background: rgba(139, 148, 158, 0.15);
+            color: #8b949e;
+            border: 1px solid rgba(139, 148, 158, 0.3);
+            font-size: 10px;
+            padding: 1px 6px;
+            border-radius: 10px;
+            display: inline-block;
+        }
+        
+        .btn-reslice {
+            background: #238636;
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+        .btn-reslice:hover {
+            background: #2ea043;
+            transform: scale(1.02);
+        }
+        .btn-reslice:disabled {
+            background: #30363d;
+            color: #8b949e;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .layer-control-card {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 10px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+        .layer-control-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .slider-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            color: #8b949e;
+        }
+        .slider-row label {
+            width: 52px;
+            flex: none;
+        }
+        .slider-row input[type="range"] {
+            flex: 1;
+            height: 4px;
+            accent-color: #58a6ff;
+            cursor: pointer;
+        }
+        .slider-row .slider-val {
+            width: 42px;
+            text-align: right;
+            color: #c9d1d9;
+            font-family: monospace;
+            font-size: 11px;
+        }
+        .btn-reset-filter {
+            background: #21262d;
+            color: #8b949e;
+            border: 1px solid #30363d;
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-size: 11px;
+            cursor: pointer;
+        }
+        .btn-reset-filter:hover {
+            background: #30363d;
+            color: #c9d1d9;
+        }
         
         .card .title {
             font-size: 13px;
@@ -436,13 +668,17 @@ HTML_CONTENT = """
         
         <!-- Right Panel: Gallery -->
         <div class="panel">
-            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #30363d; padding-bottom:12px; margin-bottom:15px;">
-                <h1 style="border:none; margin:0; padding:0; font-size:20px;">📦 资产画廊 (Asset Gallery)</h1>
-                <div style="display:flex; align-items:center; gap:8px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #30363d; padding-bottom:12px; margin-bottom:15px; flex-wrap:wrap; gap:8px;">
+                <div style="display:flex; align-items:center; gap:10px;">
+                    <h1 style="border:none; margin:0; padding:0; font-size:20px;">📦 资产画廊 (Asset Gallery)</h1>
                     <span class="badge" id="assetsTotalCount">0 资产</span>
                 </div>
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <button id="selectAllAssetsBtn" style="background:#21262d; border:1px solid #30363d; padding:6px 12px; font-size:12px; border-radius:6px; color:#c9d1d9; cursor:pointer;" onclick="toggleSelectAllAssets()">全选/取消</button>
+                    <button id="batchResliceBtn" class="btn-reslice" style="display:none; padding:6px 12px; font-size:12px;" onclick="resliceSelectedAssets()">🎨 批量升级真彩 (<span id="selectedAssetsCount">0</span>)</button>
+                </div>
             </div>
-            <p class="subtitle">已切片入库资产；点击图层标牌可拆解检视各独立分层。</p>
+            <p class="subtitle">已切片入库资产；勾选左上角可选定目标，点击图层标牌可拆解检视各通道并实时调试色相。</p>
             <div class="gallery" id="assetsGallery">
                 <div class="empty-state">正在加载...</div>
             </div>
@@ -474,7 +710,8 @@ HTML_CONTENT = """
                     <h2 id="layerModalTitle" style="margin:0; color:#58a6ff; font-size:18px;">🌱 植物图层检视</h2>
                     <div id="layerModalSubtitle" style="color:#8b949e; font-size:12px; margin-top:4px;"></div>
                 </div>
-                <div style="display:flex; align-items:center; gap:12px;">
+                <div style="display:flex; align-items:center; gap:10px;">
+                    <button id="modalResliceAssetBtn" class="btn-reslice">🎨 重新切片(升级真彩)</button>
                     <button id="modalRemoveAssetBtn" class="btn-danger" style="padding:6px 12px; border-radius:6px; font-size:12px;">移出资产</button>
                     <button class="modal-close-btn" onclick="closeLayerModal()">&times;</button>
                 </div>
@@ -482,13 +719,20 @@ HTML_CONTENT = """
             <div class="layer-modal-body">
                 <!-- Left: Composite Preview & Controls -->
                 <div class="layer-composite-pane">
-                    <div class="pane-title">🎨 实时合成预览</div>
+                    <div class="pane-title">🎨 实时合成预览 & 相对色相微调</div>
                     <div class="checkerboard-box" id="compositePreviewBox">
                         <!-- Layer images injected dynamically -->
                     </div>
                     <div style="margin-top:4px;">
-                        <div style="font-size:12px; font-weight:bold; color:#8b949e; margin-bottom:8px;">图层显隐开关:</div>
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                            <span style="font-size:12px; font-weight:bold; color:#8b949e;">分层显隐 & 色相调色盘:</span>
+                            <button class="btn-reset-filter" onclick="resetAllLayerFilters()">↺ 重置全部通道</button>
+                        </div>
                         <div id="layerToggleList" style="display:flex; flex-direction:column; gap:6px;"></div>
+                    </div>
+                    <div style="margin-top:4px;">
+                        <div style="font-size:11px; color:#8b949e; margin-bottom:4px;">实时 CSS 滤镜输出 (点击可复制):</div>
+                        <div id="combinedCssCode" style="background:#0d1117; border:1px solid #30363d; border-radius:6px; padding:6px 10px; font-family:monospace; font-size:11px; color:#58a6ff; cursor:pointer;" onclick="copyCombinedCss()" title="点击复制 CSS 代码">/* 保持原生色彩 */</div>
                     </div>
                 </div>
                 <!-- Right: Individual Slices -->
@@ -505,6 +749,117 @@ HTML_CONTENT = """
     <script>
         let currentLeftTab = 'candidates';
         let confirmedCandidates = {};
+        let selectedAssets = {};
+        let activeModalVariant = null;
+        let modalLayerFilters = [];
+
+        function handleAssetSelect(cb, plantName, variantId, title) {
+            const key = `${plantName}__${variantId}`;
+            if (cb.checked) {
+                selectedAssets[key] = { plant_name: plantName, variant_id: variantId, title: title };
+            } else {
+                delete selectedAssets[key];
+            }
+            updateSelectedAssetsUI();
+        }
+
+        function updateSelectedAssetsUI() {
+            const count = Object.keys(selectedAssets).length;
+            const countEl = document.getElementById('selectedAssetsCount');
+            if (countEl) countEl.innerText = count;
+            const batchBtn = document.getElementById('batchResliceBtn');
+            if (batchBtn) {
+                batchBtn.style.display = count > 0 ? 'inline-flex' : 'none';
+            }
+            document.querySelectorAll('.card[data-asset-key]').forEach(card => {
+                const key = card.getAttribute('data-asset-key');
+                if (selectedAssets[key]) {
+                    card.classList.add('selected-asset');
+                } else {
+                    card.classList.remove('selected-asset');
+                }
+            });
+        }
+
+        function toggleSelectAllAssets() {
+            const keys = Object.keys(selectedAssets);
+            const cbs = document.querySelectorAll('.asset-select-cb');
+            if (keys.length > 0) {
+                selectedAssets = {};
+                cbs.forEach(cb => cb.checked = false);
+            } else {
+                cbs.forEach(cb => {
+                    cb.checked = true;
+                    const pName = cb.getAttribute('data-plant-name');
+                    const vId = cb.getAttribute('data-variant-id');
+                    const title = cb.getAttribute('data-title');
+                    selectedAssets[`${pName}__${vId}`] = { plant_name: pName, variant_id: vId, title: title };
+                });
+            }
+            updateSelectedAssetsUI();
+        }
+
+        function resliceSelectedAssets() {
+            const items = Object.values(selectedAssets);
+            if (items.length === 0) return;
+            if (!confirm(`确定要将已选中的 ${items.length} 个植物资产批量重新切片为【真彩保留 + 边缘消隐】模式吗？`)) {
+                return;
+            }
+            const btn = document.getElementById('batchResliceBtn');
+            const origHtml = btn.innerHTML;
+            btn.innerText = `⏳ 正在重切 0/${items.length}...`;
+            btn.disabled = true;
+
+            fetch('/api/reslice_batch', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ items: items })
+            }).then(res => res.json()).then(res => {
+                if (res.status === 'success') {
+                    alert(`🎉 批量重切完成！成功: ${res.succeeded} 个，失败: ${res.failed} 个。`);
+                    selectedAssets = {};
+                    updateSelectedAssetsUI();
+                    loadData();
+                } else {
+                    alert('❌ 批量重切失败: ' + (res.error || ''));
+                }
+            }).catch(err => alert('网络错误: ' + err))
+            .finally(() => {
+                btn.innerHTML = origHtml;
+                btn.disabled = false;
+                updateSelectedAssetsUI();
+            });
+        }
+
+        function resliceSingleAsset(plantName, variantId, titleText) {
+            if (!confirm(`确定要将 [${titleText}] (Variant: ${variantId}) 重新切片为真彩模式吗？\n系统将自动匹配原始图像，保留 RGB 色彩并执行边缘去白边消隐。`)) {
+                return;
+            }
+            const btn = document.getElementById('modalResliceAssetBtn');
+            if (btn) {
+                btn.innerText = '正在真彩切片...';
+                btn.disabled = true;
+            }
+            fetch('/api/reslice_asset', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ plant_name: plantName, variant_id: variantId })
+            }).then(res => res.json()).then(res => {
+                if (res.status === 'success') {
+                    alert('🎉 重新切片成功！已升级为真彩高保真切片。');
+                    closeLayerModal();
+                    loadData();
+                } else {
+                    alert('❌ 重新切片失败: ' + (res.error || '未知错误'));
+                }
+            }).catch(err => alert('网络错误: ' + err))
+            .finally(() => {
+                if (btn) {
+                    btn.innerText = '🎨 重新切片(升级真彩)';
+                    btn.disabled = false;
+                }
+            });
+        }
 
         function switchLeftTab(tab) {
             currentLeftTab = tab;
@@ -613,8 +968,11 @@ HTML_CONTENT = """
                     }
                     
                     assets.forEach(variant => {
+                        const key = `${variant.plant_name}__${variant.variant_id}`;
+                        const isSelected = !!selectedAssets[key];
                         const card = document.createElement('div');
-                        card.className = 'card';
+                        card.className = 'card' + (isSelected ? ' selected-asset' : '');
+                        card.setAttribute('data-asset-key', key);
                         card.style.cursor = 'pointer';
                         
                         let imagesHtml = '';
@@ -642,23 +1000,31 @@ HTML_CONTENT = """
                             : variant.plant_name;
                         
                         const variantDataStr = JSON.stringify(variant).replace(/"/g, '&quot;');
-
                         const displayTitleStr = hasAlias ? `${variant.display_name} (${variant.plant_name})` : variant.plant_name;
+                        const colorBadgeHtml = variant.true_color 
+                            ? `<span class="badge-truecolor" title="真彩保留 RGB + 边缘消隐">✨ 真彩</span>` 
+                            : `<span class="badge-grayscale" title="旧版灰度提取">⚪ 灰度</span>`;
+
                         card.innerHTML = `
+                            <input type="checkbox" class="asset-select-cb" data-key="${key}" data-plant-name="${variant.plant_name}" data-variant-id="${variant.variant_id}" data-title="${displayTitleStr.replace(/"/g, '&quot;')}" ${isSelected ? 'checked' : ''} onclick="event.stopPropagation(); handleAssetSelect(this, '${variant.plant_name}', '${variant.variant_id}', '${displayTitleStr.replace(/'/g, "\\'")}')" />
+                            <button class="card-close-btn" title="移出资产并召回原图" onclick="event.stopPropagation(); removeAsset('${variant.plant_name}', '${variant.variant_id}', '${displayTitleStr.replace(/'/g, "\\'")}')">&times;</button>
                             <div class="img-container">${imagesHtml}</div>
-                            <div class="title" style="margin-top:2px;">${titleHtml}</div>
+                            <div style="display:flex; justify-content:center; align-items:center; gap:6px; margin-top:2px;">
+                                <div class="title" style="margin:0;">${titleHtml}</div>
+                                ${colorBadgeHtml}
+                            </div>
                             <div class="subtitle" style="margin-top:2px;">Variant: ${variant.variant_id}</div>
-                            <div style="margin-top:6px; display:flex; gap:6px; justify-content:center; width:100%;">
-                                <span class="layer-badge-btn" style="flex:1; justify-content:center;" onclick="event.stopPropagation(); openLayerModal(${variantDataStr})">
+                            <div style="margin-top:6px;">
+                                <span class="layer-badge-btn" onclick="event.stopPropagation(); openLayerModal(${variantDataStr})">
                                     🧩 ${variant.layers.length} 个独立图层 ↗
                                 </span>
-                                <button class="btn-danger" style="padding:3px 10px; font-size:11px; border-radius:12px; border:1px solid #da3633; margin-top:6px;" onclick="event.stopPropagation(); removeAsset('${variant.plant_name}', '${variant.variant_id}', '${displayTitleStr.replace(/'/g, "\\'")}')">移出</button>
                             </div>
                         `;
                         
                         card.onclick = () => openLayerModal(variant);
                         aGal.appendChild(card);
                     });
+                    updateSelectedAssetsUI();
                 }).catch(err => {
                     console.error("加载资产失败:", err);
                 });
@@ -688,10 +1054,17 @@ HTML_CONTENT = """
         }
 
         function openLayerModal(variant) {
+            activeModalVariant = variant;
             const hasAlias = variant.display_name && variant.display_name !== variant.plant_name;
             const titleText = hasAlias ? `${variant.display_name} (${variant.plant_name})` : variant.plant_name;
-            document.getElementById('layerModalTitle').innerText = `🌱 ${titleText} · Variant: ${variant.variant_id}`;
+            const colorTag = variant.true_color ? '✨ 真彩高保真' : '⚪ 传统灰度';
+            document.getElementById('layerModalTitle').innerText = `🌱 ${titleText} · Variant: ${variant.variant_id} [${colorTag}]`;
             document.getElementById('layerModalSubtitle').innerText = `路径: assets/plants/${variant.path_prefix} | 共 ${variant.layers.length} 个独立分层切片`;
+
+            const resliceBtn = document.getElementById('modalResliceAssetBtn');
+            if (resliceBtn) {
+                resliceBtn.onclick = () => resliceSingleAsset(variant.plant_name, variant.variant_id, titleText);
+            }
 
             const removeBtn = document.getElementById('modalRemoveAssetBtn');
             if (removeBtn) {
@@ -711,6 +1084,8 @@ HTML_CONTENT = """
             const fallbackColors = ['layer-red', 'layer-green', 'layer-blue'];
             const fallbackTags = ['tag-red', 'tag-green', 'tag-blue'];
             const fallbackLabels = ['红通道', '绿通道', '蓝通道'];
+
+            modalLayerFilters = variant.layers.map(() => ({ visible: true, hue: 0, sat: 100, bri: 100 }));
 
             variant.layers.forEach((layer, idx) => {
                 let cssClass = '';
@@ -744,15 +1119,35 @@ HTML_CONTENT = """
                 compImg.id = `comp-layer-${idx}`;
                 compositeBox.appendChild(compImg);
 
-                // 2. Toggle row
-                const toggleItem = document.createElement('label');
-                toggleItem.style.cssText = 'display:flex; align-items:center; gap:8px; font-size:12px; color:#c9d1d9; cursor:pointer; background:#0d1117; padding:6px 10px; border-radius:6px; border:1px solid #30363d; user-select:none;';
-                toggleItem.innerHTML = `
-                    <input type="checkbox" checked onchange="document.getElementById('comp-layer-${idx}').style.opacity = this.checked ? '1' : '0'" style="accent-color:#1f6feb; cursor:pointer;" />
-                    <span class="slice-tag ${tagClass}">${layer}</span>
-                    <span style="color:#8b949e; font-size:11px;">${label}</span>
+                // 2. Interactive Layer Control Card
+                const ctrlCard = document.createElement('div');
+                ctrlCard.className = 'layer-control-card';
+                ctrlCard.innerHTML = `
+                    <div class="layer-control-header">
+                        <label style="display:flex; align-items:center; gap:8px; cursor:pointer; user-select:none;">
+                            <input type="checkbox" checked id="layer-vis-${idx}" onchange="toggleLayerVisibility(${idx}, this.checked)" style="accent-color:#1f6feb; cursor:pointer;" />
+                            <span class="slice-tag ${tagClass}">${layer}</span>
+                            <span style="color:#c9d1d9; font-size:12px; font-weight:600;">${label}</span>
+                        </label>
+                        <button class="btn-reset-filter" onclick="resetSingleLayerFilter(${idx})" title="重置此图层色相与明度">↺ 重置</button>
+                    </div>
+                    <div class="slider-row">
+                        <label>色相偏移</label>
+                        <input type="range" min="0" max="360" value="0" step="5" id="slider-hue-${idx}" oninput="setLayerFilterValue(${idx}, 'hue', this.value, 'val-hue-${idx}')" />
+                        <span class="slider-val" id="val-hue-${idx}">0°</span>
+                    </div>
+                    <div class="slider-row">
+                        <label>饱和度</label>
+                        <input type="range" min="0" max="200" value="100" step="5" id="slider-sat-${idx}" oninput="setLayerFilterValue(${idx}, 'sat', this.value, 'val-sat-${idx}')" />
+                        <span class="slider-val" id="val-sat-${idx}">100%</span>
+                    </div>
+                    <div class="slider-row">
+                        <label>明度</label>
+                        <input type="range" min="50" max="150" value="100" step="5" id="slider-bri-${idx}" oninput="setLayerFilterValue(${idx}, 'bri', this.value, 'val-bri-${idx}')" />
+                        <span class="slider-val" id="val-bri-${idx}">100%</span>
+                    </div>
                 `;
-                toggleList.appendChild(toggleItem);
+                toggleList.appendChild(ctrlCard);
 
                 // 3. Isolated Slice Card
                 const sliceCard = document.createElement('div');
@@ -768,7 +1163,92 @@ HTML_CONTENT = """
                 slicesGrid.appendChild(sliceCard);
             });
 
+            updateCombinedCssBox();
             document.getElementById('layerModal').style.display = 'flex';
+        }
+
+        function toggleLayerVisibility(idx, isChecked) {
+            modalLayerFilters[idx].visible = isChecked;
+            applyLayerFilters(idx);
+        }
+
+        function setLayerFilterValue(idx, key, val, textId) {
+            modalLayerFilters[idx][key] = parseInt(val, 10);
+            const valEl = document.getElementById(textId);
+            if (valEl) valEl.innerText = (key === 'hue') ? `${val}°` : `${val}%`;
+            applyLayerFilters(idx);
+        }
+
+        function resetSingleLayerFilter(idx) {
+            modalLayerFilters[idx] = { visible: true, hue: 0, sat: 100, bri: 100 };
+            const vis = document.getElementById(`layer-vis-${idx}`);
+            if (vis) vis.checked = true;
+            const sHue = document.getElementById(`slider-hue-${idx}`);
+            if (sHue) sHue.value = 0;
+            const sSat = document.getElementById(`slider-sat-${idx}`);
+            if (sSat) sSat.value = 100;
+            const sBri = document.getElementById(`slider-bri-${idx}`);
+            if (sBri) sBri.value = 100;
+            const vHue = document.getElementById(`val-hue-${idx}`);
+            if (vHue) vHue.innerText = '0°';
+            const vSat = document.getElementById(`val-sat-${idx}`);
+            if (vSat) vSat.innerText = '100%';
+            const vBri = document.getElementById(`val-bri-${idx}`);
+            if (vBri) vBri.innerText = '100%';
+            applyLayerFilters(idx);
+        }
+
+        function resetAllLayerFilters() {
+            if (!modalLayerFilters) return;
+            modalLayerFilters.forEach((_, idx) => resetSingleLayerFilter(idx));
+        }
+
+        function applyLayerFilters(idx) {
+            const f = modalLayerFilters[idx];
+            const img = document.getElementById(`comp-layer-${idx}`);
+            if (!img) return;
+            img.style.opacity = f.visible ? '1' : '0';
+            const parts = [];
+            if (f.hue !== 0) parts.push(`hue-rotate(${f.hue}deg)`);
+            if (f.sat !== 100) parts.push(`saturate(${f.sat}%)`);
+            if (f.bri !== 100) parts.push(`brightness(${f.bri}%)`);
+            img.style.filter = parts.length > 0 ? parts.join(' ') : 'none';
+            updateCombinedCssBox();
+        }
+
+        function updateCombinedCssBox() {
+            if (!activeModalVariant) return;
+            const cssBox = document.getElementById('combinedCssCode');
+            if (!cssBox) return;
+            const rules = [];
+            activeModalVariant.layers.forEach((layer, idx) => {
+                const f = modalLayerFilters[idx];
+                const parts = [];
+                if (f.hue !== 0) parts.push(`hue-rotate(${f.hue}deg)`);
+                if (f.sat !== 100) parts.push(`saturate(${f.sat}%)`);
+                if (f.bri !== 100) parts.push(`brightness(${f.bri}%)`);
+                if (!f.visible) parts.push('opacity(0)');
+                if (parts.length > 0) {
+                    rules.push(`.plant-sprite.plant-${activeModalVariant.plant_name}-v${activeModalVariant.variant_id} .${layer.replace('.png', '')} { filter: ${parts.join(' ')}; }`);
+                }
+            });
+            if (rules.length === 0) {
+                cssBox.innerText = '/* 当前所有通道保持原生色彩 (filter: none) */';
+            } else {
+                cssBox.innerText = rules.join('\n');
+            }
+        }
+
+        function copyCombinedCss() {
+            const cssBox = document.getElementById('combinedCssCode');
+            if (!cssBox) return;
+            navigator.clipboard.writeText(cssBox.innerText).then(() => {
+                const originalText = cssBox.innerText;
+                cssBox.innerText = '✅ 已成功复制 CSS 滤镜到剪贴板！';
+                setTimeout(() => {
+                    cssBox.innerText = originalText;
+                }, 1500);
+            }).catch(err => alert('复制失败: ' + err));
         }
 
         function closeLayerModal() {
@@ -961,12 +1441,16 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
                             layers = [f for f in os.listdir(item_path) if f.endswith('.png')]
                             if layers:
                                 display_name = plant_name
+                                true_color = False
+                                source_image = None
                                 meta_file = os.path.join(item_path, 'metadata.json')
                                 if os.path.exists(meta_file):
                                     try:
                                         with open(meta_file, 'r', encoding='utf-8') as mf:
                                             mdata = json.load(mf)
                                             display_name = mdata.get('display_name') or mdata.get('name') or plant_name
+                                            true_color = bool(mdata.get('true_color', False))
+                                            source_image = mdata.get('source_image')
                                     except Exception:
                                         pass
                                 variants.append({
@@ -974,6 +1458,8 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
                                     'display_name': display_name,
                                     'variant_id': item,
                                     'layers': layers,
+                                    'true_color': true_color,
+                                    'source_image': source_image,
                                     'path_prefix': f'{plant_name}/{item}'
                                 })
                     
@@ -982,12 +1468,16 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
                         layers = [f for f in os.listdir(plant_path) if f.endswith('.png')]
                         if layers:
                             display_name = plant_name
+                            true_color = False
+                            source_image = None
                             meta_file = os.path.join(plant_path, 'metadata.json')
                             if os.path.exists(meta_file):
                                 try:
                                     with open(meta_file, 'r', encoding='utf-8') as mf:
                                         mdata = json.load(mf)
                                         display_name = mdata.get('display_name') or mdata.get('name') or plant_name
+                                        true_color = bool(mdata.get('true_color', False))
+                                        source_image = mdata.get('source_image')
                                 except Exception:
                                     pass
                             variants.append({
@@ -995,6 +1485,8 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
                                 'display_name': display_name,
                                 'variant_id': 'default',
                                 'layers': layers,
+                                'true_color': true_color,
+                                'source_image': source_image,
                                 'path_prefix': plant_name
                             })
             
@@ -1223,6 +1715,108 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
                 self.wfile.write(json.dumps({"status": "success", "recalled_candidate": recalled}).encode('utf-8'))
             except Exception as e:
                 import traceback
+                traceback.print_exc()
+                self.send_response(500)
+                self.send_header('Content-type', 'application/json')
+                self.end_headers()
+                self.wfile.write(json.dumps({"status": "error", "error": str(e)}).encode('utf-8'))
+
+        elif self.path == '/api/reslice_asset':
+            content_length = int(self.headers['Content-Length'])
+            post_data = self.rfile.read(content_length)
+            
+            try:
+                data = json.loads(post_data.decode('utf-8'))
+                plant_name = data.get('plant_name')
+                variant_id = data.get('variant_id')
+                if not plant_name or not variant_id:
+                    raise Exception("缺少 plant_name 或 variant_id")
+                
+                src_path = find_source_image_for_asset(plant_name, variant_id)
+                if not src_path or not os.path.exists(src_path):
+                    raise Exception(f"未找到植物 [{plant_name}] 的原始图像，无法执行重切。")
+                
+                display_name = plant_name
+                meta_file = os.path.join(PLANTS_DIR, plant_name, variant_id, 'metadata.json')
+                if os.path.exists(meta_file):
+                    try:
+                        with open(meta_file, 'r', encoding='utf-8') as mf:
+                            mdata = json.load(mf)
+                            display_name = mdata.get('display_name', plant_name)
+                    except Exception:
+                        pass
+                
+                if not run_build_asset(src_path, plant_name, variant_id, display_name):
+                    raise Exception("真彩切片生成失败")
+                
+                self.send_response(200)
+                self.send_header('Content-type', 'application/json')
+                self.end_headers()
+                self.wfile.write(json.dumps({
+                    "status": "success",
+                    "plant_name": plant_name,
+                    "variant_id": variant_id,
+                    "source_image": os.path.basename(src_path)
+                }).encode('utf-8'))
+            except Exception as e:
+                traceback.print_exc()
+                self.send_response(500)
+                self.send_header('Content-type', 'application/json')
+                self.end_headers()
+                self.wfile.write(json.dumps({"status": "error", "error": str(e)}).encode('utf-8'))
+
+        elif self.path == '/api/reslice_batch':
+            content_length = int(self.headers['Content-Length'])
+            post_data = self.rfile.read(content_length)
+            
+            try:
+                data = json.loads(post_data.decode('utf-8'))
+                items = data.get('items', [])
+                if not items:
+                    raise Exception("未指定要重切的植物资产列表")
+                
+                succeeded = 0
+                failed = 0
+                errors = []
+                
+                for item in items:
+                    p_name = item.get('plant_name')
+                    v_id = item.get('variant_id')
+                    try:
+                        src_path = find_source_image_for_asset(p_name, v_id)
+                        if not src_path or not os.path.exists(src_path):
+                            raise Exception(f"未找到原图: {p_name}")
+                        
+                        display_name = p_name
+                        meta_file = os.path.join(PLANTS_DIR, p_name, v_id, 'metadata.json')
+                        if os.path.exists(meta_file):
+                            try:
+                                with open(meta_file, 'r', encoding='utf-8') as mf:
+                                    mdata = json.load(mf)
+                                    display_name = mdata.get('display_name', p_name)
+                            except Exception:
+                                pass
+                        
+                        if run_build_asset(src_path, p_name, v_id, display_name):
+                            succeeded += 1
+                        else:
+                            failed += 1
+                            errors.append(f"{p_name}: 构建失败")
+                    except Exception as err:
+                        failed += 1
+                        errors.append(f"{p_name}: {str(err)}")
+                
+                self.send_response(200)
+                self.send_header('Content-type', 'application/json')
+                self.end_headers()
+                self.wfile.write(json.dumps({
+                    "status": "success",
+                    "total": len(items),
+                    "succeeded": succeeded,
+                    "failed": failed,
+                    "errors": errors
+                }).encode('utf-8'))
+            except Exception as e:
                 traceback.print_exc()
                 self.send_response(500)
                 self.send_header('Content-type', 'application/json')

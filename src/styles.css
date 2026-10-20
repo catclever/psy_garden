@@ -423,12 +423,10 @@ body, html {
 .plant-sprite.plant-plant_0340-v01 .layer-red { background-image: url('assets/plants/plant_0340/01/layer_red.png'); }
 .plant-sprite.plant-plant_0340-v01 .layer-green { background-image: url('assets/plants/plant_0340/01/layer_green.png'); }
 .plant-sprite.plant-plant_0340-v01 .layer-blue { background-image: url('assets/plants/plant_0340/01/layer_blue.png'); }
-
 /* CSS Output for plant_0084 (臥牛, Variant: 01) */
 .plant-sprite.plant-plant_0084-v01 { width: 99px; height: 125px; }
 .plant-sprite.plant-plant_0084-v01 .layer-red { background-image: url('assets/plants/plant_0084/01/layer_red.png'); }
 .plant-sprite.plant-plant_0084-v01 .layer-green { background-image: url('assets/plants/plant_0084/01/layer_green.png'); }
-
 /* CSS Output for plant_0314 (大叶肉托果, Variant: 01) */
 .plant-sprite.plant-plant_0314-v01 { width: 136px; height: 125px; }
 .plant-sprite.plant-plant_0314-v01 .layer-red { background-image: url('assets/plants/plant_0314/01/layer_red.png'); }
