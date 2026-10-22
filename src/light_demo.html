@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Psy Garden - Zen 2.5D Lighting & Wash Shadows</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body, html { width: 100%; height: 100%; overflow: hidden; background-color: #050505; font-family: "Noto Serif SC", serif; }
+
+        #canvas-container { width: 100%; height: 100%; position: absolute; z-index: 1; }
+
+        #hud { position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 10; pointer-events: none; padding: 20px; display: flex; justify-content: space-between; align-items: flex-start; }
+        .panel { background: rgba(15, 15, 15, 0.4); backdrop-filter: blur(10px); padding: 20px; border-radius: 12px; pointer-events: auto; border: 1px solid rgba(255,255,255,0.1); color: #e5e5e5; display: flex; flex-direction: column; gap: 15px; }
+        .panel h3 { font-size: 1rem; margin-bottom: 10px; color: #f0ebd8; font-weight: normal; letter-spacing: 2px; }
+
+        .btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 10px 20px; cursor: pointer; border-radius: 6px; font-family: inherit; transition: all 0.3s; display: flex; align-items: center; gap: 8px; }
+        .btn:hover { background: rgba(255,255,255,0.2); box-shadow: 0 0 10px rgba(255,255,255,0.1); }
+        .btn.active { background: rgba(255, 200, 100, 0.3); border-color: rgba(255, 200, 100, 0.5); }
+
+        .color-pickers { display: flex; flex-direction: column; gap: 10px; }
+        .color-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 0.9rem; }
+        input[type="color"] { background: none; border: none; width: 40px; height: 30px; cursor: pointer; padding: 0; }
+
+        .loading { position: absolute; inset: 0; background: #111; z-index: 100; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem; transition: opacity 0.5s; }
+    </style>
+</head>
+<body>
+    <div id="loading" class="loading">Loading Garden Assets...</div>
+    <div id="canvas-container"></div>
+
+    <div id="hud">
+        <div class="panel" style="width: 250px;">
+            <h3>🌸 色彩浸染</h3>
+            <div class="color-pickers">
+                <div class="color-row">
+                    <span>主色 (Red)</span>
+                    <input type="color" id="colorR" value="#9b6e45">
+                </div>
+                <div class="color-row">
+                    <span>辅色 (Green)</span>
+                    <input type="color" id="colorG" value="#4fa85a">
+                </div>
+                <div class="color-row">
+                    <span>点缀 (Blue)</span>
+                    <input type="color" id="colorB" value="#e8b54b">
+                </div>
+            </div>
+            <button class="btn" id="btnRandomize" style="margin-top: 10px; justify-content: center;">🎲 随机生成花园</button>
+        </div>
+
+        <div class="panel">
+            <h3>🌦️ 天光变幻</h3>
+            <button class="btn" id="btnDay" data-weather="day">☀️ 晴朗日光</button>
+            <button class="btn active" id="btnSunset" data-weather="sunset">🌇 晚霞金晖</button>
+            <button class="btn" id="btnMoon" data-weather="moon">🌙 静谧月夜</button>
+            <button class="btn" id="btnDark" data-weather="dark">🌌 纯黑之境</button>
+        </div>
+    </div>
+
+    <!-- Import Three.js -->
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.160.0/build/three.module.js"
+        }
+    }
+    </script>
+
+    <script type="module">
+        import * as THREE from 'three';
+
+        // --------------------------------------------------------
+        // 1. SCENE SETUP (Strict 2.5D Isometric)
+        // --------------------------------------------------------
+        const container = document.getElementById('canvas-container');
+        const scene = new THREE.Scene();
+        // Zen background color; will be modified by weather
+        scene.background = new THREE.Color('#9e8f63');
+        scene.fog = new THREE.FogExp2('#9e8f63', 0.001);
+
+        const aspect = window.innerWidth / window.innerHeight;
+        const frustumSize = 800; // Define scale of our 2.5D view
+        const camera = new THREE.OrthographicCamera(
+            frustumSize * aspect / - 2, frustumSize * aspect / 2,
+            frustumSize / 2, frustumSize / - 2,
+            -2000, 2000
+        );
+
+        // 2.5D Isometric positioning: elevation 35 deg, azimuth 45 deg
+        const isoAngle = Math.PI / 4;
+        const elevAngle = Math.atan(1 / Math.sqrt(2)); // true isometric is ~35.264
+        const camDist = 1000;
+        camera.position.set(
+            camDist * Math.cos(elevAngle) * Math.sin(isoAngle),
+            camDist * Math.sin(elevAngle),
+            camDist * Math.cos(elevAngle) * Math.cos(isoAngle)
+        );
+        camera.lookAt(0, 0, 0);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        // NO SHADOW MAPS (Plan A requirement)
+        renderer.shadowMap.enabled = false;
+        container.appendChild(renderer.domElement);
+
+        // Ground Plane (Warm zen grid pattern base)
+        const groundGeo = new THREE.PlaneGeometry(3000, 3000);
+        const groundMat = new THREE.MeshBasicMaterial({
+            color: 0x9e8f63,
+            depthWrite: false
+        });
+        const ground = new THREE.Mesh(groundGeo, groundMat);
+        ground.rotation.x = -Math.PI / 2;
+        scene.add(ground);
+
+        // Grid helper to enhance 2.5D feel
+        const gridHelper = new THREE.GridHelper(2000, 100, 0x82734b, 0x82734b);
+        gridHelper.material.opacity = 0.3;
+        gridHelper.material.transparent = true;
+        scene.add(gridHelper);
+
+        // --------------------------------------------------------
+        // 2. SHADERS (Ink-wash Shadows & Botanical Rim Light)
+        // --------------------------------------------------------
+
+        const plantVertexShader = `
+            varying vec2 vUv;
+            varying vec3 vWorldPosition;
+            void main() {
+                vUv = uv;
+                vec4 worldPosition = modelMatrix * vec4(position, 1.0);
+                vWorldPosition = worldPosition.xyz;
+                gl_Position = projectionMatrix * viewMatrix * worldPosition;
+            }
+        `;
+
+        const plantFragmentShader = `
+            uniform sampler2D tRed;
+            uniform sampler2D tGreen;
+            uniform sampler2D tBlue;
+
+            uniform vec3 colorRed;
+            uniform vec3 colorGreen;
+            uniform vec3 colorBlue;
+
+            uniform vec3 ambientColor;
+            uniform vec3 sunColor;
+            uniform vec2 sunDirection2D; // Direction of sun in screen space for rim light
+
+            uniform vec3 incensePos;
+            uniform vec3 incenseColor;
+
+            uniform vec3 mousePos;
+            uniform vec3 mouseColor;
+
+            varying vec2 vUv;
+            varying vec3 vWorldPosition;
+
+            void main() {
+                vec4 texR = texture2D(tRed, vUv);
+                vec4 texG = texture2D(tGreen, vUv);
+                vec4 texB = texture2D(tBlue, vUv);
+
+                // Combine masks (assume they are greyscale masks with alpha)
+                float alphaR = texR.a;
+                float alphaG = texG.a;
+                float alphaB = texB.a;
+
+                // For simplified setup, we sum them based on whichever is strongest
+                // Real implementation would rely on specific layer structures, but here we tint additive
+                vec3 finalColor = vec3(0.0);
+                float finalAlpha = 0.0;
+
+                if (alphaR > 0.1) { finalColor += texR.rgb * colorRed; finalAlpha = max(finalAlpha, alphaR); }
+                if (alphaG > 0.1) { finalColor += texG.rgb * colorGreen; finalAlpha = max(finalAlpha, alphaG); }
+                if (alphaB > 0.1) { finalColor += texB.rgb * colorBlue; finalAlpha = max(finalAlpha, alphaB); }
+
+                if (finalAlpha < 0.1) discard; // Cutout
+
+                // Atmospheric Wash
+                vec3 baseAlbedo = finalColor * ambientColor;
+
+                // Rim Light Calculation (Pseudo 2.5D Rim)
+                // Offset UV towards the sun to see if we are at the edge
+                vec2 rimOffset = vUv + sunDirection2D * 0.015;
+                float rimAlphaR = texture2D(tRed, rimOffset).a;
+                float rimAlphaG = texture2D(tGreen, rimOffset).a;
+                float rimAlphaB = texture2D(tBlue, rimOffset).a;
+                float rimAlpha = max(rimAlphaR, max(rimAlphaG, rimAlphaB));
+
+                // If current pixel is solid but offset pixel is empty, we are on the sun-facing edge
+                float edgeMask = clamp((finalAlpha - rimAlpha) * 5.0, 0.0, 1.0);
+                vec3 rimLight = sunColor * edgeMask * 1.5;
+
+                // Point Lights (Incense & Mouse Orb)
+                // Calculate distance in ground plane (x, z)
+                float distIncense = distance(vWorldPosition.xz, incensePos.xz);
+                float incenseAtten = 1.0 / (1.0 + 0.005 * distIncense * distIncense);
+                vec3 incenseLight = incenseColor * incenseAtten * 2.0; // Glow base
+                // Height falloff for incense
+                incenseLight *= clamp(1.0 - (vWorldPosition.y / 150.0), 0.0, 1.0);
+
+                float distMouse = distance(vWorldPosition.xz, mousePos.xz);
+                float mouseAtten = 1.0 / (1.0 + 0.002 * distMouse * distMouse);
+                vec3 mouseLight = mouseColor * mouseAtten * 1.5;
+
+                // Final composition
+                vec3 outColor = baseAlbedo + rimLight + incenseLight + mouseLight;
+
+                gl_FragColor = vec4(outColor, finalAlpha);
+            }
+        `;
+
+        const washVertexShader = `
+            uniform vec2 shadowDirection;
+            uniform float shadowSkew;
+            uniform float shadowScaleY;
+
+            varying vec2 vUv;
+
+            void main() {
+                vUv = uv;
+
+                // Assume geometry is a plane mapped 0-1 on Y.
+                // We skew the top vertices (uv.y > 0) in the shadowDirection
+                vec3 pos = position;
+
+                // The geometry is centered by default. Let's assume its pivot is at bottom.
+                // (Geometry will be translated so bottom is y=0 locally)
+
+                // Skew based on height
+                pos.x += shadowDirection.x * pos.y * shadowSkew;
+                pos.y *= shadowScaleY; // Stretch length
+
+                // In world space, we place it on ground, flat (rotated by Threejs object)
+                gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
+            }
+        `;
+
+        const washFragmentShader = `
+            uniform sampler2D tAlphaMask; // Plant alpha
+            uniform vec4 shadowTint;
+
+            varying vec2 vUv;
+
+            void main() {
+                // Fetch alpha from plant texture
+                float alphaMask = texture2D(tAlphaMask, vUv).a;
+
+                if (alphaMask < 0.1) discard;
+
+                // Ink-Wash Vertical Fade: denser at base (uv.y = 0), fades into soil at tips (uv.y = 1)
+                float fade = clamp(1.0 - (vUv.y * 0.85), 0.0, 1.0);
+
+                gl_FragColor = vec4(shadowTint.rgb, shadowTint.a * alphaMask * fade);
+            }
+        `;
+
+        // Contact Shadow generation (Canvas based)
+        function createContactShadowTexture() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 64; canvas.height = 64;
+            const ctx = canvas.getContext('2d');
+            const grad = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
+            grad.addColorStop(0, 'rgba(0,0,0,0.6)');
+            grad.addColorStop(0.5, 'rgba(0,0,0,0.3)');
+            grad.addColorStop(1, 'rgba(0,0,0,0)');
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, 64, 64);
+            const tex = new THREE.CanvasTexture(canvas);
+            return tex;
+        }
+        const contactShadowTex = createContactShadowTexture();
+
+        // --------------------------------------------------------
+        // 3. WEATHER SYSTEM & UNIFORMS
+        // --------------------------------------------------------
+
+        const uniforms = {
+            // Colors from UI
+            colorRed: { value: new THREE.Color('#9b6e45') },
+            colorGreen: { value: new THREE.Color('#4fa85a') },
+            colorBlue: { value: new THREE.Color('#e8b54b') },
+
+            // Environment / Weather
+            ambientColor: { value: new THREE.Color('#ff9e42') },
+            sunColor: { value: new THREE.Color('#ffaa66') },
+            sunDirection2D: { value: new THREE.Vector2(-1.0, 0.5).normalize() },
+
+            // Shadows
+            shadowDirection: { value: new THREE.Vector2(1.0, -0.5).normalize() }, // Opposite of sun
+            shadowSkew: { value: 1.5 },
+            shadowScaleY: { value: 1.2 },
+            shadowTint: { value: new THREE.Vector4(50/255, 30/255, 45/255, 0.6) },
+
+            // Point Lights
+            incensePos: { value: new THREE.Vector3(0, 0, 0) },
+            incenseColor: { value: new THREE.Color('#ff5500') },
+
+            mousePos: { value: new THREE.Vector3(-9999, 0, -9999) },
+            mouseColor: { value: new THREE.Color('#ffffff') }
+        };
+
+        const weathers = {
+            day: {
+                ambient: '#ffffff',
+                sun: '#ffeedd',
+                sunDir2D: [-1.0, 1.0], // Sun top-left
+                shadowDir: [1.0, -1.0], // Shadow bottom-right
+                shadowSkew: 1.0,
+                shadowScaleY: 1.0,
+                shadowTint: [45/255, 35/255, 25/255, 0.45], // Crisp soft charcoal
+                bg: '#b4a578'
+            },
+            sunset: {
+                ambient: '#ff9e42',
+                sun: '#ff7733',
+                sunDir2D: [-1.0, 0.2], // Sun low on left
+                shadowDir: [1.0, -0.2], // Long shadow right
+                shadowSkew: 2.0,
+                shadowScaleY: 1.8,
+                shadowTint: [50/255, 30/255, 45/255, 0.6], // Plum brown
+                bg: '#82654b'
+            },
+            moon: {
+                ambient: '#93c5fd',
+                sun: '#e2e8f0',
+                sunDir2D: [0.5, 1.0], // Moon top-right
+                shadowDir: [-0.5, -1.0],
+                shadowSkew: 1.2,
+                shadowScaleY: 1.2,
+                shadowTint: [15/255, 25/255, 45/255, 0.35], // Indigo
+                bg: '#1a2332'
+            },
+            dark: {
+                ambient: '#111111',
+                sun: '#000000',
+                sunDir2D: [0, 1],
+                shadowDir: [0, -1],
+                shadowSkew: 1.0,
+                shadowScaleY: 1.0,
+                shadowTint: [5/255, 5/255, 5/255, 0.8], // Very dark
+                bg: '#050505'
+            }
+        };
+
+        // --------------------------------------------------------
+        // 4. GARDEN GENERATION
+        // --------------------------------------------------------
+
+        const textureLoader = new THREE.TextureLoader();
+        const gardenGroup = new THREE.Group();
+        scene.add(gardenGroup);
+
+        const plantCandidates = [
+            'plant_0000/01', // Has R, G, B
+            'plant_0164/01', // R, G
+            'plant_0304/01', // R, G
+            'plant_0038/01', // R, G, B
+            'plant_0067/01'  // R, G
+        ];
+
+        // Empty texture to avoid shader errors if a layer is missing
+        const emptyCanvas = document.createElement('canvas');
+        emptyCanvas.width = 1; emptyCanvas.height = 1;
+        const emptyTex = new THREE.CanvasTexture(emptyCanvas);
+
+        async function loadPlant(id, x, z) {
+            const basePath = `./assets/plants/${id}/`;
+
+            // Load layers concurrently
+            const layers = ['layer_red.png', 'layer_green.png', 'layer_blue.png'];
+            const textures = [emptyTex, emptyTex, emptyTex];
+
+            for(let i=0; i<3; i++) {
+                try {
+                    textures[i] = await textureLoader.loadAsync(basePath + layers[i]);
+                    textures[i].colorSpace = THREE.SRGBColorSpace;
+                } catch(e) {
+                    // Layer might not exist, keep emptyTex
+                }
+            }
+
+            // Base geometry (Width ~ 125, Height ~ 125 mapped to 1.0)
+            const w = 120, h = 120;
+            // Shift pivot to bottom
+            const geo = new THREE.PlaneGeometry(w, h);
+            geo.translate(0, h/2, 0);
+
+            // Plant Mesh (Billboard facing camera)
+            const mat = new THREE.ShaderMaterial({
+                vertexShader: plantVertexShader,
+                fragmentShader: plantFragmentShader,
+                uniforms: {
+                    tRed: { value: textures[0] },
+                    tGreen: { value: textures[1] },
+                    tBlue: { value: textures[2] },
+                    ...uniforms
+                },
+                transparent: true,
+                depthWrite: true,
+                side: THREE.DoubleSide
+            });
+
+            const mesh = new THREE.Mesh(geo, mat);
+            // Apply reverse rotation to act as billboard on isometric view
+            mesh.rotation.y = Math.PI / 4; // Face camera along azimuth
+            // Note: True billboarding requires updating rotation to face camera,
+            // but for static ortho 2.5D, setting it fixed is often enough.
+
+            mesh.position.set(x, 0, z);
+
+            // Wash Shadow (Plan A Ink-wash)
+            const shadowMat = new THREE.ShaderMaterial({
+                vertexShader: washVertexShader,
+                fragmentShader: washFragmentShader,
+                uniforms: {
+                    tAlphaMask: { value: textures[1] !== emptyTex ? textures[1] : textures[0] }, // use green or red as silhouette
+                    ...uniforms
+                },
+                transparent: true,
+                depthWrite: false,
+                blending: THREE.NormalBlending
+            });
+
+            const shadowGeo = new THREE.PlaneGeometry(w, h);
+            shadowGeo.translate(0, h/2, 0);
+            const washShadow = new THREE.Mesh(shadowGeo, shadowMat);
+            // Lay flat on ground
+            washShadow.rotation.x = -Math.PI / 2;
+            washShadow.position.set(x, 0.2, z); // Slightly above ground to avoid z-fighting
+
+            // Contact Shadow
+            const contactMat = new THREE.MeshBasicMaterial({
+                map: contactShadowTex,
+                transparent: true,
+                depthWrite: false,
+                opacity: 0.8
+            });
+            const contactGeo = new THREE.PlaneGeometry(w*0.8, w*0.8);
+            const contactShadow = new THREE.Mesh(contactGeo, contactMat);
+            contactShadow.rotation.x = -Math.PI / 2;
+            contactShadow.position.set(x, 0.1, z);
+
+            gardenGroup.add(contactShadow);
+            gardenGroup.add(washShadow);
+            gardenGroup.add(mesh);
+        }
+
+        async function randomizeGarden() {
+            // Clear
+            while(gardenGroup.children.length > 0){
+                gardenGroup.remove(gardenGroup.children[0]);
+            }
+
+            document.getElementById('loading').style.opacity = '1';
+            document.getElementById('loading').style.pointerEvents = 'auto';
+
+            const count = 25;
+            const radiusScale = 400;
+            const promises = [];
+
+            for(let i=0; i<count; i++) {
+                // Random position, keep center clear
+                let r = 80 + Math.random() * (radiusScale - 80);
+                let theta = Math.random() * Math.PI * 2;
+                let x = r * Math.cos(theta);
+                let z = r * Math.sin(theta);
+
+                let id = plantCandidates[Math.floor(Math.random() * plantCandidates.length)];
+                promises.push(loadPlant(id, x, z));
+            }
+
+            await Promise.all(promises);
+
+            document.getElementById('loading').style.opacity = '0';
+            document.getElementById('loading').style.pointerEvents = 'none';
+        }
+
+        // --------------------------------------------------------
+        // 5. INCENSE BURNER & MOUSE INTERACTION
+        // --------------------------------------------------------
+
+        // Visual Incense
+        const incenseGeo = new THREE.CylinderGeometry(2, 2, 20);
+        incenseGeo.translate(0, 10, 0);
+        const incenseMat = new THREE.MeshBasicMaterial({ color: 0xaa4422 });
+        const incense = new THREE.Mesh(incenseGeo, incenseMat);
+        scene.add(incense);
+
+        // Embers
+        const emberGeo = new THREE.SphereGeometry(3);
+        const emberMat = new THREE.MeshBasicMaterial({ color: 0xff5500 });
+        const ember = new THREE.Mesh(emberGeo, emberMat);
+        ember.position.y = 21;
+        scene.add(ember);
+
+        // Raycaster for Mouse Orb
+        const raycaster = new THREE.Raycaster();
+        const mouse = new THREE.Vector2();
+
+        // Visual mouse orb (思绪微光)
+        const orbGeo = new THREE.SphereGeometry(5);
+        const orbMat = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent:true, opacity:0.8 });
+        const orb = new THREE.Mesh(orbGeo, orbMat);
+        scene.add(orb);
+
+        window.addEventListener('mousemove', (event) => {
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObject(ground);
+
+            if (intersects.length > 0) {
+                let p = intersects[0].point;
+                orb.position.copy(p);
+                orb.position.y = 20; // Float slightly
+                uniforms.mousePos.value.copy(p);
+            }
+        });
+
+        // --------------------------------------------------------
+        // 6. UI & WEATHER LOGIC
+        // --------------------------------------------------------
+
+        function hexToColor(hex) { return new THREE.Color(hex); }
+
+        document.getElementById('colorR').addEventListener('input', e => uniforms.colorRed.value.copy(hexToColor(e.target.value)));
+        document.getElementById('colorG').addEventListener('input', e => uniforms.colorGreen.value.copy(hexToColor(e.target.value)));
+        document.getElementById('colorB').addEventListener('input', e => uniforms.colorBlue.value.copy(hexToColor(e.target.value)));
+
+        document.getElementById('btnRandomize').addEventListener('click', randomizeGarden);
+
+        function setWeather(name) {
+            const w = weathers[name];
+            if(!w) return;
+
+            // Smoothly lerp would be better, but instant set for simplicity
+            uniforms.ambientColor.value.set(w.ambient);
+            uniforms.sunColor.value.set(w.sun);
+            uniforms.sunDirection2D.value.set(w.sunDir2D[0], w.sunDir2D[1]).normalize();
+
+            uniforms.shadowDirection.value.set(w.shadowDir[0], w.shadowDir[1]).normalize();
+            uniforms.shadowSkew.value = w.shadowSkew;
+            uniforms.shadowScaleY.value = w.shadowScaleY;
+            uniforms.shadowTint.value.set(w.shadowTint[0], w.shadowTint[1], w.shadowTint[2], w.shadowTint[3]);
+
+            scene.background.set(w.bg);
+            scene.fog.color.set(w.bg);
+            groundMat.color.set(w.bg);
+            gridHelper.material.color.set(w.bg);
+        }
+
+        const weatherBtns = ['btnDay', 'btnSunset', 'btnMoon', 'btnDark'].map(id => document.getElementById(id));
+        weatherBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                weatherBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                setWeather(btn.dataset.weather);
+            });
+        });
+
+        // --------------------------------------------------------
+        // 7. ANIMATION LOOP
+        // --------------------------------------------------------
+
+        const clock = new THREE.Clock();
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            const t = clock.getElapsedTime();
+
+            // Incense flicker
+            let flicker = 0.8 + 0.2 * Math.sin(t * 10.0);
+            uniforms.incenseColor.value.setRGB(1.0 * flicker, 0.3 * flicker, 0.0);
+            emberMat.color.copy(uniforms.incenseColor.value);
+
+            // Orb float
+            orb.position.y = 20 + Math.sin(t * 3.0) * 5.0;
+
+            renderer.render(scene, camera);
+        }
+
+        window.addEventListener('resize', () => {
+            const aspect = window.innerWidth / window.innerHeight;
+            camera.left = -frustumSize * aspect / 2;
+            camera.right = frustumSize * aspect / 2;
+            camera.top = frustumSize / 2;
+            camera.bottom = -frustumSize / 2;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Initialize
+        setWeather('sunset');
+        randomizeGarden();
+        animate();
+
+    </script>
+</body>
+</html>
