@@ -1,16 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2.5D Lighting & Normal Map Demo</title>
+    <title>心灵花园 - 2.5D 动态光影与多通道赋色演示</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        body {
+        * {
+            box-sizing: border-box;
             margin: 0;
+            padding: 0;
+        }
+        body, html {
+            width: 100%;
+            height: 100%;
             overflow: hidden;
-            background-color: #000; /* Will be covered by three.js */
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: #fff;
+            background: #8e7f55;
+            font-family: "Noto Serif SC", serif;
+            color: #3b2a1a;
+            user-select: none;
         }
         #canvas-container {
             width: 100vw;
@@ -21,66 +31,126 @@
             left: 0;
             z-index: 1;
         }
+
+        /* 顶部/左侧禅意控制台 */
         #hud {
             position: absolute;
-            top: 20px;
-            left: 20px;
+            top: 24px;
+            left: 24px;
             z-index: 10;
-            background: rgba(30, 30, 30, 0.8);
-            backdrop-filter: blur(5px);
-            padding: 20px;
-            border-radius: 8px;
-            border: 1px solid rgba(255,255,255,0.1);
-            min-width: 250px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            background: rgba(250, 246, 238, 0.82);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 22px 26px;
+            border-radius: 12px;
+            border: 1px solid rgba(180, 140, 100, 0.35);
+            min-width: 290px;
+            box-shadow: 0 10px 30px rgba(59, 42, 26, 0.15);
+            transition: all 0.3s ease;
+        }
+        #hud h2 {
+            font-size: 17px;
+            font-weight: 600;
+            margin-bottom: 14px;
+            letter-spacing: 2px;
+            color: #4a3420;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         .hud-section {
-            margin-bottom: 20px;
+            margin-bottom: 18px;
+        }
+        .hud-section:last-child {
+            margin-bottom: 0;
         }
         .hud-section h3 {
             margin: 0 0 10px 0;
-            font-size: 14px;
+            font-size: 12px;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #ccc;
+            letter-spacing: 1.5px;
+            color: #8c7358;
+            border-bottom: 1px solid rgba(180, 140, 100, 0.2);
+            padding-bottom: 4px;
+        }
+        .preset-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
         }
         .preset-btn {
-            background: #333;
-            color: #fff;
-            border: 1px solid #555;
+            background: rgba(255, 255, 255, 0.7);
+            color: #4a3420;
+            border: 1px solid rgba(180, 140, 100, 0.35);
             padding: 8px 12px;
-            margin: 0 5px 5px 0;
-            border-radius: 4px;
+            border-radius: 6px;
             cursor: pointer;
-            font-size: 12px;
-            transition: all 0.2s;
+            font-family: inherit;
+            font-size: 13px;
+            transition: all 0.25s ease;
+            text-align: center;
         }
         .preset-btn:hover {
-            background: #444;
+            background: #fff;
+            border-color: #8c6239;
+            transform: translateY(-1px);
         }
         .preset-btn.active {
-            background: #5c8ae6;
-            border-color: #7aa2f7;
+            background: #8c6239;
+            color: #fff;
+            border-color: #5c3e20;
+            box-shadow: 0 4px 10px rgba(140, 98, 57, 0.3);
         }
         .color-picker-group {
             display: flex;
             align-items: center;
-            margin-bottom: 8px;
+            justify-content: space-between;
+            margin-bottom: 10px;
         }
         .color-picker-group label {
-            flex: 1;
             font-size: 13px;
+            color: #4a3420;
         }
         .color-picker-group input[type="color"] {
-            border: none;
-            width: 30px;
-            height: 30px;
+            -webkit-appearance: none;
+            border: 1px solid rgba(140, 98, 57, 0.3);
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
             padding: 0;
             background: transparent;
             cursor: pointer;
+            overflow: hidden;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        .color-picker-group input[type="color"]::-webkit-color-swatch-wrapper {
+            padding: 0;
+        }
+        .color-picker-group input[type="color"]::-webkit-color-swatch {
+            border: none;
+            border-radius: 50%;
+        }
+
+        /* 底部操作指引提示 */
+        #hint-bar {
+            position: absolute;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            background: rgba(250, 246, 238, 0.85);
+            backdrop-filter: blur(8px);
+            padding: 8px 20px;
+            border-radius: 20px;
+            border: 1px solid rgba(180, 140, 100, 0.3);
+            font-size: 13px;
+            letter-spacing: 1px;
+            color: #5c4530;
+            pointer-events: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
         }
     </style>
-    <!-- Import Three.js -->
+    <!-- 引入 Three.js -->
     <script type="importmap">
         {
             "imports": {
@@ -94,123 +164,154 @@
     <div id="canvas-container"></div>
 
     <div id="hud">
+        <h2>🌱 2.5D 光影实验室</h2>
+        
         <div class="hud-section">
-            <h3>Environment</h3>
-            <button class="preset-btn active" data-preset="daylight">Daylight</button>
-            <button class="preset-btn" data-preset="sunset">Sunset</button>
-            <button class="preset-btn" data-preset="overcast">Overcast</button>
-            <button class="preset-btn" data-preset="moonlight">Moonlight</button>
+            <h3>昼夜天气</h3>
+            <div class="preset-grid">
+                <button class="preset-btn active" data-preset="daylight">☀️ 晴朗日光</button>
+                <button class="preset-btn" data-preset="sunset">🌇 晚霞金晖</button>
+                <button class="preset-btn" data-preset="overcast">☁️ 烟雨微茫</button>
+                <button class="preset-btn" data-preset="moonlight">🌙 静谧月夜</button>
+            </div>
         </div>
 
         <div class="hud-section">
-            <h3>Plant Tints</h3>
+            <h3>多通道情绪赋色</h3>
             <div class="color-picker-group">
-                <label for="tint-red">Layer Red (Main):</label>
-                <input type="color" id="tint-red" value="#5c8ae6">
+                <label for="tint-green">🍃 叶片生机 (Green):</label>
+                <input type="color" id="tint-green" value="#4fa85a">
             </div>
             <div class="color-picker-group">
-                <label for="tint-green">Layer Green (Acc):</label>
-                <input type="color" id="tint-green" value="#8c6d46">
+                <label for="tint-red">🪵 枝干沉稳 (Red):</label>
+                <input type="color" id="tint-red" value="#9b6e45">
             </div>
             <div class="color-picker-group">
-                <label for="tint-blue">Layer Blue (Ext):</label>
-                <input type="color" id="tint-blue" value="#e6c35c">
+                <label for="tint-blue">🌸 花苞金辉 (Blue):</label>
+                <input type="color" id="tint-blue" value="#e8b54b">
             </div>
         </div>
+    </div>
+
+    <div id="hint-bar">
+        ✨ 晃动鼠标游走思绪光点 · 点击天气观察植物法线边缘受光
     </div>
 
     <script type="module">
         import * as THREE from 'three';
 
-        // 1. Basic Scene Setup
+        // 1. 初始化场景与渲染器
         const container = document.getElementById('canvas-container');
         const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x222222);
 
-        // 2. Setup OrthographicCamera for 2.5D isometric view
-        // Matches rotateX(60deg) rotateZ(45deg)
+        // 2. 2.5D 正交相机设置 (严格匹配 rotateX(60deg) rotateZ(45deg) 透视)
         const aspect = window.innerWidth / window.innerHeight;
-        const frustumSize = 1000;
+        const frustumSize = 520; // 调大植物比例，特写呈现
         const camera = new THREE.OrthographicCamera(
-            frustumSize * aspect / - 2,
-            frustumSize * aspect / 2,
-            frustumSize / 2,
-            frustumSize / - 2,
-            1, 2000
+            -frustumSize * aspect / 2,
+             frustumSize * aspect / 2,
+             frustumSize / 2,
+            -frustumSize / 2,
+            1, 3000
         );
 
-        // Position camera for isometric view
-        camera.position.set(500, 500, 500);
+        // 60度俯仰角 (y=500, x=612, z=612)
+        camera.position.set(600, 500, 600);
         camera.lookAt(0, 0, 0);
 
-        // 3. Renderer Setup
-        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.shadowMap.enabled = true;
         renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         container.appendChild(renderer.domElement);
 
-        // 4. Add a ground plane
-        const groundGeometry = new THREE.PlaneGeometry(2000, 2000);
-        const groundMaterial = new THREE.MeshStandardMaterial({
-            color: 0x333333,
-            roughness: 0.8,
-            metalness: 0.2
+        // 3. 动态生成网格地皮纹理 (还原 Psy Garden 原作细密网格与径向渐隐)
+        function createGridGroundTexture() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 1024;
+            canvas.height = 1024;
+            const ctx = canvas.getContext('2d');
+
+            // 底色填充为温暖干草黄土色
+            ctx.fillStyle = '#9e8f63';
+            ctx.fillRect(0, 0, 1024, 1024);
+
+            // 绘制网格
+            ctx.strokeStyle = 'rgba(180, 140, 100, 0.22)';
+            ctx.lineWidth = 1.5;
+            const step = 32;
+            for (let x = 0; x <= 1024; x += step) {
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, 1024);
+                ctx.stroke();
+            }
+            for (let y = 0; y <= 1024; y += step) {
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(1024, y);
+                ctx.stroke();
+            }
+
+            // 径向光照暗角
+            const gradient = ctx.createRadialGradient(512, 512, 100, 512, 512, 500);
+            gradient.addColorStop(0, 'rgba(255, 255, 255, 0.15)');
+            gradient.addColorStop(0.7, 'rgba(0, 0, 0, 0)');
+            gradient.addColorStop(1, 'rgba(40, 30, 20, 0.25)');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, 1024, 1024);
+
+            const texture = new THREE.CanvasTexture(canvas);
+            texture.wrapS = THREE.RepeatWrapping;
+            texture.wrapT = THREE.RepeatWrapping;
+            texture.repeat.set(4, 4);
+            return texture;
+        }
+
+        // 大地面 (彻底解决切角黑框问题)
+        const groundGeo = new THREE.PlaneGeometry(3500, 3500);
+        const groundMat = new THREE.MeshStandardMaterial({
+            map: createGridGroundTexture(),
+            roughness: 0.9,
+            metalness: 0.05
         });
-        const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+        const ground = new THREE.Mesh(groundGeo, groundMat);
         ground.rotation.x = -Math.PI / 2;
         ground.receiveShadow = true;
         scene.add(ground);
 
-        // Handle window resize
-        window.addEventListener('resize', () => {
-            const aspect = window.innerWidth / window.innerHeight;
-            camera.left = -frustumSize * aspect / 2;
-            camera.right = frustumSize * aspect / 2;
-            camera.top = frustumSize / 2;
-            camera.bottom = -frustumSize / 2;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
-
-        // Basic animation loop
-        function animate() {
-            requestAnimationFrame(animate);
-            renderer.render(scene, camera);
-        }
-        animate();
-
-        // 5. Load textures and create custom material
+        // 4. 材质生成器 (支持通道 Hex 染色 + 法线立体受光 + 环境打底防死黑)
         const textureLoader = new THREE.TextureLoader();
+        const plants = [];
 
-        // Create Plant Material Generator
         function createPlantMaterial(basePath, plantData) {
-            // Load available layers
             const layerRed = textureLoader.load(`${basePath}/layer_red.png`);
             const layerGreen = textureLoader.load(`${basePath}/layer_green.png`);
-
-            let layerBlue = null;
-            if (plantData.hasBlue) {
-                layerBlue = textureLoader.load(`${basePath}/layer_blue.png`);
-            }
-
-            // Load normal map
+            const layerBlue = plantData.hasBlue ? textureLoader.load(`${basePath}/layer_blue.png`) : null;
             const normalMap = textureLoader.load(`${basePath}/normal.png`);
 
-            // We use MeshStandardMaterial and patch its shaders to inject our multi-layer logic
+            // 保持贴图边缘清晰
+            [layerRed, layerGreen, normalMap].forEach(t => {
+                if (t) {
+                    t.generateMipmaps = true;
+                    t.minFilter = THREE.LinearMipmapLinearFilter;
+                }
+            });
+
             const material = new THREE.MeshStandardMaterial({
                 transparent: true,
-                roughness: 0.6,
-                metalness: 0.1,
+                roughness: 0.45,
+                metalness: 0.08,
                 normalMap: normalMap,
-                normalScale: new THREE.Vector2(1, 1),
+                normalScale: new THREE.Vector2(0.42, 0.42), // 适度法线斜率，既凸显圆润立体感，又绝不死黑
                 side: THREE.FrontSide
             });
 
             material.userData = {
-                tintRed: { value: new THREE.Color('#5c8ae6') },
-                tintGreen: { value: new THREE.Color('#8c6d46') },
-                tintBlue: { value: new THREE.Color('#e6c35c') }
+                tintRed: { value: new THREE.Color('#9b6e45') },
+                tintGreen: { value: new THREE.Color('#4fa85a') },
+                tintBlue: { value: new THREE.Color('#e8b54b') }
             };
 
             material.onBeforeCompile = (shader) => {
@@ -222,7 +323,6 @@
                 shader.uniforms.tintGreen = material.userData.tintGreen;
                 shader.uniforms.tintBlue = material.userData.tintBlue;
 
-                // Inject uniforms
                 shader.fragmentShader = `
                     uniform sampler2D tLayerRed;
                     uniform sampler2D tLayerGreen;
@@ -233,21 +333,18 @@
                     uniform vec3 tintBlue;
                 ` + shader.fragmentShader;
 
-                // Replace map lookup with our layered blending
+                // 核心混合 Shader: 去除纯平涂死黑，融入原明暗纹理与目标色
                 const mapChunk = `
                     vec4 texRed = texture2D(tLayerRed, vUv);
                     vec4 texGreen = texture2D(tLayerGreen, vUv);
 
-                    // Multiply luminance by target tint
-                    vec3 colRed = texRed.rgb * tintRed;
-                    vec3 colGreen = texGreen.rgb * tintGreen;
-
-                    // Use diffuseColor, which is already defined by Three.js
-                    // diffuseColor = vec4(1.0); // usually initialized by three.js
+                    // 灰度明暗乘上目标色，并保留自然明暗反差
+                    vec3 colRed = (texRed.rgb * 0.85 + 0.15) * tintRed;
+                    vec3 colGreen = (texGreen.rgb * 0.85 + 0.15) * tintGreen;
 
                     vec4 myDiffuse = vec4(0.0);
 
-                    // Blend layers based on alpha
+                    // 多图层顺序叠加
                     myDiffuse.rgb = mix(myDiffuse.rgb, colRed, texRed.a);
                     myDiffuse.a = max(myDiffuse.a, texRed.a);
 
@@ -256,13 +353,14 @@
 
                     ${layerBlue ? `
                         vec4 texBlue = texture2D(tLayerBlue, vUv);
-                        vec3 colBlue = texBlue.rgb * tintBlue;
+                        vec3 colBlue = (texBlue.rgb * 0.85 + 0.15) * tintBlue;
                         myDiffuse.rgb = mix(myDiffuse.rgb, colBlue, texBlue.a);
                         myDiffuse.a = max(myDiffuse.a, texBlue.a);
                     ` : ''}
 
-                    if (myDiffuse.a < 0.1) discard;
+                    if (myDiffuse.a < 0.05) discard;
 
+                    // 提升一点基础自发光柔和度，让阴暗面依然保有植物的温润质感
                     diffuseColor = myDiffuse;
                 `;
 
@@ -271,7 +369,6 @@
                     mapChunk
                 );
 
-                // Add vUv if it's missing (sometimes Three.js doesn't declare it if map is null initially)
                 if (!shader.fragmentShader.includes('varying vec2 vUv;')) {
                     shader.fragmentShader = 'varying vec2 vUv;\n' + shader.fragmentShader;
                     shader.vertexShader = 'varying vec2 vUv;\n' + shader.vertexShader;
@@ -285,20 +382,15 @@
             return material;
         }
 
-        // 6. Spawn some plants
-        const plants = [];
-        const spawnPlant = (x, z, basePath, plantData) => {
+        // 5. 植物实例生成函数
+        const spawnPlant = (x, z, basePath, plantData, width = 160, height = 210) => {
             const material = createPlantMaterial(basePath, plantData);
-            // Size based on metadata if available, otherwise default
-            const width = 100;
-            const height = 100;
             const geometry = new THREE.PlaneGeometry(width, height);
 
             const mesh = new THREE.Mesh(geometry, material);
-            mesh.position.set(x, height/2, z);
+            mesh.position.set(x, height / 2, z);
 
-            // To make it a billboard, it needs to face the camera.
-            // Since camera is isometric, we can just rotate the plane to look at the camera.
+            // Billboard 面向 2.5D 相机
             mesh.lookAt(camera.position);
 
             mesh.castShadow = true;
@@ -309,184 +401,188 @@
             return mesh;
         };
 
-        // We will spawn the assets we built
-        spawnPlant(0, 0, 'assets/plants/bamboo_single/1', { hasBlue: false });
-        spawnPlant(-150, 100, 'assets/plants/plant_0003/1', { hasBlue: false });
-        spawnPlant(150, -100, 'assets/plants/plant_0005/1', { hasBlue: false });
+        // 优雅散布多株植物 (比例适中，错落有致)
+        spawnPlant(-70, -20, 'assets/plants/bamboo_single/1', { hasBlue: false }, 110, 240); // 单竿挺拔竹
+        spawnPlant(80, 40, 'assets/plants/plant_0003/1', { hasBlue: false }, 190, 200);   // 优雅罗汉松盆景
+        spawnPlant(-160, 90, 'assets/plants/plant_0005/1', { hasBlue: false }, 200, 210);  // 舒展灌木
+        spawnPlant(180, -90, 'assets/plants/plant_0005/1', { hasBlue: false }, 180, 190);  // 远景小松
 
-        // 7. Dynamic Lighting System
-        const dirLight = new THREE.DirectionalLight(0xffffff, 1);
+        // 6. 燃香实体与中央点光源
+        const incenseLight = new THREE.PointLight(0xff7722, 2.8, 380, 1.2);
+        incenseLight.position.set(0, 15, 0);
+        scene.add(incenseLight);
+
+        // 燃香底座与微弱火星
+        const burnerGeo = new THREE.CylinderGeometry(8, 12, 6, 24);
+        const burnerMat = new THREE.MeshStandardMaterial({ color: 0x3d3126, roughness: 0.6 });
+        const burner = new THREE.Mesh(burnerGeo, burnerMat);
+        burner.position.set(0, 3, 0);
+        scene.add(burner);
+
+        const sparkGeo = new THREE.SphereGeometry(2.5, 16, 16);
+        const sparkMat = new THREE.MeshBasicMaterial({ color: 0xff4400 });
+        const spark = new THREE.Mesh(sparkGeo, sparkMat);
+        spark.position.set(0, 9, 0);
+        scene.add(spark);
+
+        // 7. 鼠标交互微光 (思绪游走光点)
+        const mouseLight = new THREE.PointLight(0xfff5e6, 2.0, 360, 1.4);
+        mouseLight.position.set(0, 40, 0);
+        scene.add(mouseLight);
+
+        const orbGeo = new THREE.SphereGeometry(3.5, 24, 24);
+        const orbMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+        const orbMesh = new THREE.Mesh(orbGeo, orbMat);
+        orbMesh.position.copy(mouseLight.position);
+        scene.add(orbMesh);
+
+        // 8. 全局光照与全天候天气系统
+        const dirLight = new THREE.DirectionalLight(0xfff6eb, 1.8);
         dirLight.castShadow = true;
-        dirLight.shadow.mapSize.width = 1024;
-        dirLight.shadow.mapSize.height = 1024;
-        dirLight.shadow.camera.near = 10;
-        dirLight.shadow.camera.far = 2000;
-        dirLight.shadow.camera.left = -500;
-        dirLight.shadow.camera.right = 500;
-        dirLight.shadow.camera.top = 500;
-        dirLight.shadow.camera.bottom = -500;
+        dirLight.shadow.mapSize.width = 2048;
+        dirLight.shadow.mapSize.height = 2048;
+        dirLight.shadow.bias = -0.0005;
         scene.add(dirLight);
 
-        const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444, 0.6);
+        const hemiLight = new THREE.HemisphereLight(0xffeedd, 0x5c4d36, 0.95);
         scene.add(hemiLight);
 
+        // 模拟全局环境滤镜色板
         const weatherPresets = {
             daylight: {
-                dirColor: 0xfff0dd,
-                dirIntensity: 1.2,
-                dirPos: new THREE.Vector3(300, 500, 200),
-                hemiSky: 0xffffff,
-                hemiGround: 0x888888,
-                hemiIntensity: 0.8,
-                bg: 0x87CEEB // Sky blue
+                dirColor: 0xfff6eb,
+                dirIntensity: 1.6,
+                dirPos: new THREE.Vector3(450, 600, 300),
+                hemiSky: 0xfff3e3,
+                hemiGround: 0x6e5c42,
+                hemiIntensity: 1.1,
+                incenseIntensity: 2.2,
+                bg: 0x9e8f63
             },
             sunset: {
-                dirColor: 0xff7b3a,
-                dirIntensity: 1.5,
-                dirPos: new THREE.Vector3(-400, 100, 400), // Low angle, top-left ish relative to isometric
-                hemiSky: 0x4a3b5c,
-                hemiGround: 0x221122,
-                hemiIntensity: 0.6,
-                bg: 0x4a3b5c // Purple twilight
+                dirColor: 0xff7722, // 晚霞浓郁金红
+                dirIntensity: 2.5,
+                dirPos: new THREE.Vector3(-600, 120, 200), // 15度超低角度斜射，边缘金边大放异彩
+                hemiSky: 0x6e4a68, // 暮色紫
+                hemiGround: 0x3b2a22,
+                hemiIntensity: 0.85,
+                incenseIntensity: 3.5,
+                bg: 0x6e5845
             },
             overcast: {
-                dirColor: 0xdddddd,
-                dirIntensity: 0.3,
-                dirPos: new THREE.Vector3(0, 500, 0),
-                hemiSky: 0xb8c4cc,
-                hemiGround: 0x444444,
-                hemiIntensity: 1.0,
-                bg: 0x8899a6 // Gray cyan
+                dirColor: 0xd8e4e8,
+                dirIntensity: 0.6,
+                dirPos: new THREE.Vector3(100, 500, 100),
+                hemiSky: 0xc8d6dc,
+                hemiGround: 0x5a544c,
+                hemiIntensity: 1.25,
+                incenseIntensity: 2.8,
+                bg: 0x7a7970
             },
             moonlight: {
-                dirColor: 0x7aa2f7,
-                dirIntensity: 0.8,
-                dirPos: new THREE.Vector3(400, 300, -200),
-                hemiSky: 0x141b2d,
-                hemiGround: 0x050510,
-                hemiIntensity: 0.4,
-                bg: 0x0a0f1d // Deep blue
+                dirColor: 0x76a7ff, // 清冷月光蓝
+                dirIntensity: 1.2,
+                dirPos: new THREE.Vector3(300, 400, -400),
+                hemiSky: 0x18243b,
+                hemiGround: 0x0a1018,
+                hemiIntensity: 0.5,
+                incenseIntensity: 4.5, // 夜色中燃香极其耀眼
+                bg: 0x1f2633
             }
         };
 
         function setWeather(presetName) {
-            const preset = weatherPresets[presetName];
-            if (!preset) return;
+            const p = weatherPresets[presetName];
+            if (!p) return;
 
-            dirLight.color.setHex(preset.dirColor);
-            dirLight.intensity = preset.dirIntensity;
-            dirLight.position.copy(preset.dirPos);
+            dirLight.color.setHex(p.dirColor);
+            dirLight.intensity = p.dirIntensity;
+            dirLight.position.copy(p.dirPos);
 
-            hemiLight.color.setHex(preset.hemiSky);
-            hemiLight.groundColor.setHex(preset.hemiGround);
-            hemiLight.intensity = preset.hemiIntensity;
+            hemiLight.color.setHex(p.hemiSky);
+            hemiLight.groundColor.setHex(p.hemiGround);
+            hemiLight.intensity = p.hemiIntensity;
 
-            scene.background = new THREE.Color(preset.bg);
+            incenseLight.intensity = p.incenseIntensity;
+            document.body.style.background = '#' + p.bg.toString(16).padStart(6, '0');
         }
 
-        // Initialize default
         setWeather('daylight');
 
-        // Link HUD buttons to weather presets
+        // 按钮联动
         document.querySelectorAll('.preset-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
-                e.target.classList.add('active');
-                setWeather(e.target.dataset.preset);
+                btn.classList.add('active');
+                setWeather(btn.dataset.preset);
             });
         });
 
-        // 8. Local Point Lights
+        // 9. 颜色选择器交互
+        const redInput = document.getElementById('tint-red');
+        const greenInput = document.getElementById('tint-green');
+        const blueInput = document.getElementById('tint-blue');
 
-        // Incense PointLight
-        const incenseLight = new THREE.PointLight(0xff9944, 2.0, 300);
-        incenseLight.position.set(0, 30, 0); // Ground level, center
-        scene.add(incenseLight);
+        function updateTints() {
+            const cr = new THREE.Color(redInput.value);
+            const cg = new THREE.Color(greenInput.value);
+            const cb = new THREE.Color(blueInput.value);
+            plants.forEach(p => {
+                p.material.userData.tintRed.value.copy(cr);
+                p.material.userData.tintGreen.value.copy(cg);
+                p.material.userData.tintBlue.value.copy(cb);
+            });
+        }
 
-        // Visual indicator for incense
-        const incenseGeo = new THREE.SphereGeometry(5, 16, 16);
-        const incenseMat = new THREE.MeshBasicMaterial({ color: 0xff5500 });
-        const incenseMesh = new THREE.Mesh(incenseGeo, incenseMat);
-        incenseMesh.position.copy(incenseLight.position);
-        scene.add(incenseMesh);
+        redInput.addEventListener('input', updateTints);
+        greenInput.addEventListener('input', updateTints);
+        blueInput.addEventListener('input', updateTints);
+        updateTints();
 
-        // Interactive Mouse PointLight
-        const mouseLight = new THREE.PointLight(0xffffff, 1.5, 400);
-        scene.add(mouseLight);
-
-        const mouseGeo = new THREE.SphereGeometry(3, 16, 16);
-        const mouseMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
-        const mouseMesh = new THREE.Mesh(mouseGeo, mouseMat);
-        scene.add(mouseMesh);
-
-        // Raycaster for mouse light
+        // 10. 鼠标光影射线检测
         const raycaster = new THREE.Raycaster();
         const mouse = new THREE.Vector2();
-
-        // Invisible plane for raycasting at ground level
         const hitPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
+        const targetPos = new THREE.Vector3();
 
         window.addEventListener('mousemove', (e) => {
             mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
             mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
-
             raycaster.setFromCamera(mouse, camera);
-            const target = new THREE.Vector3();
-            raycaster.ray.intersectPlane(hitPlane, target);
-
-            if (target) {
-                // Raise light a bit above ground
-                mouseLight.position.set(target.x, 80, target.z);
-                mouseMesh.position.copy(mouseLight.position);
+            if (raycaster.ray.intersectPlane(hitPlane, targetPos)) {
+                mouseLight.position.set(targetPos.x, 35, targetPos.z);
+                orbMesh.position.copy(mouseLight.position);
             }
         });
 
-        // Add simple animation for incense flickering in the animation loop
-        const originalAnimate = animate;
-        window.animate = function() {
-            // Modify the global animate func defined at top if possible, or just hook in
-        };
-        // Hook into animation loop by patching the existing one or using Three.js Clock
-        const clock = new THREE.Clock();
-        function customAnimate() {
-            requestAnimationFrame(customAnimate);
+        // 11. 窗口响应与渲染动画循环
+        window.addEventListener('resize', () => {
+            const aspect = window.innerWidth / window.innerHeight;
+            camera.left = -frustumSize * aspect / 2;
+            camera.right = frustumSize * aspect / 2;
+            camera.top = frustumSize / 2;
+            camera.bottom = -frustumSize / 2;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
 
+        const clock = new THREE.Clock();
+        function animate() {
+            requestAnimationFrame(animate);
             const time = clock.getElapsedTime();
-            // Flicker incense
-            incenseLight.intensity = 2.0 + Math.sin(time * 15) * 0.5 + Math.random() * 0.2;
+
+            // 燃香呼吸跳动感
+            const flicker = Math.sin(time * 12) * 0.4 + Math.sin(time * 23) * 0.2;
+            spark.scale.setScalar(1 + flicker * 0.15);
+
+            // 轻微的植物呼吸浮动
+            plants.forEach((p, idx) => {
+                p.position.y = (p.geometry.parameters.height / 2) + Math.sin(time * 1.5 + idx) * 2;
+            });
 
             renderer.render(scene, camera);
         }
-        // Override original animate loop
-        // We will just let the custom one run, replacing the old one logic
-        // But since requestAnimationFrame(animate) was already called,
-        // we might get double rendering. We'll just hook the original if we can,
-        // but for a demo, simply overriding renderer.render in a new loop is fine,
-        // or actually patching the original is safer.
-
-        // Actually, let's redefine the global renderer behavior to include flicker
-        scene.onBeforeRender = function() {
-            const time = Date.now() * 0.001;
-            incenseLight.intensity = 2.0 + Math.sin(time * 15) * 0.5 + Math.random() * 0.2;
-        };
-
-        // Link HUD colors to materials
-        document.getElementById('tint-red').addEventListener('input', (e) => {
-            const color = new THREE.Color(e.target.value);
-            plants.forEach(p => p.material.userData.tintRed.value.copy(color));
-        });
-        document.getElementById('tint-green').addEventListener('input', (e) => {
-            const color = new THREE.Color(e.target.value);
-            plants.forEach(p => p.material.userData.tintGreen.value.copy(color));
-        });
-        document.getElementById('tint-blue').addEventListener('input', (e) => {
-            const color = new THREE.Color(e.target.value);
-            plants.forEach(p => p.material.userData.tintBlue.value.copy(color));
-        });
-
-
-        // Export variables for other parts of the demo
-        window.demoContext = { scene, camera, renderer, THREE, plants };
+        animate();
     </script>
 </body>
 </html>
