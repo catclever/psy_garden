@@ -287,6 +287,29 @@
         // 4. 材质生成器 (支持通道 Hex 染色 + 法线立体受光 + 环境打底防死黑)
         const textureLoader = new THREE.TextureLoader();
         const plants = [];
+        const contactShadows = [];
+
+        // 根部接触阴影贴图 (让植物稳稳扎根泥土，坚实不浮空)
+        function createContactShadowTexture() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 128;
+            canvas.height = 128;
+            const ctx = canvas.getContext('2d');
+            const grad = ctx.createRadialGradient(64, 64, 0, 64, 64, 60);
+            grad.addColorStop(0, 'rgba(30, 20, 10, 0.75)');
+            grad.addColorStop(0.5, 'rgba(30, 20, 10, 0.35)');
+            grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, 128, 128);
+            return new THREE.CanvasTexture(canvas);
+        }
+        const contactTex = createContactShadowTexture();
+        const contactMat = new THREE.MeshBasicMaterial({
+            map: contactTex,
+            transparent: true,
+            opacity: 0.65,
+            depthWrite: false
+        });
 
         function createPlantMaterial(basePath, plantData) {
             const layerRed = textureLoader.load(`${basePath}/layer_red.png`);
@@ -304,14 +327,16 @@
 
             const material = new THREE.MeshStandardMaterial({
                 transparent: true,
+                alphaTest: 0.05,
                 roughness: 0.45,
                 metalness: 0.08,
                 normalMap: normalMap,
                 normalScale: new THREE.Vector2(0.42, 0.42), // 适度法线斜率，既凸显圆润立体感，又绝不死黑
-                side: THREE.FrontSide
+                side: THREE.DoubleSide
             });
 
             material.userData = {
+                normalMap: normalMap,
                 tintRed: { value: new THREE.Color('#9b6e45') },
                 tintGreen: { value: new THREE.Color('#4fa85a') },
                 tintBlue: { value: new THREE.Color('#e8b54b') }
@@ -399,20 +424,43 @@
             mesh.castShadow = true;
             mesh.receiveShadow = true;
 
+            // 赋予基于 Alpha 通道的深度材质，使半透明植物能够投射出真实的镂空剪影轮廓
+            mesh.customDepthMaterial = new THREE.MeshDepthMaterial({
+                depthPacking: THREE.RGBADepthPacking,
+                map: material.userData.normalMap,
+                alphaTest: 0.15,
+                side: THREE.DoubleSide
+            });
+
             scene.add(mesh);
             plants.push(mesh);
+
+            // 根部接触阴影 (让植物底座牢牢扎在泥土中，坚实自然不浮空)
+            const shadowGeo = new THREE.PlaneGeometry(width * 0.75, width * 0.38);
+            const shadowMesh = new THREE.Mesh(shadowGeo, contactMat);
+            shadowMesh.rotation.x = -Math.PI / 2;
+            shadowMesh.position.set(x, 0.4, z);
+            scene.add(shadowMesh);
+            contactShadows.push(shadowMesh);
+
             return mesh;
         };
 
         // 优雅散布多株植物 (比例适中，错落有致)
         window.scatterPlants = () => {
-            // 清理旧植物
+            // 清理旧植物与接触阴影
             plants.forEach(p => {
                 scene.remove(p);
                 p.geometry.dispose();
                 p.material.dispose();
             });
             plants.length = 0;
+
+            contactShadows.forEach(s => {
+                scene.remove(s);
+                s.geometry.dispose();
+            });
+            contactShadows.length = 0;
 
             const validPlants = [
                 { path: 'assets/plants/bamboo_single/1', width: 110, height: 240 },
@@ -438,8 +486,8 @@
                 const scale = 0.85 + Math.random() * 0.3;
 
                 const mesh = spawnPlant(x, z, pData.path, { hasBlue: false }, pData.width * scale, pData.height * scale);
-                // Three.js handles basic depth testing, but we can set renderOrder for transparent sorting
-                mesh.renderOrder = -z;
+                // 深度排序：从场景远端到近端正确绘制
+                mesh.renderOrder = Math.round(x + z);
             }
 
             // Sync with existing UI colors
@@ -482,8 +530,20 @@
         dirLight.castShadow = true;
         dirLight.shadow.mapSize.width = 2048;
         dirLight.shadow.mapSize.height = 2048;
-        dirLight.shadow.bias = -0.0005;
+        dirLight.shadow.bias = -0.0003;
+        dirLight.shadow.normalBias = 0.02;
+
+        // 核心修复：大幅扩展平行光阴影正交相机的视锥体与远裁剪面，完整覆盖 800x800 花园与斜射拉长阴影
+        dirLight.shadow.camera.near = 50;
+        dirLight.shadow.camera.far = 2500;
+        dirLight.shadow.camera.left = -850;
+        dirLight.shadow.camera.right = 850;
+        dirLight.shadow.camera.top = 850;
+        dirLight.shadow.camera.bottom = -850;
+        dirLight.shadow.camera.updateProjectionMatrix();
+
         scene.add(dirLight);
+        scene.add(dirLight.target);
 
         const hemiLight = new THREE.HemisphereLight(0xffeedd, 0x5c4d36, 0.95);
         scene.add(hemiLight);
@@ -539,6 +599,8 @@
             dirLight.color.setHex(p.dirColor);
             dirLight.intensity = p.dirIntensity;
             dirLight.position.copy(p.dirPos);
+            dirLight.target.position.set(0, 0, 0);
+            dirLight.shadow.camera.updateProjectionMatrix();
 
             hemiLight.color.setHex(p.hemiSky);
             hemiLight.groundColor.setHex(p.hemiGround);
