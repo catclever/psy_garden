@@ -1,15 +1,15 @@
 {
-    "name": "dummy",
-    "display_name": "dummy",
+    "name": "plant_0022",
+    "display_name": "plant_0022",
     "variant_id": "1",
-    "width": 292,
+    "width": 267,
     "height": 250,
     "layers": [
         "layer-red",
         "layer-green"
     ],
-    "source_image": "candidate_plant_0005_羅漢松.jpg",
+    "source_image": "layer_green.png",
     "true_color": false,
     "has_normal": true,
-    "created_at": 1792500030
+    "created_at": 1792655425
 }

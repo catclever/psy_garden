@@ -171,8 +171,11 @@
             <div class="preset-grid">
                 <button class="preset-btn active" data-preset="daylight">☀️ 晴朗日光</button>
                 <button class="preset-btn" data-preset="sunset">🌇 晚霞金晖</button>
-                <button class="preset-btn" data-preset="overcast">☁️ 烟雨微茫</button>
+                <button class="preset-btn" data-preset="dark">🌌 纯黑之境</button>
                 <button class="preset-btn" data-preset="moonlight">🌙 静谧月夜</button>
+            </div>
+            <div style="margin-top: 10px;">
+                <button class="preset-btn" style="width: 100%" onclick="window.scatterPlants()">🎲 随机生成花园</button>
             </div>
         </div>
 
@@ -402,10 +405,48 @@
         };
 
         // 优雅散布多株植物 (比例适中，错落有致)
-        spawnPlant(-70, -20, 'assets/plants/bamboo_single/1', { hasBlue: false }, 110, 240); // 单竿挺拔竹
-        spawnPlant(80, 40, 'assets/plants/plant_0003/1', { hasBlue: false }, 190, 200);   // 优雅罗汉松盆景
-        spawnPlant(-160, 90, 'assets/plants/plant_0005/1', { hasBlue: false }, 200, 210);  // 舒展灌木
-        spawnPlant(180, -90, 'assets/plants/plant_0005/1', { hasBlue: false }, 180, 190);  // 远景小松
+        window.scatterPlants = () => {
+            // 清理旧植物
+            plants.forEach(p => {
+                scene.remove(p);
+                p.geometry.dispose();
+                p.material.dispose();
+            });
+            plants.length = 0;
+
+            const validPlants = [
+                { path: 'assets/plants/bamboo_single/1', width: 110, height: 240 },
+                { path: 'assets/plants/plant_0003/1', width: 190, height: 200 },
+                { path: 'assets/plants/plant_0005/1', width: 200, height: 210 },
+                { path: 'assets/plants/plant_0018/1', width: 164, height: 189 },
+                { path: 'assets/plants/plant_0022/1', width: 267, height: 250 },
+                { path: 'assets/plants/plant_0164/1', width: 196, height: 148 }
+            ];
+
+            const plantCount = 20;
+            for (let i = 0; i < plantCount; i++) {
+                const pData = validPlants[Math.floor(Math.random() * validPlants.length)];
+
+                // Keep center clear for incense
+                let x, z, dist;
+                do {
+                    x = (Math.random() - 0.5) * 800;
+                    z = (Math.random() - 0.5) * 800;
+                    dist = Math.sqrt(x*x + z*z);
+                } while (dist < 120);
+
+                const scale = 0.85 + Math.random() * 0.3;
+
+                const mesh = spawnPlant(x, z, pData.path, { hasBlue: false }, pData.width * scale, pData.height * scale);
+                // Three.js handles basic depth testing, but we can set renderOrder for transparent sorting
+                mesh.renderOrder = -z;
+            }
+
+            // Sync with existing UI colors
+            if (typeof updateTints === 'function') {
+                updateTints();
+            }
+        };
 
         // 6. 燃香实体与中央点光源
         const incenseLight = new THREE.PointLight(0xff7722, 2.8, 380, 1.2);
@@ -426,7 +467,7 @@
         scene.add(spark);
 
         // 7. 鼠标交互微光 (思绪游走光点)
-        const mouseLight = new THREE.PointLight(0xfff5e6, 2.0, 360, 1.4);
+        const mouseLight = new THREE.PointLight(0xfff5e6, 4.0, 600, 1.4);
         mouseLight.position.set(0, 40, 0);
         scene.add(mouseLight);
 
@@ -452,7 +493,7 @@
             daylight: {
                 dirColor: 0xfff6eb,
                 dirIntensity: 1.6,
-                dirPos: new THREE.Vector3(450, 600, 300),
+                dirPos: new THREE.Vector3(-450, 400, 200),
                 hemiSky: 0xfff3e3,
                 hemiGround: 0x6e5c42,
                 hemiIntensity: 1.1,
@@ -462,27 +503,27 @@
             sunset: {
                 dirColor: 0xff7722, // 晚霞浓郁金红
                 dirIntensity: 2.5,
-                dirPos: new THREE.Vector3(-600, 120, 200), // 15度超低角度斜射，边缘金边大放异彩
+                dirPos: new THREE.Vector3(-600, 100, 200), // 15度超低角度斜射，边缘金边大放异彩
                 hemiSky: 0x6e4a68, // 暮色紫
                 hemiGround: 0x3b2a22,
                 hemiIntensity: 0.85,
                 incenseIntensity: 3.5,
                 bg: 0x6e5845
             },
-            overcast: {
-                dirColor: 0xd8e4e8,
-                dirIntensity: 0.6,
-                dirPos: new THREE.Vector3(100, 500, 100),
-                hemiSky: 0xc8d6dc,
-                hemiGround: 0x5a544c,
-                hemiIntensity: 1.25,
-                incenseIntensity: 2.8,
-                bg: 0x7a7970
+            dark: {
+                dirColor: 0x000000,
+                dirIntensity: 0.0,
+                dirPos: new THREE.Vector3(0, 100, 0),
+                hemiSky: 0x050505,
+                hemiGround: 0x050505,
+                hemiIntensity: 0.2,
+                incenseIntensity: 3.5,
+                bg: 0x050505
             },
             moonlight: {
                 dirColor: 0x76a7ff, // 清冷月光蓝
                 dirIntensity: 1.2,
-                dirPos: new THREE.Vector3(300, 400, -400),
+                dirPos: new THREE.Vector3(450, 400, 200),
                 hemiSky: 0x18243b,
                 hemiGround: 0x0a1018,
                 hemiIntensity: 0.5,
@@ -537,6 +578,9 @@
         redInput.addEventListener('input', updateTints);
         greenInput.addEventListener('input', updateTints);
         blueInput.addEventListener('input', updateTints);
+
+        // Initialize first garden after colors are ready
+        scatterPlants();
         updateTints();
 
         // 10. 鼠标光影射线检测
@@ -574,6 +618,8 @@
             // 燃香呼吸跳动感
             const flicker = Math.sin(time * 12) * 0.4 + Math.sin(time * 23) * 0.2;
             spark.scale.setScalar(1 + flicker * 0.15);
+            const activePreset = document.querySelector('.preset-btn.active')?.dataset.preset || 'daylight';
+            incenseLight.intensity = (weatherPresets[activePreset]?.incenseIntensity || 2.8) * (1 + flicker * 0.2);
 
             // 轻微的植物呼吸浮动
             plants.forEach((p, idx) => {

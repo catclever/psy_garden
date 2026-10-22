@@ -562,3 +562,18 @@ body, html {
 .plant-sprite.plant-dummy-v1 { width: 146px; height: 125px; }
 .plant-sprite.plant-dummy-v1 .layer-red { background-image: url('assets/plants/dummy/1/layer_red.png'); }
 .plant-sprite.plant-dummy-v1 .layer-green { background-image: url('assets/plants/dummy/1/layer_green.png'); }
+
+/* CSS Output for plant_0164 (plant_0164, Variant: 1) */
+.plant-sprite.plant-plant_0164-v1 { width: 98px; height: 74px; }
+.plant-sprite.plant-plant_0164-v1 .layer-red { background-image: url('assets/plants/plant_0164/1/layer_red.png'); }
+.plant-sprite.plant-plant_0164-v1 .layer-green { background-image: url('assets/plants/plant_0164/1/layer_green.png'); }
+
+/* CSS Output for plant_0018 (plant_0018, Variant: 1) */
+.plant-sprite.plant-plant_0018-v1 { width: 82px; height: 94px; }
+.plant-sprite.plant-plant_0018-v1 .layer-red { background-image: url('assets/plants/plant_0018/1/layer_red.png'); }
+.plant-sprite.plant-plant_0018-v1 .layer-green { background-image: url('assets/plants/plant_0018/1/layer_green.png'); }
+
+/* CSS Output for plant_0022 (plant_0022, Variant: 1) */
+.plant-sprite.plant-plant_0022-v1 { width: 133px; height: 125px; }
+.plant-sprite.plant-plant_0022-v1 .layer-red { background-image: url('assets/plants/plant_0022/1/layer_red.png'); }
+.plant-sprite.plant-plant_0022-v1 .layer-green { background-image: url('assets/plants/plant_0022/1/layer_green.png'); }
