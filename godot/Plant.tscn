@@ -1,0 +1,67 @@
+[gd_scene load_steps=8 format=3 uid="uid://cxab321c8x19"]
+
+[ext_resource type="Script" path="res://Plant.gd" id="1_a8b9f"]
+[ext_resource type="Shader" path="res://plant_foliage.gdshader" id="2_f5s4a"]
+[ext_resource type="Shader" path="res://ink_shadow.gdshader" id="3_s9g8f"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_foliage"]
+shader = ExtResource("2_f5s4a")
+shader_parameter/tint_color = Color(1, 1, 1, 1)
+shader_parameter/root_uv_y = 1.0
+shader_parameter/occlusion_height = 0.0
+shader_parameter/occlusion_darken = 0.0
+shader_parameter/shadow_ambient_color = Color(0.08, 0.12, 0.18, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_shadow"]
+shader = ExtResource("3_s9g8f")
+shader_parameter/root_uv_y = 1.0
+shader_parameter/shadow_tint = Color(0, 0, 0, 0.72)
+
+[sub_resource type="Gradient" id="Gradient_contact"]
+offsets = PackedFloat32Array(0, 1)
+colors = PackedColorArray(0, 0, 0, 0.8, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_contact"]
+gradient = SubResource("Gradient_contact")
+width = 64
+height = 32
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[node name="Plant" type="Node2D"]
+script = ExtResource("1_a8b9f")
+
+[node name="RedSprite" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_foliage")
+
+[node name="GreenSprite" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_foliage")
+
+[node name="BlueSprite" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_foliage")
+
+[node name="GroundShadowPlane" type="Node2D" parent="."]
+z_index = -50
+z_as_relative = false
+scale = Vector2(1, 0.55)
+
+[node name="ContactShadow" type="Sprite2D" parent="GroundShadowPlane"]
+texture = SubResource("GradientTexture2D_contact")
+
+[node name="SunShadowPivot" type="Node2D" parent="GroundShadowPlane"]
+
+[node name="SunShadowSprite" type="Sprite2D" parent="GroundShadowPlane/SunShadowPivot"]
+material = SubResource("ShaderMaterial_shadow")
+
+[node name="LanternShadowPivot" type="Node2D" parent="GroundShadowPlane"]
+
+[node name="LanternShadowSprite" type="Sprite2D" parent="GroundShadowPlane/LanternShadowPivot"]
+material = SubResource("ShaderMaterial_shadow")
+
+[node name="IncenseShadowPivot" type="Node2D" parent="GroundShadowPlane"]
+
+[node name="IncenseShadowSprite" type="Sprite2D" parent="GroundShadowPlane/IncenseShadowPivot"]
+material = SubResource("ShaderMaterial_shadow")
+
+[node name="Occluder" type="LightOccluder2D" parent="."]

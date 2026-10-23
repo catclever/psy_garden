@@ -10,3 +10,5 @@ docs/
 dev/
 call_mcp.py
 tools/trash/
+godot/.godot/
+godot/*.import
