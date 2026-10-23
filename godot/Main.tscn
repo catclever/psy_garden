@@ -1,0 +1,175 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://Garden.gd" id="1_garden"]
+
+[sub_resource type="Gradient" id="Gradient_lantern"]
+colors = PackedColorArray(1, 0.9, 0.7, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_lantern"]
+gradient = SubResource("Gradient_lantern")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[sub_resource type="Gradient" id="Gradient_incense"]
+colors = PackedColorArray(1, 0.4, 0.07, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_incense"]
+gradient = SubResource("Gradient_incense")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_garden")
+
+[node name="Background" type="ColorRect" parent="."]
+offset_right = 1440.0
+offset_bottom = 900.0
+color = Color(0.619608, 0.560784, 0.388235, 1)
+
+[node name="YSort" type="Node2D" parent="."]
+y_sort_enabled = true
+
+[node name="MouseLantern" type="Node2D" parent="."]
+
+[node name="PointLight2D" type="PointLight2D" parent="MouseLantern"]
+shadow_enabled = true
+texture = SubResource("GradientTexture2D_lantern")
+texture_scale = 16.0
+
+[node name="Indicator" type="Sprite2D" parent="MouseLantern"]
+modulate = Color(1, 0.901961, 0.701961, 1)
+scale = Vector2(0.1, 0.1)
+texture = SubResource("GradientTexture2D_lantern")
+
+[node name="IncenseBurner" type="Node2D" parent="."]
+position = Vector2(720, 450)
+
+[node name="PointLight2D" type="PointLight2D" parent="IncenseBurner"]
+color = Color(1, 0.4, 0.0666667, 1)
+shadow_enabled = true
+texture = SubResource("GradientTexture2D_incense")
+texture_scale = 8.0
+
+[node name="SmokeParticles" type="CPUParticles2D" parent="IncenseBurner"]
+amount = 32
+lifetime = 3.0
+emission_shape = 1
+emission_sphere_radius = 5.0
+direction = Vector2(0, -1)
+spread = 15.0
+gravity = Vector2(0, -20)
+initial_velocity_min = 10.0
+initial_velocity_max = 30.0
+scale_amount_min = 2.0
+scale_amount_max = 5.0
+color = Color(1, 0.9, 0.8, 0.3)
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="MarginContainer" type="MarginContainer" parent="HUD"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HUD/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="WeatherLabel" type="Label" parent="HUD/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Weather Presets"
+
+[node name="WeatherHBox" type="HBoxContainer" parent="HUD/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="BtnDay" type="Button" parent="HUD/MarginContainer/VBoxContainer/WeatherHBox"]
+layout_mode = 2
+text = "☀️ Day"
+
+[node name="BtnSunset" type="Button" parent="HUD/MarginContainer/VBoxContainer/WeatherHBox"]
+layout_mode = 2
+text = "🌇 Sunset"
+
+[node name="BtnNight" type="Button" parent="HUD/MarginContainer/VBoxContainer/WeatherHBox"]
+layout_mode = 2
+text = "🌙 Night"
+
+[node name="BtnDark" type="Button" parent="HUD/MarginContainer/VBoxContainer/WeatherHBox"]
+layout_mode = 2
+text = "🌌 Dark"
+
+[node name="Spacer" type="Control" parent="HUD/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="SunAngleLabel" type="Label" parent="HUD/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Sun Angle (0-360)"
+
+[node name="SunAngleSlider" type="HSlider" parent="HUD/MarginContainer/VBoxContainer"]
+layout_mode = 2
+max_value = 360.0
+value = 45.0
+
+[node name="SunLengthLabel" type="Label" parent="HUD/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Sun Shadow Length"
+
+[node name="SunLengthSlider" type="HSlider" parent="HUD/MarginContainer/VBoxContainer"]
+layout_mode = 2
+max_value = 2.0
+step = 0.1
+value = 1.0
+
+[node name="LanternIntensityLabel" type="Label" parent="HUD/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Lantern Intensity"
+
+[node name="LanternIntensitySlider" type="HSlider" parent="HUD/MarginContainer/VBoxContainer"]
+layout_mode = 2
+max_value = 2.0
+step = 0.1
+value = 1.0
+
+[node name="Spacer2" type="Control" parent="HUD/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="ColorsLabel" type="Label" parent="HUD/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Plant Colors"
+
+[node name="ColorRed" type="ColorPickerButton" parent="HUD/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+color = Color(1, 1, 1, 1)
+
+[node name="ColorGreen" type="ColorPickerButton" parent="HUD/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+color = Color(1, 1, 1, 1)
+
+[node name="ColorBlue" type="ColorPickerButton" parent="HUD/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+color = Color(1, 1, 1, 1)
+
+[node name="Spacer3" type="Control" parent="HUD/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="BtnRandomLayout" type="Button" parent="HUD/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "🎲 Random Garden"
+
+[node name="BtnDemoLayout" type="Button" parent="HUD/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "🌲 Occlusion Demo"

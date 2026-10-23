@@ -1,0 +1,14 @@
+{
+    "name": "plant_0304",
+    "display_name": "紅豆杉",
+    "variant_id": "01",
+    "width": 270,
+    "height": 250,
+    "layers": [
+        "layer-red",
+        "layer-green"
+    ],
+    "source_image": "candidate_plant_304_紅豆杉.jpg",
+    "true_color": true,
+    "created_at": 1792466856
+}
