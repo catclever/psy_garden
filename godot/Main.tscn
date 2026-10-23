@@ -3,40 +3,50 @@
 [ext_resource type="Script" path="res://Garden.gd" id="1_garden"]
 
 [sub_resource type="Gradient" id="Gradient_lantern"]
-colors = PackedColorArray(1, 0.9, 0.7, 1, 0, 0, 0, 1)
+colors = PackedColorArray(1, 0.9, 0.7, 0.55, 0, 0, 0, 0)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_lantern"]
 gradient = SubResource("Gradient_lantern")
+width = 256
+height = 256
 fill = 1
 fill_from = Vector2(0.5, 0.5)
-fill_to = Vector2(1, 0.5)
+fill_to = Vector2(0.5, 0.0)
 
 [sub_resource type="Gradient" id="Gradient_incense"]
-colors = PackedColorArray(1, 0.4, 0.07, 1, 0, 0, 0, 1)
+colors = PackedColorArray(1, 0.4, 0.07, 0.65, 0, 0, 0, 0)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_incense"]
 gradient = SubResource("Gradient_incense")
+width = 256
+height = 256
 fill = 1
 fill_from = Vector2(0.5, 0.5)
-fill_to = Vector2(1, 0.5)
+fill_to = Vector2(0.5, 0.0)
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_garden")
 
 [node name="Background" type="ColorRect" parent="."]
-offset_right = 1440.0
-offset_bottom = 900.0
+z_index = -100
+z_as_relative = false
+offset_left = -2000.0
+offset_top = -2000.0
+offset_right = 6000.0
+offset_bottom = 6000.0
 color = Color(0.619608, 0.560784, 0.388235, 1)
 
 [node name="YSort" type="Node2D" parent="."]
 y_sort_enabled = true
 
 [node name="MouseLantern" type="Node2D" parent="."]
+position = Vector2(680, 420)
 
 [node name="PointLight2D" type="PointLight2D" parent="MouseLantern"]
-shadow_enabled = true
+energy = 0.85
+shadow_enabled = false
 texture = SubResource("GradientTexture2D_lantern")
-texture_scale = 16.0
+texture_scale = 4.0
 
 [node name="Indicator" type="Sprite2D" parent="MouseLantern"]
 modulate = Color(1, 0.901961, 0.701961, 1)
@@ -48,9 +58,10 @@ position = Vector2(720, 450)
 
 [node name="PointLight2D" type="PointLight2D" parent="IncenseBurner"]
 color = Color(1, 0.4, 0.0666667, 1)
-shadow_enabled = true
+energy = 0.9
+shadow_enabled = false
 texture = SubResource("GradientTexture2D_incense")
-texture_scale = 8.0
+texture_scale = 2.5
 
 [node name="SmokeParticles" type="CPUParticles2D" parent="IncenseBurner"]
 amount = 32

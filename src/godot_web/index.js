@@ -107,7 +107,7 @@ const Features = {
 		if (!Features.isFetchAvailable()) {
 			missing.push('Fetch - Check web browser version');
 		}
-		if (!Features.isSecureContext()) {
+		if (supportsThreads && !Features.isSecureContext()) {
 			missing.push('Secure Context - Check web server configuration (use HTTPS)');
 		}
 

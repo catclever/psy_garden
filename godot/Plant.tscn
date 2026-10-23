@@ -10,7 +10,7 @@ shader_parameter/tint_color = Color(1, 1, 1, 1)
 shader_parameter/root_uv_y = 1.0
 shader_parameter/occlusion_height = 0.0
 shader_parameter/occlusion_darken = 0.0
-shader_parameter/shadow_ambient_color = Color(0.08, 0.12, 0.18, 1)
+shader_parameter/shadow_ambient_color = Color(0.28, 0.34, 0.42, 1)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_shadow"]
 shader = ExtResource("3_s9g8f")
