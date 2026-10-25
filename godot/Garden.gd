@@ -38,55 +38,76 @@ func _process(delta):
 	var sun_rad = deg_to_rad(sun_angle_deg)
 	var sun_dir = Vector2(cos(sun_rad), sin(sun_rad))
 	var shadow_scale_y = 0.55
-	var sun_shadow_world_dir = Vector2(cos(sun_rad), sin(sun_rad) * shadow_scale_y)
 
-	# 1. Update plant shadows
+	# 1. Update plant shadows via synthesized single vector
+	var plant_shadow_info: Array = []
+
 	for p in active_plants:
 		if not is_instance_valid(p): continue
 
-		# Sun Shadow
-		p.sun_shadow_pivot.rotation = sun_dir.angle() + PI / 2.0
-		p.sun_shadow_pivot.scale = Vector2(1.0, sun_length)
+		# Sun shadow vector (in isometric unscaled space)
+		var v_sun = Vector2.ZERO
+		if sun_length > 0.001:
+			v_sun = sun_dir * sun_length
 
-		# Lantern Shadow
+		# Lantern shadow vector
 		var iso_delta = (p.global_position - mouse_pos) / Vector2(1.0, shadow_scale_y)
 		var dist = iso_delta.length()
-
-		if dist < lantern_radius and dist > 5.0:
+		var v_lantern = Vector2.ZERO
+		if dist < lantern_radius and dist > 5.0 and lantern_intensity > 0.001:
 			var proximity = clamp(1.0 - dist / lantern_radius, 0.0, 1.0)
-			p.lantern_shadow_pivot.rotation = iso_delta.angle() + PI / 2.0
-			p.lantern_shadow_pivot.scale = Vector2(1.0, lerp(shadow_scale_y, 1.85, proximity))
-			var a = pow(proximity, 1.15) * 0.62 * lantern_intensity
-			p.lantern_shadow.material.set_shader_parameter("shadow_tint", Color(0, 0, 0, a))
-		else:
-			p.lantern_shadow.material.set_shader_parameter("shadow_tint", Color(0, 0, 0, 0))
+			var lantern_weight = pow(proximity, 1.25) * 1.85 * lantern_intensity
+			v_lantern = iso_delta.normalized() * lantern_weight
 
-		# Incense Shadow
+		# Incense shadow vector
 		var inc_iso = (p.global_position - incense_burner.global_position) / Vector2(1.0, shadow_scale_y)
 		var inc_dist = inc_iso.length()
+		var v_incense = Vector2.ZERO
 		if inc_dist < 320.0 and inc_dist > 5.0:
-			var proximity = clamp(1.0 - inc_dist / 320.0, 0.0, 1.0)
-			p.incense_shadow_pivot.rotation = inc_iso.angle() + PI / 2.0
-			p.incense_shadow_pivot.scale = Vector2(1.0, lerp(0.55, 1.15, proximity))
-			p.incense_shadow.material.set_shader_parameter("shadow_tint", Color(0, 0, 0, proximity * 0.35))
-		else:
-			p.incense_shadow.material.set_shader_parameter("shadow_tint", Color(0, 0, 0, 0))
+			var inc_proximity = clamp(1.0 - inc_dist / 320.0, 0.0, 1.0)
+			v_incense = inc_iso.normalized() * (pow(inc_proximity, 1.25) * 0.45)
 
-	# 2. Inter-plant shadow occlusion
+		# Combined synthesized vector (single unified shadow)
+		var v_combined = v_sun + v_lantern + v_incense
+		var combined_len = v_combined.length()
+
+		if combined_len > 0.01:
+			var combined_angle = v_combined.angle() + PI / 2.0
+			var shadow_len_clamped = clamp(combined_len, 0.15, 2.2)
+			p.sun_shadow_pivot.rotation = combined_angle
+			p.sun_shadow_pivot.scale = Vector2(1.0, shadow_len_clamped)
+
+			var base_alpha = clamp(0.72 * min(combined_len, 1.0), 0.0, 0.82)
+			p.sun_shadow.material.set_shader_parameter("shadow_tint", Color(0, 0, 0, base_alpha))
+
+			# Calculate shadow world vector for inter-plant occlusion corridor
+			var world_dir = Vector2(cos(v_combined.angle()), sin(v_combined.angle()) * shadow_scale_y)
+			var world_len = p.visual_height * shadow_len_clamped * world_dir.length()
+			plant_shadow_info.append({"plant": p, "dir": world_dir.normalized(), "len": world_len})
+		else:
+			p.sun_shadow.material.set_shader_parameter("shadow_tint", Color(0, 0, 0, 0))
+
+		# Ensure secondary shadow pivots are hidden to maintain exactly ONE unified shadow
+		if p.lantern_shadow_pivot.visible:
+			p.lantern_shadow_pivot.visible = false
+		if p.incense_shadow_pivot.visible:
+			p.incense_shadow_pivot.visible = false
+
+	# 2. Inter-plant shadow occlusion using synthesized shadow corridors
 	for b in active_plants:
 		if not is_instance_valid(b): continue
 		var cover_height: float = 0.0
 		var cover_strength: float = 0.0
 
-		for a in active_plants:
+		for caster_info in plant_shadow_info:
+			var a = caster_info["plant"]
 			if a == b or not is_instance_valid(a): continue
 
-			# Sun shadow casting from A to B
-			var shadow_world_len = a.visual_height * sun_length * sun_shadow_world_dir.length()
-			var to_b = b.global_position - a.global_position
-			var unit_dir = sun_shadow_world_dir.normalized()
+			var unit_dir = caster_info["dir"]
+			var shadow_world_len = caster_info["len"]
 
-			if unit_dir.length_squared() > 0 and shadow_world_len > 8.0:
+			if shadow_world_len > 8.0:
+				var to_b = b.global_position - a.global_position
 				var along = to_b.dot(unit_dir)
 				var perp = abs(to_b.dot(Vector2(-unit_dir.y, unit_dir.x)))
 				var half_w = a.visual_width * 0.32
@@ -95,27 +116,6 @@ func _process(delta):
 					var reach_ratio = clamp((1.0 - along / shadow_world_len) * (a.visual_height / max(b.visual_height, 1.0)), 0.0, 1.0)
 					var lateral_fit = smoothstep(half_w, half_w * 0.25, perp)
 					var strength = lateral_fit * 0.65
-
-					cover_height = max(cover_height, reach_ratio)
-					cover_strength = clamp(cover_strength + strength, 0.0, 0.70)
-
-			# Lantern shadow casting from A to B
-			var l_iso_delta = (a.global_position - mouse_pos) / Vector2(1.0, shadow_scale_y)
-			var l_dist = l_iso_delta.length()
-			if l_dist < lantern_radius and l_dist > 5.0:
-				var l_proximity = clamp(1.0 - l_dist / lantern_radius, 0.0, 1.0)
-				var l_dir = Vector2(cos(l_iso_delta.angle()), sin(l_iso_delta.angle()) * shadow_scale_y)
-				var l_unit = l_dir.normalized()
-				var l_len = a.visual_height * lerp(shadow_scale_y, 1.85, l_proximity) * l_dir.length()
-
-				var l_along = to_b.dot(l_unit)
-				var l_perp = abs(to_b.dot(Vector2(-l_unit.y, l_unit.x)))
-				var l_half_w = a.visual_width * 0.32
-
-				if l_along > 8.0 and l_along < l_len and l_perp < l_half_w:
-					var reach_ratio = clamp((1.0 - l_along / l_len) * (a.visual_height / max(b.visual_height, 1.0)), 0.0, 1.0)
-					var lateral_fit = smoothstep(l_half_w, l_half_w * 0.25, l_perp)
-					var strength = lateral_fit * (pow(l_proximity, 1.15) * 0.55)
 
 					cover_height = max(cover_height, reach_ratio)
 					cover_strength = clamp(cover_strength + strength, 0.0, 0.70)
