@@ -2,6 +2,10 @@ import http.server
 import socketserver
 import json
 import os
+import threading
+import sys
+sys.path.insert(0, os.path.dirname(__file__))
+import ai_botanist
 import glob
 import subprocess
 import traceback
@@ -1149,9 +1153,14 @@ HTML_CONTENT = """
                         
                         const variantDataStr = JSON.stringify(variant).replace(/"/g, '&quot;');
                         const displayTitleStr = hasAlias ? `${variant.display_name} (${variant.plant_name})` : variant.plant_name;
-                        const colorBadgeHtml = variant.true_color 
-                            ? `<span class="badge-truecolor card-status-badge" title="真彩保留 RGB + 边缘消隐">✨ 真彩</span>` 
-                            : `<span class="badge-grayscale card-status-badge" title="旧版灰度提取">⚪ 灰度</span>`;
+                        let colorBadgeHtml = "";
+                        if (variant.status === 'ai_analyzing') {
+                            colorBadgeHtml = `<span class="badge-grayscale card-status-badge" style="background:#f39c12; color:#fff" title="植物生物学AI分析中...">🤖 分析中...</span>`;
+                        } else {
+                            colorBadgeHtml = variant.true_color
+                                ? `<span class="badge-truecolor card-status-badge" title="真彩保留 RGB + 边缘消隐">✨ 真彩</span>`
+                                : `<span class="badge-grayscale card-status-badge" title="旧版灰度提取">⚪ 灰度</span>`;
+                        }
 
                         card.innerHTML = `
                             ${colorBadgeHtml}
@@ -1631,6 +1640,8 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
                                 display_name = plant_name
                                 true_color = False
                                 source_image = None
+                                status = 'ready'
+                                ai_analysis = None
                                 meta_file = os.path.join(item_path, 'metadata.json')
                                 if os.path.exists(meta_file):
                                     try:
@@ -1639,6 +1650,8 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
                                             display_name = mdata.get('display_name') or mdata.get('name') or plant_name
                                             true_color = bool(mdata.get('true_color', False))
                                             source_image = mdata.get('source_image')
+                                            status = mdata.get('status', 'ready')
+                                            ai_analysis = mdata.get('ai_analysis')
                                     except Exception:
                                         pass
                                 variants.append({
@@ -1648,6 +1661,8 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
                                     'layers': layers,
                                     'true_color': true_color,
                                     'source_image': source_image,
+                                    'status': status,
+                                    'ai_analysis': ai_analysis,
                                     'path_prefix': f'{plant_name}/{item}'
                                 })
                     
@@ -1658,6 +1673,8 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
                             display_name = plant_name
                             true_color = False
                             source_image = None
+                            status = 'ready'
+                            ai_analysis = None
                             meta_file = os.path.join(plant_path, 'metadata.json')
                             if os.path.exists(meta_file):
                                 try:
@@ -1666,6 +1683,8 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
                                         display_name = mdata.get('display_name') or mdata.get('name') or plant_name
                                         true_color = bool(mdata.get('true_color', False))
                                         source_image = mdata.get('source_image')
+                                        status = mdata.get('status', 'ready')
+                                        ai_analysis = mdata.get('ai_analysis')
                                 except Exception:
                                     pass
                             variants.append({
@@ -1675,6 +1694,8 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
                                 'layers': layers,
                                 'true_color': true_color,
                                 'source_image': source_image,
+                                'status': status,
+                                'ai_analysis': ai_analysis,
                                 'path_prefix': plant_name
                             })
             
@@ -2025,7 +2046,7 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
                 cmd = ["uv", "run", "python", build_script, input_path, plant_name, "auto"]
                 if display_name:
                     cmd.append(display_name)
-                print(f"\n⚙️ 正在执行打包脚本: {' '.join(cmd)}")
+                print(f"\n⚙️ 正在执行打包脚本 (Phase 1): {' '.join(cmd)}")
                 
                 result = subprocess.run(cmd, cwd=os.path.join(PROJECT_ROOT, 'tools'), capture_output=True, text=True)
                 
@@ -2040,6 +2061,41 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
                     if filename in conf:
                         del conf[filename]
                         save_confirmed_candidates(conf)
+
+                    # Find the newest variant folder under plant_name
+                    plant_dir = os.path.join(PLANTS_DIR, plant_name)
+                    if os.path.exists(plant_dir):
+                        subdirs = [os.path.join(plant_dir, d) for d in os.listdir(plant_dir) if os.path.isdir(os.path.join(plant_dir, d))]
+                        if subdirs:
+                            newest_dir = max(subdirs, key=lambda d: os.path.getmtime(d))
+                            meta_file = os.path.join(newest_dir, 'metadata.json')
+
+                            def run_ai_analysis(meta_path, p_name, d_name):
+                                print(f"\n🤖 开始 AI 分析: {p_name} ({d_name})")
+                                try:
+                                    analysis = ai_botanist.analyze_plant_botany(p_name, d_name)
+                                    print(f"✅ AI 分析完成: {analysis.get('status')}")
+                                    if os.path.exists(meta_path):
+                                        with open(meta_path, 'r', encoding='utf-8') as f:
+                                            m = json.load(f)
+                                        m['status'] = 'ready'
+                                        m['ai_analysis'] = analysis
+                                        with open(meta_path, 'w', encoding='utf-8') as f:
+                                            json.dump(m, f, ensure_ascii=False, indent=4)
+                                except Exception as e:
+                                    print(f"❌ AI 分析异常: {e}")
+                                    if os.path.exists(meta_path):
+                                        try:
+                                            with open(meta_path, 'r', encoding='utf-8') as f:
+                                                m = json.load(f)
+                                            m['status'] = 'ready'
+                                            m['ai_analysis'] = {"status": "failed", "brief": f"Error: {e}"}
+                                            with open(meta_path, 'w', encoding='utf-8') as f:
+                                                json.dump(m, f, ensure_ascii=False, indent=4)
+                                        except:
+                                            pass
+
+                            threading.Thread(target=run_ai_analysis, args=(meta_file, plant_name, display_name), daemon=True).start()
                     
                     self.send_response(200)
                     self.send_header('Content-type', 'application/json')
