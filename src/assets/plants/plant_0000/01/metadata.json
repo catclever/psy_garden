@@ -11,5 +11,28 @@
     ],
     "source_image": "candidate_plant_0000_孔雀竹芋.jpg",
     "true_color": true,
-    "created_at": 1792466862
+    "created_at": 1792466862,
+    "root_width": 25,
+    "root_ratio": 0.111,
+    "ground_ellipse": [
+        25,
+        14
+    ],
+    "status": "ready",
+    "ai_analysis": {
+        "zh_name": "孔雀竹芋",
+        "scientific_name": "Calathea makoyana",
+        "botanical_height_m": [
+            0.3,
+            0.6
+        ],
+        "plant_type": "groundcover",
+        "growth_habit": "bush",
+        "suggested_game_height_px": [
+            35,
+            60
+        ],
+        "brief": "孔雀竹芋为竹芋科多年生草本，株型丛生，叶片卵状椭圆形，叶面绿色具深绿色羽状斑纹，叶背紫红色，形似孔雀尾羽。",
+        "status": "success"
+    }
 }

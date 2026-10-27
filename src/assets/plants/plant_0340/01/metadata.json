@@ -11,5 +11,28 @@
     ],
     "source_image": "candidate_plant_340_落地生根.jpg",
     "true_color": true,
-    "created_at": 1792466855
+    "created_at": 1792466855,
+    "root_width": 73,
+    "root_ratio": 0.311,
+    "ground_ellipse": [
+        73,
+        40
+    ],
+    "status": "ready",
+    "ai_analysis": {
+        "zh_name": "落地生根",
+        "scientific_name": "Kalanchoe pinnata",
+        "botanical_height_m": [
+            0.3,
+            1.5
+        ],
+        "plant_type": "flower",
+        "growth_habit": "slender",
+        "suggested_game_height_px": [
+            35,
+            150
+        ],
+        "brief": "肉质草本，叶片肥厚对生或羽状复叶，边缘具圆齿并可萌生不定芽，花冠下垂呈钟状。",
+        "status": "success"
+    }
 }

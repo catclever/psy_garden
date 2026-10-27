@@ -1,6 +1,6 @@
 {
-  "url": "https://api.openai.com/v1",
+  "url": "http://172.16.51.7:48787/v1",
   "key": "",
-  "model": "gpt-4o-mini",
+  "model": "deepseek-v4.1-flash",
   "timeout": 30
 }

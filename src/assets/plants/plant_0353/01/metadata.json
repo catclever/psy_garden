@@ -11,5 +11,28 @@
     ],
     "source_image": "candidate_plant_353_翠錦竹芋.jpg",
     "true_color": true,
-    "created_at": 1792466854
+    "created_at": 1792466854,
+    "root_width": 62,
+    "root_ratio": 0.238,
+    "ground_ellipse": [
+        62,
+        34
+    ],
+    "status": "ready",
+    "ai_analysis": {
+        "zh_name": "翠錦竹芋",
+        "scientific_name": "Calathea picturata",
+        "botanical_height_m": [
+            0.3,
+            0.6
+        ],
+        "plant_type": "groundcover",
+        "growth_habit": "bush",
+        "suggested_game_height_px": [
+            35,
+            70
+        ],
+        "brief": "翠錦竹芋是一种多年生草本观叶植物，叶片卵形至椭圆形，叶面具有深绿色与银白色相间的羽状斑纹，叶背紫红色，株型丛生紧凑。",
+        "status": "success"
+    }
 }

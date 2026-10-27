@@ -11,5 +11,28 @@
     ],
     "source_image": "candidate_plant_0188_苏铁属.jpg",
     "true_color": true,
-    "created_at": 1792466857
+    "created_at": 1792466857,
+    "root_width": 15,
+    "root_ratio": 0.06,
+    "ground_ellipse": [
+        15,
+        8
+    ],
+    "status": "ready",
+    "ai_analysis": {
+        "zh_name": "苏铁属",
+        "scientific_name": "Cycas",
+        "botanical_height_m": [
+            0.5,
+            6.0
+        ],
+        "plant_type": "shrub",
+        "growth_habit": "bush",
+        "suggested_game_height_px": [
+            35,
+            220
+        ],
+        "brief": "苏铁属植物为常绿木本，茎干粗壮单一或分枝，叶呈羽状深裂，集生于茎顶，形成独特的棕榈状树冠。",
+        "status": "success"
+    }
 }

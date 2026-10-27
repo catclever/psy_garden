@@ -10,5 +10,28 @@
     ],
     "source_image": "candidate_plant_0152_硬斗柯.jpg",
     "true_color": true,
-    "created_at": 1792466858
+    "created_at": 1792466858,
+    "root_width": 70,
+    "root_ratio": 0.345,
+    "ground_ellipse": [
+        70,
+        38
+    ],
+    "status": "ready",
+    "ai_analysis": {
+        "zh_name": "硬斗柯",
+        "scientific_name": "Lithocarpus hancei",
+        "botanical_height_m": [
+            5.0,
+            15.0
+        ],
+        "plant_type": "tree",
+        "growth_habit": "canopy",
+        "suggested_game_height_px": [
+            120,
+            220
+        ],
+        "brief": "硬斗柯为常绿乔木，树皮纵裂，叶革质全缘，雄花序穗状，壳斗杯状且苞片紧密排列，坚果坚硬。",
+        "status": "success"
+    }
 }

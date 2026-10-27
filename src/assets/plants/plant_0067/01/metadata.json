@@ -10,5 +10,28 @@
     ],
     "source_image": "candidate_plant_0067_珊瑚櫻.jpg",
     "true_color": true,
-    "created_at": 1792466852
+    "created_at": 1792466852,
+    "root_width": 72,
+    "root_ratio": 0.298,
+    "ground_ellipse": [
+        72,
+        40
+    ],
+    "status": "ready",
+    "ai_analysis": {
+        "zh_name": "珊瑚櫻",
+        "scientific_name": "Solanum pseudocapsicum",
+        "botanical_height_m": [
+            0.3,
+            1.2
+        ],
+        "plant_type": "shrub",
+        "growth_habit": "bush",
+        "suggested_game_height_px": [
+            35,
+            120
+        ],
+        "brief": "常綠小灌木，葉互生呈披針形，結圓形橙紅色漿果，形似珊瑚珠。",
+        "status": "success"
+    }
 }

@@ -10,5 +10,28 @@
     ],
     "source_image": "candidate_plant_0079_芦荟属.jpg",
     "true_color": true,
-    "created_at": 1792466853
+    "created_at": 1792466853,
+    "root_width": 15,
+    "root_ratio": 0.084,
+    "ground_ellipse": [
+        15,
+        8
+    ],
+    "status": "ready",
+    "ai_analysis": {
+        "zh_name": "芦荟属",
+        "scientific_name": "Aloe",
+        "botanical_height_m": [
+            0.1,
+            3.0
+        ],
+        "plant_type": "shrub",
+        "growth_habit": "bush",
+        "suggested_game_height_px": [
+            35,
+            220
+        ],
+        "brief": "芦荟属植物为多年生肉质草本或灌木，叶片肥厚多汁，常呈莲座状排列，边缘具齿刺。",
+        "status": "success"
+    }
 }

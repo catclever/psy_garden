@@ -2,7 +2,7 @@
     "name": "plant_0071",
     "display_name": "鵝鑾鼻燈籠草",
     "variant_id": "02",
-    "width": 288,
+    "width": 237,
     "height": 250,
     "layers": [
         "layer-red",
@@ -10,5 +10,28 @@
     ],
     "source_image": "candidate_plant_0071_鵝鑾鼻燈籠草.jpg",
     "true_color": true,
-    "created_at": 1792466854
+    "created_at": 1792466854,
+    "root_width": 11,
+    "root_ratio": 0.046,
+    "ground_ellipse": [
+        11,
+        6
+    ],
+    "status": "ready",
+    "ai_analysis": {
+        "zh_name": "鵝鑾鼻燈籠草",
+        "scientific_name": "Kalanchoe garambiensis",
+        "botanical_height_m": [
+            0.1,
+            0.3
+        ],
+        "plant_type": "groundcover",
+        "growth_habit": "carpet",
+        "suggested_game_height_px": [
+            35,
+            70
+        ],
+        "brief": "鵝鑾鼻燈籠草為矮小肉質草本，莖匍匐或斜升，葉對生呈匙形至倒卵形，肉質肥厚，頂生聚繖花序開黃色鐘形小花。",
+        "status": "success"
+    }
 }

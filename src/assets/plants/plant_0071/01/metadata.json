@@ -10,5 +10,28 @@
     ],
     "source_image": "candidate_plant_0071_鵝鑾鼻燈籠草.jpg",
     "true_color": true,
-    "created_at": 1792466852
+    "created_at": 1792466852,
+    "root_width": 11,
+    "root_ratio": 0.038,
+    "ground_ellipse": [
+        11,
+        6
+    ],
+    "status": "ready",
+    "ai_analysis": {
+        "zh_name": "鵝鑾鼻燈籠草",
+        "scientific_name": "Kalanchoe garambiensis",
+        "botanical_height_m": [
+            0.1,
+            0.3
+        ],
+        "plant_type": "groundcover",
+        "growth_habit": "carpet",
+        "suggested_game_height_px": [
+            35,
+            60
+        ],
+        "brief": "鵝鑾鼻燈籠草為小型肉質草本，葉對生、肉質倒卵形，花黃色呈燈籠狀，常見於恆春半島珊瑚礁岩地。",
+        "status": "success"
+    }
 }

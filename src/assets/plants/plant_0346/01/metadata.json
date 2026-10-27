@@ -10,5 +10,28 @@
     ],
     "source_image": "candidate_plant_346_石蒜.jpg",
     "true_color": true,
-    "created_at": 1792466854
+    "created_at": 1792466854,
+    "root_width": 15,
+    "root_ratio": 0.079,
+    "ground_ellipse": [
+        15,
+        8
+    ],
+    "status": "ready",
+    "ai_analysis": {
+        "zh_name": "石蒜",
+        "scientific_name": "Lycoris radiata",
+        "botanical_height_m": [
+            0.3,
+            0.7
+        ],
+        "plant_type": "flower",
+        "growth_habit": "slender",
+        "suggested_game_height_px": [
+            65,
+            110
+        ],
+        "brief": "石蒜为石蒜科多年生鳞茎草本，叶线形于花后抽出，花葶直立顶生伞形花序，花鲜红色、花瓣强烈反卷且具长雄蕊。",
+        "status": "success"
+    }
 }

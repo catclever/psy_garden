@@ -10,5 +10,28 @@
     ],
     "source_image": "candidate_plant_0092_翠綠龍舌蘭.jpg",
     "true_color": true,
-    "created_at": 1792466860
+    "created_at": 1792466860,
+    "root_width": 7,
+    "root_ratio": 0.049,
+    "ground_ellipse": [
+        7,
+        4
+    ],
+    "status": "ready",
+    "ai_analysis": {
+        "zh_name": "翠綠龍舌蘭",
+        "scientific_name": "Agave attenuata",
+        "botanical_height_m": [
+            0.8,
+            1.5
+        ],
+        "plant_type": "shrub",
+        "growth_habit": "bush",
+        "suggested_game_height_px": [
+            88,
+            147
+        ],
+        "brief": "翠綠龍舌蘭是一種無刺的肉質灌木，葉片呈灰綠色蓮座狀排列，柔軟彎曲，花序高聳如狐尾。",
+        "status": "success"
+    }
 }

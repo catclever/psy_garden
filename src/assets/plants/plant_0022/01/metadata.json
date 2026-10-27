@@ -10,5 +10,28 @@
     ],
     "source_image": "candidate_plant_plant_0022_西藏红豆杉.jpg",
     "true_color": true,
-    "created_at": 1792466861
+    "created_at": 1792466861,
+    "root_width": 54,
+    "root_ratio": 0.202,
+    "ground_ellipse": [
+        54,
+        30
+    ],
+    "status": "ready",
+    "ai_analysis": {
+        "zh_name": "西藏红豆杉",
+        "scientific_name": "Taxus wallichiana",
+        "botanical_height_m": [
+            10.0,
+            30.0
+        ],
+        "plant_type": "tree",
+        "growth_habit": "canopy",
+        "suggested_game_height_px": [
+            150,
+            220
+        ],
+        "brief": "西藏红豆杉为常绿乔木，树皮灰褐色呈鳞片状剥落，条形叶螺旋状排列、下面具气孔带，种子外包红色肉质假种皮。",
+        "status": "success"
+    }
 }

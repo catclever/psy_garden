@@ -10,5 +10,28 @@
     ],
     "source_image": "candidate_plant_323_馬纓丹.jpg",
     "true_color": true,
-    "created_at": 1792466856
+    "created_at": 1792466856,
+    "root_width": 12,
+    "root_ratio": 0.057,
+    "ground_ellipse": [
+        12,
+        7
+    ],
+    "status": "ready",
+    "ai_analysis": {
+        "zh_name": "馬纓丹",
+        "scientific_name": "Lantana camara",
+        "botanical_height_m": [
+            0.5,
+            2.0
+        ],
+        "plant_type": "shrub",
+        "growth_habit": "bush",
+        "suggested_game_height_px": [
+            35,
+            110
+        ],
+        "brief": "常綠灌木，枝條呈方形且具短刺，葉對生具粗鋸齒，花為多色頭狀花序，果實為核果。",
+        "status": "success"
+    }
 }

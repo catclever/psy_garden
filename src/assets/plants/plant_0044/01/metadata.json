@@ -11,5 +11,28 @@
     ],
     "source_image": "candidate_plant_0044_牛至.jpg",
     "true_color": true,
-    "created_at": 1792466853
+    "created_at": 1792466853,
+    "root_width": 9,
+    "root_ratio": 0.037,
+    "ground_ellipse": [
+        9,
+        5
+    ],
+    "status": "ready",
+    "ai_analysis": {
+        "zh_name": "牛至",
+        "scientific_name": "Origanum vulgare",
+        "botanical_height_m": [
+            0.3,
+            0.8
+        ],
+        "plant_type": "groundcover",
+        "growth_habit": "bush",
+        "suggested_game_height_px": [
+            70,
+            140
+        ],
+        "brief": "牛至是唇形科多年生草本，株型丛生，茎直立或匍匐，卵形小叶对生，顶生伞房状花序开白色或淡紫色小花，全株具芳香。",
+        "status": "success"
+    }
 }

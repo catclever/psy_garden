@@ -7,5 +7,30 @@
         "layer-red",
         "layer-green"
     ],
-    "created_at": 1791079136
+    "created_at": 1791079136,
+    "display_name": "plant_0000",
+    "root_width": 49,
+    "root_ratio": 0.196,
+    "ground_ellipse": [
+        49,
+        27
+    ],
+    "status": "ready",
+    "true_color": true,
+    "ai_analysis": {
+        "zh_name": "银杏",
+        "scientific_name": "Ginkgo biloba",
+        "botanical_height_m": [
+            20.0,
+            35.0
+        ],
+        "plant_type": "tree",
+        "growth_habit": "canopy",
+        "suggested_game_height_px": [
+            180,
+            220
+        ],
+        "brief": "落叶乔木，叶片扇形，秋季金黄，树冠宽大。",
+        "status": "success"
+    }
 }

@@ -10,5 +10,28 @@
     ],
     "source_image": "candidate_plant_plant_0164_灰幹蘇鐵.jpg",
     "true_color": true,
-    "created_at": 1792466857
+    "created_at": 1792466857,
+    "root_width": 30,
+    "root_ratio": 0.12,
+    "ground_ellipse": [
+        30,
+        16
+    ],
+    "status": "ready",
+    "ai_analysis": {
+        "zh_name": "灰幹蘇鐵",
+        "scientific_name": "Cycas conferta",
+        "botanical_height_m": [
+            1.0,
+            3.0
+        ],
+        "plant_type": "shrub",
+        "growth_habit": "canopy",
+        "suggested_game_height_px": [
+            60,
+            150
+        ],
+        "brief": "灰幹蘇鐵具有粗壯灰褐色圓柱狀莖幹，頂端叢生深綠色羽狀複葉，小葉堅硬且密集排列。",
+        "status": "success"
+    }
 }

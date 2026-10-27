@@ -10,5 +10,28 @@
     ],
     "source_image": "candidate_plant_0134_银杏.jpg",
     "true_color": true,
-    "created_at": 1792466860
+    "created_at": 1792466860,
+    "root_width": 10,
+    "root_ratio": 0.045,
+    "ground_ellipse": [
+        10,
+        6
+    ],
+    "status": "ready",
+    "ai_analysis": {
+        "zh_name": "银杏",
+        "scientific_name": "Ginkgo biloba",
+        "botanical_height_m": [
+            20.0,
+            35.0
+        ],
+        "plant_type": "tree",
+        "growth_habit": "canopy",
+        "suggested_game_height_px": [
+            180,
+            220
+        ],
+        "brief": "银杏为落叶乔木，树冠宽卵形，叶片扇形，秋季变金黄，雌雄异株。",
+        "status": "success"
+    }
 }

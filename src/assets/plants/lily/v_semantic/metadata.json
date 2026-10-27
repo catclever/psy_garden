@@ -1,0 +1,36 @@
+{
+    "name": "lily",
+    "display_name": "百合",
+    "variant_id": "v_semantic",
+    "width": 1024,
+    "height": 1024,
+    "root_width": 24,
+    "root_ratio": 0.023,
+    "ground_ellipse": [
+        24,
+        13
+    ],
+    "status": "ready",
+    "layers": [
+        "plant_lily_multi_flower.png",
+        "plant_lily_multi_stem.png"
+    ],
+    "true_color": true,
+    "created_at": 1793082074,
+    "ai_analysis": {
+        "zh_name": "百合",
+        "scientific_name": "Lilium",
+        "botanical_height_m": [
+            0.3,
+            2.0
+        ],
+        "plant_type": "flower",
+        "growth_habit": "slender",
+        "suggested_game_height_px": [
+            35,
+            220
+        ],
+        "brief": "百合为多年生草本，具鳞茎，茎直立不分枝，叶披针形，花大而美丽，常呈喇叭形或钟形。",
+        "status": "success"
+    }
+}

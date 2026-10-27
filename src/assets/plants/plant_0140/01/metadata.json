@@ -10,5 +10,28 @@
     ],
     "source_image": "candidate_plant_0140_胶苦瓜.jpg",
     "true_color": true,
-    "created_at": 1792466859
+    "created_at": 1792466859,
+    "root_width": 6,
+    "root_ratio": 0.023,
+    "ground_ellipse": [
+        6,
+        4
+    ],
+    "status": "ready",
+    "ai_analysis": {
+        "zh_name": "胶苦瓜",
+        "scientific_name": "Momordica balsamina",
+        "botanical_height_m": [
+            1.0,
+            3.0
+        ],
+        "plant_type": "groundcover",
+        "growth_habit": "slender",
+        "suggested_game_height_px": [
+            35,
+            88
+        ],
+        "brief": "胶苦瓜为一年生攀援草本，茎细长具卷须，叶掌状分裂，花黄色，果实成熟时橙红色且表面具瘤状突起。",
+        "status": "success"
+    }
 }

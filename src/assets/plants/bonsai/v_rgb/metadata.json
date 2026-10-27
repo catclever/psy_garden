@@ -1,0 +1,37 @@
+{
+    "name": "bonsai",
+    "display_name": "盆景松",
+    "variant_id": "v_rgb",
+    "width": 1024,
+    "height": 1024,
+    "root_width": 138,
+    "root_ratio": 0.135,
+    "ground_ellipse": [
+        138,
+        76
+    ],
+    "status": "ready",
+    "layers": [
+        "plant_bonsai_multi_red.png",
+        "plant_bonsai_multi_blue.png",
+        "plant_bonsai_multi_green.png"
+    ],
+    "true_color": true,
+    "created_at": 1793082067,
+    "ai_analysis": {
+        "zh_name": "盆景松",
+        "scientific_name": "Pinus parviflora",
+        "botanical_height_m": [
+            0.3,
+            1.5
+        ],
+        "plant_type": "tree",
+        "growth_habit": "canopy",
+        "suggested_game_height_px": [
+            35,
+            100
+        ],
+        "brief": "盆景松为常绿针叶小乔木，针叶簇生、树冠紧凑，常经修剪造型呈盘曲优雅的盆景姿态。",
+        "status": "success"
+    }
+}

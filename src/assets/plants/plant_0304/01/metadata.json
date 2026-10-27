@@ -10,5 +10,28 @@
     ],
     "source_image": "candidate_plant_304_紅豆杉.jpg",
     "true_color": true,
-    "created_at": 1792466856
+    "created_at": 1792466856,
+    "root_width": 76,
+    "root_ratio": 0.281,
+    "ground_ellipse": [
+        76,
+        42
+    ],
+    "status": "ready",
+    "ai_analysis": {
+        "zh_name": "紅豆杉",
+        "scientific_name": "Taxus wallichiana var. mairei",
+        "botanical_height_m": [
+            5.0,
+            15.0
+        ],
+        "plant_type": "tree",
+        "growth_habit": "canopy",
+        "suggested_game_height_px": [
+            85,
+            220
+        ],
+        "brief": "常綠喬木，葉條形螺旋狀排列，種子外被紅色肉質假種皮。",
+        "status": "success"
+    }
 }

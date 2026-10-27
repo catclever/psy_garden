@@ -10,5 +10,28 @@
     ],
     "source_image": "candidate_plant_plant_0033_秋水仙.jpg",
     "true_color": true,
-    "created_at": 1792466860
+    "created_at": 1792466860,
+    "root_width": 7,
+    "root_ratio": 0.04,
+    "ground_ellipse": [
+        7,
+        4
+    ],
+    "status": "ready",
+    "ai_analysis": {
+        "zh_name": "秋水仙",
+        "scientific_name": "Colchicum autumnale",
+        "botanical_height_m": [
+            0.1,
+            0.3
+        ],
+        "plant_type": "flower",
+        "growth_habit": "slender",
+        "suggested_game_height_px": [
+            35,
+            70
+        ],
+        "brief": "秋季开淡紫色漏斗状花，花葶短而细，叶片翌春抽出，具球茎。",
+        "status": "success"
+    }
 }

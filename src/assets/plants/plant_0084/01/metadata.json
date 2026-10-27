@@ -10,5 +10,28 @@
     ],
     "source_image": "candidate_plant_0084_臥牛.jpg",
     "true_color": true,
-    "created_at": 1792461692
+    "created_at": 1792461692,
+    "root_width": 24,
+    "root_ratio": 0.121,
+    "ground_ellipse": [
+        24,
+        13
+    ],
+    "status": "ready",
+    "ai_analysis": {
+        "zh_name": "臥牛",
+        "scientific_name": "Gasteria armstrongii",
+        "botanical_height_m": [
+            0.05,
+            0.15
+        ],
+        "plant_type": "groundcover",
+        "growth_habit": "carpet",
+        "suggested_game_height_px": [
+            35,
+            60
+        ],
+        "brief": "葉片肥厚呈舌狀、對生排列成緊密的蓮座狀，表面粗糙且帶有深綠色斑紋，植株低矮緊湊。",
+        "status": "success"
+    }
 }

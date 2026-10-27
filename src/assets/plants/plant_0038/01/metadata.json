@@ -9,5 +9,29 @@
         "layer-green",
         "layer-blue"
     ],
-    "created_at": 1792399814
+    "created_at": 1792399814,
+    "root_width": 6,
+    "root_ratio": 0.031,
+    "ground_ellipse": [
+        6,
+        4
+    ],
+    "status": "ready",
+    "true_color": true,
+    "ai_analysis": {
+        "zh_name": "狹葉薰衣草",
+        "scientific_name": "Lavandula angustifolia",
+        "botanical_height_m": [
+            0.3,
+            0.9
+        ],
+        "plant_type": "shrub",
+        "growth_habit": "bush",
+        "suggested_game_height_px": [
+            35,
+            105
+        ],
+        "brief": "常绿灌木，叶片线形至披针形，灰绿色，穗状花序顶生，花蓝紫色，芳香。",
+        "status": "success"
+    }
 }

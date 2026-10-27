@@ -10,5 +10,28 @@
     ],
     "source_image": "candidate_plant_0151_蘆莖樹蘭.jpg",
     "true_color": true,
-    "created_at": 1792466858
+    "created_at": 1792466858,
+    "root_width": 27,
+    "root_ratio": 0.121,
+    "ground_ellipse": [
+        27,
+        15
+    ],
+    "status": "ready",
+    "ai_analysis": {
+        "zh_name": "蘆莖樹蘭",
+        "scientific_name": "Epidendrum radicans",
+        "botanical_height_m": [
+            0.6,
+            1.2
+        ],
+        "plant_type": "flower",
+        "growth_habit": "bush",
+        "suggested_game_height_px": [
+            100,
+            180
+        ],
+        "brief": "蘆莖樹蘭為蘭科樹蘭屬多年生草本，莖呈蘆葦狀直立叢生，披針形革質葉互生，頂生傘房花序綻放橙紅至緋紅色小花，唇瓣三裂。",
+        "status": "success"
+    }
 }

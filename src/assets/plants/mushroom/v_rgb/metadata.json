@@ -1,0 +1,37 @@
+{
+    "name": "mushroom",
+    "display_name": "蘑菇",
+    "variant_id": "v_rgb",
+    "width": 1024,
+    "height": 1024,
+    "root_width": 93,
+    "root_ratio": 0.091,
+    "ground_ellipse": [
+        93,
+        51
+    ],
+    "status": "ready",
+    "layers": [
+        "plant_mushroom_multi_blue.png",
+        "plant_mushroom_multi_red.png",
+        "plant_mushroom_multi_green.png"
+    ],
+    "true_color": true,
+    "created_at": 1793082078,
+    "ai_analysis": {
+        "zh_name": "蘑菇",
+        "scientific_name": "Agaricus bisporus",
+        "botanical_height_m": [
+            0.05,
+            0.15
+        ],
+        "plant_type": "groundcover",
+        "growth_habit": "carpet",
+        "suggested_game_height_px": [
+            35,
+            40
+        ],
+        "brief": "蘑菇是一种真菌，具有菌盖和菌柄，通常生长在腐殖质丰富的土壤或堆肥上。",
+        "status": "success"
+    }
+}

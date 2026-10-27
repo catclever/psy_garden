@@ -11,5 +11,28 @@
     ],
     "source_image": "candidate_plant_331_垂序商陆.jpg",
     "true_color": true,
-    "created_at": 1792466855
+    "created_at": 1792466855,
+    "root_width": 35,
+    "root_ratio": 0.15,
+    "ground_ellipse": [
+        35,
+        19
+    ],
+    "status": "ready",
+    "ai_analysis": {
+        "zh_name": "垂序商陆",
+        "scientific_name": "Phytolacca americana",
+        "botanical_height_m": [
+            1.0,
+            3.0
+        ],
+        "plant_type": "flower",
+        "growth_habit": "bush",
+        "suggested_game_height_px": [
+            73,
+            220
+        ],
+        "brief": "多年生草本，茎直立粗壮多分枝，叶片卵状披针形，总状花序下垂，浆果成熟时紫黑色。",
+        "status": "success"
+    }
 }

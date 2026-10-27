@@ -10,5 +10,28 @@
     ],
     "source_image": "candidate_plant_314_大叶肉托果.jpg",
     "true_color": true,
-    "created_at": 1792466855
+    "created_at": 1792466855,
+    "root_width": 12,
+    "root_ratio": 0.044,
+    "ground_ellipse": [
+        12,
+        7
+    ],
+    "status": "ready",
+    "ai_analysis": {
+        "zh_name": "大叶肉托果",
+        "scientific_name": "Semecarpus gigantifolia",
+        "botanical_height_m": [
+            10.0,
+            20.0
+        ],
+        "plant_type": "tree",
+        "growth_habit": "canopy",
+        "suggested_game_height_px": [
+            150,
+            220
+        ],
+        "brief": "常绿乔木，叶大型革质，倒卵形或椭圆形，聚生于枝顶，圆锥花序顶生，核果肉质。",
+        "status": "success"
+    }
 }

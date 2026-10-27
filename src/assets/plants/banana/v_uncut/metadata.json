@@ -1,0 +1,35 @@
+{
+    "name": "banana",
+    "display_name": "芭蕉",
+    "variant_id": "v_uncut",
+    "width": 1024,
+    "height": 1024,
+    "root_width": 54,
+    "root_ratio": 0.053,
+    "ground_ellipse": [
+        54,
+        30
+    ],
+    "status": "ready",
+    "layers": [
+        "plant_banana.png"
+    ],
+    "true_color": true,
+    "created_at": 1793082064,
+    "ai_analysis": {
+        "zh_name": "芭蕉",
+        "scientific_name": "Musa basjoo",
+        "botanical_height_m": [
+            2.5,
+            4.0
+        ],
+        "plant_type": "shrub",
+        "growth_habit": "canopy",
+        "suggested_game_height_px": [
+            150,
+            220
+        ],
+        "brief": "芭蕉为多年生大型草本植物，具粗壮假茎和宽大长椭圆形叶片，叶色翠绿，呈螺旋状排列。",
+        "status": "success"
+    }
+}

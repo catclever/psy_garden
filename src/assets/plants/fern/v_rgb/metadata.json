@@ -1,0 +1,37 @@
+{
+    "name": "fern",
+    "display_name": "蕨类",
+    "variant_id": "v_rgb",
+    "width": 1024,
+    "height": 1024,
+    "root_width": 61,
+    "root_ratio": 0.06,
+    "ground_ellipse": [
+        61,
+        34
+    ],
+    "status": "ready",
+    "layers": [
+        "plant_fern_multi_blue.png",
+        "plant_fern_multi_green.png",
+        "plant_fern_multi_red.png"
+    ],
+    "true_color": true,
+    "created_at": 1793082069,
+    "ai_analysis": {
+        "zh_name": "蕨类",
+        "scientific_name": "Pteridophyta",
+        "botanical_height_m": [
+            0.1,
+            1.5
+        ],
+        "plant_type": "groundcover",
+        "growth_habit": "carpet",
+        "suggested_game_height_px": [
+            14,
+            220
+        ],
+        "brief": "蕨类植物具有羽状复叶、孢子囊群和根状茎，多呈丛生或地毯状生长。",
+        "status": "success"
+    }
+}

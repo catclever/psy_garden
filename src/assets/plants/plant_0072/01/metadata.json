@@ -11,5 +11,28 @@
     ],
     "source_image": "candidate_plant_0072_藍花丹.jpg",
     "true_color": true,
-    "created_at": 1792466853
+    "created_at": 1792466853,
+    "root_width": 22,
+    "root_ratio": 0.083,
+    "ground_ellipse": [
+        22,
+        12
+    ],
+    "status": "ready",
+    "ai_analysis": {
+        "zh_name": "藍花丹",
+        "scientific_name": "Plumbago auriculata",
+        "botanical_height_m": [
+            0.5,
+            2.0
+        ],
+        "plant_type": "shrub",
+        "growth_habit": "bush",
+        "suggested_game_height_px": [
+            46,
+            129
+        ],
+        "brief": "常綠灌木，枝條常呈蔓性，葉互生呈長橢圓形，頂生穗狀花序開淡藍色漏斗狀花。",
+        "status": "success"
+    }
 }

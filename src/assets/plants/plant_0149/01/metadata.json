@@ -10,5 +10,28 @@
     ],
     "source_image": "candidate_plant_0149_香茅屬.jpg",
     "true_color": true,
-    "created_at": 1792466858
+    "created_at": 1792466858,
+    "root_width": 22,
+    "root_ratio": 0.089,
+    "ground_ellipse": [
+        22,
+        12
+    ],
+    "status": "ready",
+    "ai_analysis": {
+        "zh_name": "香茅属",
+        "scientific_name": "Cymbopogon",
+        "botanical_height_m": [
+            0.5,
+            1.8
+        ],
+        "plant_type": "groundcover",
+        "growth_habit": "bush",
+        "suggested_game_height_px": [
+            35,
+            220
+        ],
+        "brief": "多年生簇生草本，叶片细长线形、多直立，揉搓后有浓郁柠檬香气。",
+        "status": "success"
+    }
 }

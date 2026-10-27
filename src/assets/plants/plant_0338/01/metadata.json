@@ -11,5 +11,28 @@
     ],
     "source_image": "candidate_plant_338_野藍薊.jpg",
     "true_color": true,
-    "created_at": 1792466856
+    "created_at": 1792466856,
+    "root_width": 7,
+    "root_ratio": 0.039,
+    "ground_ellipse": [
+        7,
+        4
+    ],
+    "status": "ready",
+    "ai_analysis": {
+        "zh_name": "野藍薊",
+        "scientific_name": "Echium vulgare",
+        "botanical_height_m": [
+            0.3,
+            0.8
+        ],
+        "plant_type": "flower",
+        "growth_habit": "slender",
+        "suggested_game_height_px": [
+            66,
+            176
+        ],
+        "brief": "植株直立，茎生粗糙硬毛，披针形叶片，顶生蝎尾状聚伞花序，花冠蓝紫色。",
+        "status": "success"
+    }
 }

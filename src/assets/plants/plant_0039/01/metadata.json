@@ -11,5 +11,28 @@
     ],
     "source_image": "candidate_plant_plant_0039_毒魚豆.jpg",
     "true_color": true,
-    "created_at": 1792466853
+    "created_at": 1792466853,
+    "root_width": 10,
+    "root_ratio": 0.058,
+    "ground_ellipse": [
+        10,
+        6
+    ],
+    "status": "ready",
+    "ai_analysis": {
+        "zh_name": "毒魚豆",
+        "scientific_name": "Derris trifoliata Lour.",
+        "botanical_height_m": [
+            0.5,
+            2.0
+        ],
+        "plant_type": "shrub",
+        "growth_habit": "slender",
+        "suggested_game_height_px": [
+            35,
+            220
+        ],
+        "brief": "常绿藤状灌木，具羽状复叶和圆锥花序，根茎含鱼藤酮，常用于毒鱼。",
+        "status": "success"
+    }
 }

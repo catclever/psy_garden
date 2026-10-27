@@ -1350,6 +1350,26 @@ HTML_CONTENT = """
                 return;
             }
 
+            // Footprint info HTML
+            let fpBlock = '';
+            if (variant.root_width) {
+                const rw = variant.root_width;
+                const ratioStr = variant.root_ratio ? `${(variant.root_ratio * 100).toFixed(1)}%` : (variant.width ? `${(rw / variant.width * 100).toFixed(1)}%` : '');
+                const ellStr = variant.ground_ellipse ? `${variant.ground_ellipse[0]} × ${variant.ground_ellipse[1]} px` : `${rw} × ${Math.round(rw * 0.55)} px`;
+                fpBlock = `
+                    <div style="margin-top:10px; background:#0d1117; padding:8px 10px; border-radius:6px; border:1px solid #21262d;">
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <span style="color:#8b949e; font-size:11px;">🌱 根部占地宽度:</span>
+                            <span style="color:#d29922; font-weight:bold; font-size:12px;">${rw}px ${ratioStr ? `<span style="color:#8b949e; font-size:10px; font-weight:normal;">(冠幅占比 ${ratioStr})</span>` : ''}</span>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">
+                            <span style="color:#8b949e; font-size:11px;">🪐 2.5D 地表椭圆投影:</span>
+                            <span style="color:#7ee787; font-size:11px; font-family:monospace;">${ellStr}</span>
+                        </div>
+                    </div>
+                `;
+            }
+
             if (variant.status === 'ai_analyzing') {
                 container.innerHTML = `
                     <div style="background:#161b22; border:1px solid #f39c12; border-radius:8px; padding:12px 14px;">
@@ -1360,6 +1380,7 @@ HTML_CONTENT = """
                         <div style="color:#8b949e; font-size:12px; margin-top:6px; line-height:1.4;">
                             后台正在通过 OpenAI 兼容接口测算真实植物学生态高度与 2.5D 映射范围，测算完成后将自动就绪并在此展示。
                         </div>
+                        ${fpBlock}
                     </div>
                 `;
             } else if (variant.ai_analysis && (variant.ai_analysis.status === 'success' || variant.ai_analysis.botanical_height_m)) {
@@ -1393,6 +1414,7 @@ HTML_CONTENT = """
                             <span style="display:inline-block; background:#21262d; padding:2px 8px; border-radius:12px; font-size:11px; color:#8b949e;">${pHabit}</span>
                             <div style="margin-top:6px; color:#8b949e; font-size:12px;">${ai.brief || ''}</div>
                         </div>
+                        ${fpBlock}
                     </div>
                 `;
             } else if (variant.ai_analysis && variant.ai_analysis.status === 'failed') {
@@ -1400,14 +1422,17 @@ HTML_CONTENT = """
                     <div style="background:#161b22; border:1px solid #8b2020; border-radius:8px; padding:10px 14px;">
                         <span style="color:#ff7b72; font-size:12px; font-weight:bold;">⚠️ AI 测算未完成:</span>
                         <span style="color:#8b949e; font-size:12px; margin-left:6px;">${variant.ai_analysis.brief || '网络或配置原因'}</span>
+                        ${fpBlock}
                     </div>
                 `;
             } else {
                 container.innerHTML = `
                     <div style="background:#161b22; border:1px solid #21262d; border-radius:8px; padding:10px 14px; color:#8b949e; font-size:12px;">
-                        ℹ️ 暂无生物学 AI 测算数据 (后续统一批量处理)
+                        ℹ️ 暂无生物学 AI 测算数据
+                        ${fpBlock}
                     </div>
                 `;
+            }
             }
         }
 
@@ -1795,6 +1820,11 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
                                 source_image = None
                                 status = 'ready'
                                 ai_analysis = None
+                                root_width = None
+                                root_ratio = None
+                                ground_ellipse = None
+                                width = None
+                                height = None
                                 meta_file = os.path.join(item_path, 'metadata.json')
                                 if os.path.exists(meta_file):
                                     try:
@@ -1805,6 +1835,11 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
                                             source_image = mdata.get('source_image')
                                             status = mdata.get('status', 'ready')
                                             ai_analysis = mdata.get('ai_analysis')
+                                            root_width = mdata.get('root_width')
+                                            root_ratio = mdata.get('root_ratio')
+                                            ground_ellipse = mdata.get('ground_ellipse')
+                                            width = mdata.get('width')
+                                            height = mdata.get('height')
                                     except Exception:
                                         pass
                                 variants.append({
@@ -1816,6 +1851,11 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
                                     'source_image': source_image,
                                     'status': status,
                                     'ai_analysis': ai_analysis,
+                                    'root_width': root_width,
+                                    'root_ratio': root_ratio,
+                                    'ground_ellipse': ground_ellipse,
+                                    'width': width,
+                                    'height': height,
                                     'path_prefix': f'{plant_name}/{item}'
                                 })
                     
@@ -1828,6 +1868,11 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
                             source_image = None
                             status = 'ready'
                             ai_analysis = None
+                            root_width = None
+                            root_ratio = None
+                            ground_ellipse = None
+                            width = None
+                            height = None
                             meta_file = os.path.join(plant_path, 'metadata.json')
                             if os.path.exists(meta_file):
                                 try:
@@ -1838,6 +1883,11 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
                                         source_image = mdata.get('source_image')
                                         status = mdata.get('status', 'ready')
                                         ai_analysis = mdata.get('ai_analysis')
+                                        root_width = mdata.get('root_width')
+                                        root_ratio = mdata.get('root_ratio')
+                                        ground_ellipse = mdata.get('ground_ellipse')
+                                        width = mdata.get('width')
+                                        height = mdata.get('height')
                                 except Exception:
                                     pass
                             variants.append({
@@ -1849,6 +1899,11 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
                                 'source_image': source_image,
                                 'status': status,
                                 'ai_analysis': ai_analysis,
+                                'root_width': root_width,
+                                'root_ratio': root_ratio,
+                                'ground_ellipse': ground_ellipse,
+                                'width': width,
+                                'height': height,
                                 'path_prefix': plant_name
                             })
             

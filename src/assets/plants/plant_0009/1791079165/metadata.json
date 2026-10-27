@@ -1,6 +1,6 @@
 {
     "name": "plant_0009",
-    "display_name": "plant_0009",
+    "display_name": "酒瓶兰",
     "variant_id": "1791079165",
     "width": 243,
     "height": 250,
@@ -10,5 +10,28 @@
     ],
     "source_image": "candidate_plant_0009_酒瓶兰.jpg",
     "true_color": true,
-    "created_at": 1792466861
+    "created_at": 1792466861,
+    "root_width": 52,
+    "root_ratio": 0.214,
+    "ground_ellipse": [
+        52,
+        29
+    ],
+    "status": "ready",
+    "ai_analysis": {
+        "zh_name": "酒瓶兰",
+        "scientific_name": "Beaucarnea recurvata",
+        "botanical_height_m": [
+            1.0,
+            4.0
+        ],
+        "plant_type": "tree",
+        "growth_habit": "slender",
+        "suggested_game_height_px": [
+            50,
+            120
+        ],
+        "brief": "酒瓶兰茎干基部膨大如酒瓶，细长弯曲的叶片簇生于顶端，形似喷泉。",
+        "status": "success"
+    }
 }

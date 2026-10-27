@@ -10,5 +10,28 @@
     ],
     "source_image": "candidate_plant_0155_牛眼馬錢.jpg",
     "true_color": true,
-    "created_at": 1792466857
+    "created_at": 1792466857,
+    "root_width": 63,
+    "root_ratio": 0.284,
+    "ground_ellipse": [
+        63,
+        35
+    ],
+    "status": "ready",
+    "ai_analysis": {
+        "zh_name": "牛眼馬錢",
+        "scientific_name": "Strychnos cathayensis",
+        "botanical_height_m": [
+            3.0,
+            8.0
+        ],
+        "plant_type": "shrub",
+        "growth_habit": "slender",
+        "suggested_game_height_px": [
+            100,
+            200
+        ],
+        "brief": "常绿木质藤本或攀援灌木，茎具卷须，叶对生革质，花冠黄白色，浆果球形似牛眼。",
+        "status": "success"
+    }
 }
