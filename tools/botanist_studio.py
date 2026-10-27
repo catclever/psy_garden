@@ -2,6 +2,10 @@ import http.server
 import socketserver
 import json
 import os
+import threading
+import sys
+sys.path.insert(0, os.path.dirname(__file__))
+import ai_botanist
 import glob
 import subprocess
 import traceback
@@ -838,6 +842,8 @@ HTML_CONTENT = """
                     <div class="slices-grid" id="layerSlicesGrid">
                         <!-- Slices injected dynamically -->
                     </div>
+                    <!-- AI Botanical Analysis Card -->
+                    <div id="layerAiAnalysisCard" style="margin-top:16px;"></div>
                 </div>
             </div>
         </div>
@@ -1149,9 +1155,15 @@ HTML_CONTENT = """
                         
                         const variantDataStr = JSON.stringify(variant).replace(/"/g, '&quot;');
                         const displayTitleStr = hasAlias ? `${variant.display_name} (${variant.plant_name})` : variant.plant_name;
-                        const colorBadgeHtml = variant.true_color 
-                            ? `<span class="badge-truecolor card-status-badge" title="真彩保留 RGB + 边缘消隐">✨ 真彩</span>` 
-                            : `<span class="badge-grayscale card-status-badge" title="旧版灰度提取">⚪ 灰度</span>`;
+                        const isAnalyzing = (variant.status === 'ai_analyzing');
+                        let colorBadgeHtml = "";
+                        if (isAnalyzing) {
+                            colorBadgeHtml = `<span class="badge-grayscale card-status-badge" style="background:#f39c12; color:#fff;" title="植物生物学 AI 分析中...">🤖 AI分析中...</span>`;
+                        } else {
+                            colorBadgeHtml = variant.true_color 
+                                ? `<span class="badge-truecolor card-status-badge" title="真彩保留 RGB + 边缘消隐">✨ 真彩</span>` 
+                                : `<span class="badge-grayscale card-status-badge" title="旧版灰度提取">⚪ 灰度</span>`;
+                        }
 
                         card.innerHTML = `
                             ${colorBadgeHtml}
@@ -1166,10 +1178,19 @@ HTML_CONTENT = """
                             </div>
                         `;
                         
-                        card.onclick = () => toggleSelectAssetCard(variant.plant_name, variant.variant_id, !!variant.true_color, displayTitleStr, card);
+                        card.onclick = () => {
+                            if (isAnalyzing) {
+                                openLayerModal(variant);
+                            } else {
+                                toggleSelectAssetCard(variant.plant_name, variant.variant_id, !!variant.true_color, displayTitleStr, card);
+                            }
+                        };
                         aGal.appendChild(card);
                     });
                     updateSelectedAssetsUI();
+                    if (assets.some(v => v.status === 'ai_analyzing')) {
+                        startAiStatusPolling();
+                    }
                 }).catch(err => {
                     console.error("加载资产失败:", err);
                 });
@@ -1317,7 +1338,134 @@ HTML_CONTENT = """
             });
 
             updateCombinedCssBox();
+            renderAiAnalysisCard(variant);
             document.getElementById('layerModal').style.display = 'flex';
+        }
+
+        function renderAiAnalysisCard(variant) {
+            const container = document.getElementById('layerAiAnalysisCard');
+            if (!container) return;
+            if (!variant) {
+                container.innerHTML = '';
+                return;
+            }
+
+            if (variant.status === 'ai_analyzing') {
+                container.innerHTML = `
+                    <div style="background:#161b22; border:1px solid #f39c12; border-radius:8px; padding:12px 14px;">
+                        <div style="display:flex; align-items:center; gap:8px; color:#f39c12; font-size:13px; font-weight:600;">
+                            <span class="spinner-mini" style="border-top-color:#f39c12; width:14px; height:14px;"></span>
+                            <span>🤖 植物生物学 AI 分析中...</span>
+                        </div>
+                        <div style="color:#8b949e; font-size:12px; margin-top:6px; line-height:1.4;">
+                            后台正在通过 OpenAI 兼容接口测算真实植物学生态高度与 2.5D 映射范围，测算完成后将自动就绪并在此展示。
+                        </div>
+                    </div>
+                `;
+            } else if (variant.ai_analysis && (variant.ai_analysis.status === 'success' || variant.ai_analysis.botanical_height_m)) {
+                const ai = variant.ai_analysis;
+                const botH = ai.botanical_height_m ? `${ai.botanical_height_m[0]}m ~ ${ai.botanical_height_m[1]}m` : '未知';
+                const gameH = ai.suggested_game_height_px ? `${ai.suggested_game_height_px[0]}px ~ ${ai.suggested_game_height_px[1]}px` : '未知';
+                const sciName = ai.scientific_name ? `<i>(${ai.scientific_name})</i>` : '';
+                const typeMap = { 'tree': '🌳 乔木', 'shrub': '🌿 灌木', 'flower': '🌸 花卉', 'groundcover': '🌱 地被' };
+                const habitMap = { 'slender': '直立挺拔', 'canopy': '伞冠展开', 'bush': '丛生茂密', 'carpet': '铺地蔓延' };
+                const pType = typeMap[ai.plant_type] || ai.plant_type || '自然植被';
+                const pHabit = habitMap[ai.growth_habit] || ai.growth_habit || '自然形态';
+
+                container.innerHTML = `
+                    <div style="background:#161b22; border:1px solid #30363d; border-radius:8px; padding:12px 14px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                            <span style="font-weight:bold; color:#58a6ff; font-size:13px;">🤖 植物生物学 AI 测算结果:</span>
+                            <span style="font-size:11px; color:#8b949e;">${sciName}</span>
+                        </div>
+                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
+                            <div style="background:#0d1117; padding:8px 10px; border-radius:6px; border:1px solid #21262d;">
+                                <div style="color:#8b949e; font-size:11px;">真实生物学生长高度:</div>
+                                <div style="color:#7ee787; font-weight:bold; font-size:13px; margin-top:2px;">${botH}</div>
+                            </div>
+                            <div style="background:#0d1117; padding:8px 10px; border-radius:6px; border:1px solid #21262d;">
+                                <div style="color:#8b949e; font-size:11px;">2.5D 游戏映射高度:</div>
+                                <div style="color:#58a6ff; font-weight:bold; font-size:13px; margin-top:2px;">${gameH}</div>
+                            </div>
+                        </div>
+                        <div style="font-size:12px; color:#c9d1d9; line-height:1.5;">
+                            <span style="display:inline-block; background:#21262d; padding:2px 8px; border-radius:12px; font-size:11px; margin-right:6px; color:#58a6ff;">${pType}</span>
+                            <span style="display:inline-block; background:#21262d; padding:2px 8px; border-radius:12px; font-size:11px; color:#8b949e;">${pHabit}</span>
+                            <div style="margin-top:6px; color:#8b949e; font-size:12px;">${ai.brief || ''}</div>
+                        </div>
+                    </div>
+                `;
+            } else if (variant.ai_analysis && variant.ai_analysis.status === 'failed') {
+                container.innerHTML = `
+                    <div style="background:#161b22; border:1px solid #8b2020; border-radius:8px; padding:10px 14px;">
+                        <span style="color:#ff7b72; font-size:12px; font-weight:bold;">⚠️ AI 测算未完成:</span>
+                        <span style="color:#8b949e; font-size:12px; margin-left:6px;">${variant.ai_analysis.brief || '网络或配置原因'}</span>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = `
+                    <div style="background:#161b22; border:1px solid #21262d; border-radius:8px; padding:10px 14px; color:#8b949e; font-size:12px;">
+                        ℹ️ 暂无生物学 AI 测算数据 (后续统一批量处理)
+                    </div>
+                `;
+            }
+        }
+
+        let aiPollingTimer = null;
+        function startAiStatusPolling() {
+            if (aiPollingTimer) return;
+            aiPollingTimer = setInterval(() => {
+                fetch('/api/assets')
+                    .then(res => res.json())
+                    .then(assets => {
+                        let stillAnalyzing = false;
+                        assets.forEach(variant => {
+                            if (variant.status === 'ai_analyzing') {
+                                stillAnalyzing = true;
+                            }
+                        });
+
+                        // If active modal is open for a variant, check if its status changed
+                        if (activeModalVariant) {
+                            const updated = assets.find(v => v.plant_name === activeModalVariant.plant_name && v.variant_id === activeModalVariant.variant_id);
+                            if (updated) {
+                                if (updated.status !== activeModalVariant.status || JSON.stringify(updated.ai_analysis) !== JSON.stringify(activeModalVariant.ai_analysis)) {
+                                    activeModalVariant = updated;
+                                    renderAiAnalysisCard(updated);
+                                }
+                            }
+                        }
+
+                        // Update badges on existing asset cards
+                        assets.forEach(variant => {
+                            const key = `${variant.plant_name}__${variant.variant_id}`;
+                            const card = document.querySelector(`.card[data-asset-key="${key}"]`);
+                            if (card) {
+                                const badge = card.querySelector('.card-status-badge');
+                                if (badge) {
+                                    if (variant.status === 'ai_analyzing') {
+                                        badge.className = 'badge-grayscale card-status-badge';
+                                        badge.style.background = '#f39c12';
+                                        badge.style.color = '#fff';
+                                        badge.innerText = '🤖 AI分析中...';
+                                    } else {
+                                        badge.className = variant.true_color ? 'badge-truecolor card-status-badge' : 'badge-grayscale card-status-badge';
+                                        badge.style.background = '';
+                                        badge.style.color = '';
+                                        badge.innerText = variant.true_color ? '✨ 真彩' : '⚪ 灰度';
+                                    }
+                                }
+                            }
+                        });
+
+                        const hasPlaceholder = !!document.querySelector('.is-slicing-placeholder');
+                        if (!hasPlaceholder && !stillAnalyzing) {
+                            clearInterval(aiPollingTimer);
+                            aiPollingTimer = null;
+                        }
+                    })
+                    .catch(() => {});
+            }, 2500);
         }
 
         function toggleLayerVisibility(idx, isChecked) {
@@ -1527,51 +1675,65 @@ HTML_CONTENT = """
             const filename = document.getElementById('candidateFilename').value;
             if(!name) return alert('请输入植物英文代号');
             
-            const btn = document.getElementById('confirmBtn');
-            const cancelBtn = document.getElementById('cancelBtn');
-            const spinnerOverlay = document.getElementById('processModalSpinner');
-            
-            btn.innerHTML = '<span class="spinner-mini"></span> 正在切片入库...';
-            btn.disabled = true;
-            if (cancelBtn) cancelBtn.disabled = true;
-            if (spinnerOverlay) spinnerOverlay.style.display = 'flex';
-            
-            // Also find the card in candidatesGallery and show spinner on its thumbnail
+            // 1. 立即关闭入库弹窗
+            document.getElementById('processModal').style.display = 'none';
+
+            // 2. 立即从左侧候选池中隐藏当前候选卡片
             const candidateCard = Array.from(document.querySelectorAll('#candidatesGallery .card')).find(c => {
                 const title = c.querySelector('.title');
                 return title && title.innerText.trim() === filename;
             });
             if (candidateCard) {
-                const imgWrap = candidateCard.querySelector('.img-container');
-                if (imgWrap && !imgWrap.querySelector('.img-spinner-overlay')) {
-                    const overlay = document.createElement('div');
-                    overlay.className = 'img-spinner-overlay';
-                    overlay.innerHTML = `<div class="spinner-circle"></div><span class="spinner-text">入库中...</span>`;
-                    imgWrap.appendChild(overlay);
-                }
+                candidateCard.style.display = 'none';
             }
-            
+
+            // 3. 立即在右侧资产画廊插入灰色不可用占位卡片【切图中】
+            const aGal = document.getElementById('assetsGallery');
+            const placeholderCard = document.createElement('div');
+            placeholderCard.className = 'card is-slicing-placeholder';
+            placeholderCard.id = `card-processing-${name}`;
+            placeholderCard.style.cssText = 'opacity:0.6; filter:grayscale(0.85); cursor:not-allowed; position:relative;';
+            const displayTitleStr = displayName ? `${displayName} (${name})` : name;
+            placeholderCard.innerHTML = `
+                <span class="badge-grayscale card-status-badge" style="background:#555; color:#eee;">⏳ 切图中...</span>
+                <div class="img-container">
+                    <img src="/tools/candidates/${filename}" />
+                    <div class="img-spinner-overlay" style="display:flex;">
+                        <div class="spinner-circle"></div>
+                        <span class="spinner-text">智能切片中...</span>
+                    </div>
+                </div>
+                <div class="title" style="margin-top:2px;">${displayTitleStr}</div>
+                <div class="subtitle" style="margin-top:2px;">Variant: --</div>
+                <div style="margin-top:6px;">
+                    <span class="layer-badge-btn" style="opacity:0.5; pointer-events:none;">⏳ 正在切片...</span>
+                </div>
+            `;
+            if (aGal.firstChild) {
+                aGal.insertBefore(placeholderCard, aGal.firstChild);
+            } else {
+                aGal.appendChild(placeholderCard);
+            }
+
+            // 4. 发起切图请求 (Phase 1)
             fetch('/api/process', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({ name: name, display_name: displayName, filename: filename })
             }).then(res => res.json()).then(res => {
-                if(res.status === 'success') {
-                    document.getElementById('processModal').style.display = 'none';
-                    loadData(); // reload
+                if (res.status === 'success') {
+                    // 切图成功，此时进入半可用状态 (AI分析中)
+                    loadData();
+                    startAiStatusPolling();
                 } else {
                     alert('处理失败: ' + res.error);
+                    if (placeholderCard) placeholderCard.remove();
+                    if (candidateCard) candidateCard.style.display = '';
                 }
-            }).catch(err => alert('网络错误: ' + err))
-            .finally(() => {
-                btn.innerText = '自动切片并入库';
-                btn.disabled = false;
-                if (cancelBtn) cancelBtn.disabled = false;
-                if (spinnerOverlay) spinnerOverlay.style.display = 'none';
-                if (candidateCard) {
-                    const overlay = candidateCard.querySelector('.img-spinner-overlay');
-                    if (overlay) overlay.remove();
-                }
+            }).catch(err => {
+                alert('网络错误: ' + err);
+                if (placeholderCard) placeholderCard.remove();
+                if (candidateCard) candidateCard.style.display = '';
             });
         }
         
@@ -1631,6 +1793,8 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
                                 display_name = plant_name
                                 true_color = False
                                 source_image = None
+                                status = 'ready'
+                                ai_analysis = None
                                 meta_file = os.path.join(item_path, 'metadata.json')
                                 if os.path.exists(meta_file):
                                     try:
@@ -1639,6 +1803,8 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
                                             display_name = mdata.get('display_name') or mdata.get('name') or plant_name
                                             true_color = bool(mdata.get('true_color', False))
                                             source_image = mdata.get('source_image')
+                                            status = mdata.get('status', 'ready')
+                                            ai_analysis = mdata.get('ai_analysis')
                                     except Exception:
                                         pass
                                 variants.append({
@@ -1648,6 +1814,8 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
                                     'layers': layers,
                                     'true_color': true_color,
                                     'source_image': source_image,
+                                    'status': status,
+                                    'ai_analysis': ai_analysis,
                                     'path_prefix': f'{plant_name}/{item}'
                                 })
                     
@@ -1658,6 +1826,8 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
                             display_name = plant_name
                             true_color = False
                             source_image = None
+                            status = 'ready'
+                            ai_analysis = None
                             meta_file = os.path.join(plant_path, 'metadata.json')
                             if os.path.exists(meta_file):
                                 try:
@@ -1666,6 +1836,8 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
                                         display_name = mdata.get('display_name') or mdata.get('name') or plant_name
                                         true_color = bool(mdata.get('true_color', False))
                                         source_image = mdata.get('source_image')
+                                        status = mdata.get('status', 'ready')
+                                        ai_analysis = mdata.get('ai_analysis')
                                 except Exception:
                                     pass
                             variants.append({
@@ -1675,6 +1847,8 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
                                 'layers': layers,
                                 'true_color': true_color,
                                 'source_image': source_image,
+                                'status': status,
+                                'ai_analysis': ai_analysis,
                                 'path_prefix': plant_name
                             })
             
@@ -2025,7 +2199,7 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
                 cmd = ["uv", "run", "python", build_script, input_path, plant_name, "auto"]
                 if display_name:
                     cmd.append(display_name)
-                print(f"\n⚙️ 正在执行打包脚本: {' '.join(cmd)}")
+                print(f"\n⚙️ 正在执行打包脚本 (Phase 1): {' '.join(cmd)}")
                 
                 result = subprocess.run(cmd, cwd=os.path.join(PROJECT_ROOT, 'tools'), capture_output=True, text=True)
                 
@@ -2040,6 +2214,41 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
                     if filename in conf:
                         del conf[filename]
                         save_confirmed_candidates(conf)
+
+                    # Find the newest variant folder under plant_name
+                    plant_dir = os.path.join(PLANTS_DIR, plant_name)
+                    if os.path.exists(plant_dir):
+                        subdirs = [os.path.join(plant_dir, d) for d in os.listdir(plant_dir) if os.path.isdir(os.path.join(plant_dir, d))]
+                        if subdirs:
+                            newest_dir = max(subdirs, key=lambda d: os.path.getmtime(d))
+                            meta_file = os.path.join(newest_dir, 'metadata.json')
+
+                            def run_ai_analysis(meta_path, p_name, d_name):
+                                print(f"\n🤖 开始 AI 分析: {p_name} ({d_name})")
+                                try:
+                                    analysis = ai_botanist.analyze_plant_botany(p_name, d_name)
+                                    print(f"✅ AI 分析完成: {analysis.get('status')}")
+                                    if os.path.exists(meta_path):
+                                        with open(meta_path, 'r', encoding='utf-8') as f:
+                                            m = json.load(f)
+                                        m['status'] = 'ready'
+                                        m['ai_analysis'] = analysis
+                                        with open(meta_path, 'w', encoding='utf-8') as f:
+                                            json.dump(m, f, ensure_ascii=False, indent=4)
+                                except Exception as e:
+                                    print(f"❌ AI 分析异常: {e}")
+                                    if os.path.exists(meta_path):
+                                        try:
+                                            with open(meta_path, 'r', encoding='utf-8') as f:
+                                                m = json.load(f)
+                                            m['status'] = 'ready'
+                                            m['ai_analysis'] = {"status": "failed", "brief": f"Error: {e}"}
+                                            with open(meta_path, 'w', encoding='utf-8') as f:
+                                                json.dump(m, f, ensure_ascii=False, indent=4)
+                                        except:
+                                            pass
+
+                            threading.Thread(target=run_ai_analysis, args=(meta_file, plant_name, display_name), daemon=True).start()
                     
                     self.send_response(200)
                     self.send_header('Content-type', 'application/json')

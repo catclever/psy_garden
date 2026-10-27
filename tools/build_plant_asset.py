@@ -54,6 +54,37 @@ def build_asset(input_path, plant_name, variant_id, output_dir, project_root, di
         
     c_width, c_height = cropped_img.size
     
+    # 1.5 Scan bottom non-transparent rows to determine root_width (actual stem/trunk pixel width)
+    print("Calculating root_width...")
+    root_width = 0
+    # Scan from the bottom of the cropped box up to 10 rows
+    rows_to_scan = min(10, c_height)
+    max_row_width = 0
+
+    for row_y in range(c_height - 1, c_height - 1 - rows_to_scan, -1):
+        row_min_x = c_width
+        row_max_x = -1
+        for col_x in range(c_width):
+            r, g, b, a = cropped_img.getpixel((col_x, row_y))
+
+            if is_white_bg:
+                bg_dist = 255 - min(r, g, b)
+            else:
+                bg_dist = max(r, g, b)
+
+            # If not background (using similar logic to splitting alpha)
+            if bg_dist >= 15:
+                if col_x < row_min_x: row_min_x = col_x
+                if col_x > row_max_x: row_max_x = col_x
+
+        if row_max_x >= row_min_x:
+            r_w = row_max_x - row_min_x + 1
+            if r_w > max_row_width:
+                max_row_width = r_w
+
+    root_width = max_row_width
+    print(f"Calculated root_width: {root_width}px")
+
     # 2. Split layers
     print("Splitting channels...")
     red_layer = []
@@ -157,10 +188,13 @@ def build_asset(input_path, plant_name, variant_id, output_dir, project_root, di
         "variant_id": variant_id,
         "width": c_width,
         "height": c_height,
+        "root_width": root_width,
         "layers": layers_created,
         "source_image": os.path.basename(input_path),
         "true_color": True,
-        "created_at": int(time.time())
+        "created_at": int(time.time()),
+        "status": "ai_analyzing",
+        "ai_analysis": None
     }
     
     with open(os.path.join(output_dir, "metadata.json"), "w", encoding="utf-8") as f:
