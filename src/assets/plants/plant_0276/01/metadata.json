@@ -19,12 +19,11 @@
     "created_at": 1794883619,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "苏铁",
-        "scientific_name": "Unknown",
+        "scientific_name": "Cycas revoluta",
         "botanical_height_m": [
-            0.5,
-            1.5
+            1.0,
+            4.0
         ],
         "plant_type": "shrub",
         "growth_habit": "bush",
@@ -32,6 +31,7 @@
             100,
             150
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "古老的常绿木本裸子植物，厚重圆柱状树干顶端螺旋展开坚硬的深绿羽状复叶冠。",
+        "status": "success"
     }
 }

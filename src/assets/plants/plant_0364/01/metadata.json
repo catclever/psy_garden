@@ -19,19 +19,19 @@
     "created_at": 1794883631,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "生石花屬",
-        "scientific_name": "Unknown",
+        "scientific_name": "Lithops spp.",
         "botanical_height_m": [
-            0.5,
-            1.5
+            0.02,
+            0.05
         ],
-        "plant_type": "shrub",
-        "growth_habit": "bush",
+        "plant_type": "groundcover",
+        "growth_habit": "carpet",
         "suggested_game_height_px": [
-            100,
-            150
+            35,
+            45
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "极矮小型肉质草本，两枚对生肥厚肉质叶愈合成扁圆石块状以拟态环境。",
+        "status": "success"
     }
 }

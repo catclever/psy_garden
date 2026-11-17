@@ -20,19 +20,19 @@
     "created_at": 1794883619,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "海芋",
-        "scientific_name": "Unknown",
+        "scientific_name": "Alocasia odora",
         "botanical_height_m": [
-            0.5,
-            1.5
+            1.5,
+            3.5
         ],
-        "plant_type": "shrub",
+        "plant_type": "flower",
         "growth_habit": "bush",
         "suggested_game_height_px": [
-            100,
+            110,
             150
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "大型天南星科直立草本，粗壮肉质茎顶生出巨大盾状箭形厚叶，佛焰苞淡绿色。",
+        "status": "success"
     }
 }

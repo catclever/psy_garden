@@ -19,19 +19,19 @@
     "created_at": 1794883605,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "百歲蘭",
-        "scientific_name": "Unknown",
+        "scientific_name": "Welwitschia mirabilis",
         "botanical_height_m": [
-            0.5,
-            1.5
+            0.3,
+            1.2
         ],
-        "plant_type": "shrub",
-        "growth_habit": "bush",
+        "plant_type": "groundcover",
+        "growth_habit": "carpet",
         "suggested_game_height_px": [
-            100,
-            150
+            50,
+            80
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "荒漠特有古老裸子植物，终生仅生两片不断生长、撕裂平卧的带状革质叶。",
+        "status": "success"
     }
 }

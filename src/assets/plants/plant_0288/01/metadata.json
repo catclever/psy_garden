@@ -20,19 +20,19 @@
     "created_at": 1794883621,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "台湾马醉木",
-        "scientific_name": "Unknown",
+        "scientific_name": "Pieris taiwanensis",
         "botanical_height_m": [
-            0.5,
-            1.5
+            1.0,
+            3.0
         ],
         "plant_type": "shrub",
         "growth_habit": "bush",
         "suggested_game_height_px": [
-            100,
-            150
+            95,
+            140
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "常绿灌木，披针形叶片幼时鲜红艳丽，早春自枝梢抽出密串如钟铃的白花花序。",
+        "status": "success"
     }
 }

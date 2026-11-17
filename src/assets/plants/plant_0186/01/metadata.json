@@ -19,19 +19,19 @@
     "created_at": 1794883606,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "梨果仙人掌",
-        "scientific_name": "Unknown",
+        "scientific_name": "Opuntia ficus-indica",
         "botanical_height_m": [
-            0.5,
-            1.5
+            1.5,
+            5.0
         ],
         "plant_type": "shrub",
         "growth_habit": "bush",
         "suggested_game_height_px": [
-            100,
-            150
+            115,
+            165
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "大型肉质多分枝灌木状仙人掌，具宽大扁平掌状茎节与黄色花朵及可食梨形浆果。",
+        "status": "success"
     }
 }

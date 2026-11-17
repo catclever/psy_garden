@@ -19,19 +19,19 @@
     "created_at": 1794883625,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "側金盞花",
-        "scientific_name": "Unknown",
+        "scientific_name": "Adonis amurensis",
         "botanical_height_m": [
-            0.5,
-            1.5
+            0.1,
+            0.3
         ],
-        "plant_type": "shrub",
-        "growth_habit": "bush",
+        "plant_type": "flower",
+        "growth_habit": "slender",
         "suggested_game_height_px": [
-            100,
-            150
+            50,
+            75
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "早春破雪绽放的毛茛科草本，金黄色花瓣光亮，叶呈羽状细裂。",
+        "status": "success"
     }
 }

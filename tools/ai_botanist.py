@@ -57,15 +57,16 @@ def build_http_request(config: dict, prompt: str):
     Returns (None, None, None, provider) if required URL is missing.
     """
     provider = resolve_provider(config)
-    raw_url = (config.get("url") or "").strip().rstrip("/")
-    api_key = (config.get("key") or "").strip()
+    raw_url = (config.get("url") or config.get("base_url") or "").strip().rstrip("/")
+    api_key = (config.get("key") or config.get("api_key") or "").strip()
+    configured_model = (config.get("model") or config.get("default_model") or "").strip()
 
     headers = {"Content-Type": "application/json"}
 
     if provider == "openai":
         if not raw_url:
             return None, None, None, provider
-        model = (config.get("model") or "gpt-4o-mini").strip()
+        model = configured_model or "gpt-4o-mini"
         endpoint = raw_url if raw_url.endswith("/chat/completions") else f"{raw_url}/chat/completions"
         if api_key:
             headers["Authorization"] = f"Bearer {api_key}"
@@ -80,7 +81,7 @@ def build_http_request(config: dict, prompt: str):
         provider = "google-interactions"
 
     if provider == "google":
-        model = (config.get("model") or "gemini-3.5-flash-lite").strip()
+        model = configured_model or "gemini-3.5-flash-lite"
         clean_model = model[len("models/"):] if model.startswith("models/") else model
         base_url = raw_url or DEFAULT_GOOGLE_BASE_URL
         if ":generateContent" in base_url:
@@ -105,7 +106,7 @@ def build_http_request(config: dict, prompt: str):
         return endpoint, headers, payload, provider
 
     if provider == "google-interactions":
-        model = (config.get("model") or "gemini-4-hydrogen").strip()
+        model = configured_model or "gemini-4-hydrogen"
         clean_model = model[len("models/"):] if model.startswith("models/") else model
         if not raw_url:
             endpoint = DEFAULT_GOOGLE_INTERACTIONS_URL
@@ -126,7 +127,7 @@ def build_http_request(config: dict, prompt: str):
         return endpoint, headers, payload, provider
 
     if provider == "anthropic":
-        model = (config.get("model") or "claude-sonnet-4-5").strip()
+        model = configured_model or "claude-sonnet-4-5"
         base_url = raw_url or DEFAULT_ANTHROPIC_BASE_URL
         if base_url.endswith("/messages"):
             endpoint = base_url
@@ -282,3 +283,68 @@ def analyze_plant_botany(plant_name: str, display_name: str = None, config_overr
         fallback["status"] = "failed"
         fallback["brief"] = f"Unexpected error: {str(e)}"
         return fallback
+
+
+def analyze_plants_batch(items: list, config_override: dict = None) -> dict:
+    """
+    Analyze a batch of [{'plant_name': str, 'display_name': str}] in a single HTTP request.
+    Returns {plant_name: analysis_dict}.
+    """
+    if not items:
+        return {}
+
+    config = config_override if isinstance(config_override, dict) else load_config()
+    if not config:
+        return {}
+
+    lines = "\n".join(f'- code: "{it["plant_name"]}", name: "{it["display_name"]}"' for it in items)
+    prompt = f"""You are an expert botanist. Analyze ALL {len(items)} plants listed below:
+{lines}
+
+Return ONLY a valid JSON object mapping each exact `code` (e.g. "plant_0002") to an object with these exact keys:
+- "zh_name": Chinese name of the plant
+- "scientific_name": Latin botanical name
+- "botanical_height_m": [min_meters, max_meters] (two floats, realistic wild/garden height)
+- "plant_type": One of ["tree", "shrub", "flower", "groundcover"]
+- "growth_habit": One of ["slender", "canopy", "bush", "carpet"]
+- "suggested_game_height_px": [min_px, max_px] (two integers mapped on a 35 ~ 220 px logarithmic visual scale: tiny moss/lithops/mushrooms 35~50, small herbs/flowers 50~95, medium shrubs/ferns/cycads 90~155, tall trees/bamboos/palms 160~220)
+- "brief": Concise one-sentence morphological summary in Chinese.
+
+Output raw JSON object ONLY."""
+
+    endpoint, headers, payload, provider = build_http_request(config, prompt)
+    if not endpoint:
+        return {}
+
+    timeout = max(int(config.get("timeout", 30)), 90)
+    proxy_url = (config.get("proxy") or "").strip()
+    req = urllib.request.Request(endpoint, data=json.dumps(payload).encode("utf-8"), method="POST")
+    for k, v in headers.items():
+        req.add_header(k, v)
+
+    opener = (
+        urllib.request.build_opener(urllib.request.ProxyHandler({"http": proxy_url, "https": proxy_url}))
+        if proxy_url
+        else urllib.request.build_opener()
+    )
+
+    with opener.open(req, timeout=timeout) as response:
+        if response.status != 200:
+            raise RuntimeError(f"HTTP {response.status}")
+        body = response.read().decode("utf-8")
+        result_json = json.loads(body)
+        content = extract_response_text(result_json, provider)
+        parsed = parse_json_content(content)
+
+    out = {}
+    if isinstance(parsed, dict):
+        for it in items:
+            code = it["plant_name"]
+            entry = parsed.get(code)
+            if isinstance(entry, dict) and "botanical_height_m" in entry and "suggested_game_height_px" in entry:
+                entry["status"] = "success"
+                if not entry.get("zh_name"):
+                    entry["zh_name"] = it["display_name"]
+                out[code] = entry
+    return out
+

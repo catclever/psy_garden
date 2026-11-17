@@ -19,19 +19,19 @@
     "created_at": 1794883631,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "女王竹芋",
-        "scientific_name": "Unknown",
+        "scientific_name": "Goeppertia majestica",
         "botanical_height_m": [
-            0.5,
+            0.6,
             1.5
         ],
-        "plant_type": "shrub",
+        "plant_type": "flower",
         "growth_habit": "bush",
         "suggested_game_height_px": [
-            100,
-            150
+            82,
+            118
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "大型丛生竹芋，深绿色革质长叶上对称排列着粉白至银白色的优美细线条。",
+        "status": "success"
     }
 }

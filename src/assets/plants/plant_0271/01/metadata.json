@@ -19,19 +19,19 @@
     "created_at": 1794883618,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "彩雲閣",
-        "scientific_name": "Unknown",
+        "scientific_name": "Euphorbia trigona",
         "botanical_height_m": [
-            0.5,
-            1.5
+            1.5,
+            3.0
         ],
         "plant_type": "shrub",
-        "growth_habit": "bush",
+        "growth_habit": "slender",
         "suggested_game_height_px": [
-            100,
-            150
+            110,
+            160
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "直立多肉灌木，具三至四棱肉质茎，深绿茎表布有大理石状白绿条纹。",
+        "status": "success"
     }
 }

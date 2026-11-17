@@ -19,19 +19,19 @@
     "created_at": 1794883611,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "茉莉花",
-        "scientific_name": "Unknown",
+        "scientific_name": "Jasminum sambac",
         "botanical_height_m": [
             0.5,
-            1.5
+            3.0
         ],
         "plant_type": "shrub",
         "growth_habit": "bush",
         "suggested_game_height_px": [
-            100,
-            150
+            65,
+            125
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "常绿直立或攀援灌木，小枝圆柱形，聚伞花序顶生，常开芳香浓郁的白色花朵。",
+        "status": "success"
     }
 }

@@ -20,19 +20,19 @@
     "created_at": 1794883614,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "虎眼萬年青屬",
-        "scientific_name": "Unknown",
+        "scientific_name": "Ornithogalum",
         "botanical_height_m": [
-            0.5,
-            1.5
+            0.3,
+            1.0
         ],
-        "plant_type": "shrub",
-        "growth_habit": "bush",
+        "plant_type": "flower",
+        "growth_habit": "slender",
         "suggested_game_height_px": [
-            100,
-            150
+            55,
+            95
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "具地下鱗莖的多年生草本植物，帶狀基生葉簇生，直立花葶頂生白色或帶綠暈的星狀花序。",
+        "status": "success"
     }
 }

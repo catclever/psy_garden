@@ -19,19 +19,19 @@
     "created_at": 1794883628,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "鉤吻",
-        "scientific_name": "Unknown",
+        "scientific_name": "Gelsemium elegans",
         "botanical_height_m": [
-            0.5,
-            1.5
+            2.0,
+            7.0
         ],
         "plant_type": "shrub",
         "growth_habit": "bush",
         "suggested_game_height_px": [
-            100,
+            110,
             150
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "常绿木质大藤本（断肠草），全株剧毒，顶生黄色漏斗状小花。",
+        "status": "success"
     }
 }

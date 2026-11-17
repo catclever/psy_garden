@@ -19,19 +19,19 @@
     "created_at": 1794883596,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "菊蒿",
-        "scientific_name": "Unknown",
+        "scientific_name": "Tanacetum vulgare",
         "botanical_height_m": [
             0.5,
-            1.5
+            1.2
         ],
-        "plant_type": "shrub",
+        "plant_type": "flower",
         "growth_habit": "bush",
         "suggested_game_height_px": [
-            100,
-            150
+            75,
+            105
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "菊科多年生芳香草本，具深裂羽状叶与扁平纽扣状的金黄色密集头状花序。",
+        "status": "success"
     }
 }

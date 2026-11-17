@@ -19,19 +19,19 @@
     "created_at": 1794883611,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "柱状南洋杉",
-        "scientific_name": "Unknown",
+        "scientific_name": "Araucaria columnaris",
         "botanical_height_m": [
-            0.5,
-            1.5
+            30.0,
+            60.0
         ],
-        "plant_type": "shrub",
-        "growth_habit": "bush",
+        "plant_type": "tree",
+        "growth_habit": "slender",
         "suggested_game_height_px": [
-            100,
-            150
+            180,
+            220
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "高大常绿针叶乔木，树冠呈极为狭长的圆柱状或尖塔形，侧枝轮生开展而短小，树姿挺拔秀丽。",
+        "status": "success"
     }
 }

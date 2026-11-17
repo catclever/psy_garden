@@ -19,19 +19,19 @@
     "created_at": 1794883595,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "巨人柱",
-        "scientific_name": "Unknown",
+        "scientific_name": "Carnegiea gigantea",
         "botanical_height_m": [
-            0.5,
-            1.5
+            3.0,
+            15.0
         ],
-        "plant_type": "shrub",
-        "growth_habit": "bush",
+        "plant_type": "tree",
+        "growth_habit": "slender",
         "suggested_game_height_px": [
-            100,
-            150
+            170,
+            220
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "仙人掌科巨型柱状树生肉质植物，主茎直立纵棱深陷，高龄株常具向上弯曲的壮硕侧枝。",
+        "status": "success"
     }
 }

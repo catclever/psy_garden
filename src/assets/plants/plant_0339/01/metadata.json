@@ -19,19 +19,19 @@
     "created_at": 1794883627,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "棒叶落地生根",
-        "scientific_name": "Unknown",
+        "scientific_name": "Kalanchoe delagoensis",
         "botanical_height_m": [
             0.5,
-            1.5
+            1.2
         ],
         "plant_type": "shrub",
-        "growth_habit": "bush",
+        "growth_habit": "slender",
         "suggested_game_height_px": [
-            100,
-            150
+            75,
+            110
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "多肉肉质草本，圆棒状叶管状对生，叶尖常着生带小根的不定芽。",
+        "status": "success"
     }
 }

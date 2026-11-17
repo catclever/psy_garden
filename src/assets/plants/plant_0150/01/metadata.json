@@ -19,19 +19,19 @@
     "created_at": 1794883601,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "印度金鈕扣",
-        "scientific_name": "Unknown",
+        "scientific_name": "Acmella paniculata",
         "botanical_height_m": [
-            0.5,
-            1.5
+            0.2,
+            0.5
         ],
-        "plant_type": "shrub",
+        "plant_type": "flower",
         "growth_habit": "bush",
         "suggested_game_height_px": [
-            100,
-            150
+            50,
+            75
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "菊科匍匐或漸升草本，具錐狀卵形的金黃色無舌狀花頭狀花序。",
+        "status": "success"
     }
 }

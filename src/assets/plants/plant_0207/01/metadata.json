@@ -20,19 +20,19 @@
     "created_at": 1794883609,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "牽牛花",
-        "scientific_name": "Unknown",
+        "scientific_name": "Ipomoea nil",
         "botanical_height_m": [
-            0.5,
-            1.5
+            1.5,
+            4.0
         ],
-        "plant_type": "shrub",
-        "growth_habit": "bush",
+        "plant_type": "flower",
+        "growth_habit": "slender",
         "suggested_game_height_px": [
-            100,
-            150
+            80,
+            115
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "缠绕草质藤本，具有心形或裂片叶片与晨间开放的大型漏斗状彩色花朵。",
+        "status": "success"
     }
 }

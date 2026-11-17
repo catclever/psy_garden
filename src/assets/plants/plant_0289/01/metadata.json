@@ -19,19 +19,19 @@
     "created_at": 1794883621,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "大豕草",
-        "scientific_name": "Unknown",
+        "scientific_name": "Heracleum mantegazzianum",
         "botanical_height_m": [
-            0.5,
-            1.5
+            2.5,
+            5.5
         ],
-        "plant_type": "shrub",
-        "growth_habit": "bush",
+        "plant_type": "flower",
+        "growth_habit": "slender",
         "suggested_game_height_px": [
-            100,
-            150
+            130,
+            175
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "巨型两年生草本，中空粗茎密布紫斑，顶端撑开直径近一米的巨大复伞形白色花球。",
+        "status": "success"
     }
 }

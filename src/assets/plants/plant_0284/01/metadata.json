@@ -19,19 +19,19 @@
     "created_at": 1794883620,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "晃玉",
-        "scientific_name": "Unknown",
+        "scientific_name": "Euphorbia obesa",
         "botanical_height_m": [
-            0.5,
-            1.5
+            0.08,
+            0.2
         ],
-        "plant_type": "shrub",
+        "plant_type": "flower",
         "growth_habit": "bush",
         "suggested_game_height_px": [
-            100,
-            150
+            40,
+            60
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "无刺球状多肉植物，体态圆浑如棒球，表皮呈灰绿至紫褐色并具规则细密棱脊。",
+        "status": "success"
     }
 }

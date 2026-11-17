@@ -19,19 +19,19 @@
     "created_at": 1794883601,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "藻玲玉屬",
-        "scientific_name": "Unknown",
+        "scientific_name": "Gibbaeum",
         "botanical_height_m": [
-            0.5,
-            1.5
+            0.02,
+            0.07
         ],
-        "plant_type": "shrub",
-        "growth_habit": "bush",
+        "plant_type": "groundcover",
+        "growth_habit": "carpet",
         "suggested_game_height_px": [
-            100,
-            150
+            35,
+            50
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "番杏科微型多肉植物，具不對稱對生的卵圓形肉質肉葉與雛菊狀小花。",
+        "status": "success"
     }
 }

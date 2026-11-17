@@ -20,19 +20,19 @@
     "created_at": 1794883596,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "毒堇",
-        "scientific_name": "Unknown",
+        "scientific_name": "Conium maculatum",
         "botanical_height_m": [
-            0.5,
-            1.5
+            1.0,
+            2.5
         ],
-        "plant_type": "shrub",
-        "growth_habit": "bush",
+        "plant_type": "flower",
+        "growth_habit": "slender",
         "suggested_game_height_px": [
-            100,
-            150
+            95,
+            135
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "伞形科两年生大草本，中空直立茎常带紫色斑点，含剧毒生物碱并开白色复伞形花序。",
+        "status": "success"
     }
 }

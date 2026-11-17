@@ -20,19 +20,19 @@
     "created_at": 1794883600,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "油桐",
-        "scientific_name": "Unknown",
+        "scientific_name": "Vernicia fordii",
         "botanical_height_m": [
-            0.5,
-            1.5
+            6.0,
+            10.0
         ],
-        "plant_type": "shrub",
-        "growth_habit": "bush",
+        "plant_type": "tree",
+        "growth_habit": "canopy",
         "suggested_game_height_px": [
-            100,
-            150
+            160,
+            205
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "大戟科落叶乔木，树冠开阔，叶阔卵形基部具红色腺体，春夏之交开白色红脉五瓣花，落花如积雪。",
+        "status": "success"
     }
 }

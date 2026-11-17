@@ -19,19 +19,19 @@
     "created_at": 1794883617,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "香蒲",
-        "scientific_name": "Unknown",
+        "scientific_name": "Typha orientalis",
         "botanical_height_m": [
-            0.5,
-            1.5
+            1.2,
+            2.5
         ],
-        "plant_type": "shrub",
-        "growth_habit": "bush",
+        "plant_type": "flower",
+        "growth_habit": "slender",
         "suggested_game_height_px": [
-            100,
+            105,
             150
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "水生或沼生多年生草本，条形狭长直立叶片，顶生红褐色圆柱状蜡烛形肉穗花序。",
+        "status": "success"
     }
 }

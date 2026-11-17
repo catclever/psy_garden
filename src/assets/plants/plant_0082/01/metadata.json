@@ -20,19 +20,19 @@
     "created_at": 1794883592,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "马蹄莲",
-        "scientific_name": "Unknown",
+        "scientific_name": "Zantedeschia aethiopica",
         "botanical_height_m": [
-            0.5,
-            1.5
+            0.6,
+            1.0
         ],
-        "plant_type": "shrub",
-        "growth_habit": "bush",
+        "plant_type": "flower",
+        "growth_habit": "slender",
         "suggested_game_height_px": [
-            100,
-            150
+            70,
+            100
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "球根草本植物，具心状箭形翠绿叶片，纯白色佛焰苞如马蹄卷包鲜黄肉穗。",
+        "status": "success"
     }
 }

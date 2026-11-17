@@ -19,19 +19,19 @@
     "created_at": 1794883614,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "澳洲蘇鐵",
-        "scientific_name": "Unknown",
+        "scientific_name": "Cycas media",
         "botanical_height_m": [
-            0.5,
-            1.5
+            2.0,
+            6.0
         ],
-        "plant_type": "shrub",
-        "growth_habit": "bush",
+        "plant_type": "tree",
+        "growth_habit": "canopy",
         "suggested_game_height_px": [
             100,
             150
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "原產於澳大利亞熱帶地區的古老裸子植物，樹幹直立粗壯，頂端密生硬質羽狀複葉構成掌狀樹冠。",
+        "status": "success"
     }
 }

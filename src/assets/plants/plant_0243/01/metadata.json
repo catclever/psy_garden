@@ -19,19 +19,19 @@
     "created_at": 1794883614,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "钓宫灯",
-        "scientific_name": "Unknown",
+        "scientific_name": "Kalanchoe porphyrocalyx",
         "botanical_height_m": [
-            0.5,
-            1.5
+            0.2,
+            0.4
         ],
-        "plant_type": "shrub",
+        "plant_type": "flower",
         "growth_habit": "bush",
         "suggested_game_height_px": [
-            100,
-            150
+            40,
+            65
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "景天科多年生肉质草本植物，茎节纤细常匍匐下垂，红色管状钟形小花垂吊盛开宛若微型宫灯。",
+        "status": "success"
     }
 }

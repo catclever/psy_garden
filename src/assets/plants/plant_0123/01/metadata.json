@@ -20,19 +20,19 @@
     "created_at": 1794883598,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "灯泡肉锥花",
-        "scientific_name": "Unknown",
+        "scientific_name": "Conophytum burgeri",
         "botanical_height_m": [
-            0.5,
-            1.5
+            0.02,
+            0.05
         ],
-        "plant_type": "shrub",
-        "growth_habit": "bush",
+        "plant_type": "groundcover",
+        "growth_habit": "carpet",
         "suggested_game_height_px": [
-            100,
-            150
+            35,
+            48
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "小型高度肉质植物，单生呈半球形洋葱状，表皮晶莹剔透如发光灯泡，顶端裂缝开洋红色小花。",
+        "status": "success"
     }
 }

@@ -10,7 +10,6 @@ import json
 import os
 import sys
 import time
-from PIL import Image
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_ROOT = os.path.dirname(SCRIPT_DIR)
@@ -51,7 +50,11 @@ def _collect_layer_files(variant_dir: str) -> list:
 
 
 def _infer_image_dimensions(variant_dir: str, layer_files: list):
-    """Read (width, height) from the first layer PNG using PIL."""
+    """Read (width, height) from the first layer PNG using PIL (lazy-imported)."""
+    try:
+        from PIL import Image
+    except ImportError:
+        return None, None
     for item in layer_files:
         fpath = os.path.join(variant_dir, item["file"])
         try:

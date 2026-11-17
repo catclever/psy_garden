@@ -19,19 +19,19 @@
     "created_at": 1794883628,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "朱蓮",
-        "scientific_name": "Unknown",
+        "scientific_name": "Kalanchoe sexangularis",
         "botanical_height_m": [
-            0.5,
-            1.5
+            0.3,
+            0.8
         ],
         "plant_type": "shrub",
         "growth_habit": "bush",
         "suggested_game_height_px": [
-            100,
-            150
+            65,
+            95
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "景天科多肉灌木，波浪边缘叶片在充足日照与温差下呈现鲜艳朱红色。",
+        "status": "success"
     }
 }

@@ -19,19 +19,19 @@
     "created_at": 1794883629,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "波士頓腎蕨",
-        "scientific_name": "Unknown",
+        "scientific_name": "Nephrolepis exaltata 'Bostoniensis'",
         "botanical_height_m": [
-            0.5,
-            1.5
+            0.4,
+            0.9
         ],
-        "plant_type": "shrub",
+        "plant_type": "groundcover",
         "growth_habit": "bush",
         "suggested_game_height_px": [
-            100,
-            150
+            70,
+            105
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "多年生常绿蕨类，一回羽状复叶细长披垂，株形丰满柔韧。",
+        "status": "success"
     }
 }

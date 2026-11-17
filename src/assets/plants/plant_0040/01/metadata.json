@@ -19,19 +19,19 @@
     "created_at": 1794883587,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "水松",
-        "scientific_name": "Unknown",
+        "scientific_name": "Glyptostrobus pensilis",
         "botanical_height_m": [
-            0.5,
-            1.5
+            8.0,
+            25.0
         ],
-        "plant_type": "shrub",
-        "growth_habit": "bush",
+        "plant_type": "tree",
+        "growth_habit": "canopy",
         "suggested_game_height_px": [
-            100,
-            150
+            175,
+            215
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "柏科半常绿乔木，树干基部膨大且四周常生出木质呼吸根，树冠呈狭圆锥形。",
+        "status": "success"
     }
 }

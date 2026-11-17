@@ -19,19 +19,19 @@
     "created_at": 1794883602,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "菊三七",
-        "scientific_name": "Unknown",
+        "scientific_name": "Gynura japonica",
         "botanical_height_m": [
             0.5,
-            1.5
+            1.2
         ],
-        "plant_type": "shrub",
-        "growth_habit": "bush",
+        "plant_type": "flower",
+        "growth_habit": "slender",
         "suggested_game_height_px": [
-            100,
-            150
+            70,
+            100
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "菊科直立多年生草本，具肉質塊根與羽狀裂葉，頂生橙黃色筒狀花頭。",
+        "status": "success"
     }
 }

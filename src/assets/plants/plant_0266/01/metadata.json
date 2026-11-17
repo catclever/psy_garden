@@ -19,19 +19,19 @@
     "created_at": 1794883617,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "黄脉爵床",
-        "scientific_name": "Unknown",
+        "scientific_name": "Sanchezia speciosa",
         "botanical_height_m": [
-            0.5,
-            1.5
+            1.0,
+            2.5
         ],
         "plant_type": "shrub",
         "growth_habit": "bush",
         "suggested_game_height_px": [
-            100,
-            150
+            95,
+            140
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "常绿灌木，大形倒卵状长圆形深绿叶片上镶嵌鲜明黄色叶脉，顶生黄色管状花及红苞片。",
+        "status": "success"
     }
 }

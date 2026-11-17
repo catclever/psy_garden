@@ -19,19 +19,19 @@
     "created_at": 1794883586,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "毒麦",
-        "scientific_name": "Unknown",
+        "scientific_name": "Lolium temulentum",
         "botanical_height_m": [
-            0.5,
-            1.5
+            0.4,
+            1.0
         ],
-        "plant_type": "shrub",
-        "growth_habit": "bush",
+        "plant_type": "flower",
+        "growth_habit": "slender",
         "suggested_game_height_px": [
-            100,
-            150
+            60,
+            85
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "禾本科一年生草本，外觀酷似黑麥或小麥，穗狀花序扁平且種子帶毒。",
+        "status": "success"
     }
 }

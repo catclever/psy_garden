@@ -20,19 +20,19 @@
     "created_at": 1794883625,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "矮疣球",
-        "scientific_name": "Unknown",
+        "scientific_name": "Ortegocactus macdougallii",
         "botanical_height_m": [
-            0.5,
-            1.5
+            0.03,
+            0.06
         ],
-        "plant_type": "shrub",
-        "growth_habit": "bush",
+        "plant_type": "groundcover",
+        "growth_habit": "carpet",
         "suggested_game_height_px": [
-            100,
-            150
+            35,
+            50
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "体型扁平微小的仙人掌科肉质植物，表皮灰绿密生小疣突与微刺。",
+        "status": "success"
     }
 }

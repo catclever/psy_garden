@@ -19,19 +19,19 @@
     "created_at": 1794883626,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "鐵線蕨",
-        "scientific_name": "Unknown",
+        "scientific_name": "Adiantum capillus-veneris",
         "botanical_height_m": [
-            0.5,
-            1.5
+            0.15,
+            0.4
         ],
-        "plant_type": "shrub",
+        "plant_type": "groundcover",
         "growth_habit": "bush",
         "suggested_game_height_px": [
-            100,
-            150
+            55,
+            80
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "多年生耐阴蕨类，叶柄纤细光亮如紫黑铁丝，扇形小羽片柔嫩翠绿。",
+        "status": "success"
     }
 }

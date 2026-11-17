@@ -1,6 +1,0 @@
-{
-  "url": "http://172.16.51.7:48787/v1",
-  "key": "",
-  "model": "deepseek-v4.1-flash",
-  "timeout": 30
-}

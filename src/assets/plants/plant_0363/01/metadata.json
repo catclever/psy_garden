@@ -19,19 +19,19 @@
     "created_at": 1794883630,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "星果鳳梨",
-        "scientific_name": "Unknown",
+        "scientific_name": "Portea petropolitana",
         "botanical_height_m": [
-            0.5,
+            0.8,
             1.5
         ],
-        "plant_type": "shrub",
+        "plant_type": "flower",
         "growth_habit": "bush",
         "suggested_game_height_px": [
-            100,
-            150
+            85,
+            120
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "大型附生或地生凤梨，硬叶边缘具刺，圆锥花序高耸且花萼浆果色彩艳丽。",
+        "status": "success"
     }
 }

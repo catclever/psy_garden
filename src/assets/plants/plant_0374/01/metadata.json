@@ -19,9 +19,8 @@
     "created_at": 1794883632,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "茵芋",
-        "scientific_name": "Unknown",
+        "scientific_name": "Skimmia reevesiana",
         "botanical_height_m": [
             0.5,
             1.5
@@ -29,9 +28,10 @@
         "plant_type": "shrub",
         "growth_habit": "bush",
         "suggested_game_height_px": [
-            100,
-            150
+            85,
+            120
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "常绿灌木，叶革质揉碎具芳香，初夏开密集白花，秋冬结成簇鲜红核果。",
+        "status": "success"
     }
 }

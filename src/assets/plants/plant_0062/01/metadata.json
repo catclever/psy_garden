@@ -20,19 +20,19 @@
     "created_at": 1794883590,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "老翁龍舌蘭",
-        "scientific_name": "Unknown",
+        "scientific_name": "Agave schidigera",
         "botanical_height_m": [
-            0.5,
-            1.5
+            0.3,
+            0.7
         ],
-        "plant_type": "shrub",
+        "plant_type": "flower",
         "growth_habit": "bush",
         "suggested_game_height_px": [
-            100,
-            150
+            60,
+            95
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "紧凑对称的莲座状多肉植物，暗绿色狭长叶缘剥离出细白卷曲的丝状纤维。",
+        "status": "success"
     }
 }

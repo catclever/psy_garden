@@ -19,19 +19,19 @@
     "created_at": 1794883587,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "仙客來屬",
-        "scientific_name": "Unknown",
+        "scientific_name": "Cyclamen persicum",
         "botanical_height_m": [
-            0.5,
-            1.5
+            0.15,
+            0.35
         ],
-        "plant_type": "shrub",
+        "plant_type": "flower",
         "growth_habit": "bush",
         "suggested_game_height_px": [
-            100,
-            150
+            50,
+            70
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "报春花科多年生球根植物，具斑纹心形叶片与向上反卷如兔耳的艳丽花冠。",
+        "status": "success"
     }
 }

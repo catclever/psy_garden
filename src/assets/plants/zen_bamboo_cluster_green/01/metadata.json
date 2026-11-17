@@ -19,19 +19,19 @@
     "created_at": 1794883634,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
-        "zh_name": "禅意翠竹(cluster_green)",
-        "scientific_name": "Unknown",
+        "zh_name": "禅意翠竹(绿簇)",
+        "scientific_name": "Bambusa multiplex",
         "botanical_height_m": [
-            0.5,
-            1.5
+            3.0,
+            6.0
         ],
-        "plant_type": "shrub",
-        "growth_habit": "bush",
+        "plant_type": "tree",
+        "growth_habit": "slender",
         "suggested_game_height_px": [
-            100,
-            150
+            165,
+            205
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "丛生型常绿观赏竹，青翠纤秀的竿株成簇而立，枝叶层次错落且富含禅境。",
+        "status": "success"
     }
 }

@@ -20,19 +20,19 @@
     "created_at": 1794883633,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "乌头属",
-        "scientific_name": "Unknown",
+        "scientific_name": "Aconitum carmichaelii",
         "botanical_height_m": [
-            0.5,
-            1.5
+            0.6,
+            1.8
         ],
-        "plant_type": "shrub",
-        "growth_habit": "bush",
+        "plant_type": "flower",
+        "growth_habit": "slender",
         "suggested_game_height_px": [
-            100,
-            150
+            85,
+            125
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "直立剧毒多年生草本，掌状深裂叶，茎顶总状花序盛放蓝紫色盔状奇花。",
+        "status": "success"
     }
 }

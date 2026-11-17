@@ -19,19 +19,19 @@
     "created_at": 1794883600,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "马桑",
-        "scientific_name": "Unknown",
+        "scientific_name": "Coriaria nepalensis",
         "botanical_height_m": [
-            0.5,
-            1.5
+            1.5,
+            4.0
         ],
         "plant_type": "shrub",
         "growth_habit": "bush",
         "suggested_game_height_px": [
-            100,
-            150
+            110,
+            160
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "多分枝落叶灌木，幼枝微呈四棱形，单叶对生排成假羽状，全株有毒，肉质花被包覆紫黑色浆果状瘦果。",
+        "status": "success"
     }
 }

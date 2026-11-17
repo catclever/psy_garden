@@ -19,19 +19,19 @@
     "created_at": 1794883632,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
-        "zh_name": "愛之蔓",
-        "scientific_name": "Unknown",
+        "zh_name": "爱之蔓",
+        "scientific_name": "Ceropegia woodii",
         "botanical_height_m": [
-            0.5,
+            0.1,
             1.5
         ],
-        "plant_type": "shrub",
-        "growth_habit": "bush",
+        "plant_type": "groundcover",
+        "growth_habit": "slender",
         "suggested_game_height_px": [
-            100,
-            150
+            45,
+            75
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "多年生多肉藤本，细长紫红茎蔓上对生具银白大理石斑纹的心形厚叶。",
+        "status": "success"
     }
 }

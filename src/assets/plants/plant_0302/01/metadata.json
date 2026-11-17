@@ -19,19 +19,19 @@
     "created_at": 1794883623,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "量天尺",
-        "scientific_name": "Unknown",
+        "scientific_name": "Selenicereus undatus",
         "botanical_height_m": [
-            0.5,
-            1.5
+            2.0,
+            8.0
         ],
         "plant_type": "shrub",
-        "growth_habit": "bush",
+        "growth_habit": "slender",
         "suggested_game_height_px": [
-            100,
-            150
+            120,
+            175
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "大型攀援性肉质仙人掌，具三棱状肉质茎与巨大夜开白色花朵。",
+        "status": "success"
     }
 }

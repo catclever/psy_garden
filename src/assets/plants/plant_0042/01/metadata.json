@@ -19,19 +19,19 @@
     "created_at": 1794883588,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "马钱子",
-        "scientific_name": "Unknown",
+        "scientific_name": "Strychnos nux-vomica",
         "botanical_height_m": [
-            0.5,
-            1.5
+            5.0,
+            15.0
         ],
-        "plant_type": "shrub",
-        "growth_habit": "bush",
+        "plant_type": "tree",
+        "growth_habit": "canopy",
         "suggested_game_height_px": [
-            100,
-            150
+            160,
+            195
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "马钱科常绿乔木，叶革质光滑具明显三出脉，浆果橙红且扁圆形种子含有剧毒生物碱。",
+        "status": "success"
     }
 }

@@ -20,19 +20,19 @@
     "created_at": 1794883589,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "蛾形文心蘭屬",
-        "scientific_name": "Unknown",
+        "scientific_name": "Psychopsis",
         "botanical_height_m": [
-            0.5,
-            1.5
+            0.3,
+            0.8
         ],
-        "plant_type": "shrub",
-        "growth_habit": "bush",
+        "plant_type": "flower",
+        "growth_habit": "slender",
         "suggested_game_height_px": [
-            100,
-            150
+            65,
+            90
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "附生兰，具有扁平假鳞茎与挺立修长的花梗，花形似展翅奇特的大型飞蛾。",
+        "status": "success"
     }
 }

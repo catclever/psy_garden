@@ -20,19 +20,19 @@
     "created_at": 1794883588,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "科西嘉薄荷",
-        "scientific_name": "Unknown",
+        "scientific_name": "Mentha requienii",
         "botanical_height_m": [
-            0.5,
-            1.5
+            0.01,
+            0.05
         ],
-        "plant_type": "shrub",
-        "growth_habit": "bush",
+        "plant_type": "groundcover",
+        "growth_habit": "carpet",
         "suggested_game_height_px": [
-            100,
-            150
+            35,
+            45
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "唇形科极矮生匍匐小草本，圆卵形微小叶片致密覆盖地表，散发浓郁薄荷香气。",
+        "status": "success"
     }
 }

@@ -20,19 +20,19 @@
     "created_at": 1794883617,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "丁香屬",
-        "scientific_name": "Unknown",
+        "scientific_name": "Syringa",
         "botanical_height_m": [
-            0.5,
-            1.5
+            2.0,
+            6.0
         ],
         "plant_type": "shrub",
         "growth_habit": "bush",
         "suggested_game_height_px": [
-            100,
-            150
+            130,
+            180
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "落叶灌木或小乔木，单叶对生，春季盛开由紫、白或粉小花组成的密集圆锥花序，芳香浓烈。",
+        "status": "success"
     }
 }

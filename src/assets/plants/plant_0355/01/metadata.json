@@ -20,19 +20,19 @@
     "created_at": 1794883629,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "藿香薊",
-        "scientific_name": "Unknown",
+        "scientific_name": "Ageratum conyzoides",
         "botanical_height_m": [
-            0.5,
-            1.5
+            0.3,
+            0.8
         ],
-        "plant_type": "shrub",
+        "plant_type": "flower",
         "growth_habit": "bush",
         "suggested_game_height_px": [
-            100,
-            150
+            55,
+            82
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "一年生直立草本，被毛且具香气，头状花序呈伞房状排列，淡紫色或白色。",
+        "status": "success"
     }
 }

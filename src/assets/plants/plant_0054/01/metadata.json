@@ -20,19 +20,19 @@
     "created_at": 1794883589,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "鐵筷子屬",
-        "scientific_name": "Unknown",
+        "scientific_name": "Helleborus orientalis",
         "botanical_height_m": [
-            0.5,
-            1.5
+            0.2,
+            0.5
         ],
-        "plant_type": "shrub",
+        "plant_type": "flower",
         "growth_habit": "bush",
         "suggested_game_height_px": [
-            100,
-            150
+            55,
+            75
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "毛茛科多年生耐寒宿根草本，掌状复叶深裂质厚，冬春之交顶开杯状下垂的持久花萼。",
+        "status": "success"
     }
 }

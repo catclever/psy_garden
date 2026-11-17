@@ -19,19 +19,19 @@
     "created_at": 1794883595,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "日輪玉",
-        "scientific_name": "Unknown",
+        "scientific_name": "Lithops aucampiae",
         "botanical_height_m": [
-            0.5,
-            1.5
+            0.02,
+            0.04
         ],
-        "plant_type": "shrub",
-        "growth_habit": "bush",
+        "plant_type": "groundcover",
+        "growth_habit": "carpet",
         "suggested_game_height_px": [
-            100,
-            150
+            35,
+            45
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "番杏科极矮生拟态多肉，两片高度肉质化的对生叶呈半球卵石状，顶面具红褐深色网纹。",
+        "status": "success"
     }
 }

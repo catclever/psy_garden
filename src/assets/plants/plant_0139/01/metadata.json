@@ -19,19 +19,19 @@
     "created_at": 1794883600,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "多肉植物",
-        "scientific_name": "Unknown",
+        "scientific_name": "Succulenta",
         "botanical_height_m": [
-            0.5,
-            1.5
+            0.05,
+            0.4
         ],
-        "plant_type": "shrub",
-        "growth_habit": "bush",
+        "plant_type": "groundcover",
+        "growth_habit": "carpet",
         "suggested_game_height_px": [
-            100,
-            150
+            40,
+            75
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "具肥厚多汁贮水根、茎或叶器官的植物泛称，形态多变小巧致密，常排列为规则莲座或肉质球状。",
+        "status": "success"
     }
 }

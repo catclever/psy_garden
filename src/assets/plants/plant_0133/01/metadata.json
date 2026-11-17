@@ -20,19 +20,19 @@
     "created_at": 1794883600,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "兴安薄荷",
-        "scientific_name": "Unknown",
+        "scientific_name": "Mentha dahurica",
         "botanical_height_m": [
-            0.5,
-            1.5
+            0.3,
+            0.7
         ],
-        "plant_type": "shrub",
-        "growth_habit": "bush",
+        "plant_type": "flower",
+        "growth_habit": "slender",
         "suggested_game_height_px": [
-            100,
-            150
+            60,
+            95
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "多年生湿生直立草本，全株具芳香，茎四棱形多分枝，叶卵圆形具细锯齿，腋生轮伞花序小巧淡紫。",
+        "status": "success"
     }
 }

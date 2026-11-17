@@ -20,19 +20,19 @@
     "created_at": 1794883599,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "宮燈長壽花",
-        "scientific_name": "Unknown",
+        "scientific_name": "Kalanchoe manginii",
         "botanical_height_m": [
-            0.5,
-            1.5
+            0.2,
+            0.4
         ],
         "plant_type": "shrub",
         "growth_habit": "bush",
         "suggested_game_height_px": [
-            100,
-            150
+            55,
+            85
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "多年生常绿肉质亚灌木，分枝纤细微下垂，匙形肉质小叶浓绿，悬垂深红或橙红色小巧管状宫灯花。",
+        "status": "success"
     }
 }

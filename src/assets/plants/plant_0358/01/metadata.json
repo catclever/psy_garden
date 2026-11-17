@@ -20,19 +20,19 @@
     "created_at": 1794883630,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "羅勒",
-        "scientific_name": "Unknown",
+        "scientific_name": "Ocimum basilicum",
         "botanical_height_m": [
-            0.5,
-            1.5
+            0.3,
+            0.7
         ],
-        "plant_type": "shrub",
+        "plant_type": "flower",
         "growth_habit": "bush",
         "suggested_game_height_px": [
-            100,
-            150
+            52,
+            75
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "一年生芳香草本，茎呈四棱形，卵形绿色叶片散发独特辛香气息。",
+        "status": "success"
     }
 }

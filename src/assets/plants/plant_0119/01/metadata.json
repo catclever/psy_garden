@@ -20,19 +20,19 @@
     "created_at": 1794883598,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "黄芩",
-        "scientific_name": "Unknown",
+        "scientific_name": "Scutellaria baicalensis",
         "botanical_height_m": [
-            0.5,
-            1.5
+            0.3,
+            0.6
         ],
-        "plant_type": "shrub",
-        "growth_habit": "bush",
+        "plant_type": "flower",
+        "growth_habit": "slender",
         "suggested_game_height_px": [
-            100,
-            150
+            55,
+            90
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "多年生宿根草本，肉质主根肥厚鲜黄，茎方形直立，总状花序偏向一侧开蓝紫色二唇形筒状花。",
+        "status": "success"
     }
 }

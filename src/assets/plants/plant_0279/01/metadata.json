@@ -20,19 +20,19 @@
     "created_at": 1794883620,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "火龙果",
-        "scientific_name": "Unknown",
+        "scientific_name": "Selenicereus undatus",
         "botanical_height_m": [
-            0.5,
-            1.5
+            2.0,
+            7.0
         ],
         "plant_type": "shrub",
-        "growth_habit": "bush",
+        "growth_habit": "slender",
         "suggested_game_height_px": [
-            100,
-            150
+            120,
+            165
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "攀援性肉质仙人掌灌木，三棱状肉质茎边缘波状，夜间盛开硕大芬芳白花并结红皮鳞果。",
+        "status": "success"
     }
 }

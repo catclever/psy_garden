@@ -19,19 +19,19 @@
     "created_at": 1794883621,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "霸王鞭",
-        "scientific_name": "Unknown",
+        "scientific_name": "Euphorbia royleana",
         "botanical_height_m": [
-            0.5,
-            1.5
+            2.0,
+            5.0
         ],
         "plant_type": "shrub",
-        "growth_habit": "bush",
+        "growth_habit": "slender",
         "suggested_game_height_px": [
-            100,
-            150
+            120,
+            170
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "肉质多浆大灌木，茎枝呈显著五棱柱形，棱脊微波状且生有成对坚硬黑褐色短刺。",
+        "status": "success"
     }
 }

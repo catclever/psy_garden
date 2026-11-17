@@ -20,19 +20,19 @@
     "created_at": 1794883630,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "毛马齿苋",
-        "scientific_name": "Unknown",
+        "scientific_name": "Portulaca pilosa",
         "botanical_height_m": [
-            0.5,
-            1.5
+            0.05,
+            0.2
         ],
-        "plant_type": "shrub",
-        "growth_habit": "bush",
+        "plant_type": "groundcover",
+        "growth_habit": "carpet",
         "suggested_game_height_px": [
-            100,
-            150
+            36,
+            52
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "肉质匍匐小草本，茎节密生银白色长柔毛，顶生红紫色娇小花朵。",
+        "status": "success"
     }
 }

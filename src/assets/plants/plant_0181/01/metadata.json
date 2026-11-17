@@ -20,19 +20,19 @@
     "created_at": 1794883606,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "薄荷屬",
-        "scientific_name": "Unknown",
+        "scientific_name": "Mentha",
         "botanical_height_m": [
-            0.5,
-            1.5
+            0.3,
+            1.0
         ],
-        "plant_type": "shrub",
-        "growth_habit": "bush",
+        "plant_type": "flower",
+        "growth_habit": "slender",
         "suggested_game_height_px": [
-            100,
-            150
+            55,
+            85
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "具特征性四棱茎和对生芳香叶的多年生草本，开淡红至白色的轮伞花序。",
+        "status": "success"
     }
 }

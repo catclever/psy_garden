@@ -20,19 +20,19 @@
     "created_at": 1794883594,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "百里香属",
-        "scientific_name": "Unknown",
+        "scientific_name": "Thymus",
         "botanical_height_m": [
-            0.5,
-            1.5
+            0.05,
+            0.3
         ],
-        "plant_type": "shrub",
-        "growth_habit": "bush",
+        "plant_type": "groundcover",
+        "growth_habit": "carpet",
         "suggested_game_height_px": [
-            100,
-            150
+            40,
+            60
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "唇形科芳香低矮小灌木或匍匐草本，密生微小叶片并绽放密集粉紫色小花。",
+        "status": "success"
     }
 }

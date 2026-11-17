@@ -19,19 +19,19 @@
     "created_at": 1794883634,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
-        "zh_name": "禅意翠竹(cluster_redgreen)",
-        "scientific_name": "Unknown",
+        "zh_name": "禅意翠竹(红绿簇)",
+        "scientific_name": "Fargesia nitida",
         "botanical_height_m": [
-            0.5,
-            1.5
+            2.5,
+            4.5
         ],
-        "plant_type": "shrub",
-        "growth_habit": "bush",
+        "plant_type": "tree",
+        "growth_habit": "slender",
         "suggested_game_height_px": [
-            100,
-            150
+            160,
+            195
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "成丛丛生冷箭竹，紫红竿体与葱绿密叶交相辉映，姿韵古雅清逸。",
+        "status": "success"
     }
 }

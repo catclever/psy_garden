@@ -19,19 +19,19 @@
     "created_at": 1794883603,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "大麻属",
-        "scientific_name": "Unknown",
+        "scientific_name": "Cannabis sativa",
         "botanical_height_m": [
-            0.5,
-            1.5
+            1.0,
+            3.5
         ],
-        "plant_type": "shrub",
-        "growth_habit": "bush",
+        "plant_type": "flower",
+        "growth_habit": "slender",
         "suggested_game_height_px": [
-            100,
-            150
+            85,
+            130
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "大麻科直立一年生草本，具深裂掌狀複葉與分枝頂生密集的綠色小花穗。",
+        "status": "success"
     }
 }

@@ -20,19 +20,19 @@
     "created_at": 1794883618,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "加拿大紫荊",
-        "scientific_name": "Unknown",
+        "scientific_name": "Cercis canadensis",
         "botanical_height_m": [
-            0.5,
-            1.5
+            6.0,
+            12.0
         ],
-        "plant_type": "shrub",
-        "growth_habit": "bush",
+        "plant_type": "tree",
+        "growth_habit": "canopy",
         "suggested_game_height_px": [
-            100,
-            150
+            160,
+            200
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "落叶乔木，早春先花后叶，紫粉色蝶形花密集簇生于老枝干上，叶近心形。",
+        "status": "success"
     }
 }

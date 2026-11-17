@@ -19,19 +19,19 @@
     "created_at": 1794883606,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "厚敦菊屬",
-        "scientific_name": "Unknown",
+        "scientific_name": "Othonna",
         "botanical_height_m": [
-            0.5,
-            1.5
+            0.1,
+            0.8
         ],
-        "plant_type": "shrub",
+        "plant_type": "groundcover",
         "growth_habit": "bush",
         "suggested_game_height_px": [
-            100,
-            150
+            45,
+            80
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "多具块根或肥厚肉质茎叶的菊科多肉植物，常于冬春季节开黄色小雏菊状花。",
+        "status": "success"
     }
 }

@@ -19,19 +19,19 @@
     "created_at": 1794883630,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "紅雀珊瑚",
-        "scientific_name": "Unknown",
+        "scientific_name": "Euphorbia tithymaloides",
         "botanical_height_m": [
-            0.5,
-            1.5
+            0.6,
+            1.8
         ],
         "plant_type": "shrub",
-        "growth_habit": "bush",
+        "growth_habit": "slender",
         "suggested_game_height_px": [
-            100,
-            150
+            90,
+            130
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "肉质常绿灌木，肉质茎呈之字形曲折生长，红色苞片形似鞋状小雀。",
+        "status": "success"
     }
 }

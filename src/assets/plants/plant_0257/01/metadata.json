@@ -19,19 +19,19 @@
     "created_at": 1794883616,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "芸香属",
-        "scientific_name": "Unknown",
+        "scientific_name": "Ruta",
         "botanical_height_m": [
-            0.5,
-            1.5
+            0.4,
+            1.0
         ],
         "plant_type": "shrub",
         "growth_habit": "bush",
         "suggested_game_height_px": [
-            100,
-            150
+            70,
+            105
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "芳香小灌木或亚灌木，灰绿色羽状复叶布满透明腺点，开黄绿色四至五瓣花朵。",
+        "status": "success"
     }
 }

@@ -19,19 +19,19 @@
     "created_at": 1794883606,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "熊童子",
-        "scientific_name": "Unknown",
+        "scientific_name": "Cotyledon tomentosa",
         "botanical_height_m": [
-            0.5,
-            1.5
+            0.15,
+            0.4
         ],
-        "plant_type": "shrub",
+        "plant_type": "groundcover",
         "growth_habit": "bush",
         "suggested_game_height_px": [
-            100,
-            150
+            45,
+            75
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "小巧分枝的景天多肉植物，叶片肥厚多茸毛且前端具红褐色齿状尖爪突起。",
+        "status": "success"
     }
 }

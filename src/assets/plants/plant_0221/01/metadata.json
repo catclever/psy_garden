@@ -20,19 +20,19 @@
     "created_at": 1794883611,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "宁夏枸杞",
-        "scientific_name": "Unknown",
+        "scientific_name": "Lycium barbarum",
         "botanical_height_m": [
-            0.5,
-            1.5
+            1.0,
+            3.0
         ],
         "plant_type": "shrub",
         "growth_habit": "bush",
         "suggested_game_height_px": [
-            100,
-            150
+            65,
+            115
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "茄科枸杞属落叶灌木，枝条细长微拱垂并多棘刺，开淡紫色小花，结鲜红色卵形浆果。",
+        "status": "success"
     }
 }

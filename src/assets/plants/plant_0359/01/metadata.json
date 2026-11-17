@@ -19,19 +19,19 @@
     "created_at": 1794883630,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "歐洲紅豆杉",
-        "scientific_name": "Unknown",
+        "scientific_name": "Taxus baccata",
         "botanical_height_m": [
-            0.5,
-            1.5
+            10.0,
+            20.0
         ],
-        "plant_type": "shrub",
-        "growth_habit": "bush",
+        "plant_type": "tree",
+        "growth_habit": "canopy",
         "suggested_game_height_px": [
-            100,
-            150
+            180,
+            220
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "常绿针叶乔木，树冠深密，线形扁平深绿叶，种子裹于鲜红肉质假种皮中。",
+        "status": "success"
     }
 }

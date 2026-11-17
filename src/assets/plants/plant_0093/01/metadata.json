@@ -20,19 +20,19 @@
     "created_at": 1794883594,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "碧冬茄",
-        "scientific_name": "Unknown",
+        "scientific_name": "Petunia × hybrida",
         "botanical_height_m": [
-            0.5,
-            1.5
+            0.15,
+            0.6
         ],
-        "plant_type": "shrub",
+        "plant_type": "flower",
         "growth_habit": "bush",
         "suggested_game_height_px": [
-            100,
-            150
+            55,
+            80
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "茄科多年生草本常作一二年生栽培，茎被腺毛易分枝，花呈漏斗状且色彩极为丰富。",
+        "status": "success"
     }
 }

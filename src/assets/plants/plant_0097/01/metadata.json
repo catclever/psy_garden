@@ -20,19 +20,19 @@
     "created_at": 1794883594,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "辣薄荷",
-        "scientific_name": "Unknown",
+        "scientific_name": "Mentha × piperita",
         "botanical_height_m": [
-            0.5,
-            1.5
+            0.3,
+            0.9
         ],
-        "plant_type": "shrub",
+        "plant_type": "flower",
         "growth_habit": "bush",
         "suggested_game_height_px": [
-            100,
-            150
+            60,
+            85
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "唇形科芳香多年生宿根草本，具四棱形直立茎和走茎，轮伞花序在枝顶紧密聚生。",
+        "status": "success"
     }
 }

@@ -19,19 +19,19 @@
     "created_at": 1794883595,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "蟹爪兰",
-        "scientific_name": "Unknown",
+        "scientific_name": "Schlumbergera truncata",
         "botanical_height_m": [
-            0.5,
-            1.5
+            0.2,
+            0.45
         ],
-        "plant_type": "shrub",
+        "plant_type": "flower",
         "growth_habit": "bush",
         "suggested_game_height_px": [
-            100,
-            150
+            55,
+            75
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "仙人掌科附生肉质多浆灌木，节状茎扁平边缘具尖齿，顶端下垂悬挂鲜艳重瓣花朵。",
+        "status": "success"
     }
 }

@@ -19,19 +19,19 @@
     "created_at": 1794883620,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "叠苞竹芋属",
-        "scientific_name": "Unknown",
+        "scientific_name": "Stromanthe",
         "botanical_height_m": [
             0.5,
             1.5
         ],
-        "plant_type": "shrub",
+        "plant_type": "flower",
         "growth_habit": "bush",
         "suggested_game_height_px": [
-            100,
-            150
+            65,
+            105
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "多年生常绿草本，叶片正面常具白绿交错的羽状斑纹，叶背面呈鲜艳深紫红色。",
+        "status": "success"
     }
 }

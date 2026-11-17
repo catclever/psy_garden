@@ -19,19 +19,19 @@
     "created_at": 1794883603,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "袋鼠爪花",
-        "scientific_name": "Unknown",
+        "scientific_name": "Anigozanthos manglesii",
         "botanical_height_m": [
             0.5,
-            1.5
+            1.2
         ],
-        "plant_type": "shrub",
-        "growth_habit": "bush",
+        "plant_type": "flower",
+        "growth_habit": "slender",
         "suggested_game_height_px": [
-            100,
-            150
+            65,
+            95
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "血皮草科草本，管狀花被外披濃密紅綠天鵝絨狀毛，形似袋鼠前爪。",
+        "status": "success"
     }
 }

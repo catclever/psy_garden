@@ -19,19 +19,19 @@
     "created_at": 1794883629,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "心叶日中花",
-        "scientific_name": "Unknown",
+        "scientific_name": "Mesembryanthemum cordifolium",
         "botanical_height_m": [
-            0.5,
-            1.5
+            0.1,
+            0.25
         ],
-        "plant_type": "shrub",
-        "growth_habit": "bush",
+        "plant_type": "groundcover",
+        "growth_habit": "carpet",
         "suggested_game_height_px": [
-            100,
-            150
+            40,
+            58
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "肉质匍匐草本，对生心形厚叶，顶生深粉红色雏菊状小花。",
+        "status": "success"
     }
 }

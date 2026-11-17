@@ -19,19 +19,19 @@
     "created_at": 1794883588,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "變葉木",
-        "scientific_name": "Unknown",
+        "scientific_name": "Codiaeum variegatum",
         "botanical_height_m": [
-            0.5,
-            1.5
+            1.0,
+            3.0
         ],
         "plant_type": "shrub",
         "growth_habit": "bush",
         "suggested_game_height_px": [
             100,
-            150
+            140
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "大戟科常绿灌木，革质叶片形状多变，布满红、黄、橙与绿色交织的绚丽斑纹。",
+        "status": "success"
     }
 }

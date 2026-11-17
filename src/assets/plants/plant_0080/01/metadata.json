@@ -20,19 +20,19 @@
     "created_at": 1794883592,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "山菅",
-        "scientific_name": "Unknown",
+        "scientific_name": "Dianella ensifolia",
         "botanical_height_m": [
             0.5,
-            1.5
+            1.2
         ],
-        "plant_type": "shrub",
+        "plant_type": "flower",
         "growth_habit": "bush",
         "suggested_game_height_px": [
-            100,
-            150
+            70,
+            105
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "草本多年生植物，剑形叶坚挺基生排成列，顶生蓝紫色小花与亮蓝色浆果。",
+        "status": "success"
     }
 }

@@ -19,19 +19,19 @@
     "created_at": 1794883591,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "欧洲荚蒾",
-        "scientific_name": "Unknown",
+        "scientific_name": "Viburnum opulus",
         "botanical_height_m": [
-            0.5,
-            1.5
+            2.0,
+            4.0
         ],
         "plant_type": "shrub",
         "growth_habit": "bush",
         "suggested_game_height_px": [
-            100,
-            150
+            130,
+            170
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "落叶丛生灌木，叶三裂，聚伞花序边缘有大型不孕白花，秋季结晶莹红果。",
+        "status": "success"
     }
 }

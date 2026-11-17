@@ -19,19 +19,19 @@
     "created_at": 1794883608,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "雪松属",
-        "scientific_name": "Unknown",
+        "scientific_name": "Cedrus",
         "botanical_height_m": [
-            0.5,
-            1.5
+            20.0,
+            40.0
         ],
-        "plant_type": "shrub",
-        "growth_habit": "bush",
+        "plant_type": "tree",
+        "growth_habit": "canopy",
         "suggested_game_height_px": [
-            100,
-            150
+            180,
+            220
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "大型常绿针叶乔木，树冠宽广呈尖塔形，枝条平展，针叶簇生。",
+        "status": "success"
     }
 }

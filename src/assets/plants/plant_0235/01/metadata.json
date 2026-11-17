@@ -20,19 +20,19 @@
     "created_at": 1794883613,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "薰衣草",
-        "scientific_name": "Unknown",
+        "scientific_name": "Lavandula angustifolia",
         "botanical_height_m": [
-            0.5,
-            1.5
+            0.3,
+            0.9
         ],
         "plant_type": "shrub",
         "growth_habit": "bush",
         "suggested_game_height_px": [
-            100,
-            150
+            50,
+            85
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "多年生半灌木，茎多分枝呈丛生灌丛状，密被线形灰绿色叶片，顶生穗状花序具芳香浓郁的蓝紫色小花。",
+        "status": "success"
     }
 }

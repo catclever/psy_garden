@@ -19,19 +19,19 @@
     "created_at": 1794883588,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "驢蹄草",
-        "scientific_name": "Unknown",
+        "scientific_name": "Caltha palustris",
         "botanical_height_m": [
-            0.5,
-            1.5
+            0.15,
+            0.5
         ],
-        "plant_type": "shrub",
+        "plant_type": "flower",
         "growth_habit": "bush",
         "suggested_game_height_px": [
-            100,
-            150
+            55,
+            75
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "毛茛科湿生多年生草本，具光泽肾形基生叶，春季绽放明亮耀眼的亮黄色单瓣花朵。",
+        "status": "success"
     }
 }

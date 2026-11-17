@@ -19,19 +19,19 @@
     "created_at": 1794883633,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "艾草",
-        "scientific_name": "Unknown",
+        "scientific_name": "Artemisia argyi",
         "botanical_height_m": [
-            0.5,
+            0.8,
             1.5
         ],
-        "plant_type": "shrub",
-        "growth_habit": "bush",
+        "plant_type": "flower",
+        "growth_habit": "slender",
         "suggested_game_height_px": [
-            100,
-            150
+            80,
+            115
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "具浓郁芳香的多年生草本，茎直立多分枝，羽状裂叶背面密生灰白色蛛丝状毛。",
+        "status": "success"
     }
 }

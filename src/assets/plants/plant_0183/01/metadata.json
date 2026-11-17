@@ -19,19 +19,19 @@
     "created_at": 1794883606,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "鳳尾蘭",
-        "scientific_name": "Unknown",
+        "scientific_name": "Yucca gloriosa",
         "botanical_height_m": [
-            0.5,
-            1.5
+            1.5,
+            4.0
         ],
         "plant_type": "shrub",
         "growth_habit": "bush",
         "suggested_game_height_px": [
-            100,
-            150
+            110,
+            155
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "茎干直立丛生的常绿硬叶灌木，放射状着生刚硬剑叶，抽生乳白色大型圆锥花序。",
+        "status": "success"
     }
 }

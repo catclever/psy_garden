@@ -20,19 +20,19 @@
     "created_at": 1794883589,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "毛建草",
-        "scientific_name": "Unknown",
+        "scientific_name": "Dracocephalum rupestre",
         "botanical_height_m": [
-            0.5,
-            1.5
+            0.15,
+            0.4
         ],
-        "plant_type": "shrub",
+        "plant_type": "flower",
         "growth_habit": "bush",
         "suggested_game_height_px": [
-            100,
-            150
+            50,
+            70
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "唇形科多年生草本，茎被柔毛，叶心状卵形具圆齿，茎顶簇生醒目的蓝紫色大唇形花。",
+        "status": "success"
     }
 }

@@ -19,19 +19,19 @@
     "created_at": 1794883623,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "豹紋竹芋",
-        "scientific_name": "Unknown",
+        "scientific_name": "Maranta leuconeura",
         "botanical_height_m": [
-            0.5,
-            1.5
+            0.2,
+            0.4
         ],
-        "plant_type": "shrub",
-        "growth_habit": "bush",
+        "plant_type": "groundcover",
+        "growth_habit": "carpet",
         "suggested_game_height_px": [
-            100,
-            150
+            45,
+            75
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "低矮匍匐草本，叶面具对称的深暗色斑块与红或浅绿脉纹。",
+        "status": "success"
     }
 }

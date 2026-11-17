@@ -19,9 +19,8 @@
     "created_at": 1794883589,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "洋金花",
-        "scientific_name": "Unknown",
+        "scientific_name": "Datura metel",
         "botanical_height_m": [
             0.5,
             1.5
@@ -29,9 +28,10 @@
         "plant_type": "shrub",
         "growth_habit": "bush",
         "suggested_game_height_px": [
-            100,
-            150
+            85,
+            115
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "茄科粗壮草本或半灌木，叶广卵形微偏斜，花单生直立呈硕大喇叭状，全株含剧毒。",
+        "status": "success"
     }
 }

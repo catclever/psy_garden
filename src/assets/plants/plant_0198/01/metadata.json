@@ -20,19 +20,19 @@
     "created_at": 1794883608,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "紫葉狼尾草",
-        "scientific_name": "Unknown",
+        "scientific_name": "Pennisetum setaceum 'Rubrum'",
         "botanical_height_m": [
-            0.5,
-            1.5
+            0.6,
+            1.2
         ],
-        "plant_type": "shrub",
+        "plant_type": "flower",
         "growth_habit": "bush",
         "suggested_game_height_px": [
-            100,
-            150
+            75,
+            105
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "多年生丛生草本，叶片与长穗状圆锥花序呈现鲜艳的紫红色或紫褐色。",
+        "status": "success"
     }
 }

@@ -19,19 +19,19 @@
     "created_at": 1794883613,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "虎尾蘭",
-        "scientific_name": "Unknown",
+        "scientific_name": "Dracaena trifasciata",
         "botanical_height_m": [
-            0.5,
-            1.5
+            0.3,
+            1.2
         ],
-        "plant_type": "shrub",
-        "growth_habit": "bush",
+        "plant_type": "flower",
+        "growth_habit": "slender",
         "suggested_game_height_px": [
-            100,
-            150
+            50,
+            95
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "葉片呈堅硬直立的劍形，肉質且表面具深綠相間的虎紋狀橫斑。",
+        "status": "success"
     }
 }

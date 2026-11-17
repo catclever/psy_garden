@@ -19,19 +19,19 @@
     "created_at": 1794883620,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "日本山椒",
-        "scientific_name": "Unknown",
+        "scientific_name": "Zanthoxylum piperitum",
         "botanical_height_m": [
-            0.5,
-            1.5
+            1.5,
+            3.5
         ],
         "plant_type": "shrub",
         "growth_habit": "bush",
         "suggested_game_height_px": [
-            100,
+            110,
             150
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "落叶灌木，枝条节间具成对硬刺，奇数羽状复叶散发独特辛香柑橘气息。",
+        "status": "success"
     }
 }

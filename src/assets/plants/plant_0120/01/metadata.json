@@ -19,19 +19,19 @@
     "created_at": 1794883597,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "葱莲",
-        "scientific_name": "Unknown",
+        "scientific_name": "Zephyranthes candida",
         "botanical_height_m": [
-            0.5,
-            1.5
+            0.15,
+            0.3
         ],
-        "plant_type": "shrub",
-        "growth_habit": "bush",
+        "plant_type": "flower",
+        "growth_habit": "carpet",
         "suggested_game_height_px": [
-            100,
-            150
+            45,
+            75
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "多年生球根草本，基生叶圆线形如细葱般碧绿，单生花茎顶端绽放洁白六瓣漏斗形花朵。",
+        "status": "success"
     }
 }

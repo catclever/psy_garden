@@ -20,19 +20,19 @@
     "created_at": 1794883620,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "翼花蛇鞭柱",
-        "scientific_name": "Unknown",
+        "scientific_name": "Selenicereus pteranthus",
         "botanical_height_m": [
-            0.5,
-            1.5
+            2.0,
+            6.0
         ],
         "plant_type": "shrub",
-        "growth_habit": "bush",
+        "growth_habit": "slender",
         "suggested_game_height_px": [
-            100,
-            150
+            110,
+            155
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "附生攀爬仙人掌，细长多棱茎具气生根，夜间盛开直径逾三十厘米的巨大芳香白色花朵。",
+        "status": "success"
     }
 }

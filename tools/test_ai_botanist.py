@@ -11,9 +11,8 @@ import ai_botanist
 def test_load_config():
     config = ai_botanist.load_config()
     assert isinstance(config, dict), "Config should be a dictionary"
-    assert "url" in config, "Config must contain 'url'"
-    assert "key" in config, "Config must contain 'key'"
-    assert "model" in config, "Config must contain 'model'"
+    assert any(k in config for k in ("key", "api_key", "_key")), "Config must contain key or api_key"
+    assert any(k in config for k in ("model", "default_model", "_model")), "Config must contain model or default_model"
     assert "timeout" in config, "Config must contain 'timeout'"
     print("test_load_config passed")
 

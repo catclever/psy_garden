@@ -20,19 +20,19 @@
     "created_at": 1794883631,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "车窝草",
-        "scientific_name": "Unknown",
+        "scientific_name": "Anthriscus cerefolium",
         "botanical_height_m": [
-            0.5,
-            1.5
+            0.3,
+            0.7
         ],
-        "plant_type": "shrub",
-        "growth_habit": "bush",
+        "plant_type": "flower",
+        "growth_habit": "slender",
         "suggested_game_height_px": [
-            100,
-            150
+            52,
+            74
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "伞形科一年生精细香草，羽状多裂纤细嫩叶，顶生白色微型复伞形花序。",
+        "status": "success"
     }
 }

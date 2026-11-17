@@ -19,19 +19,19 @@
     "created_at": 1794883627,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "女王鬱金",
-        "scientific_name": "Unknown",
+        "scientific_name": "Curcuma petiolata",
         "botanical_height_m": [
-            0.5,
-            1.5
+            0.6,
+            1.2
         ],
-        "plant_type": "shrub",
-        "growth_habit": "bush",
+        "plant_type": "flower",
+        "growth_habit": "slender",
         "suggested_game_height_px": [
-            100,
-            150
+            85,
+            115
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "姜科宿根草本，苞片层叠如杯状排列，上部苞片呈高雅的粉紫渐变色。",
+        "status": "success"
     }
 }

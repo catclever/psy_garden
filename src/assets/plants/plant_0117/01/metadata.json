@@ -19,12 +19,11 @@
     "created_at": 1794883597,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "景天树",
-        "scientific_name": "Unknown",
+        "scientific_name": "Crassula ovata",
         "botanical_height_m": [
-            0.5,
-            1.5
+            1.0,
+            3.0
         ],
         "plant_type": "shrub",
         "growth_habit": "bush",
@@ -32,6 +31,7 @@
             100,
             150
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "多浆肉质常绿灌木，茎干粗壮肉质多分枝，叶片卵圆形翠绿有光泽，顶生淡粉色或白色星状花簇。",
+        "status": "success"
     }
 }

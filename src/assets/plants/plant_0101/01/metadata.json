@@ -19,19 +19,19 @@
     "created_at": 1794883595,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "晃山",
-        "scientific_name": "Unknown",
+        "scientific_name": "Leuchtenbergia principis",
         "botanical_height_m": [
-            0.5,
-            1.5
+            0.1,
+            0.35
         ],
-        "plant_type": "shrub",
+        "plant_type": "flower",
         "growth_habit": "bush",
         "suggested_game_height_px": [
-            100,
-            150
+            45,
+            65
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "仙人掌科单属单种植物，球体具细长呈三棱柱状的疣突与纸质刺，形似小型龙舌兰。",
+        "status": "success"
     }
 }

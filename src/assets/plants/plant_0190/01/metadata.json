@@ -19,19 +19,19 @@
     "created_at": 1794883607,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "半夏",
-        "scientific_name": "Unknown",
+        "scientific_name": "Pinellia ternata",
         "botanical_height_m": [
-            0.5,
-            1.5
+            0.15,
+            0.35
         ],
-        "plant_type": "shrub",
-        "growth_habit": "bush",
+        "plant_type": "flower",
+        "growth_habit": "slender",
         "suggested_game_height_px": [
-            100,
-            150
+            45,
+            65
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "矮小块茎草本植物，具三出复叶与绿色佛焰苞，肉穗花序附属器细长如鼠尾。",
+        "status": "success"
     }
 }

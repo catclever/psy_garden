@@ -20,19 +20,19 @@
     "created_at": 1794883612,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
-        "zh_name": "留蘭香",
-        "scientific_name": "Unknown",
+        "zh_name": "留兰香",
+        "scientific_name": "Mentha spicata",
         "botanical_height_m": [
-            0.5,
-            1.5
+            0.3,
+            1.0
         ],
-        "plant_type": "shrub",
-        "growth_habit": "bush",
+        "plant_type": "groundcover",
+        "growth_habit": "carpet",
         "suggested_game_height_px": [
-            100,
-            150
+            40,
+            95
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "唇形科薄荷属多年生草本，茎直立具四棱，具芳香气味，叶卵状披针形，轮伞花序在茎顶聚集成穗状。",
+        "status": "success"
     }
 }

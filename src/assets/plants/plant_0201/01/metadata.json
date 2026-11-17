@@ -20,19 +20,19 @@
     "created_at": 1794883608,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "台湾马桑",
-        "scientific_name": "Unknown",
+        "scientific_name": "Coriaria japonica subsp. intermedia",
         "botanical_height_m": [
-            0.5,
-            1.5
+            1.0,
+            3.0
         ],
         "plant_type": "shrub",
         "growth_habit": "bush",
         "suggested_game_height_px": [
             100,
-            150
+            135
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "落叶灌木，枝条四棱形且多开展分枝，浆果状瘦果成熟时变为紫黑色。",
+        "status": "success"
     }
 }

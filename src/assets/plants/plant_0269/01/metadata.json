@@ -20,9 +20,8 @@
     "created_at": 1794883618,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "迷迭香",
-        "scientific_name": "Unknown",
+        "scientific_name": "Salvia rosmarinus",
         "botanical_height_m": [
             0.5,
             1.5
@@ -30,9 +29,10 @@
         "plant_type": "shrub",
         "growth_habit": "bush",
         "suggested_game_height_px": [
-            100,
-            150
+            70,
+            110
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "芳香常绿小灌木，叶片狭长呈线形革质，春季密开淡蓝紫色唇形小花。",
+        "status": "success"
     }
 }

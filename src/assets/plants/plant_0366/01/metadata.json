@@ -19,19 +19,19 @@
     "created_at": 1794883631,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "小銀芋",
-        "scientific_name": "Unknown",
+        "scientific_name": "Caladium humboldtii",
         "botanical_height_m": [
-            0.5,
-            1.5
+            0.15,
+            0.35
         ],
-        "plant_type": "shrub",
+        "plant_type": "flower",
         "growth_habit": "bush",
         "suggested_game_height_px": [
-            100,
-            150
+            46,
+            66
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "小型天南星科块茎草本，卵状箭形薄叶上布满大面积明亮的银白斑斑纹。",
+        "status": "success"
     }
 }

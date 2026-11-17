@@ -20,19 +20,19 @@
     "created_at": 1794883596,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "素方花",
-        "scientific_name": "Unknown",
+        "scientific_name": "Jasminum officinale",
         "botanical_height_m": [
-            0.5,
-            1.5
+            1.5,
+            5.0
         ],
         "plant_type": "shrub",
         "growth_habit": "bush",
         "suggested_game_height_px": [
-            100,
+            110,
             150
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "木犀科落叶木质攀援藤状灌木，羽状复叶互生，盛开极具芳香的雪白漏斗状小花。",
+        "status": "success"
     }
 }

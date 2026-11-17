@@ -19,19 +19,19 @@
     "created_at": 1794883585,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "羽紋竹芋",
-        "scientific_name": "Unknown",
+        "scientific_name": "Goeppertia roseopicta",
         "botanical_height_m": [
-            0.5,
-            1.5
+            0.3,
+            0.6
         ],
-        "plant_type": "shrub",
+        "plant_type": "flower",
         "growth_habit": "bush",
         "suggested_game_height_px": [
-            100,
-            150
+            60,
+            85
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "竹芋科多年生常綠草本，橢圓形大葉上具羽狀排列的粉紅至白綠彩紋。",
+        "status": "success"
     }
 }

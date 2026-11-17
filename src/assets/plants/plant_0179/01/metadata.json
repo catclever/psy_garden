@@ -19,19 +19,19 @@
     "created_at": 1794883605,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "南方红豆杉",
-        "scientific_name": "Unknown",
+        "scientific_name": "Taxus wallichiana var. mairei",
         "botanical_height_m": [
-            0.5,
-            1.5
+            5.0,
+            20.0
         ],
-        "plant_type": "shrub",
-        "growth_habit": "bush",
+        "plant_type": "tree",
+        "growth_habit": "canopy",
         "suggested_game_height_px": [
-            100,
-            150
+            170,
+            215
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "珍贵常绿针叶乔木，叶片呈披针状镰形，秋季成熟种子包覆红色肉质假种皮。",
+        "status": "success"
     }
 }

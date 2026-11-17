@@ -20,19 +20,19 @@
     "created_at": 1794883627,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "绣球花",
-        "scientific_name": "Unknown",
+        "scientific_name": "Hydrangea macrophylla",
         "botanical_height_m": [
-            0.5,
-            1.5
+            1.0,
+            2.2
         ],
         "plant_type": "shrub",
         "growth_habit": "bush",
         "suggested_game_height_px": [
-            100,
-            150
+            110,
+            145
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "温带落叶灌木，密生近球形大型伞房花序，花色随土壤酸碱度变化。",
+        "status": "success"
     }
 }

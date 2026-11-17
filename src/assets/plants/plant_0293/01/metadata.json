@@ -19,19 +19,19 @@
     "created_at": 1794883621,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "龍舌蘭屬",
-        "scientific_name": "Unknown",
+        "scientific_name": "Agave",
         "botanical_height_m": [
             0.5,
-            1.5
+            2.5
         ],
         "plant_type": "shrub",
         "growth_habit": "bush",
         "suggested_game_height_px": [
-            100,
-            150
+            70,
+            130
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "具粗壮肉质剑形硬叶且边缘具尖刺的大型莲座状多肉植物。",
+        "status": "success"
     }
 }

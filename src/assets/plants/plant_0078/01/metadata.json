@@ -20,19 +20,19 @@
     "created_at": 1794883592,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "阿開木",
-        "scientific_name": "Unknown",
+        "scientific_name": "Blighia sapida",
         "botanical_height_m": [
-            0.5,
-            1.5
+            8.0,
+            25.0
         ],
-        "plant_type": "shrub",
-        "growth_habit": "bush",
+        "plant_type": "tree",
+        "growth_habit": "canopy",
         "suggested_game_height_px": [
-            100,
-            150
+            180,
+            220
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "热带常绿乔木，羽状复叶，果实成熟时裂开露出乳黄肉质假种皮与黑色大种子。",
+        "status": "success"
     }
 }

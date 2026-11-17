@@ -19,19 +19,19 @@
     "created_at": 1794883586,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "德保苏铁",
-        "scientific_name": "Unknown",
+        "scientific_name": "Cycas debaoensis",
         "botanical_height_m": [
-            0.5,
-            1.5
+            1.0,
+            2.5
         ],
         "plant_type": "shrub",
         "growth_habit": "bush",
         "suggested_game_height_px": [
-            100,
-            150
+            95,
+            135
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "中國特有珍稀古老蘇鐵，具罕見的三回羽狀深裂大葉，株態優雅開展。",
+        "status": "success"
     }
 }

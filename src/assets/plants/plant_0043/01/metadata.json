@@ -20,19 +20,19 @@
     "created_at": 1794883588,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "哈特普列薄荷",
-        "scientific_name": "Unknown",
+        "scientific_name": "Mentha cervina",
         "botanical_height_m": [
-            0.5,
-            1.5
+            0.2,
+            0.4
         ],
-        "plant_type": "shrub",
+        "plant_type": "flower",
         "growth_habit": "bush",
         "suggested_game_height_px": [
-            100,
-            150
+            50,
+            70
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "唇形科多年生芳香草本，叶片呈窄细线形，轮伞花序密集球状簇生于叶腋。",
+        "status": "success"
     }
 }

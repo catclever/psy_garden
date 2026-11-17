@@ -19,19 +19,19 @@
     "created_at": 1794883628,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "美叶苏铁",
-        "scientific_name": "Unknown",
+        "scientific_name": "Zamia furfuracea",
         "botanical_height_m": [
             0.5,
-            1.5
+            1.3
         ],
         "plant_type": "shrub",
         "growth_habit": "bush",
         "suggested_game_height_px": [
-            100,
-            150
+            95,
+            135
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "块茎粗短的苏铁类常绿灌木，厚革质羽状叶对生排列，表面被灰褐微毛。",
+        "status": "success"
     }
 }

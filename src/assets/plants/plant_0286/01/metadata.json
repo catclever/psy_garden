@@ -20,19 +20,19 @@
     "created_at": 1794883621,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "厚葉龍舌蘭",
-        "scientific_name": "Unknown",
+        "scientific_name": "Agave victoriae-reginae",
         "botanical_height_m": [
-            0.5,
-            1.5
+            0.2,
+            0.5
         ],
-        "plant_type": "shrub",
+        "plant_type": "flower",
         "growth_habit": "bush",
         "suggested_game_height_px": [
-            100,
-            150
+            50,
+            75
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "小型几何形莲座多肉，三角状厚叶坚硬内扣，深绿叶面上饰有清晰鲜明的白色角质线条。",
+        "status": "success"
     }
 }

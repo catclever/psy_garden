@@ -19,19 +19,19 @@
     "created_at": 1794883593,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "豔紅苞鳳梨",
-        "scientific_name": "Unknown",
+        "scientific_name": "Billbergia pyramidalis",
         "botanical_height_m": [
-            0.5,
-            1.5
+            0.3,
+            0.6
         ],
-        "plant_type": "shrub",
+        "plant_type": "flower",
         "growth_habit": "bush",
         "suggested_game_height_px": [
-            100,
-            150
+            60,
+            90
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "筒状附生凤梨，叶片革质具刺缘，中心抽生出朱红密集苞片簇拥的直立花序。",
+        "status": "success"
     }
 }

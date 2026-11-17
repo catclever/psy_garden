@@ -19,19 +19,19 @@
     "created_at": 1794883601,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "崖柏",
-        "scientific_name": "Unknown",
+        "scientific_name": "Thuja sutchuenensis",
         "botanical_height_m": [
-            0.5,
-            1.5
+            5.0,
+            20.0
         ],
-        "plant_type": "shrub",
-        "growth_habit": "bush",
+        "plant_type": "tree",
+        "growth_habit": "canopy",
         "suggested_game_height_px": [
-            100,
-            150
+            170,
+            215
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "柏科常綠喬木，鱗片狀緊密排列的扁平枝葉散發濃香，多生於懸崖峭壁。",
+        "status": "success"
     }
 }

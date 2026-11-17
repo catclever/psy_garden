@@ -20,19 +20,19 @@
     "created_at": 1794883600,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "夢幻草",
-        "scientific_name": "Unknown",
+        "scientific_name": "Aquilegia flabellata",
         "botanical_height_m": [
-            0.5,
-            1.5
+            0.2,
+            0.6
         ],
-        "plant_type": "shrub",
-        "growth_habit": "bush",
+        "plant_type": "flower",
+        "growth_habit": "slender",
         "suggested_game_height_px": [
-            100,
-            150
+            55,
+            80
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "毛茛科多年生草本，具有精緻的扇形小葉與花距奇異優雅的懸垂狀花朵。",
+        "status": "success"
     }
 }

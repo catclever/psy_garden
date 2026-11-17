@@ -19,19 +19,19 @@
     "created_at": 1794883603,
     "status": "ready",
     "ai_analysis": {
-        "status": "failed",
         "zh_name": "海漆属",
-        "scientific_name": "Unknown",
+        "scientific_name": "Excoecaria agallocha",
         "botanical_height_m": [
-            0.5,
-            1.5
+            3.0,
+            10.0
         ],
-        "plant_type": "shrub",
-        "growth_habit": "bush",
+        "plant_type": "tree",
+        "growth_habit": "canopy",
         "suggested_game_height_px": [
-            100,
-            150
+            130,
+            180
         ],
-        "brief": "Network or API error: Too Many Requests"
+        "brief": "紅樹林常綠灌木或喬木，富含具刺激性乳汁，厚革質倒卵形葉互生。",
+        "status": "success"
     }
 }
