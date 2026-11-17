@@ -1,0 +1,37 @@
+{
+    "name": "plant_0293",
+    "display_name": "龍舌蘭屬",
+    "variant_id": "01",
+    "width": 197,
+    "height": 250,
+    "root_width": 13,
+    "root_ratio": 0.066,
+    "ground_ellipse": [
+        13,
+        7
+    ],
+    "layers": [
+        "layer-red",
+        "layer-green"
+    ],
+    "source_image": "candidate_plant_293_龍舌蘭屬.jpg",
+    "true_color": true,
+    "created_at": 1794883621,
+    "status": "ready",
+    "ai_analysis": {
+        "status": "failed",
+        "zh_name": "龍舌蘭屬",
+        "scientific_name": "Unknown",
+        "botanical_height_m": [
+            0.5,
+            1.5
+        ],
+        "plant_type": "shrub",
+        "growth_habit": "bush",
+        "suggested_game_height_px": [
+            100,
+            150
+        ],
+        "brief": "Network or API error: Too Many Requests"
+    }
+}

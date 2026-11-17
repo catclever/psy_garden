@@ -1,0 +1,37 @@
+{
+    "name": "zen_bamboo_thicket_green",
+    "display_name": "禅意翠竹(thicket_green)",
+    "variant_id": "01",
+    "width": 273,
+    "height": 250,
+    "root_width": 35,
+    "root_ratio": 0.128,
+    "ground_ellipse": [
+        35,
+        19
+    ],
+    "layers": [
+        "layer-red",
+        "layer-green"
+    ],
+    "source_image": "zen_bamboo_thicket_green_1790953810321.jpg",
+    "true_color": true,
+    "created_at": 1794883634,
+    "status": "ready",
+    "ai_analysis": {
+        "status": "failed",
+        "zh_name": "禅意翠竹(thicket_green)",
+        "scientific_name": "Unknown",
+        "botanical_height_m": [
+            0.5,
+            1.5
+        ],
+        "plant_type": "shrub",
+        "growth_habit": "bush",
+        "suggested_game_height_px": [
+            100,
+            150
+        ],
+        "brief": "Network or API error: Too Many Requests"
+    }
+}

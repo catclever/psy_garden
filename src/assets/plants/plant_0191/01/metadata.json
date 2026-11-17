@@ -1,0 +1,38 @@
+{
+    "name": "plant_0191",
+    "display_name": "麗虹玉",
+    "variant_id": "01",
+    "width": 255,
+    "height": 250,
+    "root_width": 8,
+    "root_ratio": 0.031,
+    "ground_ellipse": [
+        8,
+        4
+    ],
+    "layers": [
+        "layer-red",
+        "layer-green",
+        "layer-blue"
+    ],
+    "source_image": "candidate_plant_0191_麗虹玉.jpg",
+    "true_color": true,
+    "created_at": 1794883607,
+    "status": "ready",
+    "ai_analysis": {
+        "status": "failed",
+        "zh_name": "麗虹玉",
+        "scientific_name": "Unknown",
+        "botanical_height_m": [
+            0.5,
+            1.5
+        ],
+        "plant_type": "shrub",
+        "growth_habit": "bush",
+        "suggested_game_height_px": [
+            100,
+            150
+        ],
+        "brief": "Network or API error: Too Many Requests"
+    }
+}

@@ -1,0 +1,37 @@
+{
+    "name": "plant_0168",
+    "display_name": "安古蘭_(蘭花)",
+    "variant_id": "01",
+    "width": 215,
+    "height": 250,
+    "root_width": 98,
+    "root_ratio": 0.456,
+    "ground_ellipse": [
+        98,
+        54
+    ],
+    "layers": [
+        "layer-red",
+        "layer-green"
+    ],
+    "source_image": "candidate_plant_plant_0168_安古蘭_(蘭花).jpg",
+    "true_color": true,
+    "created_at": 1794883603,
+    "status": "ready",
+    "ai_analysis": {
+        "status": "failed",
+        "zh_name": "安古蘭_(蘭花)",
+        "scientific_name": "Unknown",
+        "botanical_height_m": [
+            0.5,
+            1.5
+        ],
+        "plant_type": "shrub",
+        "growth_habit": "bush",
+        "suggested_game_height_px": [
+            100,
+            150
+        ],
+        "brief": "Network or API error: Too Many Requests"
+    }
+}

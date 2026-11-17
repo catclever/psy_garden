@@ -1,0 +1,37 @@
+{
+    "name": "plant_0029",
+    "display_name": "德保苏铁",
+    "variant_id": "01",
+    "width": 254,
+    "height": 250,
+    "root_width": 23,
+    "root_ratio": 0.091,
+    "ground_ellipse": [
+        23,
+        13
+    ],
+    "layers": [
+        "layer-red",
+        "layer-green"
+    ],
+    "source_image": "candidate_plant_plant_0029_德保苏铁.jpg",
+    "true_color": true,
+    "created_at": 1794883586,
+    "status": "ready",
+    "ai_analysis": {
+        "status": "failed",
+        "zh_name": "德保苏铁",
+        "scientific_name": "Unknown",
+        "botanical_height_m": [
+            0.5,
+            1.5
+        ],
+        "plant_type": "shrub",
+        "growth_habit": "bush",
+        "suggested_game_height_px": [
+            100,
+            150
+        ],
+        "brief": "Network or API error: Too Many Requests"
+    }
+}

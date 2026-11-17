@@ -1,0 +1,38 @@
+{
+    "name": "plant_0367",
+    "display_name": "苦楝",
+    "variant_id": "01",
+    "width": 266,
+    "height": 250,
+    "root_width": 18,
+    "root_ratio": 0.068,
+    "ground_ellipse": [
+        18,
+        10
+    ],
+    "layers": [
+        "layer-red",
+        "layer-green",
+        "layer-blue"
+    ],
+    "source_image": "candidate_plant_367_苦楝.jpg",
+    "true_color": true,
+    "created_at": 1794883631,
+    "status": "ready",
+    "ai_analysis": {
+        "status": "failed",
+        "zh_name": "苦楝",
+        "scientific_name": "Unknown",
+        "botanical_height_m": [
+            0.5,
+            1.5
+        ],
+        "plant_type": "shrub",
+        "growth_habit": "bush",
+        "suggested_game_height_px": [
+            100,
+            150
+        ],
+        "brief": "Network or API error: Too Many Requests"
+    }
+}

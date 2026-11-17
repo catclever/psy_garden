@@ -1,0 +1,38 @@
+{
+    "name": "plant_0125",
+    "display_name": "南美三角酢浆草",
+    "variant_id": "01",
+    "width": 290,
+    "height": 250,
+    "root_width": 31,
+    "root_ratio": 0.107,
+    "ground_ellipse": [
+        31,
+        17
+    ],
+    "layers": [
+        "layer-red",
+        "layer-green",
+        "layer-blue"
+    ],
+    "source_image": "candidate_plant_0125_南美三角酢浆草.jpg",
+    "true_color": true,
+    "created_at": 1794883598,
+    "status": "ready",
+    "ai_analysis": {
+        "status": "failed",
+        "zh_name": "南美三角酢浆草",
+        "scientific_name": "Unknown",
+        "botanical_height_m": [
+            0.5,
+            1.5
+        ],
+        "plant_type": "shrub",
+        "growth_habit": "bush",
+        "suggested_game_height_px": [
+            100,
+            150
+        ],
+        "brief": "Network or API error: Too Many Requests"
+    }
+}

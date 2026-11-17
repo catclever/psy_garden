@@ -1,0 +1,37 @@
+{
+    "name": "plant_0218",
+    "display_name": "五爪木",
+    "variant_id": "01",
+    "width": 253,
+    "height": 250,
+    "root_width": 6,
+    "root_ratio": 0.024,
+    "ground_ellipse": [
+        6,
+        4
+    ],
+    "layers": [
+        "layer-red",
+        "layer-green"
+    ],
+    "source_image": "candidate_plant_0218_五爪木.jpg",
+    "true_color": true,
+    "created_at": 1794883611,
+    "status": "ready",
+    "ai_analysis": {
+        "status": "failed",
+        "zh_name": "五爪木",
+        "scientific_name": "Unknown",
+        "botanical_height_m": [
+            0.5,
+            1.5
+        ],
+        "plant_type": "shrub",
+        "growth_habit": "bush",
+        "suggested_game_height_px": [
+            100,
+            150
+        ],
+        "brief": "Network or API error: Too Many Requests"
+    }
+}

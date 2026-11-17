@@ -1,0 +1,37 @@
+{
+    "name": "plant_0197",
+    "display_name": "新疆千里光",
+    "variant_id": "01",
+    "width": 248,
+    "height": 250,
+    "root_width": 15,
+    "root_ratio": 0.06,
+    "ground_ellipse": [
+        15,
+        8
+    ],
+    "layers": [
+        "layer-red",
+        "layer-green"
+    ],
+    "source_image": "candidate_plant_0197_新疆千里光.jpg",
+    "true_color": true,
+    "created_at": 1794883608,
+    "status": "ready",
+    "ai_analysis": {
+        "status": "failed",
+        "zh_name": "新疆千里光",
+        "scientific_name": "Unknown",
+        "botanical_height_m": [
+            0.5,
+            1.5
+        ],
+        "plant_type": "shrub",
+        "growth_habit": "bush",
+        "suggested_game_height_px": [
+            100,
+            150
+        ],
+        "brief": "Network or API error: Too Many Requests"
+    }
+}

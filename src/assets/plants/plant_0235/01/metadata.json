@@ -1,0 +1,38 @@
+{
+    "name": "plant_0235",
+    "display_name": "薰衣草",
+    "variant_id": "01",
+    "width": 176,
+    "height": 250,
+    "root_width": 6,
+    "root_ratio": 0.034,
+    "ground_ellipse": [
+        6,
+        4
+    ],
+    "layers": [
+        "layer-red",
+        "layer-green",
+        "layer-blue"
+    ],
+    "source_image": "candidate_plant_0235_薰衣草.jpg",
+    "true_color": true,
+    "created_at": 1794883613,
+    "status": "ready",
+    "ai_analysis": {
+        "status": "failed",
+        "zh_name": "薰衣草",
+        "scientific_name": "Unknown",
+        "botanical_height_m": [
+            0.5,
+            1.5
+        ],
+        "plant_type": "shrub",
+        "growth_habit": "bush",
+        "suggested_game_height_px": [
+            100,
+            150
+        ],
+        "brief": "Network or API error: Too Many Requests"
+    }
+}

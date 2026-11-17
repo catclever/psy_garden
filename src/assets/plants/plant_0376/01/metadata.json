@@ -1,0 +1,37 @@
+{
+    "name": "plant_0376",
+    "display_name": "菊水",
+    "variant_id": "01",
+    "width": 215,
+    "height": 250,
+    "root_width": 40,
+    "root_ratio": 0.186,
+    "ground_ellipse": [
+        40,
+        22
+    ],
+    "layers": [
+        "layer-red",
+        "layer-green"
+    ],
+    "source_image": "candidate_plant_376_菊水.jpg",
+    "true_color": true,
+    "created_at": 1794883632,
+    "status": "ready",
+    "ai_analysis": {
+        "status": "failed",
+        "zh_name": "菊水",
+        "scientific_name": "Unknown",
+        "botanical_height_m": [
+            0.5,
+            1.5
+        ],
+        "plant_type": "shrub",
+        "growth_habit": "bush",
+        "suggested_game_height_px": [
+            100,
+            150
+        ],
+        "brief": "Network or API error: Too Many Requests"
+    }
+}

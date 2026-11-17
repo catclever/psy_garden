@@ -1,0 +1,38 @@
+{
+    "name": "plant_0344",
+    "display_name": "水仙属",
+    "variant_id": "01",
+    "width": 163,
+    "height": 250,
+    "root_width": 21,
+    "root_ratio": 0.129,
+    "ground_ellipse": [
+        21,
+        12
+    ],
+    "layers": [
+        "layer-red",
+        "layer-green",
+        "layer-blue"
+    ],
+    "source_image": "candidate_plant_344_水仙属.jpg",
+    "true_color": true,
+    "created_at": 1794883628,
+    "status": "ready",
+    "ai_analysis": {
+        "status": "failed",
+        "zh_name": "水仙属",
+        "scientific_name": "Unknown",
+        "botanical_height_m": [
+            0.5,
+            1.5
+        ],
+        "plant_type": "shrub",
+        "growth_habit": "bush",
+        "suggested_game_height_px": [
+            100,
+            150
+        ],
+        "brief": "Network or API error: Too Many Requests"
+    }
+}

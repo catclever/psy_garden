@@ -1,0 +1,37 @@
+{
+    "name": "plant_0137",
+    "display_name": "马桑",
+    "variant_id": "01",
+    "width": 220,
+    "height": 250,
+    "root_width": 12,
+    "root_ratio": 0.055,
+    "ground_ellipse": [
+        12,
+        7
+    ],
+    "layers": [
+        "layer-red",
+        "layer-green"
+    ],
+    "source_image": "candidate_plant_0137_马桑.jpg",
+    "true_color": true,
+    "created_at": 1794883600,
+    "status": "ready",
+    "ai_analysis": {
+        "status": "failed",
+        "zh_name": "马桑",
+        "scientific_name": "Unknown",
+        "botanical_height_m": [
+            0.5,
+            1.5
+        ],
+        "plant_type": "shrub",
+        "growth_habit": "bush",
+        "suggested_game_height_px": [
+            100,
+            150
+        ],
+        "brief": "Network or API error: Too Many Requests"
+    }
+}

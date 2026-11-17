@@ -1,0 +1,38 @@
+{
+    "name": "plant_0369",
+    "display_name": "车窝草",
+    "variant_id": "01",
+    "width": 185,
+    "height": 250,
+    "root_width": 25,
+    "root_ratio": 0.135,
+    "ground_ellipse": [
+        25,
+        14
+    ],
+    "layers": [
+        "layer-red",
+        "layer-green",
+        "layer-blue"
+    ],
+    "source_image": "candidate_plant_369_车窝草.jpg",
+    "true_color": true,
+    "created_at": 1794883631,
+    "status": "ready",
+    "ai_analysis": {
+        "status": "failed",
+        "zh_name": "车窝草",
+        "scientific_name": "Unknown",
+        "botanical_height_m": [
+            0.5,
+            1.5
+        ],
+        "plant_type": "shrub",
+        "growth_habit": "bush",
+        "suggested_game_height_px": [
+            100,
+            150
+        ],
+        "brief": "Network or API error: Too Many Requests"
+    }
+}

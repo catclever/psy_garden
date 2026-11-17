@@ -1,0 +1,37 @@
+{
+    "name": "plant_0063",
+    "display_name": "寶冠木",
+    "variant_id": "01",
+    "width": 291,
+    "height": 250,
+    "root_width": 41,
+    "root_ratio": 0.141,
+    "ground_ellipse": [
+        41,
+        23
+    ],
+    "layers": [
+        "layer-red",
+        "layer-green"
+    ],
+    "source_image": "candidate_plant_0063_寶冠木.jpg",
+    "true_color": true,
+    "created_at": 1794883590,
+    "status": "ready",
+    "ai_analysis": {
+        "status": "failed",
+        "zh_name": "寶冠木",
+        "scientific_name": "Unknown",
+        "botanical_height_m": [
+            0.5,
+            1.5
+        ],
+        "plant_type": "shrub",
+        "growth_habit": "bush",
+        "suggested_game_height_px": [
+            100,
+            150
+        ],
+        "brief": "Network or API error: Too Many Requests"
+    }
+}

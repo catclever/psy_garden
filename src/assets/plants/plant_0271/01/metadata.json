@@ -1,0 +1,37 @@
+{
+    "name": "plant_0271",
+    "display_name": "彩雲閣",
+    "variant_id": "01",
+    "width": 306,
+    "height": 250,
+    "root_width": 32,
+    "root_ratio": 0.105,
+    "ground_ellipse": [
+        32,
+        18
+    ],
+    "layers": [
+        "layer-red",
+        "layer-green"
+    ],
+    "source_image": "candidate_plant_0271_彩雲閣.jpg",
+    "true_color": true,
+    "created_at": 1794883618,
+    "status": "ready",
+    "ai_analysis": {
+        "status": "failed",
+        "zh_name": "彩雲閣",
+        "scientific_name": "Unknown",
+        "botanical_height_m": [
+            0.5,
+            1.5
+        ],
+        "plant_type": "shrub",
+        "growth_habit": "bush",
+        "suggested_game_height_px": [
+            100,
+            150
+        ],
+        "brief": "Network or API error: Too Many Requests"
+    }
+}

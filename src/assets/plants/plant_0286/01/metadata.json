@@ -1,0 +1,38 @@
+{
+    "name": "plant_0286",
+    "display_name": "厚葉龍舌蘭",
+    "variant_id": "01",
+    "width": 285,
+    "height": 250,
+    "root_width": 113,
+    "root_ratio": 0.396,
+    "ground_ellipse": [
+        113,
+        62
+    ],
+    "layers": [
+        "layer-red",
+        "layer-green",
+        "layer-blue"
+    ],
+    "source_image": "candidate_plant_286_厚葉龍舌蘭.jpg",
+    "true_color": true,
+    "created_at": 1794883621,
+    "status": "ready",
+    "ai_analysis": {
+        "status": "failed",
+        "zh_name": "厚葉龍舌蘭",
+        "scientific_name": "Unknown",
+        "botanical_height_m": [
+            0.5,
+            1.5
+        ],
+        "plant_type": "shrub",
+        "growth_habit": "bush",
+        "suggested_game_height_px": [
+            100,
+            150
+        ],
+        "brief": "Network or API error: Too Many Requests"
+    }
+}

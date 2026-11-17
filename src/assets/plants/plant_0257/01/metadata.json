@@ -1,0 +1,37 @@
+{
+    "name": "plant_0257",
+    "display_name": "芸香属",
+    "variant_id": "01",
+    "width": 194,
+    "height": 250,
+    "root_width": 6,
+    "root_ratio": 0.031,
+    "ground_ellipse": [
+        6,
+        4
+    ],
+    "layers": [
+        "layer-red",
+        "layer-green"
+    ],
+    "source_image": "candidate_plant_0257_芸香属.jpg",
+    "true_color": true,
+    "created_at": 1794883616,
+    "status": "ready",
+    "ai_analysis": {
+        "status": "failed",
+        "zh_name": "芸香属",
+        "scientific_name": "Unknown",
+        "botanical_height_m": [
+            0.5,
+            1.5
+        ],
+        "plant_type": "shrub",
+        "growth_habit": "bush",
+        "suggested_game_height_px": [
+            100,
+            150
+        ],
+        "brief": "Network or API error: Too Many Requests"
+    }
+}

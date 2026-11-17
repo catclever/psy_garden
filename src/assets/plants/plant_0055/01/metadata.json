@@ -1,0 +1,37 @@
+{
+    "name": "plant_0055",
+    "display_name": "仙人掌",
+    "variant_id": "01",
+    "width": 183,
+    "height": 250,
+    "root_width": 23,
+    "root_ratio": 0.126,
+    "ground_ellipse": [
+        23,
+        13
+    ],
+    "layers": [
+        "layer-red",
+        "layer-green"
+    ],
+    "source_image": "candidate_plant_0055_仙人掌.jpg",
+    "true_color": true,
+    "created_at": 1794883589,
+    "status": "ready",
+    "ai_analysis": {
+        "status": "failed",
+        "zh_name": "仙人掌",
+        "scientific_name": "Unknown",
+        "botanical_height_m": [
+            0.5,
+            1.5
+        ],
+        "plant_type": "shrub",
+        "growth_habit": "bush",
+        "suggested_game_height_px": [
+            100,
+            150
+        ],
+        "brief": "Network or API error: Too Many Requests"
+    }
+}

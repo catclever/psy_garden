@@ -1,0 +1,37 @@
+{
+    "name": "plant_0379",
+    "display_name": "长寿花",
+    "variant_id": "01",
+    "width": 270,
+    "height": 250,
+    "root_width": 9,
+    "root_ratio": 0.033,
+    "ground_ellipse": [
+        9,
+        5
+    ],
+    "layers": [
+        "layer-red",
+        "layer-green"
+    ],
+    "source_image": "candidate_plant_379_长寿花.jpg",
+    "true_color": true,
+    "created_at": 1794883633,
+    "status": "ready",
+    "ai_analysis": {
+        "status": "failed",
+        "zh_name": "长寿花",
+        "scientific_name": "Unknown",
+        "botanical_height_m": [
+            0.5,
+            1.5
+        ],
+        "plant_type": "shrub",
+        "growth_habit": "bush",
+        "suggested_game_height_px": [
+            100,
+            150
+        ],
+        "brief": "Network or API error: Too Many Requests"
+    }
+}

@@ -1,0 +1,37 @@
+{
+    "name": "plant_0047",
+    "display_name": "變葉木",
+    "variant_id": "01",
+    "width": 238,
+    "height": 250,
+    "root_width": 10,
+    "root_ratio": 0.042,
+    "ground_ellipse": [
+        10,
+        6
+    ],
+    "layers": [
+        "layer-red",
+        "layer-green"
+    ],
+    "source_image": "candidate_plant_plant_0047_變葉木.jpg",
+    "true_color": true,
+    "created_at": 1794883588,
+    "status": "ready",
+    "ai_analysis": {
+        "status": "failed",
+        "zh_name": "變葉木",
+        "scientific_name": "Unknown",
+        "botanical_height_m": [
+            0.5,
+            1.5
+        ],
+        "plant_type": "shrub",
+        "growth_habit": "bush",
+        "suggested_game_height_px": [
+            100,
+            150
+        ],
+        "brief": "Network or API error: Too Many Requests"
+    }
+}

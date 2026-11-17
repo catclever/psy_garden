@@ -8,45 +8,106 @@
 </head>
 <body>
     <div class="app-layout">
-        
+
         <!-- 环境滤镜层 (全局暖光/天气/时间) -->
         <div class="env-filter-overlay time-sunset"></div>
 
         <!-- 层级 1: 世界层 (The Garden, 2.5D 透视) -->
-        <div class="layer-world">
+        <main class="layer-world" aria-label="2.5D 植物花园场景">
             <div class="world-3d-container">
                 <!-- 纯背景网格层，带有渐隐遮罩 (单独抽离以防打破3D上下文) -->
                 <div class="grid-bg"></div>
-                
+
                 <!-- 香炉依然是固定在中间的地标 -->
                 <div class="incense-node" style="top: 50%; left: 50%;">
                     [燃香实体]
                 </div>
-                
+
+                <!-- 手植模式实时占地预览椭圆 -->
+                <div id="footprint-preview" class="footprint-preview" hidden aria-hidden="true"></div>
+
                 <!-- 动态花园种植床 -->
-                <div id="world-plants"></div>
+                <div id="world-plants" class="footprints-visible"></div>
             </div>
-        </div>
+        </main>
 
         <!-- 层级 2: HUD 最高层 -->
         <div class="layer-hud">
-            
-            <!-- 魔法变色控制台 -->
-            <div class="ui-magic-buttons">
-                <button class="magic-btn" onclick="randomizeGarden()">🎲 重新随机生成花园 (30株)</button>
-                <button class="magic-btn" onclick="setGlobalTint('tint-gold')">全局染：金色回想</button>
-                <button class="magic-btn" onclick="setGlobalTint('tint-cyan')">全局沉浸：开启心流模式 ✨</button>
-            </div>
+
+            <!-- 魔法控制按钮组 -->
+            <nav class="ui-magic-buttons" aria-label="花园控制面板">
+                <button id="btn-randomize" type="button" class="magic-btn">🎲 随机生态群落 (55株)</button>
+                <button id="btn-toggle-footprints" type="button" class="magic-btn" aria-pressed="true">🪐 占地圈与高度标尺: 开</button>
+                <button id="btn-cycle-color" type="button" class="magic-btn">🎨 色彩: 原生真彩</button>
+                <button id="btn-toggle-catalog" type="button" class="magic-btn" aria-expanded="false" aria-controls="catalog-drawer">🌿 植物图鉴与手植 (共 6 种)</button>
+                <button id="btn-focus-mode" type="button" class="magic-btn">✨ 开启心流模式</button>
+            </nav>
+
+            <!-- 手植模式提示条 -->
+            <div id="planting-banner" class="planting-banner" role="status" aria-live="polite" hidden></div>
+
+            <!-- 植物悬停检视卡片 -->
+            <section id="plant-inspector-card" class="plant-inspector-card" aria-label="植物详情检视" aria-live="polite" hidden>
+                <div class="inspector-header">
+                    <div>
+                        <h2 class="inspector-zh" data-field="zh-name">银杏</h2>
+                        <p class="inspector-sci" data-field="sci-name" lang="la">Ginkgo biloba</p>
+                    </div>
+                    <div class="inspector-tags">
+                        <span class="inspector-tag" data-field="type-tag">乔木</span>
+                        <span class="inspector-tag habit" data-field="habit-tag">伞冠型</span>
+                    </div>
+                </div>
+                <dl class="inspector-metrics">
+                    <div class="metric-row">
+                        <dt>自然株高</dt>
+                        <dd data-field="botanical-height">20 – 35 m</dd>
+                    </div>
+                    <div class="metric-row">
+                        <dt>当前采样高度</dt>
+                        <dd data-field="sampled-height">180 px</dd>
+                    </div>
+                    <div class="metric-row">
+                        <dt>地面占地椭圆</dt>
+                        <dd data-field="footprint-size">12 × 7 px</dd>
+                    </div>
+                </dl>
+                <p class="inspector-brief" data-field="brief"></p>
+            </section>
+
+            <!-- 可折叠植物图鉴与手植抽屉 -->
+            <aside id="catalog-drawer" class="catalog-drawer" aria-label="植物图鉴与手植抽屉" hidden>
+                <div class="catalog-drawer-header">
+                    <h2 class="catalog-title">🌿 植物图鉴与手植</h2>
+                    <button id="btn-close-catalog" type="button" class="catalog-close-btn" aria-label="关闭图鉴抽屉">✕</button>
+                </div>
+
+                <div class="catalog-controls">
+                    <div class="catalog-search-row">
+                        <label for="catalog-search" class="visually-hidden">搜索植物名称或拉丁学名</label>
+                        <input id="catalog-search" type="search" class="catalog-search-input" placeholder="搜索中文名 / 学名..." autocomplete="off">
+                        <button id="btn-clear-garden" type="button" class="catalog-clear-btn">🧹 清空花园</button>
+                    </div>
+                    <div class="catalog-filter-pills" role="group" aria-label="按植物类型筛选">
+                        <button type="button" class="catalog-filter-pill is-active" data-filter-type="all" aria-pressed="true">全部</button>
+                        <button type="button" class="catalog-filter-pill" data-filter-type="tree" aria-pressed="false">🌳乔木</button>
+                        <button type="button" class="catalog-filter-pill" data-filter-type="shrub" aria-pressed="false">🌿灌木</button>
+                        <button type="button" class="catalog-filter-pill" data-filter-type="flower" aria-pressed="false">🌸花卉</button>
+                        <button type="button" class="catalog-filter-pill" data-filter-type="groundcover" aria-pressed="false">🌱地被</button>
+                    </div>
+                </div>
+
+                <div id="catalog-grid" class="catalog-grid"></div>
+            </aside>
         </div>
 
         <!-- 层级 3: 终极沉浸模式 (Ambient Glass Backdrop) -->
         <div id="focus-mode-ui" class="ambient-glass-overlay">
-            <button class="magic-btn close-focus-btn" onclick="document.getElementById('focus-mode-ui').style.display='none'">退出心流模式</button>
-            
+            <button id="btn-close-focus" type="button" class="magic-btn close-focus-btn">退出心流模式</button>
+
             <!-- 左侧：记忆之池 (History Stream) -->
             <div class="focus-history-col">
                 <div class="focus-history-stream">
-                    <!-- 虚构的对话记录用于排版演示 -->
                     <div class="focus-msg ai">在这个赛博花园里，每一株植物都映射着一段情绪的碎片。</div>
                     <div class="focus-msg user">我今天终于把那个纠结了很久的问题想清楚了，感觉心里一块石头落地。</div>
                     <div class="focus-msg ai">我感受到了一束明亮的金光。我已经将它化作一颗种子。</div>
@@ -54,84 +115,15 @@
                     <div class="focus-msg ai">是的，你随时可以回到这里，它们会一直在霓虹中呼吸。</div>
                 </div>
             </div>
-            
+
             <!-- 右侧：心流输入舱 (Flow Input Area) -->
             <div class="focus-input-col">
-                <textarea class="flow-textarea" placeholder="把你的思绪投射到这片发光的环境中... (支持长文书写)"></textarea>
+                <label for="flow-textarea" class="visually-hidden">心流书写区</label>
+                <textarea id="flow-textarea" class="flow-textarea" placeholder="把你的思绪投射到这片发光的环境中... (支持长文书写)"></textarea>
             </div>
         </div>
     </div>
 
-    <script>
-        const splitTemplates = ["plant-banana-split", "plant-bamboo-split", "plant-mushroom-split", "plant-fern-split", "plant-bonsai-split", "plant-lily-split"];
-        const tints = ["tint-gold", "tint-cyan", "tint-magenta", "tint-ghost", "tint-emerald"];
-
-        function randomizeGarden() {
-            const gardenBed = document.getElementById("world-plants");
-            gardenBed.innerHTML = ''; // 清空现有植物
-
-            // 种下 30 棵多层组合植物
-            for (let i = 0; i < 30; i++) {
-                const species = splitTemplates[Math.floor(Math.random() * splitTemplates.length)];
-                
-                // 坐标随机散布
-                const top = 15 + Math.random() * 70;
-                const left = 10 + Math.random() * 80;
-                const zIndex = Math.floor(top * 10);
-
-                const plant = document.createElement("div");
-                plant.className = "plant-node";
-                plant.style.top = `${top}%`;
-                plant.style.left = `${left}%`;
-                plant.style.zIndex = zIndex;
-
-                const sprite = document.createElement("div");
-                sprite.className = `plant-sprite ${species}`;
-                
-                // 给每个通道分配随机滤镜
-                const t1 = tints[Math.floor(Math.random() * tints.length)];
-                const t2 = tints[Math.floor(Math.random() * tints.length)];
-                const t3 = tints[Math.floor(Math.random() * tints.length)];
-
-                if (species === "plant-banana-split") {
-                    // 香蕉树有三个通道：树干(Red), 叶子(Green), 香蕉(Blue)
-                    sprite.innerHTML = `
-                        <div class="sprite-layer layer-red ${t1}"></div>
-                        <div class="sprite-layer layer-green ${t2}"></div>
-                        <div class="sprite-layer layer-blue ${t3}"></div>
-                    `;
-                } else if (species === "plant-lily-split") {
-                    sprite.innerHTML = `
-                        <div class="sprite-layer layer-stem ${t1}"></div>
-                        <div class="sprite-layer layer-flower ${t2}"></div>
-                    `;
-                } else {
-                    // 其他植物只有两个通道：Red 和 Green
-                    sprite.innerHTML = `
-                        <div class="sprite-layer layer-red ${t1}"></div>
-                        <div class="sprite-layer layer-green ${t2}"></div>
-                    `;
-                }
-                
-                plant.appendChild(sprite);
-                gardenBed.appendChild(plant);
-            }
-        }
-
-        function setGlobalTint(targetTint) {
-            if (targetTint === 'tint-cyan') {
-                document.getElementById('focus-mode-ui').style.display = 'flex';
-                return;
-            }
-            const sprites = document.querySelectorAll('#world-plants .plant-sprite');
-            sprites.forEach(sprite => {
-                const species = Array.from(sprite.classList).find(c => c.startsWith('plant-') && c !== 'plant-sprite');
-                sprite.className = `plant-sprite ${species} ${targetTint}`;
-            });
-        }
-
-        // 初始化时立刻生成一波
-        document.addEventListener("DOMContentLoaded", randomizeGarden);
-    </script>
+    <script src="garden.js"></script>
 </body>
 </html>

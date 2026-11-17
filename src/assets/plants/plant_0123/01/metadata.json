@@ -1,0 +1,38 @@
+{
+    "name": "plant_0123",
+    "display_name": "灯泡肉锥花",
+    "variant_id": "01",
+    "width": 237,
+    "height": 250,
+    "root_width": 63,
+    "root_ratio": 0.266,
+    "ground_ellipse": [
+        63,
+        35
+    ],
+    "layers": [
+        "layer-red",
+        "layer-green",
+        "layer-blue"
+    ],
+    "source_image": "candidate_plant_0123_灯泡肉锥花.jpg",
+    "true_color": true,
+    "created_at": 1794883598,
+    "status": "ready",
+    "ai_analysis": {
+        "status": "failed",
+        "zh_name": "灯泡肉锥花",
+        "scientific_name": "Unknown",
+        "botanical_height_m": [
+            0.5,
+            1.5
+        ],
+        "plant_type": "shrub",
+        "growth_habit": "bush",
+        "suggested_game_height_px": [
+            100,
+            150
+        ],
+        "brief": "Network or API error: Too Many Requests"
+    }
+}

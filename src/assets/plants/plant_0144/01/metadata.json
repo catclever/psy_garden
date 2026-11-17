@@ -1,0 +1,37 @@
+{
+    "name": "plant_0144",
+    "display_name": "崖柏",
+    "variant_id": "01",
+    "width": 191,
+    "height": 250,
+    "root_width": 46,
+    "root_ratio": 0.241,
+    "ground_ellipse": [
+        46,
+        25
+    ],
+    "layers": [
+        "layer-red",
+        "layer-green"
+    ],
+    "source_image": "candidate_plant_0144_崖柏.jpg",
+    "true_color": true,
+    "created_at": 1794883601,
+    "status": "ready",
+    "ai_analysis": {
+        "status": "failed",
+        "zh_name": "崖柏",
+        "scientific_name": "Unknown",
+        "botanical_height_m": [
+            0.5,
+            1.5
+        ],
+        "plant_type": "shrub",
+        "growth_habit": "bush",
+        "suggested_game_height_px": [
+            100,
+            150
+        ],
+        "brief": "Network or API error: Too Many Requests"
+    }
+}

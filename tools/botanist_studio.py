@@ -22,6 +22,13 @@ PLANTS_DIR = os.path.join(PROJECT_ROOT, 'src', 'assets', 'plants')
 CONFIRMED_CANDIDATES_FILE = os.path.join(PROJECT_ROOT, 'tools', 'confirmed_candidates.json')
 CONFIRMED_PLANTS_FILE = os.path.join(PROJECT_ROOT, 'tools', 'confirmed_plants.json')
 
+def refresh_plant_manifest():
+    try:
+        import generate_plant_manifest
+        generate_plant_manifest.generate_manifest(plants_dir=PLANTS_DIR)
+    except Exception as e:
+        print(f"⚠️ 刷新 manifest.json 失败: {e}")
+
 def get_confirmed_candidates():
     target_file = CONFIRMED_CANDIDATES_FILE if os.path.exists(CONFIRMED_CANDIDATES_FILE) else CONFIRMED_PLANTS_FILE
     if os.path.exists(target_file):
@@ -1781,7 +1788,12 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
             
         elif self.path == '/api/candidates':
             os.makedirs(CANDIDATES_DIR, exist_ok=True)
-            files = [f for f in os.listdir(CANDIDATES_DIR) if f.endswith(('.png', '.jpg', '.jpeg'))]
+            files = [
+                f for f in os.listdir(CANDIDATES_DIR)
+                if f.lower().endswith(('.png', '.jpg', '.jpeg'))
+                and not f.startswith('.')
+                and os.path.exists(os.path.join(CANDIDATES_DIR, f))
+            ]
             self.send_response(200)
             self.send_header('Content-type', 'application/json; charset=utf-8')
             self.end_headers()
@@ -2122,6 +2134,8 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
                     
                     with open(css_path, 'w', encoding='utf-8') as f:
                         f.write(new_css_content)
+
+                refresh_plant_manifest()
                 
                 self.send_response(200)
                 self.send_header('Content-type', 'application/json')
@@ -2270,6 +2284,9 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
                         del conf[filename]
                         save_confirmed_candidates(conf)
 
+                    # Refresh manifest immediately after slicing
+                    refresh_plant_manifest()
+
                     # Find the newest variant folder under plant_name
                     plant_dir = os.path.join(PLANTS_DIR, plant_name)
                     if os.path.exists(plant_dir):
@@ -2302,6 +2319,8 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
                                                 json.dump(m, f, ensure_ascii=False, indent=4)
                                         except:
                                             pass
+                                finally:
+                                    refresh_plant_manifest()
 
                             threading.Thread(target=run_ai_analysis, args=(meta_file, plant_name, display_name), daemon=True).start()
                     
