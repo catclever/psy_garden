@@ -33,5 +33,6 @@
         ],
         "brief": "蕨类植物具有羽状复叶、孢子囊群和根状茎，多呈丛生或地毯状生长。",
         "status": "success"
-    }
+    },
+    "enabled": false
 }

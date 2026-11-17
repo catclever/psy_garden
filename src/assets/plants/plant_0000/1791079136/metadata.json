@@ -32,5 +32,6 @@
         ],
         "brief": "落叶乔木，叶片扇形，秋季金黄，树冠宽大。",
         "status": "success"
-    }
+    },
+    "enabled": false
 }

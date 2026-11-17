@@ -33,5 +33,6 @@
         ],
         "brief": "单挺秀拔观赏竹，秆皮转为典雅红褐，顶端疏生狭长绿叶，风骨卓然。",
         "status": "success"
-    }
+    },
+    "enabled": false
 }

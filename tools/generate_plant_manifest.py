@@ -66,7 +66,7 @@ def _infer_image_dimensions(variant_dir: str, layer_files: list):
 
 
 def _build_variant_record(plant_name: str, variant_id: str, variant_dir: str):
-    """Build a candidate manifest record for one variant directory, or None if invalid."""
+    """Build a candidate manifest record for one variant directory, or None if invalid or disabled."""
     layer_files = _collect_layer_files(variant_dir)
     if not layer_files:
         return None
@@ -81,6 +81,9 @@ def _build_variant_record(plant_name: str, variant_id: str, variant_dir: str):
                     mdata = loaded
         except Exception:
             mdata = {}
+
+    if mdata.get("enabled", True) is False:
+        return None
 
     display_name = mdata.get("display_name") or mdata.get("name") or plant_name
     true_color = bool(mdata.get("true_color", False))

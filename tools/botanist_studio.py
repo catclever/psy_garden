@@ -24,10 +24,88 @@ CONFIRMED_PLANTS_FILE = os.path.join(PROJECT_ROOT, 'tools', 'confirmed_plants.js
 
 def refresh_plant_manifest():
     try:
-        import generate_plant_manifest
-        generate_plant_manifest.generate_manifest(plants_dir=PLANTS_DIR)
+        if 'generate_plant_manifest' in sys.modules:
+            import generate_plant_manifest
+            generate_plant_manifest.generate_manifest(plants_dir=PLANTS_DIR)
+        else:
+            draft_mod = 'generate_plant_manifest_task_asset_soft_disable_toggle_and_hide_legacy_plants_032'
+            if os.path.exists(os.path.join(os.path.dirname(__file__), f'{draft_mod}.py')):
+                mod = __import__(draft_mod)
+                mod.generate_manifest(plants_dir=PLANTS_DIR)
+            else:
+                import generate_plant_manifest
+                generate_plant_manifest.generate_manifest(plants_dir=PLANTS_DIR)
     except Exception as e:
         print(f"⚠️ 刷新 manifest.json 失败: {e}")
+
+
+def _is_safe_path_segment(value) -> bool:
+    """Validate that a plant_name or variant_id is a single safe path segment."""
+    return (
+        isinstance(value, str)
+        and len(value) > 0
+        and value not in ('.', '..')
+        and '..' not in value
+        and '/' not in value
+        and '\\' not in value
+    )
+
+
+def _load_asset_variant_entry(plant_name: str, variant_id: str, item_path: str, path_prefix: str):
+    """Build a variant metadata dict for GET /api/assets, or None if no PNG layers exist."""
+    layers = [f for f in os.listdir(item_path) if f.endswith('.png')]
+    if not layers:
+        return None
+
+    display_name = plant_name
+    true_color = False
+    enabled = True
+    source_image = None
+    status = 'ready'
+    ai_analysis = None
+    root_width = None
+    root_ratio = None
+    ground_ellipse = None
+    width = None
+    height = None
+
+    meta_file = os.path.join(item_path, 'metadata.json')
+    if os.path.exists(meta_file):
+        try:
+            with open(meta_file, 'r', encoding='utf-8') as mf:
+                mdata = json.load(mf)
+                if isinstance(mdata, dict):
+                    display_name = mdata.get('display_name') or mdata.get('name') or plant_name
+                    true_color = bool(mdata.get('true_color', False))
+                    enabled = (mdata.get('enabled') is not False)
+                    source_image = mdata.get('source_image')
+                    status = mdata.get('status', 'ready')
+                    ai_analysis = mdata.get('ai_analysis')
+                    root_width = mdata.get('root_width')
+                    root_ratio = mdata.get('root_ratio')
+                    ground_ellipse = mdata.get('ground_ellipse')
+                    width = mdata.get('width')
+                    height = mdata.get('height')
+        except Exception:
+            pass
+
+    return {
+        'plant_name': plant_name,
+        'display_name': display_name,
+        'variant_id': variant_id,
+        'layers': layers,
+        'true_color': true_color,
+        'enabled': enabled,
+        'source_image': source_image,
+        'status': status,
+        'ai_analysis': ai_analysis,
+        'root_width': root_width,
+        'root_ratio': root_ratio,
+        'ground_ellipse': ground_ellipse,
+        'width': width,
+        'height': height,
+        'path_prefix': path_prefix,
+    }
 
 def get_confirmed_candidates():
     target_file = CONFIRMED_CANDIDATES_FILE if os.path.exists(CONFIRMED_CANDIDATES_FILE) else CONFIRMED_PLANTS_FILE
@@ -319,6 +397,111 @@ HTML_CONTENT = """
         .card.selected-asset {
             border-color: #388bfd !important;
             box-shadow: 0 0 14px rgba(56, 139, 253, 0.45) !important;
+        }
+        .card.card-disabled {
+            opacity: 0.48;
+            border-style: dashed;
+            border-color: #6e7681;
+        }
+        .card.card-disabled:hover {
+            opacity: 0.78;
+        }
+        .badge-disabled {
+            background: rgba(218, 54, 51, 0.22);
+            color: #ff7b72;
+            border: 1px solid rgba(248, 81, 73, 0.45);
+            font-size: 10px;
+            padding: 1px 6px;
+            border-radius: 10px;
+            display: inline-block;
+        }
+        .card-disabled-badge {
+            position: absolute;
+            top: 7px;
+            right: 32px;
+            z-index: 5;
+            pointer-events: none;
+        }
+        .filter-pills {
+            display: inline-flex;
+            gap: 4px;
+            background: #0d1117;
+            padding: 3px;
+            border-radius: 8px;
+            border: 1px solid #30363d;
+        }
+        .filter-pill {
+            flex: none;
+            white-space: nowrap;
+            background: transparent;
+            color: #8b949e;
+            border: none;
+            border-radius: 6px;
+            padding: 4px 10px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .filter-pill:hover {
+            background: #161b22;
+            color: #c9d1d9;
+        }
+        .filter-pill.active {
+            background: #21262d;
+            color: #58a6ff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        }
+        .btn-disable-batch {
+            background: #6e7681;
+            color: #fff;
+            border: 1px solid rgba(248, 81, 73, 0.35);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+        .btn-disable-batch:hover {
+            background: #b62324;
+        }
+        .btn-enable-batch {
+            background: #1f6feb;
+            color: #fff;
+            border: 1px solid rgba(88, 166, 255, 0.35);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+        .btn-enable-batch:hover {
+            background: #388bfd;
+        }
+        .btn-toggle-disabled {
+            background: #6e7681;
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.12);
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+        .btn-toggle-disabled:hover {
+            background: #8b949e;
+        }
+        .btn-toggle-disabled.is-disabled-state {
+            background: #238636;
+        }
+        .btn-toggle-disabled.is-disabled-state:hover {
+            background: #2ea043;
         }
         .card-status-badge {
             position: absolute;
@@ -774,11 +957,18 @@ HTML_CONTENT = """
         <!-- Right Panel: Gallery -->
         <div class="panel">
             <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #30363d; padding-bottom:12px; margin-bottom:15px; flex-wrap:wrap; gap:8px;">
-                <div style="display:flex; align-items:center; gap:10px;">
+                <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
                     <h1 style="border:none; margin:0; padding:0; font-size:20px;">📦 资产画廊 (Asset Gallery)</h1>
-                    <span class="badge" id="assetsTotalCount">0 资产</span>
+                    <span class="badge" id="assetsTotalCount">0 启用 / 0 资产</span>
+                    <div class="filter-pills" id="assetFilterPills">
+                        <button type="button" class="filter-pill active" data-filter="all" onclick="setAssetFilter('all')">全部</button>
+                        <button type="button" class="filter-pill" data-filter="enabled" onclick="setAssetFilter('enabled')">✅ 使用中</button>
+                        <button type="button" class="filter-pill" data-filter="disabled" onclick="setAssetFilter('disabled')">🚫 不使用</button>
+                    </div>
                 </div>
-                <div>
+                <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                    <button id="batchDisableBtn" class="btn-disable-batch" style="display:none;" onclick="setSelectedAssetsEnabled(false)">🚫 设为不使用 (<span id="selectedDisableCount">0</span>)</button>
+                    <button id="batchEnableBtn" class="btn-enable-batch" style="display:none;" onclick="setSelectedAssetsEnabled(true)">✅ 恢复使用 (<span id="selectedEnableCount">0</span>)</button>
                     <button id="batchResliceBtn" class="btn-reslice" style="display:none; padding:6px 14px; font-size:12px;" onclick="resliceSelectedGrayscaleAssets()">🎨 升级真彩 (<span id="selectedGrayscaleCount">0</span>)</button>
                 </div>
             </div>
@@ -820,6 +1010,7 @@ HTML_CONTENT = """
                 </div>
                 <div style="display:flex; align-items:center; gap:10px;">
                     <button id="modalResliceAssetBtn" class="btn-reslice">🎨 重新切片(升级真彩)</button>
+                    <button id="modalToggleEnabledBtn" class="btn-toggle-disabled" style="padding:6px 12px; border-radius:6px; font-size:12px;">🚫 设为不使用</button>
                     <button id="modalRemoveAssetBtn" class="btn-danger" style="padding:6px 12px; border-radius:6px; font-size:12px;">移出资产</button>
                     <button class="modal-close-btn" onclick="closeLayerModal()">&times;</button>
                 </div>
@@ -860,6 +1051,8 @@ HTML_CONTENT = """
         let currentLeftTab = 'candidates';
         let confirmedCandidates = {};
         let selectedAssets = {};
+        let allAssets = [];
+        let currentAssetFilter = 'all';
         let activeModalVariant = null;
         let modalLayerFilters = [];
         let isReslicingInProgress = false;
@@ -926,6 +1119,16 @@ HTML_CONTENT = """
             if (batchBtn) {
                 batchBtn.style.display = grayscaleSelected.length > 0 ? 'inline-flex' : 'none';
             }
+
+            const disableBtn = document.getElementById('batchDisableBtn');
+            const enableBtn = document.getElementById('batchEnableBtn');
+            const disableCountEl = document.getElementById('selectedDisableCount');
+            const enableCountEl = document.getElementById('selectedEnableCount');
+            if (disableCountEl) disableCountEl.innerText = allSelected.length;
+            if (enableCountEl) enableCountEl.innerText = allSelected.length;
+            if (disableBtn) disableBtn.style.display = allSelected.length > 0 ? 'inline-flex' : 'none';
+            if (enableBtn) enableBtn.style.display = allSelected.length > 0 ? 'inline-flex' : 'none';
+
             document.querySelectorAll('.card[data-asset-key]').forEach(card => {
                 const key = card.getAttribute('data-asset-key');
                 if (selectedAssets[key]) {
@@ -933,6 +1136,51 @@ HTML_CONTENT = """
                 } else {
                     card.classList.remove('selected-asset');
                 }
+            });
+        }
+
+        function setAssetFilter(filter) {
+            currentAssetFilter = filter || 'all';
+            document.querySelectorAll('#assetFilterPills .filter-pill').forEach(btn => {
+                if (btn.getAttribute('data-filter') === currentAssetFilter) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            renderAssetsGallery();
+        }
+
+        function setSelectedAssetsEnabled(enabled) {
+            if (isReslicingInProgress) return;
+            const items = Object.values(selectedAssets).map(a => ({
+                plant_name: a.plant_name,
+                variant_id: a.variant_id
+            }));
+            if (items.length === 0) return;
+
+            const disableBtn = document.getElementById('batchDisableBtn');
+            const enableBtn = document.getElementById('batchEnableBtn');
+            if (disableBtn) disableBtn.disabled = true;
+            if (enableBtn) enableBtn.disabled = true;
+
+            fetch('/api/set_assets_enabled', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ items: items, enabled: !!enabled })
+            }).then(res => res.json()).then(res => {
+                if (res.status === 'success') {
+                    selectedAssets = {};
+                    updateSelectedAssetsUI();
+                    loadAssets();
+                } else {
+                    alert('❌ 批量更新状态失败: ' + (res.error || '未知错误'));
+                }
+            }).catch(err => {
+                alert('网络错误: ' + err);
+            }).finally(() => {
+                if (disableBtn) disableBtn.disabled = false;
+                if (enableBtn) enableBtn.disabled = false;
             });
         }
 
@@ -1116,91 +1364,119 @@ HTML_CONTENT = """
                 });
                 
             // Load Assets
-            fetch('/api/assets')
+            loadAssets();
+        }
+
+        function loadAssets() {
+            return fetch('/api/assets')
                 .then(res => res.json())
                 .then(assets => {
-                    document.getElementById('assetsTotalCount').innerText = `${assets.length} 资产`;
-                    
-                    const aGal = document.getElementById('assetsGallery');
-                    aGal.innerHTML = '';
-                    if (assets.length === 0) {
-                        aGal.innerHTML = '<div class="empty-state">资产库为空</div>';
-                        return;
-                    }
-                    
-                    assets.forEach(variant => {
-                        const key = `${variant.plant_name}__${variant.variant_id}`;
-                        const isSelected = !!selectedAssets[key];
-                        const card = document.createElement('div');
-                        card.className = 'card' + (isSelected ? ' selected-asset' : '');
-                        card.setAttribute('data-asset-key', key);
-                        card.style.cursor = 'pointer';
-                        
-                        let imagesHtml = '';
-                        let colorIndex = 0;
-                        const fallbackColors = ['layer-red', 'layer-green', 'layer-blue'];
-                        variant.layers.forEach(layer => {
-                            let cssClass = '';
-                            if (layer.includes('red') || layer.includes('flower') || layer.includes('cap') || layer.includes('leaves')) {
-                                cssClass = 'layer-red';
-                            } else if (layer.includes('green') || layer.includes('stem') || layer.includes('trunk')) {
-                                cssClass = 'layer-green';
-                            } else if (layer.includes('blue') || layer.includes('accent')) {
-                                cssClass = 'layer-blue';
-                            } else {
-                                cssClass = fallbackColors[colorIndex % 3];
-                                colorIndex++;
-                            }
-                            
-                            imagesHtml += `<img src="/assets/plants/${variant.path_prefix}/${layer}" class="${cssClass}" />`;
-                        });
-                        
-                        const hasAlias = variant.display_name && variant.display_name !== variant.plant_name;
-                        const titleHtml = hasAlias 
-                            ? `${variant.display_name} <span style="font-size:11px; color:#8b949e; font-weight:normal;">(${variant.plant_name})</span>` 
-                            : variant.plant_name;
-                        
-                        const variantDataStr = JSON.stringify(variant).replace(/"/g, '&quot;');
-                        const displayTitleStr = hasAlias ? `${variant.display_name} (${variant.plant_name})` : variant.plant_name;
-                        const isAnalyzing = (variant.status === 'ai_analyzing');
-                        let colorBadgeHtml = "";
-                        if (isAnalyzing) {
-                            colorBadgeHtml = `<span class="badge-grayscale card-status-badge" style="background:#f39c12; color:#fff;" title="植物生物学 AI 分析中...">🤖 AI分析中...</span>`;
-                        } else {
-                            colorBadgeHtml = variant.true_color 
-                                ? `<span class="badge-truecolor card-status-badge" title="真彩保留 RGB + 边缘消隐">✨ 真彩</span>` 
-                                : `<span class="badge-grayscale card-status-badge" title="旧版灰度提取">⚪ 灰度</span>`;
-                        }
-
-                        card.innerHTML = `
-                            ${colorBadgeHtml}
-                            <button class="card-close-btn" title="移出资产并召回原图" onclick="event.stopPropagation(); removeAsset('${variant.plant_name}', '${variant.variant_id}', '${displayTitleStr.replace(/'/g, "\\'")}')">&times;</button>
-                            <div class="img-container">${imagesHtml}</div>
-                            <div class="title" style="margin-top:2px;">${titleHtml}</div>
-                            <div class="subtitle" style="margin-top:2px;">Variant: ${variant.variant_id}</div>
-                            <div style="margin-top:6px;">
-                                <span class="layer-badge-btn" onclick="event.stopPropagation(); openLayerModal(${variantDataStr})">
-                                    🧩 ${variant.layers.length} 个独立图层 ↗
-                                </span>
-                            </div>
-                        `;
-                        
-                        card.onclick = () => {
-                            if (isAnalyzing) {
-                                openLayerModal(variant);
-                            } else {
-                                toggleSelectAssetCard(variant.plant_name, variant.variant_id, !!variant.true_color, displayTitleStr, card);
-                            }
-                        };
-                        aGal.appendChild(card);
-                    });
-                    updateSelectedAssetsUI();
-                    if (assets.some(v => v.status === 'ai_analyzing')) {
+                    allAssets = Array.isArray(assets) ? assets : [];
+                    const enabledCount = allAssets.filter(v => v.enabled !== false).length;
+                    document.getElementById('assetsTotalCount').innerText = `${enabledCount} 启用 / ${allAssets.length} 资产`;
+                    renderAssetsGallery();
+                    if (allAssets.some(v => v.status === 'ai_analyzing')) {
                         startAiStatusPolling();
                     }
                 }).catch(err => {
                     console.error("加载资产失败:", err);
                 });
+        }
+
+        function renderAssetsGallery() {
+            const aGal = document.getElementById('assetsGallery');
+            aGal.innerHTML = '';
+            if (allAssets.length === 0) {
+                aGal.innerHTML = '<div class="empty-state">资产库为空</div>';
+                updateSelectedAssetsUI();
+                return;
+            }
+
+            const filteredAssets = allAssets.filter(variant => {
+                const isDisabled = (variant.enabled === false);
+                if (currentAssetFilter === 'enabled') return !isDisabled;
+                if (currentAssetFilter === 'disabled') return isDisabled;
+                return true;
+            });
+
+            if (filteredAssets.length === 0) {
+                aGal.innerHTML = '<div class="empty-state">当前筛选条件下无资产</div>';
+                updateSelectedAssetsUI();
+                return;
+            }
+
+            filteredAssets.forEach(variant => {
+                const key = `${variant.plant_name}__${variant.variant_id}`;
+                const isSelected = !!selectedAssets[key];
+                const isDisabled = (variant.enabled === false);
+                const card = document.createElement('div');
+                card.className = 'card' + (isSelected ? ' selected-asset' : '') + (isDisabled ? ' card-disabled' : '');
+                card.setAttribute('data-asset-key', key);
+                card.style.cursor = 'pointer';
+
+                let imagesHtml = '';
+                let colorIndex = 0;
+                const fallbackColors = ['layer-red', 'layer-green', 'layer-blue'];
+                variant.layers.forEach(layer => {
+                    let cssClass = '';
+                    if (layer.includes('red') || layer.includes('flower') || layer.includes('cap') || layer.includes('leaves')) {
+                        cssClass = 'layer-red';
+                    } else if (layer.includes('green') || layer.includes('stem') || layer.includes('trunk')) {
+                        cssClass = 'layer-green';
+                    } else if (layer.includes('blue') || layer.includes('accent')) {
+                        cssClass = 'layer-blue';
+                    } else {
+                        cssClass = fallbackColors[colorIndex % 3];
+                        colorIndex++;
+                    }
+
+                    imagesHtml += `<img src="/assets/plants/${variant.path_prefix}/${layer}" class="${cssClass}" />`;
+                });
+
+                const hasAlias = variant.display_name && variant.display_name !== variant.plant_name;
+                const titleHtml = hasAlias
+                    ? `${variant.display_name} <span style="font-size:11px; color:#8b949e; font-weight:normal;">(${variant.plant_name})</span>`
+                    : variant.plant_name;
+
+                const variantDataStr = JSON.stringify(variant).replace(/"/g, '&quot;');
+                const displayTitleStr = hasAlias ? `${variant.display_name} (${variant.plant_name})` : variant.plant_name;
+                const isAnalyzing = (variant.status === 'ai_analyzing');
+                let colorBadgeHtml = "";
+                if (isAnalyzing) {
+                    colorBadgeHtml = `<span class="badge-grayscale card-status-badge" style="background:#f39c12; color:#fff;" title="植物生物学 AI 分析中...">🤖 AI分析中...</span>`;
+                } else {
+                    colorBadgeHtml = variant.true_color
+                        ? `<span class="badge-truecolor card-status-badge" title="真彩保留 RGB + 边缘消隐">✨ 真彩</span>`
+                        : `<span class="badge-grayscale card-status-badge" title="旧版灰度提取">⚪ 灰度</span>`;
+                }
+                const disabledBadgeHtml = isDisabled
+                    ? `<span class="badge-disabled card-disabled-badge" title="已在花园中停用，仅在造物工坊保留">🚫 不使用</span>`
+                    : '';
+
+                card.innerHTML = `
+                    ${colorBadgeHtml}
+                    ${disabledBadgeHtml}
+                    <button class="card-close-btn" title="移出资产并召回原图" onclick="event.stopPropagation(); removeAsset('${variant.plant_name}', '${variant.variant_id}', '${displayTitleStr.replace(/'/g, "\\'")}')">&times;</button>
+                    <div class="img-container">${imagesHtml}</div>
+                    <div class="title" style="margin-top:2px;">${titleHtml}</div>
+                    <div class="subtitle" style="margin-top:2px;">Variant: ${variant.variant_id}</div>
+                    <div style="margin-top:6px;">
+                        <span class="layer-badge-btn" onclick="event.stopPropagation(); openLayerModal(${variantDataStr})">
+                            🧩 ${variant.layers.length} 个独立图层 ↗
+                        </span>
+                    </div>
+                `;
+
+                card.onclick = () => {
+                    if (isAnalyzing) {
+                        openLayerModal(variant);
+                    } else {
+                        toggleSelectAssetCard(variant.plant_name, variant.variant_id, !!variant.true_color, displayTitleStr, card);
+                    }
+                };
+                aGal.appendChild(card);
+            });
+            updateSelectedAssetsUI();
         }
         
         function toggleConfirmCandidate(filename, card) {
@@ -1226,12 +1502,67 @@ HTML_CONTENT = """
             }).catch(err => alert('网络错误: ' + err));
         }
 
+        function updateModalToggleEnabledBtn(variant) {
+            const toggleBtn = document.getElementById('modalToggleEnabledBtn');
+            if (!toggleBtn || !variant) return;
+            const isDisabled = (variant.enabled === false);
+            if (isDisabled) {
+                toggleBtn.innerText = '✅ 恢复使用';
+                toggleBtn.classList.add('is-disabled-state');
+                toggleBtn.title = '恢复此植物资产到花园中';
+                toggleBtn.onclick = () => toggleSingleAssetEnabled(variant, true);
+            } else {
+                toggleBtn.innerText = '🚫 设为不使用';
+                toggleBtn.classList.remove('is-disabled-state');
+                toggleBtn.title = '在花园中隐藏此植物资产（保留源码目录）';
+                toggleBtn.onclick = () => toggleSingleAssetEnabled(variant, false);
+            }
+        }
+
+        function toggleSingleAssetEnabled(variant, nextEnabled) {
+            if (!variant) return;
+            const toggleBtn = document.getElementById('modalToggleEnabledBtn');
+            if (toggleBtn) toggleBtn.disabled = true;
+
+            fetch('/api/set_assets_enabled', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    items: [{ plant_name: variant.plant_name, variant_id: variant.variant_id }],
+                    enabled: !!nextEnabled
+                })
+            }).then(res => res.json()).then(res => {
+                if (res.status === 'success') {
+                    variant.enabled = !!nextEnabled;
+                    if (activeModalVariant &&
+                        activeModalVariant.plant_name === variant.plant_name &&
+                        activeModalVariant.variant_id === variant.variant_id) {
+                        activeModalVariant.enabled = !!nextEnabled;
+                        updateModalToggleEnabledBtn(activeModalVariant);
+                        const hasAlias = activeModalVariant.display_name && activeModalVariant.display_name !== activeModalVariant.plant_name;
+                        const titleText = hasAlias ? `${activeModalVariant.display_name} (${activeModalVariant.plant_name})` : activeModalVariant.plant_name;
+                        const colorTag = activeModalVariant.true_color ? '✨ 真彩高保真' : '⚪ 传统灰度';
+                        const disabledTag = activeModalVariant.enabled === false ? ' [🚫 不使用]' : '';
+                        document.getElementById('layerModalTitle').innerText = `🌱 ${titleText} · Variant: ${activeModalVariant.variant_id} [${colorTag}]${disabledTag}`;
+                    }
+                    loadAssets();
+                } else {
+                    alert('❌ 切换启用状态失败: ' + (res.error || '未知错误'));
+                }
+            }).catch(err => {
+                alert('网络错误: ' + err);
+            }).finally(() => {
+                if (toggleBtn) toggleBtn.disabled = false;
+            });
+        }
+
         function openLayerModal(variant) {
             activeModalVariant = variant;
             const hasAlias = variant.display_name && variant.display_name !== variant.plant_name;
             const titleText = hasAlias ? `${variant.display_name} (${variant.plant_name})` : variant.plant_name;
             const colorTag = variant.true_color ? '✨ 真彩高保真' : '⚪ 传统灰度';
-            document.getElementById('layerModalTitle').innerText = `🌱 ${titleText} · Variant: ${variant.variant_id} [${colorTag}]`;
+            const disabledTag = variant.enabled === false ? ' [🚫 不使用]' : '';
+            document.getElementById('layerModalTitle').innerText = `🌱 ${titleText} · Variant: ${variant.variant_id} [${colorTag}]${disabledTag}`;
             document.getElementById('layerModalSubtitle').innerText = `路径: assets/plants/${variant.path_prefix} | 共 ${variant.layers.length} 个独立分层切片`;
 
             const resliceBtn = document.getElementById('modalResliceAssetBtn');
@@ -1246,6 +1577,8 @@ HTML_CONTENT = """
                     resliceBtn.onclick = () => resliceSingleAsset(variant.plant_name, variant.variant_id, titleText);
                 }
             }
+
+            updateModalToggleEnabledBtn(variant);
 
             const removeBtn = document.getElementById('modalRemoveAssetBtn');
             if (removeBtn) {
@@ -1825,99 +2158,19 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
                         item_path = os.path.join(plant_path, item)
                         if os.path.isdir(item_path):
                             has_subdirs = True
-                            layers = [f for f in os.listdir(item_path) if f.endswith('.png')]
-                            if layers:
-                                display_name = plant_name
-                                true_color = False
-                                source_image = None
-                                status = 'ready'
-                                ai_analysis = None
-                                root_width = None
-                                root_ratio = None
-                                ground_ellipse = None
-                                width = None
-                                height = None
-                                meta_file = os.path.join(item_path, 'metadata.json')
-                                if os.path.exists(meta_file):
-                                    try:
-                                        with open(meta_file, 'r', encoding='utf-8') as mf:
-                                            mdata = json.load(mf)
-                                            display_name = mdata.get('display_name') or mdata.get('name') or plant_name
-                                            true_color = bool(mdata.get('true_color', False))
-                                            source_image = mdata.get('source_image')
-                                            status = mdata.get('status', 'ready')
-                                            ai_analysis = mdata.get('ai_analysis')
-                                            root_width = mdata.get('root_width')
-                                            root_ratio = mdata.get('root_ratio')
-                                            ground_ellipse = mdata.get('ground_ellipse')
-                                            width = mdata.get('width')
-                                            height = mdata.get('height')
-                                    except Exception:
-                                        pass
-                                variants.append({
-                                    'plant_name': plant_name,
-                                    'display_name': display_name,
-                                    'variant_id': item,
-                                    'layers': layers,
-                                    'true_color': true_color,
-                                    'source_image': source_image,
-                                    'status': status,
-                                    'ai_analysis': ai_analysis,
-                                    'root_width': root_width,
-                                    'root_ratio': root_ratio,
-                                    'ground_ellipse': ground_ellipse,
-                                    'width': width,
-                                    'height': height,
-                                    'path_prefix': f'{plant_name}/{item}'
-                                })
-                    
+                            entry = _load_asset_variant_entry(
+                                plant_name, item, item_path, f'{plant_name}/{item}'
+                            )
+                            if entry is not None:
+                                variants.append(entry)
+
                     # If no subdirs, treat the plant_path itself as the container (Legacy compatibility)
                     if not has_subdirs:
-                        layers = [f for f in os.listdir(plant_path) if f.endswith('.png')]
-                        if layers:
-                            display_name = plant_name
-                            true_color = False
-                            source_image = None
-                            status = 'ready'
-                            ai_analysis = None
-                            root_width = None
-                            root_ratio = None
-                            ground_ellipse = None
-                            width = None
-                            height = None
-                            meta_file = os.path.join(plant_path, 'metadata.json')
-                            if os.path.exists(meta_file):
-                                try:
-                                    with open(meta_file, 'r', encoding='utf-8') as mf:
-                                        mdata = json.load(mf)
-                                        display_name = mdata.get('display_name') or mdata.get('name') or plant_name
-                                        true_color = bool(mdata.get('true_color', False))
-                                        source_image = mdata.get('source_image')
-                                        status = mdata.get('status', 'ready')
-                                        ai_analysis = mdata.get('ai_analysis')
-                                        root_width = mdata.get('root_width')
-                                        root_ratio = mdata.get('root_ratio')
-                                        ground_ellipse = mdata.get('ground_ellipse')
-                                        width = mdata.get('width')
-                                        height = mdata.get('height')
-                                except Exception:
-                                    pass
-                            variants.append({
-                                'plant_name': plant_name,
-                                'display_name': display_name,
-                                'variant_id': 'default',
-                                'layers': layers,
-                                'true_color': true_color,
-                                'source_image': source_image,
-                                'status': status,
-                                'ai_analysis': ai_analysis,
-                                'root_width': root_width,
-                                'root_ratio': root_ratio,
-                                'ground_ellipse': ground_ellipse,
-                                'width': width,
-                                'height': height,
-                                'path_prefix': plant_name
-                            })
+                        entry = _load_asset_variant_entry(
+                            plant_name, 'default', plant_path, plant_name
+                        )
+                        if entry is not None:
+                            variants.append(entry)
             
             # Sort by plant name, then variant_id descending
             variants.sort(key=lambda x: (x['plant_name'], x['variant_id']), reverse=True)
@@ -2089,6 +2342,93 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
                 self.end_headers()
                 self.wfile.write(json.dumps({"status": "error", "error": str(e)}).encode('utf-8'))
 
+
+        elif self.path == '/api/set_assets_enabled':
+            content_length = int(self.headers.get('Content-Length', 0))
+            post_data = self.rfile.read(content_length)
+
+            try:
+                data = json.loads(post_data.decode('utf-8'))
+                if not isinstance(data, dict) or not isinstance(data.get('items'), list) or 'enabled' not in data:
+                    self.send_response(400)
+                    self.send_header('Content-type', 'application/json')
+                    self.end_headers()
+                    self.wfile.write(json.dumps({"status": "error", "error": "Invalid request payload"}).encode('utf-8'))
+                    return
+
+                enabled = bool(data['enabled'])
+                plants_real_root = os.path.realpath(PLANTS_DIR)
+                validated_targets = []
+
+                for item in data['items']:
+                    if not isinstance(item, dict):
+                        self.send_response(400)
+                        self.send_header('Content-type', 'application/json')
+                        self.end_headers()
+                        self.wfile.write(json.dumps({"status": "error", "error": "Invalid item entry"}).encode('utf-8'))
+                        return
+
+                    plant_name = item.get('plant_name')
+                    variant_id = item.get('variant_id')
+                    if not _is_safe_path_segment(plant_name) or not _is_safe_path_segment(variant_id):
+                        self.send_response(400)
+                        self.send_header('Content-type', 'application/json')
+                        self.end_headers()
+                        self.wfile.write(json.dumps({"status": "error", "error": "Unsafe plant_name or variant_id"}).encode('utf-8'))
+                        return
+
+                    if variant_id == 'default':
+                        variant_dir = os.path.join(PLANTS_DIR, plant_name)
+                    else:
+                        variant_dir = os.path.join(PLANTS_DIR, plant_name, variant_id)
+
+                    real_variant = os.path.realpath(variant_dir)
+                    if real_variant != plants_real_root and not real_variant.startswith(plants_real_root + os.sep):
+                        self.send_response(400)
+                        self.send_header('Content-type', 'application/json')
+                        self.end_headers()
+                        self.wfile.write(json.dumps({"status": "error", "error": "Path escapes plants directory"}).encode('utf-8'))
+                        return
+
+                    validated_targets.append((plant_name, variant_id, variant_dir))
+
+                updated_count = 0
+                for plant_name, variant_id, variant_dir in validated_targets:
+                    if not os.path.isdir(variant_dir):
+                        continue
+                    meta_file = os.path.join(variant_dir, 'metadata.json')
+                    mdata = {}
+                    if os.path.exists(meta_file):
+                        try:
+                            with open(meta_file, 'r', encoding='utf-8') as mf:
+                                loaded = json.load(mf)
+                                if isinstance(loaded, dict):
+                                    mdata = loaded
+                        except Exception:
+                            mdata = {}
+                    if not mdata:
+                        mdata = {'name': plant_name, 'variant_id': variant_id}
+                    mdata['enabled'] = enabled
+                    with open(meta_file, 'w', encoding='utf-8') as mf:
+                        json.dump(mdata, mf, ensure_ascii=False, indent=4)
+                    updated_count += 1
+
+                refresh_plant_manifest()
+
+                self.send_response(200)
+                self.send_header('Content-type', 'application/json')
+                self.end_headers()
+                self.wfile.write(json.dumps({
+                    "status": "success",
+                    "updated": updated_count,
+                    "enabled": enabled
+                }).encode('utf-8'))
+            except Exception as e:
+                traceback.print_exc()
+                self.send_response(500)
+                self.send_header('Content-type', 'application/json')
+                self.end_headers()
+                self.wfile.write(json.dumps({"status": "error", "error": str(e)}).encode('utf-8'))
 
         elif self.path == '/api/remove_asset':
             content_length = int(self.headers['Content-Length'])
