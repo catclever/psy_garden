@@ -11,3 +11,5 @@ dev/
 call_mcp.py
 tools/trash/
 tools/ai_config.json
+godot/.godot/
+godot/*.import

@@ -1,0 +1,14 @@
+{
+    "name": "plant_0067",
+    "display_name": "珊瑚櫻",
+    "variant_id": "01",
+    "width": 242,
+    "height": 250,
+    "layers": [
+        "layer-red",
+        "layer-green"
+    ],
+    "source_image": "candidate_plant_0067_珊瑚櫻.jpg",
+    "true_color": true,
+    "created_at": 1792466852
+}
