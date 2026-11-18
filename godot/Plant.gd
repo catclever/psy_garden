@@ -13,6 +13,11 @@ var meta_root_width: float = -1.0
 var fp_w: float = 24.0
 var fp_h: float = 14.0
 var perspective_scale: float = 1.0
+var ground_pitch_ratio: float = 0.55
+var courtyard_pos: Vector2 = Vector2.ZERO
+var has_courtyard_pos: bool = false
+var target_xray_alpha: float = 1.0
+var current_xray_alpha: float = 1.0
 var _cached_base_scale: float = 1.0
 var _cached_raw_w: float = 100.0
 var _cached_raw_h: float = 100.0
@@ -31,6 +36,7 @@ var skip_auto_load: bool = false
 @onready var sprite_green = $GreenSprite
 @onready var sprite_blue = $BlueSprite
 
+@onready var ground_shadow_plane = $GroundShadowPlane
 @onready var contact_shadow = $GroundShadowPlane/ContactShadow
 @onready var sun_shadow = $GroundShadowPlane/SunShadowPivot/SunShadowSprite
 @onready var lantern_shadow = $GroundShadowPlane/LanternShadowPivot/LanternShadowSprite
@@ -42,13 +48,21 @@ var skip_auto_load: bool = false
 @onready var incense_shadow_pivot = $GroundShadowPlane/IncenseShadowPivot
 
 func _ready():
+	if not ground_shadow_plane:
+		ground_shadow_plane = get_node_or_null("GroundShadowPlane")
+	if ground_shadow_plane:
+		ground_shadow_plane.scale = Vector2(1.0, ground_pitch_ratio)
 	if not skip_auto_load and plant_id != "":
 		load_plant(plant_id)
+	if not ground_shadow_plane:
+		ground_shadow_plane = get_node_or_null("GroundShadowPlane")
+	if ground_shadow_plane:
+		ground_shadow_plane.scale = Vector2(1.0, ground_pitch_ratio)
 
 func _draw():
 	if not show_footprint_ring:
 		return
-	draw_set_transform(Vector2.ZERO, 0.0, Vector2(1.0, 0.55))
+	draw_set_transform(Vector2.ZERO, 0.0, Vector2(1.0, ground_pitch_ratio))
 	draw_arc(Vector2.ZERO, fp_w * 0.5, 0.0, TAU, 36, Color(0.55, 0.92, 0.65, 0.52), 1.5, true)
 	draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 
@@ -57,6 +71,24 @@ func set_perspective_scale(p_scale: float):
 	if _textures_ready:
 		_apply_effective_scale()
 
+func set_ground_pitch(ratio: float):
+	ground_pitch_ratio = clampf(ratio, 0.45, 0.92)
+	if not ground_shadow_plane:
+		ground_shadow_plane = get_node_or_null("GroundShadowPlane")
+	if ground_shadow_plane:
+		ground_shadow_plane.scale = Vector2(1.0, ground_pitch_ratio)
+	if _textures_ready:
+		_apply_effective_scale()
+	else:
+		fp_h = max(6.0, fp_w * ground_pitch_ratio)
+		queue_redraw()
+
+func set_xray_alpha(alpha_val: float):
+	current_xray_alpha = clampf(alpha_val, 0.2, 1.0)
+	for spr in [sprite_red, sprite_green, sprite_blue]:
+		if spr and spr.material:
+			(spr.material as ShaderMaterial).set_shader_parameter("xray_alpha", current_xray_alpha)
+
 func _apply_effective_scale():
 	var s: float = _cached_base_scale * clampf(perspective_scale, 0.35, 2.5)
 
@@ -64,7 +96,12 @@ func _apply_effective_scale():
 	visual_height = _cached_raw_h * s
 
 	fp_w = max(10.0, _cached_base_rw * s)
-	fp_h = max(6.0, fp_w * 0.55)
+	fp_h = max(6.0, fp_w * ground_pitch_ratio)
+
+	if not ground_shadow_plane:
+		ground_shadow_plane = get_node_or_null("GroundShadowPlane")
+	if ground_shadow_plane:
+		ground_shadow_plane.scale = Vector2(1.0, ground_pitch_ratio)
 
 	if contact_shadow:
 		contact_shadow.position = Vector2.ZERO
@@ -124,6 +161,7 @@ func setup_with_textures(id: String, tex_red: Texture2D, tex_green: Texture2D, t
 	if not sprite_red: sprite_red = get_node_or_null("RedSprite")
 	if not sprite_green: sprite_green = get_node_or_null("GreenSprite")
 	if not sprite_blue: sprite_blue = get_node_or_null("BlueSprite")
+	if not ground_shadow_plane: ground_shadow_plane = get_node_or_null("GroundShadowPlane")
 	if not contact_shadow: contact_shadow = get_node_or_null("GroundShadowPlane/ContactShadow")
 	if not sun_shadow: sun_shadow = get_node_or_null("GroundShadowPlane/SunShadowPivot/SunShadowSprite")
 	if not lantern_shadow: lantern_shadow = get_node_or_null("GroundShadowPlane/LanternShadowPivot/LanternShadowSprite")
@@ -250,6 +288,8 @@ func setup_with_textures(id: String, tex_red: Texture2D, tex_green: Texture2D, t
 		else:
 			spr.visible = false
 			spr.texture = null
+
+	set_xray_alpha(current_xray_alpha)
 
 	# Configure shadows
 	for shadow in [sun_shadow, lantern_shadow, incense_shadow]:

@@ -34,11 +34,27 @@ const DEPTH_Y_REF: float = 490.0
 const DEPTH_HALF_SPAN: float = 350.0
 const BASE_PERSPECTIVE_SLOPE: float = 0.25
 
+const COURTYARD_CENTER: Vector2 = Vector2(720.0, 450.0)
+const DEFAULT_PITCH_RATIO: float = 0.76
+
 var sun_angle_deg: float = 45.0
 var sun_length: float = 1.0
 var lantern_intensity: float = 1.0
 var lantern_radius: float = 520.0
 var perspective_strength: float = 1.0
+
+var camera_pitch_ratio: float = DEFAULT_PITCH_RATIO
+var orbit_angle_deg: float = 0.0
+var target_orbit_deg: float = 0.0
+var xray_enabled: bool = true
+var _right_dragging: bool = false
+var _syncing_orbit_ui: bool = false
+var ground_canvas: Node2D = null
+var pitch_label: Label = null
+var pitch_slider: HSlider = null
+var orbit_label: Label = null
+var orbit_slider: HSlider = null
+var btn_toggle_xray: Button = null
 
 var color_red: Color = Color.WHITE
 var color_green: Color = Color.WHITE
@@ -51,31 +67,194 @@ var perspective_slider: HSlider = null
 
 func _ready():
 	mouse_lantern.global_position = Vector2(680, 420)
+	ground_canvas = Node2D.new()
+	ground_canvas.name = "ZenGround"
+	ground_canvas.z_index = -80
+	ground_canvas.z_as_relative = false
+	add_child(ground_canvas)
+	ground_canvas.draw.connect(_draw_zen_ground)
 	_ready_ui()
 	_init_http_pool()
 	generate_demo_layout()
 	call_deferred("_load_manifest")
+	ground_canvas.queue_redraw()
 
 func get_depth_scale(y_pos: float, strength: float = -1.0) -> float:
 	var eff_strength: float = perspective_strength if strength < 0.0 else clampf(strength, 0.0, 1.5)
 	var norm_y: float = clampf((y_pos - DEPTH_Y_REF) / DEPTH_HALF_SPAN, -1.35, 1.35)
 	return clampf(1.0 + norm_y * BASE_PERSPECTIVE_SLOPE * eff_strength, 0.45, 1.85)
 
-func _refresh_all_plants_perspective():
+func project_courtyard_point(courtyard_pt: Vector2, orbit_deg: float = NAN, pitch: float = -1.0, p_strength: float = -1.0) -> Dictionary:
+	var eff_deg: float = orbit_angle_deg if is_nan(orbit_deg) else orbit_deg
+	var eff_pitch: float = camera_pitch_ratio if pitch < 0.0 else clampf(pitch, 0.45, 0.92)
+	var eff_persp: float = perspective_strength if p_strength < 0.0 else clampf(p_strength, 0.0, 1.5)
+	var rad: float = deg_to_rad(eff_deg)
+	var c: float = cos(rad)
+	var sn: float = sin(rad)
+	var rx: float = courtyard_pt.x * c - courtyard_pt.y * sn
+	var ry: float = courtyard_pt.x * sn + courtyard_pt.y * c
+	var sy: float = COURTYARD_CENTER.y + ry * eff_pitch
+	var d_scale: float = get_depth_scale(sy, eff_persp)
+	var sx: float = COURTYARD_CENTER.x + rx * d_scale
+	return {"screen_pos": Vector2(sx, sy), "depth_scale": d_scale, "rx": rx, "ry": ry}
+
+func screen_to_courtyard(screen_pos: Vector2) -> Vector2:
+	var d_scale: float = max(get_depth_scale(screen_pos.y), 0.25)
+	var eff_pitch: float = max(camera_pitch_ratio, 0.25)
+	var rx: float = (screen_pos.x - COURTYARD_CENTER.x) / d_scale
+	var ry: float = (screen_pos.y - COURTYARD_CENTER.y) / eff_pitch
+	var rad: float = -deg_to_rad(orbit_angle_deg)
+	var c: float = cos(rad)
+	var sn: float = sin(rad)
+	return Vector2(rx * c - ry * sn, rx * sn + ry * c)
+
+func _wrap_deg_180(deg: float) -> float:
+	return fposmod(deg + 180.0, 360.0) - 180.0
+
+func _set_orbit_target(deg: float, snap_immediate: bool = false):
+	target_orbit_deg = _wrap_deg_180(deg)
+	if snap_immediate:
+		orbit_angle_deg = target_orbit_deg
+		_refresh_courtyard_projection()
+	if orbit_label:
+		orbit_label.text = "Courtyard Angle: %d deg [Q/E]" % int(round(orbit_angle_deg))
+	if orbit_slider and not _syncing_orbit_ui:
+		_syncing_orbit_ui = true
+		orbit_slider.value = orbit_angle_deg
+		_syncing_orbit_ui = false
+
+func _refresh_courtyard_projection():
 	for p in active_plants:
-		if is_instance_valid(p) and p.has_method("set_perspective_scale"):
-			p.set_perspective_scale(get_depth_scale(p.global_position.y))
+		if is_instance_valid(p):
+			if not p.has_courtyard_pos:
+				p.courtyard_pos = screen_to_courtyard(p.global_position)
+				p.has_courtyard_pos = true
+			var proj: Dictionary = project_courtyard_point(p.courtyard_pos)
+			p.global_position = proj["screen_pos"]
+			if p.has_method("set_ground_pitch"):
+				p.set_ground_pitch(camera_pitch_ratio)
+			if p.has_method("set_perspective_scale"):
+				p.set_perspective_scale(proj["depth_scale"])
+	if ground_canvas:
+		ground_canvas.queue_redraw()
+
+func _refresh_all_plants_perspective():
+	_refresh_courtyard_projection()
+
+func _draw_zen_ground():
+	if not ground_canvas:
+		return
+	var bg_col: Color = bg.color if is_instance_valid(bg) else Color("#9e8f63")
+	var lum: float = bg_col.get_luminance()
+	var is_dark: bool = lum < 0.25
+	var ring_col: Color = Color(0.78, 0.84, 0.90, 0.14) if is_dark else Color(0.24, 0.20, 0.14, 0.15)
+	var grid_col: Color = Color(0.72, 0.78, 0.85, 0.09) if is_dark else Color(0.28, 0.23, 0.16, 0.10)
+	var border_col: Color = Color(0.76, 0.80, 0.86, 0.22) if is_dark else Color(0.24, 0.19, 0.13, 0.26)
+	var axis_col: Color = Color(0.82, 0.86, 0.92, 0.16) if is_dark else Color(0.25, 0.21, 0.14, 0.18)
+
+	# Karesansui raked-sand concentric rings
+	var ring_radii: Array = [85.0, 135.0, 190.0, 250.0, 320.0, 395.0]
+	var segs: int = 48
+	for r in ring_radii:
+		var pts := PackedVector2Array()
+		for i in range(segs + 1):
+			var ang: float = (float(i) / float(segs)) * TAU
+			var pt: Vector2 = Vector2(cos(ang) * float(r), sin(ang) * float(r))
+			pts.append(project_courtyard_point(pt)["screen_pos"])
+		ground_canvas.draw_polyline(pts, ring_col, 1.25, true)
+
+	# Perspective courtyard inner grid lines step 130 (subdivided 16 segments per line)
+	var half_w: float = 520.0
+	var half_h: float = 360.0
+	var grid_segs: int = 16
+	for gx in [-390.0, -260.0, -130.0, 0.0, 130.0, 260.0, 390.0]:
+		var pts := PackedVector2Array()
+		for i in range(grid_segs + 1):
+			var t: float = float(i) / float(grid_segs)
+			var gy: float = lerpf(-half_h, half_h, t)
+			pts.append(project_courtyard_point(Vector2(gx, gy))["screen_pos"])
+		ground_canvas.draw_polyline(pts, grid_col, 1.0, true)
+
+	for gy in [-260.0, -130.0, 0.0, 130.0, 260.0]:
+		var pts := PackedVector2Array()
+		for i in range(grid_segs + 1):
+			var t: float = float(i) / float(grid_segs)
+			var gx: float = lerpf(-half_w, half_w, t)
+			pts.append(project_courtyard_point(Vector2(gx, gy))["screen_pos"])
+		ground_canvas.draw_polyline(pts, grid_col, 1.0, true)
+
+	# Perspective courtyard timber/stone outer border [-520..520, -360..360]
+	var border_corners: Array = [
+		Vector2(-half_w, -half_h),
+		Vector2(half_w, -half_h),
+		Vector2(half_w, half_h),
+		Vector2(-half_w, half_h)
+	]
+	var border_pts := PackedVector2Array()
+	for c_idx in range(4):
+		var p0: Vector2 = border_corners[c_idx]
+		var p1: Vector2 = border_corners[(c_idx + 1) % 4]
+		for i in range(grid_segs):
+			var t: float = float(i) / float(grid_segs)
+			border_pts.append(project_courtyard_point(p0.lerp(p1, t))["screen_pos"])
+	border_pts.append(project_courtyard_point(border_corners[0])["screen_pos"])
+	ground_canvas.draw_polyline(border_pts, border_col, 2.0, true)
+
+	# Cardinal markers along X/Y axes
+	var marker_dist_x: float = 475.0
+	var marker_dist_y: float = 325.0
+	var marker_len: float = 22.0
+	var cardinal_segs: Array = [
+		[Vector2(marker_dist_x - marker_len, 0.0), Vector2(marker_dist_x + marker_len, 0.0)],
+		[Vector2(-marker_dist_x - marker_len, 0.0), Vector2(-marker_dist_x + marker_len, 0.0)],
+		[Vector2(0.0, marker_dist_y - marker_len), Vector2(0.0, marker_dist_y + marker_len)],
+		[Vector2(0.0, -marker_dist_y - marker_len), Vector2(0.0, -marker_dist_y + marker_len)]
+	]
+	for seg in cardinal_segs:
+		var a: Vector2 = project_courtyard_point(seg[0])["screen_pos"]
+		var b: Vector2 = project_courtyard_point(seg[1])["screen_pos"]
+		ground_canvas.draw_line(a, b, axis_col, 2.0, true)
+		ground_canvas.draw_circle(b, 3.0, axis_col)
+
+func _unhandled_input(event):
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_RIGHT:
+			_right_dragging = event.pressed
+	elif event is InputEventMouseMotion and _right_dragging:
+		target_orbit_deg = _wrap_deg_180(target_orbit_deg + event.relative.x * 0.35)
 
 func _process(delta):
+	var key_dir: float = 0.0
+	if Input.is_physical_key_pressed(KEY_Q):
+		key_dir -= 1.0
+	if Input.is_physical_key_pressed(KEY_E):
+		key_dir += 1.0
+	if key_dir != 0.0:
+		target_orbit_deg = _wrap_deg_180(target_orbit_deg + key_dir * 75.0 * delta)
+
+	var orbit_diff: float = _wrap_deg_180(target_orbit_deg - orbit_angle_deg)
+	if abs(orbit_diff) > 0.01:
+		var step_weight: float = min(1.0, 10.0 * delta)
+		orbit_angle_deg = _wrap_deg_180(orbit_angle_deg + orbit_diff * step_weight)
+		if abs(_wrap_deg_180(target_orbit_deg - orbit_angle_deg)) <= 0.02:
+			orbit_angle_deg = _wrap_deg_180(target_orbit_deg)
+		if orbit_label:
+			orbit_label.text = "Courtyard Angle: %d deg [Q/E]" % int(round(orbit_angle_deg))
+		if orbit_slider:
+			_syncing_orbit_ui = true
+			orbit_slider.value = orbit_angle_deg
+			_syncing_orbit_ui = false
+		_refresh_courtyard_projection()
+
 	var raw_mouse = get_global_mouse_position()
 	var target_mouse = raw_mouse if raw_mouse.length_squared() > 4.0 else Vector2(680, 420)
 	mouse_lantern.global_position = mouse_lantern.global_position.lerp(target_mouse, 25.0 * delta)
 	var mouse_pos = mouse_lantern.global_position
 	mouse_lantern_light.energy = lantern_intensity * 0.85
 
-	var sun_rad = deg_to_rad(sun_angle_deg)
+	var sun_rad = deg_to_rad(sun_angle_deg + orbit_angle_deg)
 	var sun_dir = Vector2(cos(sun_rad), sin(sun_rad))
-	var shadow_scale_y = 0.55
+	var shadow_scale_y: float = camera_pitch_ratio
 
 	# 1. Update plant shadows via synthesized single vector
 	var plant_shadow_info: Array = []
@@ -167,6 +346,25 @@ func _process(delta):
 				mat.set_shader_parameter("occlusion_height", cover_height)
 				mat.set_shader_parameter("occlusion_darken", cover_strength)
 
+	# 3. Dynamic X-Ray pass for tall front plants overlapping rear plants
+	var xray_weight: float = min(1.0, 10.0 * delta)
+	for f in active_plants:
+		if not is_instance_valid(f):
+			continue
+		f.target_xray_alpha = 1.0
+		if xray_enabled and f.visual_height > 52.0:
+			for r in active_plants:
+				if r == f or not is_instance_valid(r):
+					continue
+				if f.global_position.y > r.global_position.y + 8.0:
+					if (f.global_position.y - f.visual_height * 0.92) < (r.global_position.y - r.visual_height * 0.18):
+						if abs(f.global_position.x - r.global_position.x) < (f.visual_width * 0.36 + r.visual_width * 0.18):
+							var fade_target: float = 0.34 if r.global_position.distance_to(mouse_pos) < 160.0 else 0.48
+							f.target_xray_alpha = min(f.target_xray_alpha, fade_target)
+		f.current_xray_alpha = lerpf(f.current_xray_alpha, f.target_xray_alpha, xray_weight)
+		if f.has_method("set_xray_alpha"):
+			f.set_xray_alpha(f.current_xray_alpha)
+
 func clear_garden():
 	generation_id += 1
 	for p in active_plants:
@@ -174,18 +372,25 @@ func clear_garden():
 			p.queue_free()
 	active_plants.clear()
 	placed_footprints.clear()
+	if ground_canvas:
+		ground_canvas.queue_redraw()
 
 func add_plant(id: String, pos: Vector2):
 	var p = plant_scene.instantiate()
 	p.plant_id = id
 	p.show_footprint_ring = footprints_visible
 	p.global_position = pos
+	p.ground_pitch_ratio = camera_pitch_ratio
+	p.courtyard_pos = screen_to_courtyard(pos)
+	p.has_courtyard_pos = true
 	p.perspective_scale = get_depth_scale(pos.y)
 	y_sort.add_child(p)
+	p.set_ground_pitch(camera_pitch_ratio)
 	active_plants.append(p)
 	placed_footprints.append({"pos": pos, "fp_w": p.fp_w, "fp_h": p.fp_h})
 
 	update_plant_colors(p)
+	return p
 
 func update_plant_colors(p=null):
 	var targets = [p] if p else active_plants
@@ -200,7 +405,7 @@ func update_plant_colors(p=null):
 
 func can_place_plant(pos: Vector2, fp_w: float, fp_h: float) -> bool:
 	# Avoid HUD top-left panel
-	if pos.x < 290.0 and pos.y < 640.0:
+	if pos.x < 310.0 and pos.y < 790.0:
 		return false
 	# Avoid IncenseBurner within 65px of (720, 450)
 	var incense_pos: Vector2 = incense_burner.global_position if is_instance_valid(incense_burner) else Vector2(720.0, 450.0)
@@ -231,7 +436,7 @@ func _sample_record_metrics(rec: Dictionary) -> Dictionary:
 	var scale_factor: float = target_h / raw_h
 	var root_w: float = float(rec.get("root_width", 24))
 	var fp_w: float = max(10.0, root_w * scale_factor)
-	var fp_h: float = max(6.0, fp_w * 0.55)
+	var fp_h: float = max(6.0, fp_w * camera_pitch_ratio)
 	return {
 		"target_h": target_h,
 		"scale_factor": scale_factor,
@@ -246,14 +451,16 @@ func generate_random_garden(count: int = 36):
 		var fallback_count: int = min(count, 16)
 		for i in range(fallback_count):
 			var id = available_plants[randi() % available_plants.size()]
-			for _attempt in range(30):
+			for _attempt in range(80):
 				var pos = Vector2(randf_range(130.0, 1330.0), randf_range(140.0, 840.0))
 				var depth_s: float = get_depth_scale(pos.y)
 				var eff_fp_w: float = max(10.0, 24.0 * depth_s)
-				var eff_fp_h: float = max(6.0, 14.0 * depth_s)
+				var eff_fp_h: float = max(6.0, 24.0 * depth_s * camera_pitch_ratio)
 				if can_place_plant(pos, eff_fp_w, eff_fp_h):
 					add_plant(id, pos)
 					break
+		if ground_canvas:
+			ground_canvas.queue_redraw()
 		return
 
 	var buckets: Dictionary = {
@@ -274,6 +481,8 @@ func generate_random_garden(count: int = 36):
 		if not buckets[key].is_empty():
 			bucket_order.append(key)
 	if bucket_order.is_empty():
+		if ground_canvas:
+			ground_canvas.queue_redraw()
 		return
 
 	for i in range(count):
@@ -282,19 +491,20 @@ func generate_random_garden(count: int = 36):
 		var rec: Dictionary = pool[randi() % pool.size()]
 		var metrics: Dictionary = _sample_record_metrics(rec)
 		var fp_w: float = metrics["fp_w"]
-		var fp_h: float = metrics["fp_h"]
 		var target_h: float = metrics["target_h"]
 		var root_w: float = metrics["root_w"]
 
-		for _attempt in range(40):
+		for _attempt in range(80):
 			var pos = Vector2(randf_range(130.0, 1330.0), randf_range(140.0, 840.0))
 			var depth_s: float = get_depth_scale(pos.y)
 			var eff_fp_w: float = max(10.0, fp_w * depth_s)
-			var eff_fp_h: float = max(6.0, eff_fp_w * 0.55)
+			var eff_fp_h: float = max(6.0, eff_fp_w * camera_pitch_ratio)
 			if can_place_plant(pos, eff_fp_w, eff_fp_h):
 				spawn_manifest_plant(rec, pos, target_h, root_w, eff_fp_w, eff_fp_h, depth_s)
 				placed_footprints.append({"pos": pos, "fp_w": eff_fp_w, "fp_h": eff_fp_h})
 				break
+	if ground_canvas:
+		ground_canvas.queue_redraw()
 
 func spawn_manifest_plant(rec: Dictionary, pos: Vector2, target_h: float, root_w: float, fp_w: float, fp_h: float, depth_scale: float = 1.0):
 	var p = plant_scene.instantiate()
@@ -307,9 +517,13 @@ func spawn_manifest_plant(rec: Dictionary, pos: Vector2, target_h: float, root_w
 	p.fp_h = fp_h
 	p.show_footprint_ring = footprints_visible
 	p.global_position = pos
+	p.ground_pitch_ratio = camera_pitch_ratio
+	p.courtyard_pos = screen_to_courtyard(pos)
+	p.has_courtyard_pos = true
 	p.perspective_scale = depth_scale
 	p.set_meta("gen_id", generation_id)
 	y_sort.add_child(p)
+	p.set_ground_pitch(camera_pitch_ratio)
 	active_plants.append(p)
 
 	var path_prefix: String = str(rec.get("path_prefix", ""))
@@ -353,6 +567,7 @@ func spawn_manifest_plant(rec: Dictionary, pos: Vector2, target_h: float, root_w
 							root_w,
 							anchor_uv
 						)
+						p.set_ground_pitch(camera_pitch_ratio)
 						p.show_footprint_ring = footprints_visible
 						update_plant_colors(p)
 		)
@@ -510,6 +725,8 @@ func generate_demo_layout():
 
 	add_plant("plant_0022", Vector2(860, 270))
 	add_plant("plant_0018", Vector2(1140, 670))
+	if ground_canvas:
+		ground_canvas.queue_redraw()
 
 # UI SIGNAL HANDLERS
 @onready var bg = $Background
@@ -534,6 +751,11 @@ func _ready_ui():
 
 	var vbox = $HUD/MarginContainer/VBoxContainer
 
+	for sp_name in ["Spacer", "Spacer2", "Spacer3"]:
+		var sp = vbox.get_node_or_null(sp_name)
+		if sp:
+			sp.custom_minimum_size.y = 6
+
 	perspective_label = Label.new()
 	perspective_label.name = "PerspectiveLabel"
 	perspective_label.text = "Perspective Depth (%.2fx)" % perspective_strength
@@ -557,9 +779,83 @@ func _ready_ui():
 		_refresh_all_plants_perspective()
 	)
 
+	pitch_label = Label.new()
+	pitch_label.name = "PitchLabel"
+	pitch_label.text = "Camera Pitch: %d deg (%.2f)" % [int(round(rad_to_deg(asin(camera_pitch_ratio)))), camera_pitch_ratio]
+	vbox.add_child(pitch_label)
+
+	pitch_slider = HSlider.new()
+	pitch_slider.name = "PitchSlider"
+	pitch_slider.min_value = 0.50
+	pitch_slider.max_value = 0.88
+	pitch_slider.step = 0.02
+	pitch_slider.value = camera_pitch_ratio
+	vbox.add_child(pitch_slider)
+
+	pitch_slider.value_changed.connect(func(v: float):
+		camera_pitch_ratio = clampf(v, 0.45, 0.92)
+		if pitch_label:
+			pitch_label.text = "Camera Pitch: %d deg (%.2f)" % [int(round(rad_to_deg(asin(camera_pitch_ratio)))), camera_pitch_ratio]
+		_refresh_courtyard_projection()
+	)
+
+	orbit_label = Label.new()
+	orbit_label.name = "OrbitLabel"
+	orbit_label.text = "Courtyard Angle: 0 deg [Q/E]"
+	vbox.add_child(orbit_label)
+
+	var orbit_row := HBoxContainer.new()
+	orbit_row.name = "OrbitRow"
+	vbox.add_child(orbit_row)
+
+	var btn_orbit_left := Button.new()
+	btn_orbit_left.name = "BtnOrbitLeft"
+	btn_orbit_left.text = "<< Q 45"
+	btn_orbit_left.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	btn_orbit_left.pressed.connect(func(): _set_orbit_target(target_orbit_deg - 45.0, true))
+	orbit_row.add_child(btn_orbit_left)
+
+	var btn_orbit_reset := Button.new()
+	btn_orbit_reset.name = "BtnOrbitReset"
+	btn_orbit_reset.text = "Reset 0"
+	btn_orbit_reset.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	btn_orbit_reset.pressed.connect(func(): _set_orbit_target(0.0, true))
+	orbit_row.add_child(btn_orbit_reset)
+
+	var btn_orbit_right := Button.new()
+	btn_orbit_right.name = "BtnOrbitRight"
+	btn_orbit_right.text = "45 E >>"
+	btn_orbit_right.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	btn_orbit_right.pressed.connect(func(): _set_orbit_target(target_orbit_deg + 45.0, true))
+	orbit_row.add_child(btn_orbit_right)
+
+	orbit_slider = HSlider.new()
+	orbit_slider.name = "OrbitSlider"
+	orbit_slider.min_value = -180.0
+	orbit_slider.max_value = 180.0
+	orbit_slider.step = 1.0
+	orbit_slider.value = 0.0
+	vbox.add_child(orbit_slider)
+
+	orbit_slider.value_changed.connect(func(v: float):
+		if not _syncing_orbit_ui:
+			_set_orbit_target(v, true)
+	)
+
+	var cam_idx: int = perspective_slider.get_index() + 1
+	vbox.move_child(pitch_label, cam_idx)
+	vbox.move_child(pitch_slider, cam_idx + 1)
+	vbox.move_child(orbit_label, cam_idx + 2)
+	vbox.move_child(orbit_row, cam_idx + 3)
+	vbox.move_child(orbit_slider, cam_idx + 4)
+
 	var cr = $HUD/MarginContainer/VBoxContainer/ColorRed
 	var cg = $HUD/MarginContainer/VBoxContainer/ColorGreen
 	var cb = $HUD/MarginContainer/VBoxContainer/ColorBlue
+
+	for col_picker in [cr, cg, cb]:
+		if col_picker:
+			col_picker.custom_minimum_size.y = 22
 
 	cr.color_changed.connect(func(c): color_red = c; update_plant_colors())
 	cg.color_changed.connect(func(c): color_green = c; update_plant_colors())
@@ -574,6 +870,12 @@ func _ready_ui():
 	btn_toggle_footprints.pressed.connect(_on_toggle_footprints_pressed)
 	vbox.add_child(btn_toggle_footprints)
 
+	btn_toggle_xray = Button.new()
+	btn_toggle_xray.name = "BtnToggleXRay"
+	btn_toggle_xray.text = "X-Ray Peek: ON"
+	btn_toggle_xray.pressed.connect(_on_toggle_xray_pressed)
+	vbox.add_child(btn_toggle_xray)
+
 	fleet_status_label = Label.new()
 	fleet_status_label.name = "FleetStatusLabel"
 	fleet_status_label.text = "Fleet: loading manifest..."
@@ -587,22 +889,35 @@ func _on_toggle_footprints_pressed():
 		if is_instance_valid(p):
 			p.show_footprint_ring = footprints_visible
 
+func _on_toggle_xray_pressed():
+	xray_enabled = not xray_enabled
+	if btn_toggle_xray:
+		btn_toggle_xray.text = "X-Ray Peek: ON" if xray_enabled else "X-Ray Peek: OFF"
+
 func set_weather_day():
 	bg.color = Color("#9e8f63")
 	sun_angle_slider.value = 45.0
 	sun_length_slider.value = 0.8
+	if ground_canvas:
+		ground_canvas.queue_redraw()
 
 func set_weather_sunset():
 	bg.color = Color("#8c6a51")
 	sun_angle_slider.value = 15.0
 	sun_length_slider.value = 1.6
+	if ground_canvas:
+		ground_canvas.queue_redraw()
 
 func set_weather_night():
 	bg.color = Color("#1e2a38")
 	sun_angle_slider.value = 90.0
 	sun_length_slider.value = 0.3
+	if ground_canvas:
+		ground_canvas.queue_redraw()
 
 func set_weather_dark():
 	bg.color = Color("#0a0a0a")
 	sun_angle_slider.value = 0.0
 	sun_length_slider.value = 0.0
+	if ground_canvas:
+		ground_canvas.queue_redraw()
