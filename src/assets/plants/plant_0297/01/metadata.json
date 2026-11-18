@@ -4,10 +4,10 @@
     "variant_id": "01",
     "width": 217,
     "height": 250,
-    "root_width": 7,
-    "root_ratio": 0.032,
+    "root_width": 8,
+    "root_ratio": 0.037,
     "ground_ellipse": [
-        7,
+        8,
         4
     ],
     "layers": [
@@ -34,5 +34,11 @@
         ],
         "brief": "直立具芳香的多年生草本，轮伞花序腋生，开淡紫色小花。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5098,
+        0.996
+    ],
+    "root_x": 110.62,
+    "root_y": 249
 }

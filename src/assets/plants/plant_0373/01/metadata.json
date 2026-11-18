@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 260,
     "height": 250,
-    "root_width": 11,
-    "root_ratio": 0.042,
+    "root_width": 9,
+    "root_ratio": 0.035,
     "ground_ellipse": [
-        11,
-        6
+        9,
+        5
     ],
     "layers": [
         "layer-red",
@@ -34,5 +34,11 @@
         ],
         "brief": "常绿半蔓生灌木，枝条柔软开展，聚伞花序顶生淡天蓝色筒状花朵。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5142,
+        0.996
+    ],
+    "root_x": 133.7,
+    "root_y": 249
 }

@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 223,
     "height": 250,
-    "root_width": 43,
-    "root_ratio": 0.193,
+    "root_width": 42,
+    "root_ratio": 0.188,
     "ground_ellipse": [
-        43,
-        24
+        42,
+        23
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "巨型两年生草本，中空粗茎密布紫斑，顶端撑开直径近一米的巨大复伞形白色花球。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.4505,
+        0.992
+    ],
+    "root_x": 100.47,
+    "root_y": 248
 }

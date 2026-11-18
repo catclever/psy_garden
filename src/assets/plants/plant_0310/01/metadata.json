@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 208,
     "height": 250,
-    "root_width": 31,
-    "root_ratio": 0.149,
+    "root_width": 10,
+    "root_ratio": 0.048,
     "ground_ellipse": [
-        31,
-        17
+        10,
+        6
     ],
     "layers": [
         "layer-red",
@@ -34,5 +34,11 @@
         ],
         "brief": "二年生剧毒草本，全株被腺毛，花冠淡黄绿色且具紫色网状脉纹。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.356,
+        0.888
+    ],
+    "root_x": 74.06,
+    "root_y": 222
 }

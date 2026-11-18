@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 209,
     "height": 250,
-    "root_width": 15,
-    "root_ratio": 0.072,
+    "root_width": 13,
+    "root_ratio": 0.062,
     "ground_ellipse": [
-        15,
-        8
+        13,
+        7
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "毛茛科湿生多年生草本，具光泽肾形基生叶，春季绽放明亮耀眼的亮黄色单瓣花朵。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5354,
+        0.996
+    ],
+    "root_x": 111.9,
+    "root_y": 249
 }

@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 285,
     "height": 250,
-    "root_width": 95,
-    "root_ratio": 0.333,
+    "root_width": 67,
+    "root_ratio": 0.235,
     "ground_ellipse": [
-        95,
-        52
+        67,
+        37
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "矮小垫状常绿极地高山半灌木，匍匐伏地生长，开带有八片白色花瓣的花朵。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.529,
+        0.996
+    ],
+    "root_x": 150.76,
+    "root_y": 249
 }

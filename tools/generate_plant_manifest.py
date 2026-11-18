@@ -127,6 +127,19 @@ def _build_variant_record(plant_name: str, variant_id: str, variant_dir: str):
     else:
         ground_ellipse = [root_width, max(4, int(round(root_width * 0.55)))]
 
+    raw_root_anchor = mdata.get("root_anchor")
+    if (
+        isinstance(raw_root_anchor, list)
+        and len(raw_root_anchor) == 2
+        and all(
+            isinstance(v, (int, float)) and not isinstance(v, bool) and 0.0 <= float(v) <= 1.0
+            for v in raw_root_anchor
+        )
+    ):
+        root_anchor = [round(float(raw_root_anchor[0]), 4), round(float(raw_root_anchor[1]), 4)]
+    else:
+        root_anchor = [0.5, 1.0]
+
     return {
         "id": f"{plant_name}__{variant_id}",
         "name": plant_name,
@@ -135,6 +148,7 @@ def _build_variant_record(plant_name: str, variant_id: str, variant_dir: str):
         "path_prefix": f"assets/plants/{plant_name}/{variant_id}",
         "width": width,
         "height": height,
+        "root_anchor": root_anchor,
         "root_width": root_width,
         "root_ratio": root_ratio,
         "ground_ellipse": ground_ellipse,

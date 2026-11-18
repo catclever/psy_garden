@@ -4,10 +4,10 @@
     "variant_id": "01",
     "width": 236,
     "height": 250,
-    "root_width": 7,
-    "root_ratio": 0.03,
+    "root_width": 8,
+    "root_ratio": 0.034,
     "ground_ellipse": [
-        7,
+        8,
         4
     ],
     "layers": [
@@ -33,5 +33,11 @@
         ],
         "brief": "二年生芳香草本，丛生羽状分裂深绿叶片，边缘具卷曲细裂褶皱。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5083,
+        0.996
+    ],
+    "root_x": 119.95,
+    "root_y": 249
 }

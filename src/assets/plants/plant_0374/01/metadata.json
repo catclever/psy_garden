@@ -4,10 +4,10 @@
     "variant_id": "01",
     "width": 251,
     "height": 250,
-    "root_width": 7,
-    "root_ratio": 0.028,
+    "root_width": 8,
+    "root_ratio": 0.032,
     "ground_ellipse": [
-        7,
+        8,
         4
     ],
     "layers": [
@@ -33,5 +33,11 @@
         ],
         "brief": "常绿灌木，叶革质揉碎具芳香，初夏开密集白花，秋冬结成簇鲜红核果。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5449,
+        0.996
+    ],
+    "root_x": 136.76,
+    "root_y": 249
 }

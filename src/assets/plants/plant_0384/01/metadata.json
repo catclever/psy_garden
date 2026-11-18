@@ -4,10 +4,10 @@
     "variant_id": "01",
     "width": 136,
     "height": 250,
-    "root_width": 5,
-    "root_ratio": 0.037,
+    "root_width": 8,
+    "root_ratio": 0.059,
     "ground_ellipse": [
-        5,
+        8,
         4
     ],
     "layers": [
@@ -34,5 +34,11 @@
         ],
         "brief": "直立剧毒多年生草本，掌状深裂叶，茎顶总状花序盛放蓝紫色盔状奇花。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.507,
+        0.996
+    ],
+    "root_x": 68.95,
+    "root_y": 249
 }

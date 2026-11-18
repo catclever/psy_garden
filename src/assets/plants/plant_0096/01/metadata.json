@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 163,
     "height": 250,
-    "root_width": 74,
-    "root_ratio": 0.454,
+    "root_width": 48,
+    "root_ratio": 0.294,
     "ground_ellipse": [
-        74,
-        41
+        48,
+        26
     ],
     "layers": [
         "layer-red",
@@ -34,5 +34,11 @@
         ],
         "brief": "天门冬科肉质灌木状草本，灰绿至带白斑的坚硬剑形叶呈莲座状密集排列辐射展开。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5008,
+        0.996
+    ],
+    "root_x": 81.63,
+    "root_y": 249
 }

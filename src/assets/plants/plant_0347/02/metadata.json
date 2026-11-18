@@ -1,0 +1,45 @@
+{
+    "name": "plant_0347",
+    "display_name": "鉤吻",
+    "variant_id": "02",
+    "width": 261,
+    "height": 250,
+    "root_anchor": [
+        0.5037,
+        0.996
+    ],
+    "root_x": 131.45,
+    "root_y": 249,
+    "root_width": 22,
+    "root_ratio": 0.084,
+    "ground_ellipse": [
+        22,
+        12
+    ],
+    "layers": [
+        "layer-red",
+        "layer-green",
+        "layer-blue"
+    ],
+    "source_image": "plant_0347.jpg",
+    "true_color": true,
+    "created_at": 1794979354,
+    "status": "ready",
+    "ai_analysis": {
+        "zh_name": "鉤吻",
+        "scientific_name": "Gelsemium elegans",
+        "botanical_height_m": [
+            2.0,
+            7.0
+        ],
+        "plant_type": "shrub",
+        "growth_habit": "bush",
+        "suggested_game_height_px": [
+            110,
+            150
+        ],
+        "brief": "常绿木质大藤本（断肠草），全株剧毒，顶生黄色漏斗状小花。",
+        "status": "success"
+    },
+    "enabled": true
+}

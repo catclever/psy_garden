@@ -34,5 +34,6 @@
         ],
         "brief": "温带落叶灌木，密生近球形大型伞房花序，花色随土壤酸碱度变化。",
         "status": "success"
-    }
+    },
+    "enabled": false
 }

@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 246,
     "height": 250,
-    "root_width": 31,
-    "root_ratio": 0.126,
+    "root_width": 30,
+    "root_ratio": 0.122,
     "ground_ellipse": [
-        31,
-        17
+        30,
+        16
     ],
     "layers": [
         "layer-red",
@@ -34,5 +34,11 @@
         ],
         "brief": "攀援性肉质仙人掌灌木，三棱状肉质茎边缘波状，夜间盛开硕大芬芳白花并结红皮鳞果。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5035,
+        0.996
+    ],
+    "root_x": 123.85,
+    "root_y": 249
 }

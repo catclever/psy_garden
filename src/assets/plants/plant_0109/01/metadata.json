@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 274,
     "height": 250,
-    "root_width": 34,
-    "root_ratio": 0.124,
+    "root_width": 31,
+    "root_ratio": 0.113,
     "ground_ellipse": [
-        34,
-        19
+        31,
+        17
     ],
     "layers": [
         "layer-red",
@@ -34,5 +34,11 @@
         ],
         "brief": "石竹科多分枝多年生草本，纤细花梗上密生无数微小白色花朵形成云雾状圆锥花序。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5752,
+        0.996
+    ],
+    "root_x": 157.6,
+    "root_y": 249
 }

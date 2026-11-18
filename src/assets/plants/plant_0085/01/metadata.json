@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 219,
     "height": 250,
-    "root_width": 73,
-    "root_ratio": 0.333,
+    "root_width": 74,
+    "root_ratio": 0.338,
     "ground_ellipse": [
-        73,
-        40
+        74,
+        41
     ],
     "layers": [
         "layer-red",
@@ -34,5 +34,11 @@
         ],
         "brief": "低矮高山草本，叶片覆有微绒毛呈莲座状，短梗顶生鲜明多色伞形花序。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5115,
+        0.92
+    ],
+    "root_x": 112.03,
+    "root_y": 230
 }

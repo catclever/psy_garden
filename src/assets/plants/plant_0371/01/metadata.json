@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 245,
     "height": 250,
-    "root_width": 43,
-    "root_ratio": 0.176,
+    "root_width": 42,
+    "root_ratio": 0.171,
     "ground_ellipse": [
-        43,
-        24
+        42,
+        23
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "芸香科芳香灌木或小乔木，羽状复叶具强烈辛香气，南亚经典玛撒拉香料源。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.4879,
+        0.996
+    ],
+    "root_x": 119.54,
+    "root_y": 249
 }

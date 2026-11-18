@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 243,
     "height": 250,
-    "root_width": 11,
-    "root_ratio": 0.045,
+    "root_width": 38,
+    "root_ratio": 0.156,
     "ground_ellipse": [
-        11,
-        6
+        38,
+        21
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "一二年生草本，莖纖細被糙毛，花瓣薄如絲絹且色澤鮮艷。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.629,
+        0.948
+    ],
+    "root_x": 152.85,
+    "root_y": 237
 }

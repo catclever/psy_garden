@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 250,
     "height": 250,
-    "root_width": 61,
-    "root_ratio": 0.244,
+    "root_width": 8,
+    "root_ratio": 0.032,
     "ground_ellipse": [
-        61,
-        34
+        8,
+        4
     ],
     "layers": [
         "layer-red",
@@ -34,5 +34,11 @@
         ],
         "brief": "茄科枸杞属落叶灌木，枝条细长微拱垂并多棘刺，开淡紫色小花，结鲜红色卵形浆果。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5202,
+        0.996
+    ],
+    "root_x": 130.06,
+    "root_y": 249
 }

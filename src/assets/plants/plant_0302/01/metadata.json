@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 208,
     "height": 250,
-    "root_width": 45,
-    "root_ratio": 0.216,
+    "root_width": 44,
+    "root_ratio": 0.212,
     "ground_ellipse": [
-        45,
-        25
+        44,
+        24
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "大型攀援性肉质仙人掌，具三棱状肉质茎与巨大夜开白色花朵。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5017,
+        0.996
+    ],
+    "root_x": 104.35,
+    "root_y": 249
 }

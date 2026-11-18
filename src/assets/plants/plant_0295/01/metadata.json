@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 271,
     "height": 250,
-    "root_width": 32,
-    "root_ratio": 0.118,
+    "root_width": 31,
+    "root_ratio": 0.114,
     "ground_ellipse": [
-        32,
-        18
+        31,
+        17
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "羽状复叶宽大且裂片平展的常绿苏铁类木本植物。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.4925,
+        0.996
+    ],
+    "root_x": 133.48,
+    "root_y": 249
 }

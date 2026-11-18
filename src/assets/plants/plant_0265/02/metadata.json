@@ -1,0 +1,45 @@
+{
+    "name": "plant_0265",
+    "display_name": "香球蘭",
+    "variant_id": "02",
+    "width": 221,
+    "height": 250,
+    "root_anchor": [
+        0.4911,
+        0.996
+    ],
+    "root_x": 108.54,
+    "root_y": 249,
+    "root_width": 10,
+    "root_ratio": 0.045,
+    "ground_ellipse": [
+        10,
+        6
+    ],
+    "layers": [
+        "layer-red",
+        "layer-green",
+        "layer-blue"
+    ],
+    "source_image": "plant_0265.jpg",
+    "true_color": true,
+    "created_at": 1794979348,
+    "status": "ready",
+    "ai_analysis": {
+        "zh_name": "香球蘭",
+        "scientific_name": "Hoya odorata",
+        "botanical_height_m": [
+            0.5,
+            2.0
+        ],
+        "plant_type": "groundcover",
+        "growth_habit": "slender",
+        "suggested_game_height_px": [
+            70,
+            110
+        ],
+        "brief": "常绿附生肉质藤本，叶椭圆形肉质对生，伞形花序悬垂，星状白蜡质小花清香馥郁。",
+        "status": "success"
+    },
+    "enabled": true
+}

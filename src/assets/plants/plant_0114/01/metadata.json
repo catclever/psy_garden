@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 222,
     "height": 250,
-    "root_width": 109,
-    "root_ratio": 0.491,
+    "root_width": 77,
+    "root_ratio": 0.347,
     "ground_ellipse": [
-        109,
-        60
+        77,
+        42
     ],
     "layers": [
         "layer-red",
@@ -34,5 +34,11 @@
         ],
         "brief": "报春花科多年生块茎草本，心形厚质叶具银灰斑纹，花瓣向上反卷形如兔耳。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.6555,
+        0.872
+    ],
+    "root_x": 145.52,
+    "root_y": 218
 }

@@ -33,5 +33,6 @@
         ],
         "brief": "香港特有種灌木，嫩枝披星狀鏽毛，長披針形葉片互生且花序直立。",
         "status": "success"
-    }
+    },
+    "enabled": false
 }

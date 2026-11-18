@@ -33,5 +33,6 @@
         ],
         "brief": "枝条常年翠绿拱垂的落叶灌木，春末满树绽放金黄色小巧花朵。",
         "status": "success"
-    }
+    },
+    "enabled": false
 }

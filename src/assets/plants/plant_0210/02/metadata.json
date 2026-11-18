@@ -1,0 +1,45 @@
+{
+    "name": "plant_0210",
+    "display_name": "木荷",
+    "variant_id": "02",
+    "width": 228,
+    "height": 250,
+    "root_anchor": [
+        0.4974,
+        0.996
+    ],
+    "root_x": 113.42,
+    "root_y": 249,
+    "root_width": 42,
+    "root_ratio": 0.184,
+    "ground_ellipse": [
+        42,
+        23
+    ],
+    "layers": [
+        "layer-red",
+        "layer-green",
+        "layer-blue"
+    ],
+    "source_image": "plant_0210.jpg",
+    "true_color": true,
+    "created_at": 1794979346,
+    "status": "ready",
+    "ai_analysis": {
+        "zh_name": "木荷",
+        "scientific_name": "Schima superba",
+        "botanical_height_m": [
+            10.0,
+            25.0
+        ],
+        "plant_type": "tree",
+        "growth_habit": "canopy",
+        "suggested_game_height_px": [
+            170,
+            215
+        ],
+        "brief": "高大常绿乔木，树皮厚实具防火耐火特性，开白色单生或丛生荷花状花朵。",
+        "status": "success"
+    },
+    "enabled": true
+}

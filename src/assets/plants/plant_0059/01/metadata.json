@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 205,
     "height": 250,
-    "root_width": 101,
-    "root_ratio": 0.493,
+    "root_width": 68,
+    "root_ratio": 0.332,
     "ground_ellipse": [
-        101,
-        56
+        68,
+        37
     ],
     "layers": [
         "layer-red",
@@ -34,5 +34,11 @@
         ],
         "brief": "附生兰，具有扁平假鳞茎与挺立修长的花梗，花形似展翅奇特的大型飞蛾。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5762,
+        0.932
+    ],
+    "root_x": 118.12,
+    "root_y": 233
 }

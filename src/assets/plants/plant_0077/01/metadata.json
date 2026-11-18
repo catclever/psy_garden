@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 194,
     "height": 250,
-    "root_width": 58,
-    "root_ratio": 0.299,
+    "root_width": 24,
+    "root_ratio": 0.124,
     "ground_ellipse": [
-        58,
-        32
+        24,
+        13
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "直立肉质茎常绿草本，大型长椭圆形叶面布满黄白不规则杂斑及条纹。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5819,
+        0.936
+    ],
+    "root_x": 112.9,
+    "root_y": 234
 }

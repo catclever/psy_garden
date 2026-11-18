@@ -4,10 +4,10 @@
     "variant_id": "01",
     "width": 220,
     "height": 250,
-    "root_width": 7,
-    "root_ratio": 0.032,
+    "root_width": 8,
+    "root_ratio": 0.036,
     "ground_ellipse": [
-        7,
+        8,
         4
     ],
     "layers": [
@@ -33,5 +33,11 @@
         ],
         "brief": "常绿直立或攀援灌木，小枝圆柱形，聚伞花序顶生，常开芳香浓郁的白色花朵。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5037,
+        0.996
+    ],
+    "root_x": 110.8,
+    "root_y": 249
 }

@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 249,
     "height": 250,
-    "root_width": 12,
-    "root_ratio": 0.048,
+    "root_width": 10,
+    "root_ratio": 0.04,
     "ground_ellipse": [
-        12,
-        7
+        10,
+        6
     ],
     "layers": [
         "layer-red",
@@ -34,5 +34,11 @@
         ],
         "brief": "具强烈薄荷香气的多年生直立草本，顶生密集的淡紫色细长穗状花序。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.52,
+        0.996
+    ],
+    "root_x": 129.48,
+    "root_y": 249
 }

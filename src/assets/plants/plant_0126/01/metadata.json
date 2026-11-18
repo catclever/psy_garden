@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 262,
     "height": 250,
-    "root_width": 84,
-    "root_ratio": 0.321,
+    "root_width": 25,
+    "root_ratio": 0.095,
     "ground_ellipse": [
-        84,
-        46
+        25,
+        14
     ],
     "layers": [
         "layer-red",
@@ -34,5 +34,11 @@
         ],
         "brief": "落叶大型木质藤本，枝干粗壮扭曲攀援，春季垂挂修长密集的蓝紫色蝶形花序，落英如雨。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5057,
+        0.984
+    ],
+    "root_x": 132.49,
+    "root_y": 246
 }

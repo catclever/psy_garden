@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 267,
     "height": 250,
-    "root_width": 57,
-    "root_ratio": 0.213,
+    "root_width": 49,
+    "root_ratio": 0.184,
     "ground_ellipse": [
-        57,
-        31
+        49,
+        27
     ],
     "layers": [
         "layer-red",
@@ -34,5 +34,11 @@
         ],
         "brief": "高大常绿乔木，新叶覆密生星状白绒毛，核果坚硬富含油脂。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5423,
+        0.996
+    ],
+    "root_x": 144.79,
+    "root_y": 249
 }

@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 292,
     "height": 250,
-    "root_width": 139,
-    "root_ratio": 0.476,
+    "root_width": 37,
+    "root_ratio": 0.127,
     "ground_ellipse": [
-        139,
-        76
+        37,
+        20
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "匍匐肉质一年生草本，紫红茎节贴地铺散，倒卵形叶互生，盛夏开黄色小花。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5594,
+        0.96
+    ],
+    "root_x": 163.33,
+    "root_y": 240
 }

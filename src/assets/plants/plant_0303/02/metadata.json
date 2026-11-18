@@ -1,0 +1,45 @@
+{
+    "name": "plant_0303",
+    "display_name": "馬尾杉屬",
+    "variant_id": "02",
+    "width": 198,
+    "height": 250,
+    "root_anchor": [
+        0.5343,
+        0.996
+    ],
+    "root_x": 105.78,
+    "root_y": 249,
+    "root_width": 65,
+    "root_ratio": 0.328,
+    "ground_ellipse": [
+        65,
+        36
+    ],
+    "layers": [
+        "layer-red",
+        "layer-green",
+        "layer-blue"
+    ],
+    "source_image": "plant_0303.jpg",
+    "true_color": true,
+    "created_at": 1794979350,
+    "status": "ready",
+    "ai_analysis": {
+        "zh_name": "馬尾杉屬",
+        "scientific_name": "Phlegmariurus",
+        "botanical_height_m": [
+            0.2,
+            0.8
+        ],
+        "plant_type": "groundcover",
+        "growth_habit": "slender",
+        "suggested_game_height_px": [
+            55,
+            90
+        ],
+        "brief": "附生蕨类植物，枝条多数下垂呈线绳状，密被细小鳞片叶。",
+        "status": "success"
+    },
+    "enabled": true
+}

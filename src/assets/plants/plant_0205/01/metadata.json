@@ -33,5 +33,6 @@
         ],
         "brief": "矮小肉质草本，两枚对生圆锥状肉质叶完全合生，顶部半透明如天窗。",
         "status": "success"
-    }
+    },
+    "enabled": false
 }

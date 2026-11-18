@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 233,
     "height": 250,
-    "root_width": 25,
-    "root_ratio": 0.107,
+    "root_width": 24,
+    "root_ratio": 0.103,
     "ground_ellipse": [
-        25,
-        14
+        24,
+        13
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "中型观叶草本，墨绿色椭圆形叶面上整齐对称分布细密的粉红或白色侧脉条纹。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5017,
+        0.996
+    ],
+    "root_x": 116.91,
+    "root_y": 249
 }

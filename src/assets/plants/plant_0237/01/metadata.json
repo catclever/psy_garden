@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 200,
     "height": 250,
-    "root_width": 60,
-    "root_ratio": 0.3,
+    "root_width": 55,
+    "root_ratio": 0.275,
     "ground_ellipse": [
-        60,
-        33
+        55,
+        30
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "葉片呈堅硬直立的劍形，肉質且表面具深綠相間的虎紋狀橫斑。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.4618,
+        0.996
+    ],
+    "root_x": 92.36,
+    "root_y": 249
 }

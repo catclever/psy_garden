@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 225,
     "height": 250,
-    "root_width": 10,
-    "root_ratio": 0.044,
+    "root_width": 9,
+    "root_ratio": 0.04,
     "ground_ellipse": [
-        10,
-        6
+        9,
+        5
     ],
     "layers": [
         "layer-red",
@@ -34,5 +34,11 @@
         ],
         "brief": "热带肉质落叶小乔木，枝干肉质多汁，花瓣螺旋排列且极富清香。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5104,
+        0.996
+    ],
+    "root_x": 114.84,
+    "root_y": 249
 }

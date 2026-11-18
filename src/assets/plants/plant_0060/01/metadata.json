@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 269,
     "height": 250,
-    "root_width": 22,
-    "root_ratio": 0.082,
+    "root_width": 75,
+    "root_ratio": 0.279,
     "ground_ellipse": [
-        22,
-        12
+        75,
+        41
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "肉质灌木或小乔木，多分枝圆柱状肉质绿色枝条似珊瑚，叶片退化早落。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5644,
+        0.924
+    ],
+    "root_x": 151.81,
+    "root_y": 231
 }

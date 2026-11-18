@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 283,
     "height": 250,
-    "root_width": 25,
-    "root_ratio": 0.088,
+    "root_width": 23,
+    "root_ratio": 0.081,
     "ground_ellipse": [
-        25,
-        14
+        23,
+        13
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "块茎粗短的苏铁类常绿灌木，厚革质羽状叶对生排列，表面被灰褐微毛。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.1868,
+        0.996
+    ],
+    "root_x": 52.86,
+    "root_y": 249
 }

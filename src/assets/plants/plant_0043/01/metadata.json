@@ -4,10 +4,10 @@
     "variant_id": "01",
     "width": 251,
     "height": 250,
-    "root_width": 5,
-    "root_ratio": 0.02,
+    "root_width": 8,
+    "root_ratio": 0.032,
     "ground_ellipse": [
-        5,
+        8,
         4
     ],
     "layers": [
@@ -34,5 +34,11 @@
         ],
         "brief": "唇形科多年生芳香草本，叶片呈窄细线形，轮伞花序密集球状簇生于叶腋。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5378,
+        0.996
+    ],
+    "root_x": 135.0,
+    "root_y": 249
 }

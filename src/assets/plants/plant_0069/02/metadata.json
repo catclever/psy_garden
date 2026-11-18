@@ -1,0 +1,44 @@
+{
+    "name": "plant_0069",
+    "display_name": "垂葉花燭",
+    "variant_id": "02",
+    "width": 246,
+    "height": 250,
+    "root_anchor": [
+        0.5,
+        0.996
+    ],
+    "root_x": 123.01,
+    "root_y": 249,
+    "root_width": 66,
+    "root_ratio": 0.268,
+    "ground_ellipse": [
+        66,
+        36
+    ],
+    "layers": [
+        "layer-red",
+        "layer-green"
+    ],
+    "source_image": "plant_0069.jpg",
+    "true_color": true,
+    "created_at": 1794979336,
+    "status": "ready",
+    "ai_analysis": {
+        "zh_name": "垂葉花燭",
+        "scientific_name": "Anthurium wendlingeri",
+        "botanical_height_m": [
+            0.4,
+            1.2
+        ],
+        "plant_type": "flower",
+        "growth_habit": "slender",
+        "suggested_game_height_px": [
+            75,
+            115
+        ],
+        "brief": "大型附生花烛，革质带状叶深绿垂坠可达一米，肉穗花序螺旋扭曲如开瓶器。",
+        "status": "success"
+    },
+    "enabled": true
+}

@@ -11,11 +11,11 @@
     "source_image": "candidate_plant_0166_光果苏铁.jpg",
     "true_color": true,
     "created_at": 1792466857,
-    "root_width": 46,
-    "root_ratio": 0.167,
+    "root_width": 41,
+    "root_ratio": 0.149,
     "ground_ellipse": [
-        46,
-        25
+        41,
+        23
     ],
     "status": "ready",
     "ai_analysis": {
@@ -33,5 +33,11 @@
         ],
         "brief": "光果苏铁为常绿棕榈状植物，茎干粗壮圆柱形，羽状叶坚硬呈放射状丛生，种子外种皮光滑呈橙红色。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5006,
+        0.996
+    ],
+    "root_x": 137.68,
+    "root_y": 249
 }

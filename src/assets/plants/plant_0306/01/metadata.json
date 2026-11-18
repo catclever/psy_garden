@@ -4,10 +4,10 @@
     "variant_id": "01",
     "width": 217,
     "height": 250,
-    "root_width": 11,
-    "root_ratio": 0.051,
+    "root_width": 10,
+    "root_ratio": 0.046,
     "ground_ellipse": [
-        11,
+        10,
         6
     ],
     "layers": [
@@ -33,5 +33,11 @@
         ],
         "brief": "落叶灌木，枝条四棱拱形下垂，早春先花后叶并开鲜黄色花朵。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5175,
+        0.996
+    ],
+    "root_x": 112.3,
+    "root_y": 249
 }

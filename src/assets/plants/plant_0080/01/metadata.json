@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 292,
     "height": 250,
-    "root_width": 4,
-    "root_ratio": 0.014,
+    "root_width": 66,
+    "root_ratio": 0.226,
     "ground_ellipse": [
-        4,
-        4
+        66,
+        36
     ],
     "layers": [
         "layer-red",
@@ -34,5 +34,11 @@
         ],
         "brief": "草本多年生植物，剑形叶坚挺基生排成列，顶生蓝紫色小花与亮蓝色浆果。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.4825,
+        0.84
+    ],
+    "root_x": 140.9,
+    "root_y": 210
 }

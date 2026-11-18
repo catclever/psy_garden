@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 254,
     "height": 250,
-    "root_width": 16,
-    "root_ratio": 0.063,
+    "root_width": 49,
+    "root_ratio": 0.193,
     "ground_ellipse": [
-        16,
-        9
+        49,
+        27
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "一年生直立粗壮草本植物，具多分枝，其果实干燥后密被倒钩刺，易附着传播。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.6092,
+        0.896
+    ],
+    "root_x": 154.74,
+    "root_y": 224
 }

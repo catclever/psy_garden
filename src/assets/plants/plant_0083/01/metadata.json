@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 305,
     "height": 250,
-    "root_width": 29,
-    "root_ratio": 0.095,
+    "root_width": 70,
+    "root_ratio": 0.23,
     "ground_ellipse": [
-        29,
-        16
+        70,
+        38
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "低矮半地下茎苏铁，羽状复叶呈放射状，小叶革质倒卵形覆盖细致鳞毛。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5729,
+        0.896
+    ],
+    "root_x": 174.73,
+    "root_y": 224
 }

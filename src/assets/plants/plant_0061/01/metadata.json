@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 222,
     "height": 250,
-    "root_width": 44,
-    "root_ratio": 0.198,
+    "root_width": 8,
+    "root_ratio": 0.036,
     "ground_ellipse": [
-        44,
-        24
+        8,
+        4
     ],
     "layers": [
         "layer-red",
@@ -34,5 +34,11 @@
         ],
         "brief": "直立常绿小灌木，叶披针形，成熟浆果橙红光亮圆润如珠，宿存枝头。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5104,
+        0.996
+    ],
+    "root_x": 113.31,
+    "root_y": 249
 }

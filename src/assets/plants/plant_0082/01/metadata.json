@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 282,
     "height": 250,
-    "root_width": 20,
-    "root_ratio": 0.071,
+    "root_width": 18,
+    "root_ratio": 0.064,
     "ground_ellipse": [
-        20,
-        11
+        18,
+        10
     ],
     "layers": [
         "layer-red",
@@ -34,5 +34,11 @@
         ],
         "brief": "球根草本植物，具心状箭形翠绿叶片，纯白色佛焰苞如马蹄卷包鲜黄肉穗。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.4998,
+        0.996
+    ],
+    "root_x": 140.95,
+    "root_y": 249
 }

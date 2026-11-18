@@ -1,0 +1,45 @@
+{
+    "name": "plant_0053",
+    "display_name": "耳墜草",
+    "variant_id": "02",
+    "width": 296,
+    "height": 250,
+    "root_anchor": [
+        0.4879,
+        0.996
+    ],
+    "root_x": 144.42,
+    "root_y": 249,
+    "root_width": 106,
+    "root_ratio": 0.358,
+    "ground_ellipse": [
+        106,
+        58
+    ],
+    "layers": [
+        "layer-red",
+        "layer-green",
+        "layer-blue"
+    ],
+    "source_image": "plant_0053.jpg",
+    "true_color": true,
+    "created_at": 1794979335,
+    "status": "ready",
+    "ai_analysis": {
+        "zh_name": "耳墜草",
+        "scientific_name": "Sedum rubrotinctum",
+        "botanical_height_m": [
+            0.1,
+            0.25
+        ],
+        "plant_type": "groundcover",
+        "growth_habit": "carpet",
+        "suggested_game_height_px": [
+            45,
+            60
+        ],
+        "brief": "景天科多肉植物，圆筒状肉质叶轮生如饱满耳坠，经日照温差会转变为晶莹的红褐色。",
+        "status": "success"
+    },
+    "enabled": true
+}

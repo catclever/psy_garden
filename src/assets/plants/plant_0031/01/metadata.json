@@ -4,10 +4,10 @@
     "variant_id": "01",
     "width": 160,
     "height": 250,
-    "root_width": 6,
-    "root_ratio": 0.037,
+    "root_width": 8,
+    "root_ratio": 0.05,
     "ground_ellipse": [
-        6,
+        8,
         4
     ],
     "layers": [
@@ -33,5 +33,11 @@
         ],
         "brief": "石蒜科多年生草本，伞形花序顶生淡紫红色花朵，具有先花后叶的生长特性。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5061,
+        0.996
+    ],
+    "root_x": 80.98,
+    "root_y": 249
 }

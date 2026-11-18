@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 210,
     "height": 250,
-    "root_width": 49,
-    "root_ratio": 0.233,
+    "root_width": 41,
+    "root_ratio": 0.195,
     "ground_ellipse": [
-        49,
-        27
+        41,
+        23
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "大灌木，掌状深裂叶如细羽，顶生伞房花序鲜红如枝状珊瑚。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5124,
+        0.996
+    ],
+    "root_x": 107.61,
+    "root_y": 249
 }

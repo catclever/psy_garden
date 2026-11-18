@@ -4,10 +4,10 @@
     "variant_id": "01",
     "width": 245,
     "height": 250,
-    "root_width": 24,
-    "root_ratio": 0.098,
+    "root_width": 23,
+    "root_ratio": 0.094,
     "ground_ellipse": [
-        24,
+        23,
         13
     ],
     "layers": [
@@ -33,5 +33,11 @@
         ],
         "brief": "常绿多肉多浆草本植物，肥厚多汁的剑形叶片呈莲座状簇生，边缘具硬齿刺。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5173,
+        0.996
+    ],
+    "root_x": 126.75,
+    "root_y": 249
 }

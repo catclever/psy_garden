@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 142,
     "height": 250,
-    "root_width": 32,
-    "root_ratio": 0.225,
+    "root_width": 29,
+    "root_ratio": 0.204,
     "ground_ellipse": [
-        32,
-        18
+        29,
+        16
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "仙人掌科巨型柱状树生肉质植物，主茎直立纵棱深陷，高龄株常具向上弯曲的壮硕侧枝。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.4981,
+        0.996
+    ],
+    "root_x": 70.74,
+    "root_y": 249
 }

@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 200,
     "height": 250,
-    "root_width": 33,
-    "root_ratio": 0.165,
+    "root_width": 72,
+    "root_ratio": 0.36,
     "ground_ellipse": [
-        33,
-        18
+        72,
+        40
     ],
     "layers": [
         "layer-red",
@@ -34,5 +34,11 @@
         ],
         "brief": "小型地生或半附生兰花，叶片具深浅相间的斑驳纹理，直立花葶顶生纯白且具细微紫红斑点的兜状花。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.481,
+        0.712
+    ],
+    "root_x": 96.19,
+    "root_y": 178
 }

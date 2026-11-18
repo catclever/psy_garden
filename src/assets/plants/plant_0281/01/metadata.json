@@ -4,10 +4,10 @@
     "variant_id": "01",
     "width": 223,
     "height": 250,
-    "root_width": 7,
-    "root_ratio": 0.031,
+    "root_width": 8,
+    "root_ratio": 0.036,
     "ground_ellipse": [
-        7,
+        8,
         4
     ],
     "layers": [
@@ -33,5 +33,11 @@
         ],
         "brief": "落叶灌木，枝条节间具成对硬刺，奇数羽状复叶散发独特辛香柑橘气息。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.4757,
+        0.996
+    ],
+    "root_x": 106.08,
+    "root_y": 249
 }

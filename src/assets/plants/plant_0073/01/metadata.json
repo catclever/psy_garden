@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 203,
     "height": 250,
-    "root_width": 10,
-    "root_ratio": 0.049,
+    "root_width": 9,
+    "root_ratio": 0.044,
     "ground_ellipse": [
-        10,
-        6
+        9,
+        5
     ],
     "layers": [
         "layer-red",
@@ -34,5 +34,11 @@
         ],
         "brief": "林下铺地草本，轮生细长叶片娇嫩清香，顶生伞房状小白花星状繁密。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.513,
+        0.996
+    ],
+    "root_x": 104.13,
+    "root_y": 249
 }

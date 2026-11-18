@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 277,
     "height": 250,
-    "root_width": 64,
-    "root_ratio": 0.231,
+    "root_width": 54,
+    "root_ratio": 0.195,
     "ground_ellipse": [
-        64,
-        35
+        54,
+        30
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "景天科多肉灌木，波浪边缘叶片在充足日照与温差下呈现鲜艳朱红色。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.4844,
+        0.968
+    ],
+    "root_x": 134.18,
+    "root_y": 242
 }

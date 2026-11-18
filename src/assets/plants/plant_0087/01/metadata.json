@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 259,
     "height": 250,
-    "root_width": 94,
-    "root_ratio": 0.363,
+    "root_width": 46,
+    "root_ratio": 0.178,
     "ground_ellipse": [
-        94,
-        52
+        46,
+        25
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "筒状附生凤梨，叶片革质具刺缘，中心抽生出朱红密集苞片簇拥的直立花序。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.504,
+        0.996
+    ],
+    "root_x": 130.54,
+    "root_y": 249
 }

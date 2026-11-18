@@ -1,0 +1,44 @@
+{
+    "name": "plant_0144",
+    "display_name": "崖柏",
+    "variant_id": "02",
+    "width": 169,
+    "height": 250,
+    "root_anchor": [
+        0.4928,
+        0.996
+    ],
+    "root_x": 83.29,
+    "root_y": 249,
+    "root_width": 61,
+    "root_ratio": 0.361,
+    "ground_ellipse": [
+        61,
+        34
+    ],
+    "layers": [
+        "layer-red",
+        "layer-green"
+    ],
+    "source_image": "plant_0144.jpg",
+    "true_color": true,
+    "created_at": 1794979340,
+    "status": "ready",
+    "ai_analysis": {
+        "zh_name": "崖柏",
+        "scientific_name": "Thuja sutchuenensis",
+        "botanical_height_m": [
+            5.0,
+            20.0
+        ],
+        "plant_type": "tree",
+        "growth_habit": "canopy",
+        "suggested_game_height_px": [
+            170,
+            215
+        ],
+        "brief": "柏科常綠喬木，鱗片狀緊密排列的扁平枝葉散發濃香，多生於懸崖峭壁。",
+        "status": "success"
+    },
+    "enabled": true
+}

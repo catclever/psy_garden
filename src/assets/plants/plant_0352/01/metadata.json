@@ -4,10 +4,10 @@
     "variant_id": "01",
     "width": 247,
     "height": 250,
-    "root_width": 7,
-    "root_ratio": 0.028,
+    "root_width": 8,
+    "root_ratio": 0.032,
     "ground_ellipse": [
-        7,
+        8,
         4
     ],
     "layers": [
@@ -33,5 +33,11 @@
         ],
         "brief": "多年生高山草本，全株被灰白色柔毛，头状总状花序密生黄色蝶形花。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.522,
+        0.996
+    ],
+    "root_x": 128.95,
+    "root_y": 249
 }

@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 185,
     "height": 250,
-    "root_width": 28,
-    "root_ratio": 0.151,
+    "root_width": 26,
+    "root_ratio": 0.141,
     "ground_ellipse": [
-        28,
-        15
+        26,
+        14
     ],
     "layers": [
         "layer-red",
@@ -34,5 +34,11 @@
         ],
         "brief": "具地下鱗莖的多年生草本植物，帶狀基生葉簇生，直立花葶頂生白色或帶綠暈的星狀花序。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5054,
+        0.996
+    ],
+    "root_x": 93.5,
+    "root_y": 249
 }

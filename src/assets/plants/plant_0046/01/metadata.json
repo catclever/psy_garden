@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 222,
     "height": 250,
-    "root_width": 82,
-    "root_ratio": 0.369,
+    "root_width": 10,
+    "root_ratio": 0.045,
     "ground_ellipse": [
-        82,
-        45
+        10,
+        6
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "红豆杉科常绿乔木，条状披针形叶微弯呈两列排布，成熟种子具鲜红色肉质假种皮。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5868,
+        0.996
+    ],
+    "root_x": 130.27,
+    "root_y": 249
 }

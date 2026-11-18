@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 234,
     "height": 250,
-    "root_width": 12,
-    "root_ratio": 0.051,
+    "root_width": 8,
+    "root_ratio": 0.034,
     "ground_ellipse": [
-        12,
-        7
+        8,
+        4
     ],
     "layers": [
         "layer-red",
@@ -34,5 +34,11 @@
         ],
         "brief": "湿生多年生草本，具卵形齿缘叶与茎顶球状密集淡紫色花序。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5141,
+        0.996
+    ],
+    "root_x": 120.3,
+    "root_y": 249
 }

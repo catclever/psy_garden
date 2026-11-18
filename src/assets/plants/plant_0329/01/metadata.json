@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 250,
     "height": 250,
-    "root_width": 10,
-    "root_ratio": 0.04,
+    "root_width": 45,
+    "root_ratio": 0.18,
     "ground_ellipse": [
-        10,
-        6
+        45,
+        25
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "大型天南星科附生观叶植物，大型叶片呈多裂掌状深裂展开。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.4326,
+        0.952
+    ],
+    "root_x": 108.14,
+    "root_y": 238
 }

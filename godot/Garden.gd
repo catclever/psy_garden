@@ -299,6 +299,12 @@ func spawn_manifest_plant(rec: Dictionary, pos: Vector2, target_h: float, root_w
 	if slot_files.is_empty():
 		return
 
+	var anchor_uv: Vector2 = Vector2(-1.0, -1.0)
+	var raw_anchor = rec.get("root_anchor", null)
+	if raw_anchor is Array and raw_anchor.size() >= 2:
+		if (raw_anchor[0] is float or raw_anchor[0] is int) and (raw_anchor[1] is float or raw_anchor[1] is int):
+			anchor_uv = Vector2(float(raw_anchor[0]), float(raw_anchor[1]))
+
 	var my_gen_id: int = generation_id
 	var loaded_textures: Dictionary = {"red": null, "green": null, "blue": null}
 	var remaining: Array = [slot_files.size()]
@@ -317,7 +323,8 @@ func spawn_manifest_plant(rec: Dictionary, pos: Vector2, target_h: float, root_w
 							loaded_textures["green"],
 							loaded_textures["blue"],
 							target_h,
-							root_w
+							root_w,
+							anchor_uv
 						)
 						p.show_footprint_ring = footprints_visible
 						update_plant_colors(p)

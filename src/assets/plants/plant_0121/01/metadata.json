@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 298,
     "height": 250,
-    "root_width": 26,
-    "root_ratio": 0.087,
+    "root_width": 61,
+    "root_ratio": 0.205,
     "ground_ellipse": [
-        26,
-        14
+        61,
+        34
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "多年生常绿草本，叶片宽大具天鹅绒质感，深浅相间的斑马状横向条纹鲜明，叶背紫红。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5152,
+        0.916
+    ],
+    "root_x": 153.53,
+    "root_y": 229
 }

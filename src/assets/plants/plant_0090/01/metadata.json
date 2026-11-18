@@ -4,10 +4,10 @@
     "variant_id": "01",
     "width": 214,
     "height": 250,
-    "root_width": 5,
-    "root_ratio": 0.023,
+    "root_width": 8,
+    "root_ratio": 0.037,
     "ground_ellipse": [
-        5,
+        8,
         4
     ],
     "layers": [
@@ -33,5 +33,11 @@
         ],
         "brief": "伞形科一年生草本，茎秆直立中空，羽状细裂叶散发特殊芳香并开金黄色复伞形花序。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5208,
+        0.996
+    ],
+    "root_x": 111.45,
+    "root_y": 249
 }

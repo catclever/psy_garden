@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 229,
     "height": 250,
-    "root_width": 35,
-    "root_ratio": 0.153,
+    "root_width": 21,
+    "root_ratio": 0.092,
     "ground_ellipse": [
-        35,
-        19
+        21,
+        12
     ],
     "layers": [
         "layer-red",
@@ -34,5 +34,11 @@
         ],
         "brief": "强健的附生或岩生兰科植物，假鳞茎坚硬粗壮，总状花序密密开满乳白色香花。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.4756,
+        0.996
+    ],
+    "root_x": 108.92,
+    "root_y": 249
 }

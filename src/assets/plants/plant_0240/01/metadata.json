@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 267,
     "height": 250,
-    "root_width": 40,
-    "root_ratio": 0.15,
+    "root_width": 39,
+    "root_ratio": 0.146,
     "ground_ellipse": [
-        40,
-        22
+        39,
+        21
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "原產於澳大利亞熱帶地區的古老裸子植物，樹幹直立粗壯，頂端密生硬質羽狀複葉構成掌狀樹冠。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.3625,
+        0.996
+    ],
+    "root_x": 96.79,
+    "root_y": 249
 }

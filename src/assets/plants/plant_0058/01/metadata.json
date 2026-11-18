@@ -4,10 +4,10 @@
     "variant_id": "01",
     "width": 242,
     "height": 250,
-    "root_width": 5,
-    "root_ratio": 0.021,
+    "root_width": 8,
+    "root_ratio": 0.033,
     "ground_ellipse": [
-        5,
+        8,
         4
     ],
     "layers": [
@@ -34,5 +34,11 @@
         ],
         "brief": "菊科多年生草本植物，披针形叶片对生具浅齿且富含极高甜度成分，头状花序开白色小花。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5591,
+        0.996
+    ],
+    "root_x": 135.3,
+    "root_y": 249
 }

@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 241,
     "height": 250,
-    "root_width": 36,
-    "root_ratio": 0.149,
+    "root_width": 52,
+    "root_ratio": 0.216,
     "ground_ellipse": [
-        36,
-        20
+        52,
+        29
     ],
     "layers": [
         "layer-red",
@@ -34,5 +34,11 @@
         ],
         "brief": "具可食用的纺锤形块根，基生狭长叶片，细长花茎顶生单朵金黄色舌状头状花序。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.3786,
+        0.928
+    ],
+    "root_x": 91.24,
+    "root_y": 232
 }

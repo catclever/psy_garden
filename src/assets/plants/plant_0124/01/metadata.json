@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 232,
     "height": 250,
-    "root_width": 3,
-    "root_ratio": 0.013,
+    "root_width": 79,
+    "root_ratio": 0.341,
     "ground_ellipse": [
-        3,
-        4
+        79,
+        43
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "多年生大型丛生禾草，全株富含浓郁柠檬香气，叶片细长下垂，花序疏散弯曲成波浪状。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.4836,
+        0.828
+    ],
+    "root_x": 112.19,
+    "root_y": 207
 }

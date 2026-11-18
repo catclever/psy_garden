@@ -4,10 +4,10 @@
     "variant_id": "01",
     "width": 204,
     "height": 250,
-    "root_width": 7,
-    "root_ratio": 0.034,
+    "root_width": 8,
+    "root_ratio": 0.039,
     "ground_ellipse": [
-        7,
+        8,
         4
     ],
     "layers": [
@@ -34,5 +34,11 @@
         ],
         "brief": "多年生蔓延草本，卵形绿叶边缘带齿痕常嵌金黄斑纹，揉碎散发薄荷与温和姜香。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5216,
+        0.996
+    ],
+    "root_x": 106.4,
+    "root_y": 249
 }

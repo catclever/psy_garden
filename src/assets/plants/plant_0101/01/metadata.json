@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 207,
     "height": 250,
-    "root_width": 72,
-    "root_ratio": 0.348,
+    "root_width": 48,
+    "root_ratio": 0.232,
     "ground_ellipse": [
-        72,
-        40
+        48,
+        26
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "仙人掌科单属单种植物，球体具细长呈三棱柱状的疣突与纸质刺，形似小型龙舌兰。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.4311,
+        0.996
+    ],
+    "root_x": 89.23,
+    "root_y": 249
 }

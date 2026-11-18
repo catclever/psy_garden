@@ -4,10 +4,10 @@
     "variant_id": "01",
     "width": 194,
     "height": 250,
-    "root_width": 22,
-    "root_ratio": 0.113,
+    "root_width": 21,
+    "root_ratio": 0.108,
     "ground_ellipse": [
-        22,
+        21,
         12
     ],
     "layers": [
@@ -33,5 +33,11 @@
         ],
         "brief": "全株被覆灰白绒毛的宿根草本，叶片灰白微韧，顶生密集粉紫穗状花序。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5767,
+        0.996
+    ],
+    "root_x": 111.87,
+    "root_y": 249
 }

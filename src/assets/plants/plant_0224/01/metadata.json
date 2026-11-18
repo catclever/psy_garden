@@ -4,10 +4,10 @@
     "variant_id": "01",
     "width": 140,
     "height": 250,
-    "root_width": 11,
-    "root_ratio": 0.079,
+    "root_width": 10,
+    "root_ratio": 0.071,
     "ground_ellipse": [
-        11,
+        10,
         6
     ],
     "layers": [
@@ -33,5 +33,11 @@
         ],
         "brief": "高大常绿针叶乔木，树冠呈极为狭长的圆柱状或尖塔形，侧枝轮生开展而短小，树姿挺拔秀丽。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.4969,
+        0.996
+    ],
+    "root_x": 69.56,
+    "root_y": 249
 }

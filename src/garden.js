@@ -230,6 +230,27 @@ function getHeightRange(plant) {
 }
 
 /**
+ * Extract and clamp normalized [ax, ay] stem-base root anchor UV from plant.root_anchor.
+ */
+function getRootAnchorUV(plant) {
+    const raw = plant && plant.root_anchor;
+    if (Array.isArray(raw) && raw.length >= 2) {
+        const rx = raw[0];
+        const ry = raw[1];
+        const validX = typeof rx === 'number' || (typeof rx === 'string' && rx.trim() !== '');
+        const validY = typeof ry === 'number' || (typeof ry === 'string' && ry.trim() !== '');
+        if (validX && validY) {
+            const ax = Number(rx);
+            const ay = Number(ry);
+            if (Number.isFinite(ax) && Number.isFinite(ay)) {
+                return [clamp(ax, 0.05, 0.95), clamp(ay, 0.60, 1.0)];
+            }
+        }
+    }
+    return [0.5, 1.0];
+}
+
+/**
  * Sample botanical height in px, derive aspect-ratio-preserved sprite size and 0.55 elliptical stem footprint.
  */
 function samplePlantDimensions(plant, rng = Math.random) {
@@ -550,6 +571,11 @@ if (typeof document !== 'undefined') {
         sprite.style.width = `${targetW}px`;
         sprite.style.height = `${targetH}px`;
 
+        const [ax, ay] = getRootAnchorUV(plant);
+        const shiftXPct = Math.round((0.5 - ax) * 10000) / 100;
+        const shiftYPct = Math.round((1.0 - ay) * 10000) / 100;
+        const hasAnchorShift = Math.abs(shiftXPct) > 0.05 || Math.abs(shiftYPct) > 0.05;
+
         const layers = Array.isArray(plant.layer_files) && plant.layer_files.length > 0
             ? plant.layer_files
             : [{ slot: 'green', file: 'layer_green.png' }];
@@ -558,6 +584,9 @@ if (typeof document !== 'undefined') {
             const tint = getLayerTintClass(plant, slotIdx, instanceIdx);
             layerEl.className = `sprite-layer layer-${layer.slot}${tint ? ` ${tint}` : ''}`;
             layerEl.style.backgroundImage = `url('${plant.path_prefix}/${layer.file}')`;
+            if (hasAnchorShift) {
+                layerEl.style.transform = `translate(${shiftXPct}%, ${shiftYPct}%)`;
+            }
             sprite.appendChild(layerEl);
         });
 
@@ -1002,6 +1031,7 @@ if (typeof document !== 'undefined') {
         window.cycleColorMode = cycleColorMode;
         window.toggleCatalogDrawer = toggleCatalogDrawer;
         window.clearGarden = clearGarden;
+        window.createPlantNodeElement = createPlantNodeElement;
     }
 
     if (document.readyState === 'loading') {
@@ -1026,6 +1056,7 @@ if (typeof module !== 'undefined' && module.exports) {
         FALLBACK_PLANTS,
         clamp,
         getHeightRange,
+        getRootAnchorUV,
         samplePlantDimensions,
         pctToPx,
         pxToPct,

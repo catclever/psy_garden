@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 261,
     "height": 250,
-    "root_width": 30,
-    "root_ratio": 0.115,
+    "root_width": 74,
+    "root_ratio": 0.284,
     "ground_ellipse": [
-        30,
-        16
+        74,
+        41
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "大型落叶乔木，叶形奇特宛如中国传统马褂，花单生似黄绿色郁金香。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5261,
+        0.928
+    ],
+    "root_x": 137.31,
+    "root_y": 232
 }

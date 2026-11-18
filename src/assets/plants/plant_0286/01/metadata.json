@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 285,
     "height": 250,
-    "root_width": 113,
-    "root_ratio": 0.396,
+    "root_width": 103,
+    "root_ratio": 0.361,
     "ground_ellipse": [
-        113,
-        62
+        103,
+        57
     ],
     "layers": [
         "layer-red",
@@ -34,5 +34,11 @@
         ],
         "brief": "小型几何形莲座多肉，三角状厚叶坚硬内扣，深绿叶面上饰有清晰鲜明的白色角质线条。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5248,
+        0.896
+    ],
+    "root_x": 149.56,
+    "root_y": 224
 }

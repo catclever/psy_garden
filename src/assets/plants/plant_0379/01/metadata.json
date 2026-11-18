@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 270,
     "height": 250,
-    "root_width": 9,
-    "root_ratio": 0.033,
+    "root_width": 8,
+    "root_ratio": 0.03,
     "ground_ellipse": [
-        9,
-        5
+        8,
+        4
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "多年生肉质草本，叶色浓绿边缘具波状齿，顶生聚伞花序密覆艳丽小花。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.513,
+        0.996
+    ],
+    "root_x": 138.5,
+    "root_y": 249
 }

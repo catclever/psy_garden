@@ -55,6 +55,7 @@ func load_plant(id: String):
 
 	var target_h: float = desired_height_px
 	var root_w: float = meta_root_width
+	var override_anchor_uv: Vector2 = Vector2(-1.0, -1.0)
 
 	var meta_path = base_path + "metadata.json"
 	if FileAccess.file_exists(meta_path):
@@ -71,10 +72,14 @@ func load_plant(id: String):
 						var min_px: float = clampf(float(h_arr[0]), 35.0, 220.0)
 						var max_px: float = clampf(float(h_arr[1]), min_px, 220.0)
 						target_h = randf_range(min_px, max_px)
+			var ra = meta.get("root_anchor", null)
+			if ra is Array and ra.size() >= 2:
+				if (ra[0] is float or ra[0] is int) and (ra[1] is float or ra[1] is int):
+					override_anchor_uv = Vector2(float(ra[0]), float(ra[1]))
 
-	setup_with_textures(id, tex_red, tex_green, tex_blue, target_h, root_w)
+	setup_with_textures(id, tex_red, tex_green, tex_blue, target_h, root_w, override_anchor_uv)
 
-func setup_with_textures(id: String, tex_red: Texture2D, tex_green: Texture2D, tex_blue: Texture2D, target_h_px: float = -1.0, root_w_px: float = -1.0):
+func setup_with_textures(id: String, tex_red: Texture2D, tex_green: Texture2D, tex_blue: Texture2D, target_h_px: float = -1.0, root_w_px: float = -1.0, override_anchor_uv: Vector2 = Vector2(-1.0, -1.0)):
 	if not sprite_red: sprite_red = get_node_or_null("RedSprite")
 	if not sprite_green: sprite_green = get_node_or_null("GreenSprite")
 	if not sprite_blue: sprite_blue = get_node_or_null("BlueSprite")
@@ -161,8 +166,15 @@ func setup_with_textures(id: String, tex_red: Texture2D, tex_green: Texture2D, t
 	if count > 0:
 		root_x = sum_x / float(count)
 
-	root_anchor = Vector2(root_x, float(bottom_y))
-	root_uv_y = float(bottom_y) / float(max(height, 1))
+	if override_anchor_uv.x >= 0.0 and override_anchor_uv.y > 0.0:
+		root_anchor = Vector2(
+			clampf(override_anchor_uv.x, 0.05, 0.95) * float(width),
+			clampf(override_anchor_uv.y, 0.60, 1.0) * float(height)
+		)
+		root_uv_y = clampf(override_anchor_uv.y, 0.05, 1.0)
+	else:
+		root_anchor = Vector2(root_x, float(bottom_y))
+		root_uv_y = float(bottom_y) / float(max(height, 1))
 
 	var raw_w: float = max(24.0, float(max_x - min_x))
 	var raw_h: float = max(24.0, float(bottom_y - top_y))

@@ -4,10 +4,10 @@
     "variant_id": "01",
     "width": 223,
     "height": 250,
-    "root_width": 6,
-    "root_ratio": 0.027,
+    "root_width": 8,
+    "root_ratio": 0.036,
     "ground_ellipse": [
-        6,
+        8,
         4
     ],
     "layers": [
@@ -34,5 +34,11 @@
         ],
         "brief": "唇形科芳香低矮小灌木或匍匐草本，密生微小叶片并绽放密集粉紫色小花。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.497,
+        0.996
+    ],
+    "root_x": 110.84,
+    "root_y": 249
 }

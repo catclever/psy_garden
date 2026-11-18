@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 334,
     "height": 250,
-    "root_width": 122,
-    "root_ratio": 0.365,
+    "root_width": 32,
+    "root_ratio": 0.096,
     "ground_ellipse": [
-        122,
-        67
+        32,
+        18
     ],
     "layers": [
         "layer-red",
@@ -34,5 +34,11 @@
         ],
         "brief": "杜鹃花科常绿匍匐垫状矮灌木，革质匙形小叶四季浓绿，结鲜红小巧浆果。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.6031,
+        0.988
+    ],
+    "root_x": 201.43,
+    "root_y": 247
 }

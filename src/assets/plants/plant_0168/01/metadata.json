@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 215,
     "height": 250,
-    "root_width": 98,
-    "root_ratio": 0.456,
+    "root_width": 77,
+    "root_ratio": 0.358,
     "ground_ellipse": [
-        98,
-        54
+        77,
+        42
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "附生或地生大型蘭花，具肥大假鱗莖與向上直立深凹如鬱金香狀的單生花。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.4402,
+        0.848
+    ],
+    "root_x": 94.63,
+    "root_y": 212
 }

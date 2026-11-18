@@ -4,10 +4,10 @@
     "variant_id": "01",
     "width": 190,
     "height": 250,
-    "root_width": 6,
-    "root_ratio": 0.032,
+    "root_width": 8,
+    "root_ratio": 0.042,
     "ground_ellipse": [
-        6,
+        8,
         4
     ],
     "layers": [
@@ -34,5 +34,11 @@
         ],
         "brief": "具特征性四棱茎和对生芳香叶的多年生草本，开淡红至白色的轮伞花序。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5064,
+        0.996
+    ],
+    "root_x": 96.21,
+    "root_y": 249
 }

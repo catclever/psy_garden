@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 260,
     "height": 250,
-    "root_width": 103,
-    "root_ratio": 0.396,
+    "root_width": 29,
+    "root_ratio": 0.112,
     "ground_ellipse": [
-        103,
-        57
+        29,
+        16
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "古老的常绿木本裸子植物，厚重圆柱状树干顶端螺旋展开坚硬的深绿羽状复叶冠。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.4995,
+        0.996
+    ],
+    "root_x": 129.88,
+    "root_y": 249
 }

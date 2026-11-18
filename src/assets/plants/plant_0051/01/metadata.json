@@ -4,10 +4,10 @@
     "variant_id": "01",
     "width": 192,
     "height": 250,
-    "root_width": 7,
-    "root_ratio": 0.036,
+    "root_width": 8,
+    "root_ratio": 0.042,
     "ground_ellipse": [
-        7,
+        8,
         4
     ],
     "layers": [
@@ -33,5 +33,11 @@
         ],
         "brief": "樟科落叶乔木，同株常具有单裂、二裂与三裂异型叶，秋季叶色橙红灿烂且全株芳香。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.519,
+        0.996
+    ],
+    "root_x": 99.65,
+    "root_y": 249
 }

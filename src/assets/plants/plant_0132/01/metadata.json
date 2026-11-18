@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 231,
     "height": 250,
-    "root_width": 12,
-    "root_ratio": 0.052,
+    "root_width": 10,
+    "root_ratio": 0.043,
     "ground_ellipse": [
-        12,
-        7
+        10,
+        6
     ],
     "layers": [
         "layer-red",
@@ -34,5 +34,11 @@
         ],
         "brief": "多年生常绿肉质亚灌木，分枝纤细微下垂，匙形肉质小叶浓绿，悬垂深红或橙红色小巧管状宫灯花。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5125,
+        0.996
+    ],
+    "root_x": 118.39,
+    "root_y": 249
 }

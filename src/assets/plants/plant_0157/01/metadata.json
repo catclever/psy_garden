@@ -4,10 +4,10 @@
     "variant_id": "01",
     "width": 215,
     "height": 250,
-    "root_width": 48,
-    "root_ratio": 0.223,
+    "root_width": 47,
+    "root_ratio": 0.219,
     "ground_ellipse": [
-        48,
+        47,
         26
     ],
     "layers": [
@@ -33,5 +33,11 @@
         ],
         "brief": "高山無莖多肉植物，尖銳肉質葉片緊密排列呈現完美的五瓣螺旋幾何外觀。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.4583,
+        0.996
+    ],
+    "root_x": 98.53,
+    "root_y": 249
 }

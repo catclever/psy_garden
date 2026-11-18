@@ -4,6 +4,12 @@ import json
 import time
 from PIL import Image
 
+_TOOLS_DIR = os.path.dirname(os.path.abspath(__file__))
+if _TOOLS_DIR not in sys.path:
+    sys.path.insert(0, _TOOLS_DIR)
+
+from root_anchor_calibrator import calibrate_root_anchor
+
 
 def build_asset(
     input_path,
@@ -66,39 +72,6 @@ def build_asset(
         print(f"Scaled to: {cropped_img.size}")
 
     c_width, c_height = cropped_img.size
-
-    # 1.5 Scan bottom non-transparent rows to determine root_width (actual stem/trunk pixel width)
-    print("Calculating root_width...")
-    rows_to_scan = min(10, c_height)
-    max_row_width = 0
-
-    for row_y in range(c_height - 1, c_height - 1 - rows_to_scan, -1):
-        row_min_x = c_width
-        row_max_x = -1
-        for col_x in range(c_width):
-            r, g, b, a = cropped_img.getpixel((col_x, row_y))
-
-            if is_white_bg:
-                bg_dist = 255 - min(r, g, b)
-            else:
-                bg_dist = max(r, g, b)
-
-            # If not background (using similar logic to splitting alpha)
-            if bg_dist >= 15:
-                if col_x < row_min_x:
-                    row_min_x = col_x
-                if col_x > row_max_x:
-                    row_max_x = col_x
-
-        if row_max_x >= row_min_x:
-            r_w = row_max_x - row_min_x + 1
-            if r_w > max_row_width:
-                max_row_width = r_w
-
-    root_width = max_row_width if max_row_width > 0 else max(10, int(c_width * 0.15))
-    root_ratio = round(root_width / c_width, 3)
-    ground_ellipse = [root_width, max(4, int(round(root_width * 0.55)))]
-    print(f"Calculated root_width: {root_width}px (ratio: {root_ratio}, ellipse: {ground_ellipse})")
 
     # 2. Split layers
     print("Splitting channels...")
@@ -188,6 +161,7 @@ def build_asset(
     img_green.save(out_green)
 
     layers_created = ["layer-red", "layer-green"]
+    img_blue = None
 
     if has_blue:
         img_blue = Image.new("RGBA", cropped_img.size)
@@ -196,6 +170,17 @@ def build_asset(
         img_blue.save(out_blue)
         layers_created.append("layer-blue")
 
+    # 3. Calibrate stem-first root_anchor and footprint metrics
+    print("Calibrating stem-first root_anchor...")
+    cal = calibrate_root_anchor(img_red, img_green, img_blue if has_blue else None)
+    root_width = cal["root_width"]
+    root_ratio = cal["root_ratio"]
+    ground_ellipse = cal["ground_ellipse"]
+    print(
+        f"Calibrated root_anchor={cal['root_anchor']}, root_width={root_width}px "
+        f"(ratio: {root_ratio}, ellipse: {ground_ellipse})"
+    )
+
     # Write metadata
     metadata = {
         "name": plant_name,
@@ -203,6 +188,9 @@ def build_asset(
         "variant_id": variant_id,
         "width": c_width,
         "height": c_height,
+        "root_anchor": cal["root_anchor"],
+        "root_x": cal["root_x"],
+        "root_y": cal["root_y"],
         "root_width": root_width,
         "root_ratio": root_ratio,
         "ground_ellipse": ground_ellipse,

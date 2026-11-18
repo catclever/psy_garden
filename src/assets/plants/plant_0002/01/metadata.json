@@ -4,10 +4,10 @@
     "variant_id": "01",
     "width": 245,
     "height": 250,
-    "root_width": 7,
-    "root_ratio": 0.029,
+    "root_width": 8,
+    "root_ratio": 0.033,
     "ground_ellipse": [
-        7,
+        8,
         4
     ],
     "layers": [
@@ -33,5 +33,11 @@
         ],
         "brief": "具蔓性灌木，枝條柔軟下垂，盛開金黃色漏斗形大花。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5166,
+        0.996
+    ],
+    "root_x": 126.57,
+    "root_y": 249
 }

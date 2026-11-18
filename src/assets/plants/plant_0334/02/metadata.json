@@ -1,0 +1,45 @@
+{
+    "name": "plant_0334",
+    "display_name": "绣球花",
+    "variant_id": "02",
+    "width": 255,
+    "height": 250,
+    "root_anchor": [
+        0.5076,
+        0.996
+    ],
+    "root_x": 129.45,
+    "root_y": 249,
+    "root_width": 20,
+    "root_ratio": 0.078,
+    "ground_ellipse": [
+        20,
+        11
+    ],
+    "layers": [
+        "layer-red",
+        "layer-green",
+        "layer-blue"
+    ],
+    "source_image": "plant_0334.jpg",
+    "true_color": true,
+    "created_at": 1794979353,
+    "status": "ready",
+    "ai_analysis": {
+        "zh_name": "绣球花",
+        "scientific_name": "Hydrangea macrophylla",
+        "botanical_height_m": [
+            1.0,
+            2.2
+        ],
+        "plant_type": "shrub",
+        "growth_habit": "bush",
+        "suggested_game_height_px": [
+            110,
+            145
+        ],
+        "brief": "温带落叶灌木，密生近球形大型伞房花序，花色随土壤酸碱度变化。",
+        "status": "success"
+    },
+    "enabled": true
+}

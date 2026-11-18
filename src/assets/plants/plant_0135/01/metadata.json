@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 167,
     "height": 250,
-    "root_width": 47,
-    "root_ratio": 0.281,
+    "root_width": 45,
+    "root_ratio": 0.269,
     "ground_ellipse": [
-        47,
-        26
+        45,
+        25
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "肉质灌木状仙人掌，分枝扁平呈倒卵状长圆形翠绿色，刺座常具单根长刺，边缘开鲜黄色花朵。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5227,
+        0.996
+    ],
+    "root_x": 87.28,
+    "root_y": 249
 }

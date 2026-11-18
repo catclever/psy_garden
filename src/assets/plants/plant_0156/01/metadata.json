@@ -33,5 +33,6 @@
         ],
         "brief": "菊科直立多年生草本，具肉質塊根與羽狀裂葉，頂生橙黃色筒狀花頭。",
         "status": "success"
-    }
+    },
+    "enabled": false
 }

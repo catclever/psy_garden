@@ -4,10 +4,10 @@
     "variant_id": "01",
     "width": 141,
     "height": 250,
-    "root_width": 5,
-    "root_ratio": 0.035,
+    "root_width": 8,
+    "root_ratio": 0.057,
     "ground_ellipse": [
-        5,
+        8,
         4
     ],
     "layers": [
@@ -33,5 +33,11 @@
         ],
         "brief": "早春破雪绽放的毛茛科草本，金黄色花瓣光亮，叶呈羽状细裂。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.6563,
+        0.996
+    ],
+    "root_x": 92.54,
+    "root_y": 249
 }

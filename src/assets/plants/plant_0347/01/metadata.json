@@ -33,5 +33,6 @@
         ],
         "brief": "常绿木质大藤本（断肠草），全株剧毒，顶生黄色漏斗状小花。",
         "status": "success"
-    }
+    },
+    "enabled": false
 }

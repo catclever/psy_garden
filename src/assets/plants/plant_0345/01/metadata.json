@@ -4,10 +4,10 @@
     "variant_id": "01",
     "width": 241,
     "height": 250,
-    "root_width": 7,
-    "root_ratio": 0.029,
+    "root_width": 8,
+    "root_ratio": 0.033,
     "ground_ellipse": [
-        7,
+        8,
         4
     ],
     "layers": [
@@ -33,5 +33,11 @@
         ],
         "brief": "多年生匍匐多肉植物，粉白厚匙形肉质叶排列成形如风车的莲座状。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5187,
+        0.996
+    ],
+    "root_x": 125.0,
+    "root_y": 249
 }

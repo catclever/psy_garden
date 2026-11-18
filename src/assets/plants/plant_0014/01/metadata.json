@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 183,
     "height": 250,
-    "root_width": 19,
-    "root_ratio": 0.104,
+    "root_width": 17,
+    "root_ratio": 0.093,
     "ground_ellipse": [
-        19,
-        10
+        17,
+        9
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "擬石蓮花屬多肉植物，緊湊蓮座狀排列，匙形葉片淡藍透粉披薄白霜。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5242,
+        0.996
+    ],
+    "root_x": 95.93,
+    "root_y": 249
 }

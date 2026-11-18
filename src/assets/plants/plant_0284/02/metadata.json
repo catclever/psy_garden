@@ -1,0 +1,44 @@
+{
+    "name": "plant_0284",
+    "display_name": "晃玉",
+    "variant_id": "02",
+    "width": 241,
+    "height": 250,
+    "root_anchor": [
+        0.5011,
+        0.996
+    ],
+    "root_x": 120.77,
+    "root_y": 249,
+    "root_width": 87,
+    "root_ratio": 0.361,
+    "ground_ellipse": [
+        87,
+        48
+    ],
+    "layers": [
+        "layer-red",
+        "layer-green"
+    ],
+    "source_image": "plant_0284.jpg",
+    "true_color": true,
+    "created_at": 1794979349,
+    "status": "ready",
+    "ai_analysis": {
+        "zh_name": "晃玉",
+        "scientific_name": "Euphorbia obesa",
+        "botanical_height_m": [
+            0.08,
+            0.2
+        ],
+        "plant_type": "flower",
+        "growth_habit": "bush",
+        "suggested_game_height_px": [
+            40,
+            60
+        ],
+        "brief": "无刺球状多肉植物，体态圆浑如棒球，表皮呈灰绿至紫褐色并具规则细密棱脊。",
+        "status": "success"
+    },
+    "enabled": true
+}

@@ -1,0 +1,45 @@
+{
+    "name": "plant_0301",
+    "display_name": "有毒植物",
+    "variant_id": "02",
+    "width": 257,
+    "height": 250,
+    "root_anchor": [
+        0.5051,
+        0.996
+    ],
+    "root_x": 129.82,
+    "root_y": 249,
+    "root_width": 93,
+    "root_ratio": 0.362,
+    "ground_ellipse": [
+        93,
+        51
+    ],
+    "layers": [
+        "layer-red",
+        "layer-green",
+        "layer-blue"
+    ],
+    "source_image": "plant_0301.jpg",
+    "true_color": true,
+    "created_at": 1794979350,
+    "status": "ready",
+    "ai_analysis": {
+        "zh_name": "有毒植物",
+        "scientific_name": "Atropa belladonna",
+        "botanical_height_m": [
+            0.6,
+            1.5
+        ],
+        "plant_type": "flower",
+        "growth_habit": "bush",
+        "suggested_game_height_px": [
+            65,
+            105
+        ],
+        "brief": "以颠茄为代表的剧毒草本植物，具钟形暗紫花朵与黑色浆果。",
+        "status": "success"
+    },
+    "enabled": true
+}

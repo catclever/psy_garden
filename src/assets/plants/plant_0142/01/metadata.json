@@ -33,5 +33,6 @@
         ],
         "brief": "具直立或微攀援莖的草本植物，心形葉腋生黃綠色管狀漏斗花。",
         "status": "success"
-    }
+    },
+    "enabled": false
 }

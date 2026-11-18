@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 224,
     "height": 250,
-    "root_width": 9,
-    "root_ratio": 0.04,
+    "root_width": 8,
+    "root_ratio": 0.036,
     "ground_ellipse": [
-        9,
-        5
+        8,
+        4
     ],
     "layers": [
         "layer-red",
@@ -34,5 +34,11 @@
         ],
         "brief": "多年生湿生直立草本，全株具芳香，茎四棱形多分枝，叶卵圆形具细锯齿，腋生轮伞花序小巧淡紫。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5359,
+        0.996
+    ],
+    "root_x": 120.04,
+    "root_y": 249
 }

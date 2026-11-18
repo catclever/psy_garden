@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 199,
     "height": 250,
-    "root_width": 15,
-    "root_ratio": 0.075,
+    "root_width": 39,
+    "root_ratio": 0.196,
     "ground_ellipse": [
-        15,
-        8
+        39,
+        21
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "常绿灌木，大形倒卵状长圆形深绿叶片上镶嵌鲜明黄色叶脉，顶生黄色管状花及红苞片。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5204,
+        0.952
+    ],
+    "root_x": 103.57,
+    "root_y": 238
 }

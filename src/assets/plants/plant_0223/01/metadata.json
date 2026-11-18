@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 224,
     "height": 250,
-    "root_width": 9,
-    "root_ratio": 0.04,
+    "root_width": 8,
+    "root_ratio": 0.036,
     "ground_ellipse": [
-        9,
-        5
+        8,
+        4
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "多年生草本鳞茎植物，花茎直立挺拔，伞形花序顶生鲜黄色的花朵，花被裂片强烈反卷且雄蕊长长伸出。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.4984,
+        0.996
+    ],
+    "root_x": 111.64,
+    "root_y": 249
 }

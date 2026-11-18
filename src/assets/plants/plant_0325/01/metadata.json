@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 222,
     "height": 250,
-    "root_width": 57,
-    "root_ratio": 0.257,
+    "root_width": 50,
+    "root_ratio": 0.225,
     "ground_ellipse": [
-        57,
-        31
+        50,
+        28
     ],
     "layers": [
         "layer-red",
@@ -34,5 +34,11 @@
         ],
         "brief": "附生兰花，圆锥花序轻盈展开，白色唇瓣形如翩跹起舞的纯白仙女。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.4732,
+        0.968
+    ],
+    "root_x": 105.05,
+    "root_y": 242
 }

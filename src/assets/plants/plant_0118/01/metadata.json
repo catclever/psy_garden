@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 279,
     "height": 250,
-    "root_width": 67,
-    "root_ratio": 0.24,
+    "root_width": 74,
+    "root_ratio": 0.265,
     "ground_ellipse": [
-        67,
-        37
+        74,
+        41
     ],
     "layers": [
         "layer-red",
@@ -34,5 +34,11 @@
         ],
         "brief": "多年生直立草本，全株具清凉香气，被白色绒毛，长披针形叶片边缘具齿，轮伞花序密集组成顶生穗状。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.6107,
+        0.976
+    ],
+    "root_x": 170.39,
+    "root_y": 244
 }

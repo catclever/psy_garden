@@ -4,10 +4,10 @@
     "variant_id": "01",
     "width": 273,
     "height": 250,
-    "root_width": 35,
-    "root_ratio": 0.128,
+    "root_width": 34,
+    "root_ratio": 0.125,
     "ground_ellipse": [
-        35,
+        34,
         19
     ],
     "layers": [
@@ -34,5 +34,11 @@
         ],
         "brief": "二年生或多年生肉质草本，基生肉质叶排列成紧密莲座状，顶生密集小花花序。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.6279,
+        0.996
+    ],
+    "root_x": 171.41,
+    "root_y": 249
 }

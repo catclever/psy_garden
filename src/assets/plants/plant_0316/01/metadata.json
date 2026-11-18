@@ -33,5 +33,6 @@
         ],
         "brief": "落叶大乔木，叶全缘或近基部浅裂似梓树叶，翅果开展。",
         "status": "success"
-    }
+    },
+    "enabled": false
 }

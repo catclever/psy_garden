@@ -12,10 +12,10 @@
     "source_image": "candidate_plant_338_野藍薊.jpg",
     "true_color": true,
     "created_at": 1792466856,
-    "root_width": 7,
-    "root_ratio": 0.039,
+    "root_width": 8,
+    "root_ratio": 0.045,
     "ground_ellipse": [
-        7,
+        8,
         4
     ],
     "status": "ready",
@@ -34,5 +34,11 @@
         ],
         "brief": "植株直立，茎生粗糙硬毛，披针形叶片，顶生蝎尾状聚伞花序，花冠蓝紫色。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5253,
+        0.996
+    ],
+    "root_x": 93.5,
+    "root_y": 249
 }

@@ -1,0 +1,45 @@
+{
+    "name": "plant_0350",
+    "display_name": "心叶日中花",
+    "variant_id": "02",
+    "width": 321,
+    "height": 250,
+    "root_anchor": [
+        0.5039,
+        0.996
+    ],
+    "root_x": 161.77,
+    "root_y": 249,
+    "root_width": 22,
+    "root_ratio": 0.069,
+    "ground_ellipse": [
+        22,
+        12
+    ],
+    "layers": [
+        "layer-red",
+        "layer-green",
+        "layer-blue"
+    ],
+    "source_image": "plant_0350.jpg",
+    "true_color": true,
+    "created_at": 1794979354,
+    "status": "ready",
+    "ai_analysis": {
+        "zh_name": "心叶日中花",
+        "scientific_name": "Mesembryanthemum cordifolium",
+        "botanical_height_m": [
+            0.1,
+            0.25
+        ],
+        "plant_type": "groundcover",
+        "growth_habit": "carpet",
+        "suggested_game_height_px": [
+            40,
+            58
+        ],
+        "brief": "肉质匍匐草本，对生心形厚叶，顶生深粉红色雏菊状小花。",
+        "status": "success"
+    },
+    "enabled": true
+}

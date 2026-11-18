@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 226,
     "height": 250,
-    "root_width": 22,
-    "root_ratio": 0.097,
+    "root_width": 37,
+    "root_ratio": 0.164,
     "ground_ellipse": [
-        22,
-        12
+        37,
+        20
     ],
     "layers": [
         "layer-red",
@@ -34,5 +34,11 @@
         ],
         "brief": "肉质多多分枝灌木，肉质小叶对生圆润，茎干木质化呈红褐色。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5382,
+        0.92
+    ],
+    "root_x": 121.63,
+    "root_y": 230
 }

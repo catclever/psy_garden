@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 254,
     "height": 250,
-    "root_width": 10,
-    "root_ratio": 0.039,
+    "root_width": 9,
+    "root_ratio": 0.035,
     "ground_ellipse": [
-        10,
-        6
+        9,
+        5
     ],
     "layers": [
         "layer-red",
@@ -34,5 +34,11 @@
         ],
         "brief": "唇形科芳香半灌木，具披針形對生葉與頂生密集的深藍紫色唇形花序。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5002,
+        0.996
+    ],
+    "root_x": 127.04,
+    "root_y": 249
 }

@@ -4,10 +4,10 @@
     "variant_id": "01",
     "width": 253,
     "height": 250,
-    "root_width": 13,
-    "root_ratio": 0.051,
+    "root_width": 12,
+    "root_ratio": 0.047,
     "ground_ellipse": [
-        13,
+        12,
         7
     ],
     "layers": [
@@ -33,5 +33,11 @@
         ],
         "brief": "牡丹与芍药远缘杂交培育出的半灌木，兼具芍药的丰花性与牡丹硕大繁复的花型，株型紧凑且茎秆直立强健。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5184,
+        0.996
+    ],
+    "root_x": 131.14,
+    "root_y": 249
 }

@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 276,
     "height": 250,
-    "root_width": 34,
-    "root_ratio": 0.123,
+    "root_width": 31,
+    "root_ratio": 0.112,
     "ground_ellipse": [
-        34,
-        19
+        31,
+        17
     ],
     "layers": [
         "layer-red",
@@ -34,5 +34,11 @@
         ],
         "brief": "一年生芳香草本植物，茎纤细多分枝，叶线状披针形，叶腋开淡紫色或白色小唇形花。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5187,
+        0.996
+    ],
+    "root_x": 143.16,
+    "root_y": 249
 }

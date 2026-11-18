@@ -34,5 +34,6 @@
         ],
         "brief": "以颠茄为代表的剧毒草本植物，具钟形暗紫花朵与黑色浆果。",
         "status": "success"
-    }
+    },
+    "enabled": false
 }

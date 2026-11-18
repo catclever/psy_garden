@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 256,
     "height": 250,
-    "root_width": 51,
-    "root_ratio": 0.199,
+    "root_width": 42,
+    "root_ratio": 0.164,
     "ground_ellipse": [
-        51,
-        28
+        42,
+        23
     ],
     "layers": [
         "layer-red",
@@ -34,5 +34,11 @@
         ],
         "brief": "小型高山草本植物，茎顶密被厚实白色绒毛的星芒状苞叶簇拥着淡黄色头状花序。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5173,
+        0.996
+    ],
+    "root_x": 132.42,
+    "root_y": 249
 }

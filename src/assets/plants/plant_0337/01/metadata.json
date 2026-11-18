@@ -4,10 +4,10 @@
     "variant_id": "01",
     "width": 201,
     "height": 250,
-    "root_width": 5,
-    "root_ratio": 0.025,
+    "root_width": 8,
+    "root_ratio": 0.04,
     "ground_ellipse": [
-        5,
+        8,
         4
     ],
     "layers": [
@@ -34,5 +34,11 @@
         ],
         "brief": "卵圆形叶片微皱且覆柔毛，揉碎散发温和苹果甜香与清凉气味。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5218,
+        0.996
+    ],
+    "root_x": 104.88,
+    "root_y": 249
 }

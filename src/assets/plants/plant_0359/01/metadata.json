@@ -4,10 +4,10 @@
     "variant_id": "01",
     "width": 215,
     "height": 250,
-    "root_width": 76,
-    "root_ratio": 0.353,
+    "root_width": 77,
+    "root_ratio": 0.358,
     "ground_ellipse": [
-        76,
+        77,
         42
     ],
     "layers": [
@@ -33,5 +33,11 @@
         ],
         "brief": "常绿针叶乔木，树冠深密，线形扁平深绿叶，种子裹于鲜红肉质假种皮中。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.4741,
+        0.944
+    ],
+    "root_x": 101.92,
+    "root_y": 236
 }

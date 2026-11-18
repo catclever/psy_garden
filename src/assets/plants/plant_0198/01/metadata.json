@@ -4,10 +4,10 @@
     "variant_id": "01",
     "width": 193,
     "height": 250,
-    "root_width": 2,
-    "root_ratio": 0.01,
+    "root_width": 8,
+    "root_ratio": 0.041,
     "ground_ellipse": [
-        2,
+        8,
         4
     ],
     "layers": [
@@ -34,5 +34,11 @@
         ],
         "brief": "多年生丛生草本，叶片与长穗状圆锥花序呈现鲜艳的紫红色或紫褐色。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.3581,
+        0.992
+    ],
+    "root_x": 69.11,
+    "root_y": 248
 }

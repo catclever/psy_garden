@@ -33,5 +33,6 @@
         ],
         "brief": "多年生大型陆生蕨类，具长匍匐根状茎与粉绿色幼嫩羽状复叶。",
         "status": "success"
-    }
+    },
+    "enabled": false
 }

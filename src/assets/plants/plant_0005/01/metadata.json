@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 292,
     "height": 250,
-    "root_width": 60,
-    "root_ratio": 0.205,
+    "root_width": 80,
+    "root_ratio": 0.274,
     "ground_ellipse": [
-        60,
-        33
+        80,
+        44
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "常綠喬木，披針形條葉密集排列，種托肉質似羅漢袈裟。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.4325,
+        0.936
+    ],
+    "root_x": 126.3,
+    "root_y": 234
 }

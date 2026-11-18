@@ -4,10 +4,10 @@
     "variant_id": "01",
     "width": 101,
     "height": 250,
-    "root_width": 4,
-    "root_ratio": 0.04,
+    "root_width": 8,
+    "root_ratio": 0.079,
     "ground_ellipse": [
-        4,
+        8,
         4
     ],
     "layers": [
@@ -33,5 +33,11 @@
         ],
         "brief": "禾本科一年生草本，外觀酷似黑麥或小麥，穗狀花序扁平且種子帶毒。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5023,
+        0.996
+    ],
+    "root_x": 50.73,
+    "root_y": 249
 }

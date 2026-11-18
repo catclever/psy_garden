@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 250,
     "height": 250,
-    "root_width": 37,
-    "root_ratio": 0.148,
+    "root_width": 66,
+    "root_ratio": 0.264,
     "ground_ellipse": [
-        37,
-        20
+        66,
+        36
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "多年生丛生观叶草本，卵圆形大叶表面具醒目的粉红色环状羽斑，叶背紫红。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.4978,
+        0.716
+    ],
+    "root_x": 124.44,
+    "root_y": 179
 }

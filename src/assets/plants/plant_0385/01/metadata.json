@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 268,
     "height": 250,
-    "root_width": 10,
-    "root_ratio": 0.037,
+    "root_width": 9,
+    "root_ratio": 0.034,
     "ground_ellipse": [
-        10,
-        6
+        9,
+        5
     ],
     "layers": [
         "layer-red",
@@ -34,5 +34,11 @@
         ],
         "brief": "具特殊刺激性香气的一年生草本，茎多分枝，叶被腺点且穗状花序细密繁茂。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5287,
+        0.996
+    ],
+    "root_x": 141.69,
+    "root_y": 249
 }

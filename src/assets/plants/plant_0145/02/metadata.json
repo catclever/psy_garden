@@ -1,0 +1,45 @@
+{
+    "name": "plant_0145",
+    "display_name": "藻玲玉屬",
+    "variant_id": "02",
+    "width": 289,
+    "height": 250,
+    "root_anchor": [
+        0.47,
+        0.992
+    ],
+    "root_x": 135.84,
+    "root_y": 248,
+    "root_width": 104,
+    "root_ratio": 0.36,
+    "ground_ellipse": [
+        104,
+        57
+    ],
+    "layers": [
+        "layer-red",
+        "layer-green",
+        "layer-blue"
+    ],
+    "source_image": "plant_0145.jpg",
+    "true_color": true,
+    "created_at": 1794981042,
+    "status": "ready",
+    "ai_analysis": {
+        "zh_name": "藻玲玉屬",
+        "scientific_name": "Gibbaeum",
+        "botanical_height_m": [
+            0.02,
+            0.07
+        ],
+        "plant_type": "groundcover",
+        "growth_habit": "carpet",
+        "suggested_game_height_px": [
+            35,
+            50
+        ],
+        "brief": "番杏科微型多肉植物，具不對稱對生的卵圓形肉質肉葉與雛菊狀小花。",
+        "status": "success"
+    },
+    "enabled": true
+}

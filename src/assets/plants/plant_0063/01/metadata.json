@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 291,
     "height": 250,
-    "root_width": 41,
-    "root_ratio": 0.141,
+    "root_width": 105,
+    "root_ratio": 0.361,
     "ground_ellipse": [
-        41,
-        23
+        105,
+        58
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "热带常绿乔木，新叶下垂如丝绢手帕，枝头绽放硕大球形鲜红头状花序。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5559,
+        0.88
+    ],
+    "root_x": 161.78,
+    "root_y": 220
 }

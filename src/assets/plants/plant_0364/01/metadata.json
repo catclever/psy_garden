@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 229,
     "height": 250,
-    "root_width": 74,
-    "root_ratio": 0.323,
+    "root_width": 64,
+    "root_ratio": 0.279,
     "ground_ellipse": [
-        74,
-        41
+        64,
+        35
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "极矮小型肉质草本，两枚对生肥厚肉质叶愈合成扁圆石块状以拟态环境。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.4369,
+        0.996
+    ],
+    "root_x": 100.05,
+    "root_y": 249
 }

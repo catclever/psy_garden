@@ -4,10 +4,10 @@
     "variant_id": "01",
     "width": 262,
     "height": 250,
-    "root_width": 11,
-    "root_ratio": 0.042,
+    "root_width": 10,
+    "root_ratio": 0.038,
     "ground_ellipse": [
-        11,
+        10,
         6
     ],
     "layers": [
@@ -33,5 +33,11 @@
         ],
         "brief": "落叶小乔木，树冠优美，掌状深裂叶片秋季转为艳丽红或金黄色。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.4994,
+        0.996
+    ],
+    "root_x": 130.84,
+    "root_y": 249
 }

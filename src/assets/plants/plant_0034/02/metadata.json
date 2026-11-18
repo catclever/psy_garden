@@ -1,0 +1,45 @@
+{
+    "name": "plant_0034",
+    "display_name": "皱叶留兰香",
+    "variant_id": "02",
+    "width": 232,
+    "height": 250,
+    "root_anchor": [
+        0.5117,
+        0.992
+    ],
+    "root_x": 118.72,
+    "root_y": 248,
+    "root_width": 72,
+    "root_ratio": 0.31,
+    "ground_ellipse": [
+        72,
+        40
+    ],
+    "layers": [
+        "layer-red",
+        "layer-green",
+        "layer-blue"
+    ],
+    "source_image": "plant_0034.jpg",
+    "true_color": true,
+    "created_at": 1794979335,
+    "status": "ready",
+    "ai_analysis": {
+        "zh_name": "皱叶留兰香",
+        "scientific_name": "Mentha spicata var. crispa",
+        "botanical_height_m": [
+            0.3,
+            0.8
+        ],
+        "plant_type": "flower",
+        "growth_habit": "bush",
+        "suggested_game_height_px": [
+            60,
+            85
+        ],
+        "brief": "唇形科芳香宿根草本，叶面波状起皱凹凸不平，轮伞花序密集生长于枝顶。",
+        "status": "success"
+    },
+    "enabled": true
+}

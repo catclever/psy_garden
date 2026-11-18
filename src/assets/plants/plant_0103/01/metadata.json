@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 333,
     "height": 250,
-    "root_width": 97,
-    "root_ratio": 0.291,
+    "root_width": 92,
+    "root_ratio": 0.276,
     "ground_ellipse": [
-        97,
-        53
+        92,
+        51
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "番杏科极矮生拟态多肉，两片高度肉质化的对生叶呈半球卵石状，顶面具红褐深色网纹。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5388,
+        0.996
+    ],
+    "root_x": 179.42,
+    "root_y": 249
 }

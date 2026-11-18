@@ -4,10 +4,10 @@
     "variant_id": "01",
     "width": 257,
     "height": 250,
-    "root_width": 22,
-    "root_ratio": 0.086,
+    "root_width": 21,
+    "root_ratio": 0.082,
     "ground_ellipse": [
-        22,
+        21,
         12
     ],
     "layers": [
@@ -33,5 +33,11 @@
         ],
         "brief": "天南星科半附生木质多年生植物，具有粗壮肉质茎干和巨大深裂的羽状叶片。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.472,
+        0.996
+    ],
+    "root_x": 121.31,
+    "root_y": 249
 }

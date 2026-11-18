@@ -4,10 +4,10 @@
     "variant_id": "01",
     "width": 262,
     "height": 250,
-    "root_width": 6,
-    "root_ratio": 0.023,
+    "root_width": 8,
+    "root_ratio": 0.031,
     "ground_ellipse": [
-        6,
+        8,
         4
     ],
     "layers": [
@@ -34,5 +34,11 @@
         ],
         "brief": "大型天南星科直立草本，粗壮肉质茎顶生出巨大盾状箭形厚叶，佛焰苞淡绿色。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5018,
+        0.996
+    ],
+    "root_x": 131.47,
+    "root_y": 249
 }

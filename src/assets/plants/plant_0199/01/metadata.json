@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 268,
     "height": 250,
-    "root_width": 61,
-    "root_ratio": 0.228,
+    "root_width": 74,
+    "root_ratio": 0.276,
     "ground_ellipse": [
-        61,
-        34
+        74,
+        41
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "大型常绿针叶乔木，树冠宽广呈尖塔形，枝条平展，针叶簇生。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.3742,
+        0.94
+    ],
+    "root_x": 100.3,
+    "root_y": 235
 }

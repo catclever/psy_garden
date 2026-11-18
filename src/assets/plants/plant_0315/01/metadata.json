@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 200,
     "height": 250,
-    "root_width": 53,
-    "root_ratio": 0.265,
+    "root_width": 49,
+    "root_ratio": 0.245,
     "ground_ellipse": [
-        53,
-        29
+        49,
+        27
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "茎干基部膨大如酒瓶状的多肉小乔木，顶端丛生线形下垂软叶。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5144,
+        0.996
+    ],
+    "root_x": 102.87,
+    "root_y": 249
 }

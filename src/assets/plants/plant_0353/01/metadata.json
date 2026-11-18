@@ -12,11 +12,11 @@
     "source_image": "candidate_plant_353_翠錦竹芋.jpg",
     "true_color": true,
     "created_at": 1792466854,
-    "root_width": 62,
-    "root_ratio": 0.238,
+    "root_width": 86,
+    "root_ratio": 0.331,
     "ground_ellipse": [
-        62,
-        34
+        86,
+        47
     ],
     "status": "ready",
     "ai_analysis": {
@@ -34,5 +34,11 @@
         ],
         "brief": "翠錦竹芋是一种多年生草本观叶植物，叶片卵形至椭圆形，叶面具有深绿色与银白色相间的羽状斑纹，叶背紫红色，株型丛生紧凑。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5351,
+        0.884
+    ],
+    "root_x": 139.12,
+    "root_y": 221
 }

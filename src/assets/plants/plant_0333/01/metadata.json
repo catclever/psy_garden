@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 204,
     "height": 250,
-    "root_width": 10,
-    "root_ratio": 0.049,
+    "root_width": 8,
+    "root_ratio": 0.039,
     "ground_ellipse": [
-        10,
-        6
+        8,
+        4
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "姜科宿根草本，苞片层叠如杯状排列，上部苞片呈高雅的粉紫渐变色。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.4948,
+        0.996
+    ],
+    "root_x": 100.95,
+    "root_y": 249
 }

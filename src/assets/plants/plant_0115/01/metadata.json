@@ -4,10 +4,10 @@
     "variant_id": "01",
     "width": 249,
     "height": 250,
-    "root_width": 5,
-    "root_ratio": 0.02,
+    "root_width": 8,
+    "root_ratio": 0.032,
     "ground_ellipse": [
-        5,
+        8,
         4
     ],
     "layers": [
@@ -33,5 +33,11 @@
         ],
         "brief": "多年生常绿半灌木，叶二至三回羽状全裂具腺点，开黄绿色小花，具有强烈的特殊草药辛香。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5661,
+        0.996
+    ],
+    "root_x": 140.95,
+    "root_y": 249
 }

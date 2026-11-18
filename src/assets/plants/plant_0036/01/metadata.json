@@ -4,10 +4,10 @@
     "variant_id": "01",
     "width": 232,
     "height": 250,
-    "root_width": 7,
-    "root_ratio": 0.03,
+    "root_width": 8,
+    "root_ratio": 0.034,
     "ground_ellipse": [
-        7,
+        8,
         4
     ],
     "layers": [
@@ -33,5 +33,11 @@
         ],
         "brief": "夹竹桃科常绿大灌木，具披针形光亮叶片与漏斗状鲜黄色芳香花朵，全株有毒。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5203,
+        0.996
+    ],
+    "root_x": 120.71,
+    "root_y": 249
 }

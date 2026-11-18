@@ -11,11 +11,11 @@
     "source_image": "candidate_plant_0067_珊瑚櫻.jpg",
     "true_color": true,
     "created_at": 1792466852,
-    "root_width": 72,
-    "root_ratio": 0.298,
+    "root_width": 47,
+    "root_ratio": 0.194,
     "ground_ellipse": [
-        72,
-        40
+        47,
+        26
     ],
     "status": "ready",
     "ai_analysis": {
@@ -33,5 +33,11 @@
         ],
         "brief": "常綠小灌木，葉互生呈披針形，結圓形橙紅色漿果，形似珊瑚珠。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.6385,
+        0.968
+    ],
+    "root_x": 154.53,
+    "root_y": 242
 }

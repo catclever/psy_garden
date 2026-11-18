@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 249,
     "height": 250,
-    "root_width": 37,
-    "root_ratio": 0.149,
+    "root_width": 8,
+    "root_ratio": 0.032,
     "ground_ellipse": [
-        37,
-        20
+        8,
+        4
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "多肉肉质草本，圆棒状叶管状对生，叶尖常着生带小根的不定芽。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5106,
+        0.944
+    ],
+    "root_x": 127.15,
+    "root_y": 236
 }

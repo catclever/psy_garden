@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 164,
     "height": 250,
-    "root_width": 11,
-    "root_ratio": 0.067,
+    "root_width": 46,
+    "root_ratio": 0.28,
     "ground_ellipse": [
-        11,
-        6
+        46,
+        25
     ],
     "layers": [
         "layer-red",
@@ -34,5 +34,11 @@
         ],
         "brief": "伞形科两年生大草本，中空直立茎常带紫色斑点，含剧毒生物碱并开白色复伞形花序。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5672,
+        0.916
+    ],
+    "root_x": 93.03,
+    "root_y": 229
 }

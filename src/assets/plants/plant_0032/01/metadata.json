@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 231,
     "height": 250,
-    "root_width": 21,
-    "root_ratio": 0.091,
+    "root_width": 66,
+    "root_ratio": 0.286,
     "ground_ellipse": [
-        21,
-        12
+        66,
+        36
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "报春花科多年生球根植物，具斑纹心形叶片与向上反卷如兔耳的艳丽花冠。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5513,
+        0.852
+    ],
+    "root_x": 127.34,
+    "root_y": 213
 }

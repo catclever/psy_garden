@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 247,
     "height": 250,
-    "root_width": 53,
-    "root_ratio": 0.215,
+    "root_width": 71,
+    "root_ratio": 0.287,
     "ground_ellipse": [
-        53,
-        29
+        71,
+        39
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "多年生耐阴蕨类，叶柄纤细光亮如紫黑铁丝，扇形小羽片柔嫩翠绿。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5079,
+        0.928
+    ],
+    "root_x": 125.46,
+    "root_y": 232
 }

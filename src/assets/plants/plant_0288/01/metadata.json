@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 237,
     "height": 250,
-    "root_width": 71,
-    "root_ratio": 0.3,
+    "root_width": 24,
+    "root_ratio": 0.101,
     "ground_ellipse": [
-        71,
-        39
+        24,
+        13
     ],
     "layers": [
         "layer-red",
@@ -34,5 +34,11 @@
         ],
         "brief": "常绿灌木，披针形叶片幼时鲜红艳丽，早春自枝梢抽出密串如钟铃的白花花序。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.4954,
+        0.996
+    ],
+    "root_x": 117.4,
+    "root_y": 249
 }

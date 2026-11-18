@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 204,
     "height": 250,
-    "root_width": 10,
-    "root_ratio": 0.049,
+    "root_width": 9,
+    "root_ratio": 0.044,
     "ground_ellipse": [
-        10,
-        6
+        9,
+        5
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "水生或沼生多年生草本，条形狭长直立叶片，顶生红褐色圆柱状蜡烛形肉穗花序。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.4993,
+        0.996
+    ],
+    "root_x": 101.87,
+    "root_y": 249
 }

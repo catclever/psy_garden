@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 115,
     "height": 250,
-    "root_width": 26,
-    "root_ratio": 0.226,
+    "root_width": 29,
+    "root_ratio": 0.252,
     "ground_ellipse": [
-        26,
-        14
+        29,
+        16
     ],
     "layers": [
         "layer-red",
@@ -34,5 +34,11 @@
         ],
         "brief": "大型地生蘭，花瓣長而橫向平展，具深紅褐色條紋與突出的兜狀唇瓣。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5851,
+        0.876
+    ],
+    "root_x": 67.28,
+    "root_y": 219
 }

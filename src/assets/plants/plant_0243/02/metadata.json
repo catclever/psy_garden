@@ -1,0 +1,45 @@
+{
+    "name": "plant_0243",
+    "display_name": "钓宫灯",
+    "variant_id": "02",
+    "width": 240,
+    "height": 250,
+    "root_anchor": [
+        0.4917,
+        0.996
+    ],
+    "root_x": 118.02,
+    "root_y": 249,
+    "root_width": 44,
+    "root_ratio": 0.183,
+    "ground_ellipse": [
+        44,
+        24
+    ],
+    "layers": [
+        "layer-red",
+        "layer-green",
+        "layer-blue"
+    ],
+    "source_image": "plant_0243.jpg",
+    "true_color": true,
+    "created_at": 1794979348,
+    "status": "ready",
+    "ai_analysis": {
+        "zh_name": "钓宫灯",
+        "scientific_name": "Kalanchoe porphyrocalyx",
+        "botanical_height_m": [
+            0.2,
+            0.4
+        ],
+        "plant_type": "flower",
+        "growth_habit": "bush",
+        "suggested_game_height_px": [
+            40,
+            65
+        ],
+        "brief": "景天科多年生肉质草本植物，茎节纤细常匍匐下垂，红色管状钟形小花垂吊盛开宛若微型宫灯。",
+        "status": "success"
+    },
+    "enabled": true
+}

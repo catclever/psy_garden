@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 337,
     "height": 250,
-    "root_width": 27,
-    "root_ratio": 0.08,
+    "root_width": 22,
+    "root_ratio": 0.065,
     "ground_ellipse": [
-        27,
-        15
+        22,
+        12
     ],
     "layers": [
         "layer-red",
@@ -34,5 +34,11 @@
         ],
         "brief": "唇形科半灌木状低矮草本，茎节匍匐贴地生根延展，开密集的粉紫色芳香小花。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5975,
+        0.996
+    ],
+    "root_x": 201.35,
+    "root_y": 249
 }

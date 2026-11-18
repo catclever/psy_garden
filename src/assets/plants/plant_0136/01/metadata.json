@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 283,
     "height": 250,
-    "root_width": 25,
-    "root_ratio": 0.088,
+    "root_width": 52,
+    "root_ratio": 0.184,
     "ground_ellipse": [
-        25,
-        14
+        52,
+        29
     ],
     "layers": [
         "layer-red",
@@ -34,5 +34,11 @@
         ],
         "brief": "多年生肉质匍匐草本，肉质叶呈三棱线形如松针苍翠，顶生艳丽紫红或粉色小雏菊状多瓣花朵。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.6707,
+        0.972
+    ],
+    "root_x": 189.81,
+    "root_y": 243
 }

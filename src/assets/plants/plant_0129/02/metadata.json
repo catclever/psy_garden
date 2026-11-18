@@ -1,0 +1,45 @@
+{
+    "name": "plant_0129",
+    "display_name": "毛地黄属",
+    "variant_id": "02",
+    "width": 128,
+    "height": 250,
+    "root_anchor": [
+        0.4808,
+        0.976
+    ],
+    "root_x": 61.54,
+    "root_y": 244,
+    "root_width": 47,
+    "root_ratio": 0.367,
+    "ground_ellipse": [
+        47,
+        26
+    ],
+    "layers": [
+        "layer-red",
+        "layer-green",
+        "layer-blue"
+    ],
+    "source_image": "plant_0129.jpg",
+    "true_color": true,
+    "created_at": 1794979339,
+    "status": "ready",
+    "ai_analysis": {
+        "zh_name": "毛地黄属",
+        "scientific_name": "Digitalis",
+        "botanical_height_m": [
+            0.6,
+            1.5
+        ],
+        "plant_type": "flower",
+        "growth_habit": "slender",
+        "suggested_game_height_px": [
+            80,
+            130
+        ],
+        "brief": "二年生或多年生高大草本，直立粗壮花茎上密集排列倒悬长钟状花朵，花冠内侧具深色斑点斑纹。",
+        "status": "success"
+    },
+    "enabled": true
+}

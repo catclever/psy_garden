@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 169,
     "height": 250,
-    "root_width": 10,
-    "root_ratio": 0.059,
+    "root_width": 8,
+    "root_ratio": 0.047,
     "ground_ellipse": [
-        10,
-        6
+        8,
+        4
     ],
     "layers": [
         "layer-red",
@@ -34,5 +34,11 @@
         ],
         "brief": "常绿直立小灌木，复叶纤细如竹，秋冬叶转红色并缀满鲜红球形浆果。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5095,
+        0.996
+    ],
+    "root_x": 86.1,
+    "root_y": 249
 }

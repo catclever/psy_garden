@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 249,
     "height": 250,
-    "root_width": 21,
-    "root_ratio": 0.084,
+    "root_width": 44,
+    "root_ratio": 0.177,
     "ground_ellipse": [
-        21,
-        12
+        44,
+        24
     ],
     "layers": [
         "layer-red",
@@ -34,5 +34,11 @@
         ],
         "brief": "落叶大乔木，宽阔心形叶配圆锥花序，春季繁花胜雪并结富含油脂的球果。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.4845,
+        0.956
+    ],
+    "root_x": 120.64,
+    "root_y": 239
 }

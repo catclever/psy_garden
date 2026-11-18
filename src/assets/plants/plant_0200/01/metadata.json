@@ -4,10 +4,10 @@
     "variant_id": "01",
     "width": 200,
     "height": 250,
-    "root_width": 4,
-    "root_ratio": 0.02,
+    "root_width": 8,
+    "root_ratio": 0.04,
     "ground_ellipse": [
-        4,
+        8,
         4
     ],
     "layers": [
@@ -34,5 +34,11 @@
         ],
         "brief": "一年生直立分枝草本，全株被灰白色绒毛，顶生密集细小的白色头状花序。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5046,
+        0.996
+    ],
+    "root_x": 100.92,
+    "root_y": 249
 }

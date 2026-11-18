@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 227,
     "height": 250,
-    "root_width": 16,
-    "root_ratio": 0.07,
+    "root_width": 14,
+    "root_ratio": 0.062,
     "ground_ellipse": [
-        16,
-        9
+        14,
+        8
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "荒漠特有常绿超旱生灌木，具银灰色绢毛三出复叶，早春开金黄色蝶形花。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5272,
+        0.996
+    ],
+    "root_x": 119.68,
+    "root_y": 249
 }

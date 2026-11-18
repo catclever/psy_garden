@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 303,
     "height": 250,
-    "root_width": 25,
-    "root_ratio": 0.083,
+    "root_width": 20,
+    "root_ratio": 0.066,
     "ground_ellipse": [
-        25,
-        14
+        20,
+        11
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "小巧分枝的景天多肉植物，叶片肥厚多茸毛且前端具红褐色齿状尖爪突起。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.755,
+        0.996
+    ],
+    "root_x": 228.75,
+    "root_y": 249
 }

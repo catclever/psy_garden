@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 235,
     "height": 250,
-    "root_width": 21,
-    "root_ratio": 0.089,
+    "root_width": 20,
+    "root_ratio": 0.085,
     "ground_ellipse": [
-        21,
-        12
+        20,
+        11
     ],
     "layers": [
         "layer-red",
@@ -34,5 +34,11 @@
         ],
         "brief": "附生攀爬仙人掌，细长多棱茎具气生根，夜间盛开直径逾三十厘米的巨大芳香白色花朵。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5211,
+        0.996
+    ],
+    "root_x": 122.46,
+    "root_y": 249
 }

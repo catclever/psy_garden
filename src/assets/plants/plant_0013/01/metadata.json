@@ -34,5 +34,6 @@
         ],
         "brief": "落葉小喬木，葉片全季深紫紅色，春季盛開深紫紅繁花，觀賞價值高。",
         "status": "success"
-    }
+    },
+    "enabled": false
 }

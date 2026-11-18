@@ -11,11 +11,11 @@
     "source_image": "candidate_plant_plant_0022_西藏红豆杉.jpg",
     "true_color": true,
     "created_at": 1792466861,
-    "root_width": 54,
-    "root_ratio": 0.202,
+    "root_width": 76,
+    "root_ratio": 0.285,
     "ground_ellipse": [
-        54,
-        30
+        76,
+        42
     ],
     "status": "ready",
     "ai_analysis": {
@@ -33,5 +33,11 @@
         ],
         "brief": "西藏红豆杉为常绿乔木，树皮灰褐色呈鳞片状剥落，条形叶螺旋状排列、下面具气孔带，种子外包红色肉质假种皮。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.459,
+        0.936
+    ],
+    "root_x": 122.54,
+    "root_y": 234
 }

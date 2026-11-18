@@ -1,0 +1,45 @@
+{
+    "name": "plant_0104",
+    "display_name": "蟹爪兰",
+    "variant_id": "02",
+    "width": 271,
+    "height": 250,
+    "root_anchor": [
+        0.4833,
+        0.996
+    ],
+    "root_x": 130.97,
+    "root_y": 249,
+    "root_width": 75,
+    "root_ratio": 0.277,
+    "ground_ellipse": [
+        75,
+        41
+    ],
+    "layers": [
+        "layer-red",
+        "layer-green",
+        "layer-blue"
+    ],
+    "source_image": "plant_0104.jpg",
+    "true_color": true,
+    "created_at": 1794979337,
+    "status": "ready",
+    "ai_analysis": {
+        "zh_name": "蟹爪兰",
+        "scientific_name": "Schlumbergera truncata",
+        "botanical_height_m": [
+            0.2,
+            0.45
+        ],
+        "plant_type": "flower",
+        "growth_habit": "bush",
+        "suggested_game_height_px": [
+            55,
+            75
+        ],
+        "brief": "仙人掌科附生肉质多浆灌木，节状茎扁平边缘具尖齿，顶端下垂悬挂鲜艳重瓣花朵。",
+        "status": "success"
+    },
+    "enabled": true
+}

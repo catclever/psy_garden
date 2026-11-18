@@ -33,5 +33,6 @@
         ],
         "brief": "具有三出复叶且富含刺激性漆酚的蔓生或直立灌木，秋季叶色变红。",
         "status": "success"
-    }
+    },
+    "enabled": false
 }

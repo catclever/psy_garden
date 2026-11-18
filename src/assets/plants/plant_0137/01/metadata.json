@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 220,
     "height": 250,
-    "root_width": 12,
-    "root_ratio": 0.055,
+    "root_width": 11,
+    "root_ratio": 0.05,
     "ground_ellipse": [
-        12,
-        7
+        11,
+        6
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "多分枝落叶灌木，幼枝微呈四棱形，单叶对生排成假羽状，全株有毒，肉质花被包覆紫黑色浆果状瘦果。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5033,
+        0.996
+    ],
+    "root_x": 110.74,
+    "root_y": 249
 }

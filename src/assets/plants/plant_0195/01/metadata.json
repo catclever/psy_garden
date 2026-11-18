@@ -4,10 +4,10 @@
     "variant_id": "01",
     "width": 215,
     "height": 250,
-    "root_width": 7,
-    "root_ratio": 0.033,
+    "root_width": 8,
+    "root_ratio": 0.037,
     "ground_ellipse": [
-        7,
+        8,
         4
     ],
     "layers": [
@@ -34,5 +34,11 @@
         ],
         "brief": "生于林荫湿润处的气味芳香草本，具细长柔弱的直立茎和疏散白至淡紫色轮伞花。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.509,
+        0.996
+    ],
+    "root_x": 109.44,
+    "root_y": 249
 }

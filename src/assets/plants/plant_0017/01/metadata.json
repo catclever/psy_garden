@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 243,
     "height": 250,
-    "root_width": 2,
-    "root_ratio": 0.008,
+    "root_width": 14,
+    "root_ratio": 0.058,
     "ground_ellipse": [
-        2,
-        4
+        14,
+        8
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "禾本科多年生草本，狹長葉叢散發香豆素甜香，圓錐花序疏散开展。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5279,
+        0.956
+    ],
+    "root_x": 128.28,
+    "root_y": 239
 }

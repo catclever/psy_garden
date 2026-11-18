@@ -4,10 +4,10 @@
     "variant_id": "01",
     "width": 256,
     "height": 250,
-    "root_width": 25,
-    "root_ratio": 0.098,
+    "root_width": 26,
+    "root_ratio": 0.102,
     "ground_ellipse": [
-        25,
+        26,
         14
     ],
     "layers": [
@@ -33,5 +33,11 @@
         ],
         "brief": "多年生肉质肉茎植物，四棱形直立肉质茎，绽开巨大五角星形黄底红横纹恶臭腐肉花。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.524,
+        0.984
+    ],
+    "root_x": 134.13,
+    "root_y": 246
 }

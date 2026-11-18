@@ -4,10 +4,10 @@
     "variant_id": "01",
     "width": 221,
     "height": 250,
-    "root_width": 7,
-    "root_ratio": 0.032,
+    "root_width": 8,
+    "root_ratio": 0.036,
     "ground_ellipse": [
-        7,
+        8,
         4
     ],
     "layers": [
@@ -34,5 +34,11 @@
         ],
         "brief": "茎蔓生具柔毛的攀援草质藤本，开蓝紫色星形花，挂鲜红色球形浆果。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5105,
+        0.996
+    ],
+    "root_x": 112.83,
+    "root_y": 249
 }

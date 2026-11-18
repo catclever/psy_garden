@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 167,
     "height": 250,
-    "root_width": 108,
-    "root_ratio": 0.647,
+    "root_width": 8,
+    "root_ratio": 0.048,
     "ground_ellipse": [
-        108,
-        59
+        8,
+        4
     ],
     "layers": [
         "layer-red",
@@ -34,5 +34,11 @@
         ],
         "brief": "一年生直立草本，被毛且具香气，头状花序呈伞房状排列，淡紫色或白色。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5458,
+        0.996
+    ],
+    "root_x": 91.15,
+    "root_y": 249
 }

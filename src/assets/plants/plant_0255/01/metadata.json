@@ -4,10 +4,10 @@
     "variant_id": "01",
     "width": 223,
     "height": 250,
-    "root_width": 6,
-    "root_ratio": 0.027,
+    "root_width": 8,
+    "root_ratio": 0.036,
     "ground_ellipse": [
-        6,
+        8,
         4
     ],
     "layers": [
@@ -33,5 +33,11 @@
         ],
         "brief": "一年生直立草本，分枝浓密呈金字塔形，掌状复叶裂片宽大，密布树脂腺体。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5071,
+        0.996
+    ],
+    "root_x": 113.08,
+    "root_y": 249
 }

@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 207,
     "height": 250,
-    "root_width": 17,
-    "root_ratio": 0.082,
+    "root_width": 40,
+    "root_ratio": 0.193,
     "ground_ellipse": [
-        17,
-        9
+        40,
+        22
     ],
     "layers": [
         "layer-red",
@@ -34,5 +34,11 @@
         ],
         "brief": "肉质灌木或小乔木，具有膨大的肉质茎干和落叶性的肉质掌状复叶。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5612,
+        0.884
+    ],
+    "root_x": 116.18,
+    "root_y": 221
 }

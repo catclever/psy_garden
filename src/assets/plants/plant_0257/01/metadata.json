@@ -4,10 +4,10 @@
     "variant_id": "01",
     "width": 194,
     "height": 250,
-    "root_width": 6,
-    "root_ratio": 0.031,
+    "root_width": 8,
+    "root_ratio": 0.041,
     "ground_ellipse": [
-        6,
+        8,
         4
     ],
     "layers": [
@@ -33,5 +33,11 @@
         ],
         "brief": "芳香小灌木或亚灌木，灰绿色羽状复叶布满透明腺点，开黄绿色四至五瓣花朵。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5026,
+        0.996
+    ],
+    "root_x": 97.5,
+    "root_y": 249
 }

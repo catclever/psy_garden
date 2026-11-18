@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 276,
     "height": 250,
-    "root_width": 58,
-    "root_ratio": 0.21,
+    "root_width": 53,
+    "root_ratio": 0.192,
     "ground_ellipse": [
-        58,
-        32
+        53,
+        29
     ],
     "layers": [
         "layer-red",
@@ -34,5 +34,11 @@
         ],
         "brief": "唇形科多年生草本，茎被柔毛，叶心状卵形具圆齿，茎顶簇生醒目的蓝紫色大唇形花。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5214,
+        0.996
+    ],
+    "root_x": 143.89,
+    "root_y": 249
 }

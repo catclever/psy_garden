@@ -4,10 +4,10 @@
     "variant_id": "01",
     "width": 233,
     "height": 250,
-    "root_width": 4,
-    "root_ratio": 0.017,
+    "root_width": 8,
+    "root_ratio": 0.034,
     "ground_ellipse": [
-        4,
+        8,
         4
     ],
     "layers": [
@@ -33,5 +33,11 @@
         ],
         "brief": "二年生草本，茎直立粗壮，掌状深裂叶，总状花序密生蓝紫色花朵，种子有毒可杀虫。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5253,
+        0.996
+    ],
+    "root_x": 122.39,
+    "root_y": 249
 }

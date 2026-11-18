@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 271,
     "height": 250,
-    "root_width": 30,
-    "root_ratio": 0.111,
+    "root_width": 97,
+    "root_ratio": 0.358,
     "ground_ellipse": [
-        30,
-        16
+        97,
+        53
     ],
     "layers": [
         "layer-red",
@@ -34,5 +34,11 @@
         ],
         "brief": "多年生常绿肉质草本，叶片针状线形轮生似松针，初夏绽放黄色星形聚伞花序，具优异的匍匐地被覆盖性。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5037,
+        0.844
+    ],
+    "root_x": 136.51,
+    "root_y": 211
 }

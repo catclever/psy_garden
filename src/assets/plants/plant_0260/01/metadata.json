@@ -4,10 +4,10 @@
     "variant_id": "01",
     "width": 200,
     "height": 250,
-    "root_width": 30,
-    "root_ratio": 0.15,
+    "root_width": 29,
+    "root_ratio": 0.145,
     "ground_ellipse": [
-        30,
+        29,
         16
     ],
     "layers": [
@@ -33,5 +33,11 @@
         ],
         "brief": "多年生丛生高大草本，叶如芭蕉，下垂的花序具鲜艳的红黄相间舟状苞片如鸟喙。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.4912,
+        0.996
+    ],
+    "root_x": 98.24,
+    "root_y": 249
 }

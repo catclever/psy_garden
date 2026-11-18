@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 237,
     "height": 250,
-    "root_width": 63,
-    "root_ratio": 0.266,
+    "root_width": 56,
+    "root_ratio": 0.236,
     "ground_ellipse": [
-        63,
-        35
+        56,
+        31
     ],
     "layers": [
         "layer-red",
@@ -34,5 +34,11 @@
         ],
         "brief": "小型高度肉质植物，单生呈半球形洋葱状，表皮晶莹剔透如发光灯泡，顶端裂缝开洋红色小花。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5024,
+        0.996
+    ],
+    "root_x": 119.06,
+    "root_y": 249
 }

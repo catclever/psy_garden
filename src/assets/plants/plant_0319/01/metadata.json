@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 219,
     "height": 250,
-    "root_width": 98,
-    "root_ratio": 0.447,
+    "root_width": 79,
+    "root_ratio": 0.361,
     "ground_ellipse": [
-        98,
-        54
+        79,
+        43
     ],
     "layers": [
         "layer-red",
@@ -34,5 +34,11 @@
         ],
         "brief": "体型扁平微小的仙人掌科肉质植物，表皮灰绿密生小疣突与微刺。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.4946,
+        0.996
+    ],
+    "root_x": 108.32,
+    "root_y": 249
 }

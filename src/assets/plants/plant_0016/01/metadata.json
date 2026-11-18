@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 235,
     "height": 250,
-    "root_width": 15,
-    "root_ratio": 0.064,
+    "root_width": 76,
+    "root_ratio": 0.323,
     "ground_ellipse": [
-        15,
-        8
+        76,
+        42
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "竹芋科多年生常綠草本，橢圓形大葉上具羽狀排列的粉紅至白綠彩紋。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.448,
+        0.856
+    ],
+    "root_x": 105.29,
+    "root_y": 214
 }

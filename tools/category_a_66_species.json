@@ -1,0 +1,464 @@
+[
+  {
+    "plant_id": "plant_0013",
+    "zh_name": "王族海棠",
+    "scientific_name": "Malus 'Royalty'",
+    "plant_type": "tree",
+    "category": "A_severe"
+  },
+  {
+    "plant_id": "plant_0024",
+    "zh_name": "香港巴豆",
+    "scientific_name": "Croton hancei",
+    "plant_type": "shrub",
+    "category": "A_severe"
+  },
+  {
+    "plant_id": "plant_0034",
+    "zh_name": "皱叶留兰香",
+    "scientific_name": "Mentha spicata var. crispa",
+    "plant_type": "flower",
+    "category": "A_moderate"
+  },
+  {
+    "plant_id": "plant_0042",
+    "zh_name": "马钱子",
+    "scientific_name": "Strychnos nux-vomica",
+    "plant_type": "tree",
+    "category": "A_moderate"
+  },
+  {
+    "plant_id": "plant_0048",
+    "zh_name": "莲叶桐",
+    "scientific_name": "Hernandia nymphaeifolia",
+    "plant_type": "tree",
+    "category": "A_severe"
+  },
+  {
+    "plant_id": "plant_0053",
+    "zh_name": "耳墜草",
+    "scientific_name": "Sedum rubrotinctum",
+    "plant_type": "groundcover",
+    "category": "A_severe"
+  },
+  {
+    "plant_id": "plant_0069",
+    "zh_name": "垂葉花燭",
+    "scientific_name": "Anthurium wendlingeri",
+    "plant_type": "flower",
+    "category": "A_severe"
+  },
+  {
+    "plant_id": "plant_0071",
+    "zh_name": "鵝鑾鼻燈籠草",
+    "scientific_name": "Kalanchoe garambiensis",
+    "plant_type": "groundcover",
+    "category": "A_moderate"
+  },
+  {
+    "plant_id": "plant_0075",
+    "zh_name": "欧洲荚蒾",
+    "scientific_name": "Viburnum opulus",
+    "plant_type": "shrub",
+    "category": "A_moderate"
+  },
+  {
+    "plant_id": "plant_0076",
+    "zh_name": "歐洲冬青",
+    "scientific_name": "Ilex aquifolium",
+    "plant_type": "tree",
+    "category": "A_moderate"
+  },
+  {
+    "plant_id": "plant_0081",
+    "zh_name": "曇花屬",
+    "scientific_name": "Epiphyllum",
+    "plant_type": "shrub",
+    "category": "A_moderate"
+  },
+  {
+    "plant_id": "plant_0104",
+    "zh_name": "蟹爪兰",
+    "scientific_name": "Schlumbergera truncata",
+    "plant_type": "flower",
+    "category": "A_severe"
+  },
+  {
+    "plant_id": "plant_0107",
+    "zh_name": "菊蒿",
+    "scientific_name": "Tanacetum vulgare",
+    "plant_type": "flower",
+    "category": "A_moderate"
+  },
+  {
+    "plant_id": "plant_0119",
+    "zh_name": "黄芩",
+    "scientific_name": "Scutellaria baicalensis",
+    "plant_type": "flower",
+    "category": "A_severe"
+  },
+  {
+    "plant_id": "plant_0122",
+    "zh_name": "马兜铃",
+    "scientific_name": "Aristolochia debilis",
+    "plant_type": "flower",
+    "category": "A_moderate"
+  },
+  {
+    "plant_id": "plant_0127",
+    "zh_name": "鈴蘭",
+    "scientific_name": "Convallaria majalis",
+    "plant_type": "flower",
+    "category": "A_moderate"
+  },
+  {
+    "plant_id": "plant_0129",
+    "zh_name": "毛地黄属",
+    "scientific_name": "Digitalis",
+    "plant_type": "flower",
+    "category": "A_moderate"
+  },
+  {
+    "plant_id": "plant_0130",
+    "zh_name": "含羞草",
+    "scientific_name": "Mimosa pudica",
+    "plant_type": "groundcover",
+    "category": "A_moderate"
+  },
+  {
+    "plant_id": "plant_0134",
+    "zh_name": "银杏",
+    "scientific_name": "Ginkgo biloba",
+    "plant_type": "tree",
+    "category": "A_moderate"
+  },
+  {
+    "plant_id": "plant_0138",
+    "zh_name": "油桐",
+    "scientific_name": "Vernicia fordii",
+    "plant_type": "tree",
+    "category": "A_moderate"
+  },
+  {
+    "plant_id": "plant_0142",
+    "zh_name": "铁线莲状马兜铃",
+    "scientific_name": "Aristolochia clematitis",
+    "plant_type": "flower",
+    "category": "A_moderate"
+  },
+  {
+    "plant_id": "plant_0144",
+    "zh_name": "崖柏",
+    "scientific_name": "Thuja sutchuenensis",
+    "plant_type": "tree",
+    "category": "A_severe"
+  },
+  {
+    "plant_id": "plant_0145",
+    "zh_name": "藻玲玉屬",
+    "scientific_name": "Gibbaeum",
+    "plant_type": "groundcover",
+    "category": "A_severe"
+  },
+  {
+    "plant_id": "plant_0155",
+    "zh_name": "牛眼馬錢",
+    "scientific_name": "Strychnos cathayensis",
+    "plant_type": "shrub",
+    "category": "A_moderate"
+  },
+  {
+    "plant_id": "plant_0156",
+    "zh_name": "菊三七",
+    "scientific_name": "Gynura japonica",
+    "plant_type": "flower",
+    "category": "A_moderate"
+  },
+  {
+    "plant_id": "plant_0167",
+    "zh_name": "颠茄",
+    "scientific_name": "Atropa belladonna",
+    "plant_type": "flower",
+    "category": "A_moderate"
+  },
+  {
+    "plant_id": "plant_0170",
+    "zh_name": "蒺藜",
+    "scientific_name": "Tribulus terrestris",
+    "plant_type": "groundcover",
+    "category": "A_severe"
+  },
+  {
+    "plant_id": "plant_0172",
+    "zh_name": "毒漆藤",
+    "scientific_name": "Toxicodendron radicans",
+    "plant_type": "shrub",
+    "category": "A_severe"
+  },
+  {
+    "plant_id": "plant_0176",
+    "zh_name": "百歲蘭",
+    "scientific_name": "Welwitschia mirabilis",
+    "plant_type": "groundcover",
+    "category": "A_severe"
+  },
+  {
+    "plant_id": "plant_0177",
+    "zh_name": "曼陀罗",
+    "scientific_name": "Datura stramonium",
+    "plant_type": "flower",
+    "category": "A_severe"
+  },
+  {
+    "plant_id": "plant_0178",
+    "zh_name": "棣棠花",
+    "scientific_name": "Kerria japonica",
+    "plant_type": "shrub",
+    "category": "A_moderate"
+  },
+  {
+    "plant_id": "plant_0182",
+    "zh_name": "香草",
+    "scientific_name": "Vanilla planifolia",
+    "plant_type": "flower",
+    "category": "A_moderate"
+  },
+  {
+    "plant_id": "plant_0189",
+    "zh_name": "卧茎宫灯长寿",
+    "scientific_name": "Kalanchoe manginii",
+    "plant_type": "groundcover",
+    "category": "A_severe"
+  },
+  {
+    "plant_id": "plant_0204",
+    "zh_name": "蔓綠絨屬",
+    "scientific_name": "Philodendron",
+    "plant_type": "shrub",
+    "category": "A_severe"
+  },
+  {
+    "plant_id": "plant_0205",
+    "zh_name": "风铃玉",
+    "scientific_name": "Ophthalmophyllum friedrichiae",
+    "plant_type": "groundcover",
+    "category": "A_severe"
+  },
+  {
+    "plant_id": "plant_0206",
+    "zh_name": "銀合歡",
+    "scientific_name": "Leucaena leucocephala",
+    "plant_type": "tree",
+    "category": "A_moderate"
+  },
+  {
+    "plant_id": "plant_0208",
+    "zh_name": "田野薄荷",
+    "scientific_name": "Mentha arvensis",
+    "plant_type": "groundcover",
+    "category": "A_severe"
+  },
+  {
+    "plant_id": "plant_0209",
+    "zh_name": "日中花属",
+    "scientific_name": "Mesembryanthemum",
+    "plant_type": "groundcover",
+    "category": "A_moderate"
+  },
+  {
+    "plant_id": "plant_0210",
+    "zh_name": "木荷",
+    "scientific_name": "Schima superba",
+    "plant_type": "tree",
+    "category": "A_moderate"
+  },
+  {
+    "plant_id": "plant_0214",
+    "zh_name": "樹蘭亞科",
+    "scientific_name": "Epidendroideae",
+    "plant_type": "flower",
+    "category": "A_severe"
+  },
+  {
+    "plant_id": "plant_0230",
+    "zh_name": "吊兰",
+    "scientific_name": "Chlorophytum comosum",
+    "plant_type": "groundcover",
+    "category": "A_severe"
+  },
+  {
+    "plant_id": "plant_0232",
+    "zh_name": "流星毬蘭",
+    "scientific_name": "Hoya multiflora",
+    "plant_type": "shrub",
+    "category": "A_severe"
+  },
+  {
+    "plant_id": "plant_0236",
+    "zh_name": "全缘钓宫灯",
+    "scientific_name": "Fuchsia integrifolia",
+    "plant_type": "shrub",
+    "category": "A_severe"
+  },
+  {
+    "plant_id": "plant_0243",
+    "zh_name": "钓宫灯",
+    "scientific_name": "Kalanchoe porphyrocalyx",
+    "plant_type": "flower",
+    "category": "A_severe"
+  },
+  {
+    "plant_id": "plant_0258",
+    "zh_name": "雞母珠",
+    "scientific_name": "Abrus precatorius",
+    "plant_type": "groundcover",
+    "category": "A_severe"
+  },
+  {
+    "plant_id": "plant_0265",
+    "zh_name": "香球蘭",
+    "scientific_name": "Hoya odorata",
+    "plant_type": "groundcover",
+    "category": "A_severe"
+  },
+  {
+    "plant_id": "plant_0270",
+    "zh_name": "加拿大紫荊",
+    "scientific_name": "Cercis canadensis",
+    "plant_type": "tree",
+    "category": "A_moderate"
+  },
+  {
+    "plant_id": "plant_0274",
+    "zh_name": "浪葉花燭",
+    "scientific_name": "Anthurium plowmanii",
+    "plant_type": "flower",
+    "category": "A_moderate"
+  },
+  {
+    "plant_id": "plant_0284",
+    "zh_name": "晃玉",
+    "scientific_name": "Euphorbia obesa",
+    "plant_type": "flower",
+    "category": "A_severe"
+  },
+  {
+    "plant_id": "plant_0292",
+    "zh_name": "栗蕨",
+    "scientific_name": "Histiopteris incisa",
+    "plant_type": "groundcover",
+    "category": "A_severe"
+  },
+  {
+    "plant_id": "plant_0301",
+    "zh_name": "有毒植物",
+    "scientific_name": "Atropa belladonna",
+    "plant_type": "flower",
+    "category": "A_moderate"
+  },
+  {
+    "plant_id": "plant_0303",
+    "zh_name": "馬尾杉屬",
+    "scientific_name": "Phlegmariurus",
+    "plant_type": "groundcover",
+    "category": "A_severe"
+  },
+  {
+    "plant_id": "plant_0307",
+    "zh_name": "月桂葉",
+    "scientific_name": "Laurus nobilis",
+    "plant_type": "tree",
+    "category": "A_moderate"
+  },
+  {
+    "plant_id": "plant_0309",
+    "zh_name": "海马齿",
+    "scientific_name": "Sesuvium portulacastrum",
+    "plant_type": "groundcover",
+    "category": "A_severe"
+  },
+  {
+    "plant_id": "plant_0312",
+    "zh_name": "黃蟬",
+    "scientific_name": "Allamanda schraderi",
+    "plant_type": "shrub",
+    "category": "A_moderate"
+  },
+  {
+    "plant_id": "plant_0316",
+    "zh_name": "梓叶槭",
+    "scientific_name": "Acer catalpifolium",
+    "plant_type": "tree",
+    "category": "A_moderate"
+  },
+  {
+    "plant_id": "plant_0323",
+    "zh_name": "馬纓丹",
+    "scientific_name": "Lantana camara",
+    "plant_type": "shrub",
+    "category": "A_moderate"
+  },
+  {
+    "plant_id": "plant_0331",
+    "zh_name": "垂序商陆",
+    "scientific_name": "Phytolacca americana",
+    "plant_type": "flower",
+    "category": "A_moderate"
+  },
+  {
+    "plant_id": "plant_0334",
+    "zh_name": "绣球花",
+    "scientific_name": "Hydrangea macrophylla",
+    "plant_type": "shrub",
+    "category": "A_severe"
+  },
+  {
+    "plant_id": "plant_0342",
+    "zh_name": "網紋草",
+    "scientific_name": "Fittonia albivenis",
+    "plant_type": "groundcover",
+    "category": "A_severe"
+  },
+  {
+    "plant_id": "plant_0347",
+    "zh_name": "鉤吻",
+    "scientific_name": "Gelsemium elegans",
+    "plant_type": "shrub",
+    "category": "A_moderate"
+  },
+  {
+    "plant_id": "plant_0349",
+    "zh_name": "大花四照花",
+    "scientific_name": "Cornus florida",
+    "plant_type": "tree",
+    "category": "A_severe"
+  },
+  {
+    "plant_id": "plant_0350",
+    "zh_name": "心叶日中花",
+    "scientific_name": "Mesembryanthemum cordifolium",
+    "plant_type": "groundcover",
+    "category": "A_severe"
+  },
+  {
+    "plant_id": "plant_0363",
+    "zh_name": "星果鳳梨",
+    "scientific_name": "Portea petropolitana",
+    "plant_type": "flower",
+    "category": "A_moderate"
+  },
+  {
+    "plant_id": "plant_0369",
+    "zh_name": "车窝草",
+    "scientific_name": "Anthriscus cerefolium",
+    "plant_type": "flower",
+    "category": "A_severe"
+  },
+  {
+    "plant_id": "plant_0375",
+    "zh_name": "爱之蔓",
+    "scientific_name": "Ceropegia woodii",
+    "plant_type": "groundcover",
+    "category": "A_severe"
+  }
+]

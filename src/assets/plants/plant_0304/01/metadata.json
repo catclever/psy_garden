@@ -11,11 +11,11 @@
     "source_image": "candidate_plant_304_紅豆杉.jpg",
     "true_color": true,
     "created_at": 1792466856,
-    "root_width": 76,
-    "root_ratio": 0.281,
+    "root_width": 85,
+    "root_ratio": 0.315,
     "ground_ellipse": [
-        76,
-        42
+        85,
+        47
     ],
     "status": "ready",
     "ai_analysis": {
@@ -33,5 +33,11 @@
         ],
         "brief": "常綠喬木，葉條形螺旋狀排列，種子外被紅色肉質假種皮。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.3775,
+        0.932
+    ],
+    "root_x": 101.92,
+    "root_y": 233
 }

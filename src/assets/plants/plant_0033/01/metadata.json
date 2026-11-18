@@ -11,10 +11,10 @@
     "source_image": "candidate_plant_plant_0033_秋水仙.jpg",
     "true_color": true,
     "created_at": 1792466860,
-    "root_width": 7,
-    "root_ratio": 0.04,
+    "root_width": 8,
+    "root_ratio": 0.045,
     "ground_ellipse": [
-        7,
+        8,
         4
     ],
     "status": "ready",
@@ -33,5 +33,11 @@
         ],
         "brief": "秋季开淡紫色漏斗状花，花葶短而细，叶片翌春抽出，具球茎。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5229,
+        0.996
+    ],
+    "root_x": 92.56,
+    "root_y": 249
 }

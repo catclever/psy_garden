@@ -4,10 +4,10 @@
     "variant_id": "01",
     "width": 191,
     "height": 250,
-    "root_width": 5,
-    "root_ratio": 0.026,
+    "root_width": 8,
+    "root_ratio": 0.042,
     "ground_ellipse": [
-        5,
+        8,
         4
     ],
     "layers": [
@@ -33,5 +33,11 @@
         ],
         "brief": "矮小块茎草本植物，具三出复叶与绿色佛焰苞，肉穗花序附属器细长如鼠尾。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5113,
+        0.996
+    ],
+    "root_x": 97.66,
+    "root_y": 249
 }

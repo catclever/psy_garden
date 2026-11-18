@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 250,
     "height": 250,
-    "root_width": 37,
-    "root_ratio": 0.148,
+    "root_width": 10,
+    "root_ratio": 0.04,
     "ground_ellipse": [
-        37,
-        20
+        10,
+        6
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "北美荒漠代表性高大单子叶树木，分枝粗犷扭曲，末梢簇生坚硬短剑叶。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5137,
+        0.84
+    ],
+    "root_x": 128.43,
+    "root_y": 210
 }

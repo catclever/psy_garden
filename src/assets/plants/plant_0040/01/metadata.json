@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 228,
     "height": 250,
-    "root_width": 74,
-    "root_ratio": 0.325,
+    "root_width": 50,
+    "root_ratio": 0.219,
     "ground_ellipse": [
-        74,
-        41
+        50,
+        28
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "柏科半常绿乔木，树干基部膨大且四周常生出木质呼吸根，树冠呈狭圆锥形。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.4679,
+        0.98
+    ],
+    "root_x": 106.68,
+    "root_y": 245
 }

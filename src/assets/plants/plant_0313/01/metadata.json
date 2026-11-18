@@ -4,10 +4,10 @@
     "variant_id": "01",
     "width": 244,
     "height": 250,
-    "root_width": 11,
-    "root_ratio": 0.045,
+    "root_width": 10,
+    "root_ratio": 0.041,
     "ground_ellipse": [
-        11,
+        10,
         6
     ],
     "layers": [
@@ -34,5 +34,11 @@
         ],
         "brief": "落叶或常绿灌木，顶生伞房花序硕大球状，具显眼装饰性萼片。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.4927,
+        0.996
+    ],
+    "root_x": 120.22,
+    "root_y": 249
 }

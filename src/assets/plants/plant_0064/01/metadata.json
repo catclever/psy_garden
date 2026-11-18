@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 272,
     "height": 250,
-    "root_width": 127,
-    "root_ratio": 0.467,
+    "root_width": 98,
+    "root_ratio": 0.36,
     "ground_ellipse": [
-        127,
-        70
+        98,
+        54
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "丛生常绿草本，椭圆形叶面天鹅绒质感，分布有黄绿相间如斑马般的横向斑纹。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5499,
+        0.768
+    ],
+    "root_x": 149.56,
+    "root_y": 192
 }

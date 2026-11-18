@@ -1,0 +1,45 @@
+{
+    "name": "plant_0292",
+    "display_name": "栗蕨",
+    "variant_id": "02",
+    "width": 262,
+    "height": 250,
+    "root_anchor": [
+        0.4869,
+        0.996
+    ],
+    "root_x": 127.58,
+    "root_y": 249,
+    "root_width": 48,
+    "root_ratio": 0.183,
+    "ground_ellipse": [
+        48,
+        26
+    ],
+    "layers": [
+        "layer-red",
+        "layer-green",
+        "layer-blue"
+    ],
+    "source_image": "plant_0292.jpg",
+    "true_color": true,
+    "created_at": 1794979350,
+    "status": "ready",
+    "ai_analysis": {
+        "zh_name": "栗蕨",
+        "scientific_name": "Histiopteris incisa",
+        "botanical_height_m": [
+            0.6,
+            2.0
+        ],
+        "plant_type": "groundcover",
+        "growth_habit": "bush",
+        "suggested_game_height_px": [
+            75,
+            115
+        ],
+        "brief": "多年生大型陆生蕨类，具长匍匐根状茎与粉绿色幼嫩羽状复叶。",
+        "status": "success"
+    },
+    "enabled": true
+}

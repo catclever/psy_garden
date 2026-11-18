@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 183,
     "height": 250,
-    "root_width": 46,
-    "root_ratio": 0.251,
+    "root_width": 40,
+    "root_ratio": 0.219,
     "ground_ellipse": [
-        46,
-        25
+        40,
+        22
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "馬達加斯加珍稀樹狀蘆薈，單幹直立，頂生肉質粗葉與長穗狀花序。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5003,
+        0.968
+    ],
+    "root_x": 91.55,
+    "root_y": 242
 }

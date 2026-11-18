@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 302,
     "height": 250,
-    "root_width": 140,
-    "root_ratio": 0.464,
+    "root_width": 107,
+    "root_ratio": 0.354,
     "ground_ellipse": [
-        140,
-        77
+        107,
+        59
     ],
     "layers": [
         "layer-red",
@@ -34,5 +34,11 @@
         ],
         "brief": "唇形科极矮生匍匐小草本，圆卵形微小叶片致密覆盖地表，散发浓郁薄荷香气。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.4549,
+        0.952
+    ],
+    "root_x": 137.38,
+    "root_y": 238
 }

@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 188,
     "height": 250,
-    "root_width": 52,
-    "root_ratio": 0.277,
+    "root_width": 20,
+    "root_ratio": 0.106,
     "ground_ellipse": [
-        52,
-        29
+        20,
+        11
     ],
     "layers": [
         "layer-red",
@@ -34,5 +34,11 @@
         ],
         "brief": "菊科多年生芳香草本，葉羽狀極度細裂如千羽，莖頂著生緻密扁平白花序。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5429,
+        0.996
+    ],
+    "root_x": 102.07,
+    "root_y": 249
 }

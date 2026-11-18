@@ -4,10 +4,10 @@
     "variant_id": "01",
     "width": 247,
     "height": 250,
-    "root_width": 7,
-    "root_ratio": 0.028,
+    "root_width": 8,
+    "root_ratio": 0.032,
     "ground_ellipse": [
-        7,
+        8,
         4
     ],
     "layers": [
@@ -34,5 +34,11 @@
         ],
         "brief": "多年生半灌木状草本，紧密的聚伞花序开满浓香的紫蓝色小花。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5058,
+        0.996
+    ],
+    "root_x": 124.94,
+    "root_y": 249
 }

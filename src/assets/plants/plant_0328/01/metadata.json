@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 204,
     "height": 250,
-    "root_width": 13,
-    "root_ratio": 0.064,
+    "root_width": 8,
+    "root_ratio": 0.039,
     "ground_ellipse": [
-        13,
-        7
+        8,
+        4
     ],
     "layers": [
         "layer-red",
@@ -34,5 +34,11 @@
         ],
         "brief": "十字花科二年生草本，果实干枯后呈现半透明银白色圆盘状假隔膜。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5057,
+        0.996
+    ],
+    "root_x": 103.16,
+    "root_y": 249
 }

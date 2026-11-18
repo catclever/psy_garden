@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 230,
     "height": 250,
-    "root_width": 45,
-    "root_ratio": 0.196,
+    "root_width": 8,
+    "root_ratio": 0.035,
     "ground_ellipse": [
-        45,
-        25
+        8,
+        4
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "豆科粗壯灌木，具大型羽狀複葉與直立如燭台般的金黃色密生總狀花序。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5161,
+        0.996
+    ],
+    "root_x": 118.7,
+    "root_y": 249
 }

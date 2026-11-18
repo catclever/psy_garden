@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 239,
     "height": 250,
-    "root_width": 19,
-    "root_ratio": 0.079,
+    "root_width": 38,
+    "root_ratio": 0.159,
     "ground_ellipse": [
-        19,
-        10
+        38,
+        21
     ],
     "layers": [
         "layer-red",
@@ -34,5 +34,11 @@
         ],
         "brief": "具强烈清凉香气的多年生宿根草本，茎四棱，轮伞花序腋生。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.613,
+        0.896
+    ],
+    "root_x": 146.51,
+    "root_y": 224
 }

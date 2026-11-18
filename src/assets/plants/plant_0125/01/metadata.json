@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 290,
     "height": 250,
-    "root_width": 31,
-    "root_ratio": 0.107,
+    "root_width": 29,
+    "root_ratio": 0.1,
     "ground_ellipse": [
-        31,
-        17
+        29,
+        16
     ],
     "layers": [
         "layer-red",
@@ -34,5 +34,11 @@
         ],
         "brief": "多年生宿根草本，三枚倒三角形小叶呈深紫红色且随光线闭合，簇生淡粉至白色小花。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.6363,
+        0.996
+    ],
+    "root_x": 184.51,
+    "root_y": 249
 }

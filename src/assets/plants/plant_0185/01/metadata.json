@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 267,
     "height": 250,
-    "root_width": 15,
-    "root_ratio": 0.056,
+    "root_width": 63,
+    "root_ratio": 0.236,
     "ground_ellipse": [
-        15,
-        8
+        63,
+        35
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "多具块根或肥厚肉质茎叶的菊科多肉植物，常于冬春季节开黄色小雏菊状花。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5487,
+        0.908
+    ],
+    "root_x": 146.52,
+    "root_y": 227
 }

@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 233,
     "height": 250,
-    "root_width": 21,
-    "root_ratio": 0.09,
+    "root_width": 19,
+    "root_ratio": 0.082,
     "ground_ellipse": [
-        21,
-        12
+        19,
+        10
     ],
     "layers": [
         "layer-red",
@@ -34,5 +34,11 @@
         ],
         "brief": "山茱萸科落叶灌木，老枝暗红而冬季幼枝鲜红夺目，伞房状花序着生乳白色小花。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.4976,
+        0.996
+    ],
+    "root_x": 115.94,
+    "root_y": 249
 }

@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 257,
     "height": 250,
-    "root_width": 59,
-    "root_ratio": 0.23,
+    "root_width": 52,
+    "root_ratio": 0.202,
     "ground_ellipse": [
-        59,
-        32
+        52,
+        29
     ],
     "layers": [
         "layer-red",
@@ -34,5 +34,11 @@
         ],
         "brief": "毛茛科多年生耐寒宿根草本，掌状复叶深裂质厚，冬春之交顶开杯状下垂的持久花萼。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5003,
+        0.996
+    ],
+    "root_x": 128.57,
+    "root_y": 249
 }

@@ -1,0 +1,45 @@
+{
+    "name": "plant_0081",
+    "display_name": "曇花屬",
+    "variant_id": "02",
+    "width": 206,
+    "height": 250,
+    "root_anchor": [
+        0.5061,
+        0.996
+    ],
+    "root_x": 104.26,
+    "root_y": 249,
+    "root_width": 74,
+    "root_ratio": 0.359,
+    "ground_ellipse": [
+        74,
+        41
+    ],
+    "layers": [
+        "layer-red",
+        "layer-green",
+        "layer-blue"
+    ],
+    "source_image": "plant_0081.jpg",
+    "true_color": true,
+    "created_at": 1794979337,
+    "status": "ready",
+    "ai_analysis": {
+        "zh_name": "曇花屬",
+        "scientific_name": "Epiphyllum",
+        "botanical_height_m": [
+            1.0,
+            3.0
+        ],
+        "plant_type": "shrub",
+        "growth_habit": "slender",
+        "suggested_game_height_px": [
+            100,
+            145
+        ],
+        "brief": "附生肉质灌木，茎退化扁平呈叶状，夜间绽放大而洁白、芳香四溢的漏斗花。",
+        "status": "success"
+    },
+    "enabled": true
+}

@@ -11,10 +11,10 @@
     "source_image": "candidate_plant_plant_0010_射干.jpg",
     "true_color": true,
     "created_at": 1792466862,
-    "root_width": 6,
-    "root_ratio": 0.039,
+    "root_width": 8,
+    "root_ratio": 0.052,
     "ground_ellipse": [
-        6,
+        8,
         4
     ],
     "status": "ready",
@@ -33,5 +33,11 @@
         ],
         "brief": "射干为多年生草本，具剑形互生叶，夏季开橙红色带斑点花，蒴果成熟后开裂露出黑色种子。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.466,
+        0.996
+    ],
+    "root_x": 71.77,
+    "root_y": 249
 }

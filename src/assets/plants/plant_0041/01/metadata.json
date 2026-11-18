@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 236,
     "height": 250,
-    "root_width": 9,
-    "root_ratio": 0.038,
+    "root_width": 8,
+    "root_ratio": 0.034,
     "ground_ellipse": [
-        9,
-        5
+        8,
+        4
     ],
     "layers": [
         "layer-red",
@@ -34,5 +34,11 @@
         ],
         "brief": "车前科直立亚灌木，枝叶具松脂清香，茎顶绽放带有白色喉部的鲜艳蓝紫色唇形花。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.4972,
+        0.996
+    ],
+    "root_x": 117.34,
+    "root_y": 249
 }

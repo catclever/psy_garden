@@ -33,5 +33,6 @@
         ],
         "brief": "番杏科微型多肉植物，具不對稱對生的卵圓形肉質肉葉與雛菊狀小花。",
         "status": "success"
-    }
+    },
+    "enabled": false
 }

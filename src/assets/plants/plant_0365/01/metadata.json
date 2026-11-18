@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 259,
     "height": 250,
-    "root_width": 22,
-    "root_ratio": 0.085,
+    "root_width": 78,
+    "root_ratio": 0.301,
     "ground_ellipse": [
-        22,
-        12
+        78,
+        43
     ],
     "layers": [
         "layer-red",
@@ -34,5 +34,11 @@
         ],
         "brief": "典型观赏草本植物，叶片色彩丰富多变且斑纹斑斓，多用于盆栽与花坛。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.3149,
+        0.944
+    ],
+    "root_x": 81.55,
+    "root_y": 236
 }

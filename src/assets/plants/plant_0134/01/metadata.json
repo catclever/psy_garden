@@ -33,5 +33,6 @@
         ],
         "brief": "银杏为落叶乔木，树冠宽卵形，叶片扇形，秋季变金黄，雌雄异株。",
         "status": "success"
-    }
+    },
+    "enabled": false
 }

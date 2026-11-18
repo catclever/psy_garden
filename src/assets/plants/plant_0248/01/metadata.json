@@ -4,10 +4,10 @@
     "variant_id": "01",
     "width": 244,
     "height": 250,
-    "root_width": 6,
-    "root_ratio": 0.025,
+    "root_width": 8,
+    "root_ratio": 0.033,
     "ground_ellipse": [
-        6,
+        8,
         4
     ],
     "layers": [
@@ -34,5 +34,11 @@
         ],
         "brief": "多年生亚灌木状草本，叶倒卵状椭圆形，高脚碟状花五裂，常年红粉或白色花开不断。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.4895,
+        0.996
+    ],
+    "root_x": 119.45,
+    "root_y": 249
 }

@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 238,
     "height": 250,
-    "root_width": 38,
-    "root_ratio": 0.16,
+    "root_width": 46,
+    "root_ratio": 0.193,
     "ground_ellipse": [
-        38,
-        21
+        46,
+        25
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "大型落葉高大喬木，葉形截頭似馬褂，花大形似黃綠色鬱金香。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5898,
+        0.932
+    ],
+    "root_x": 140.37,
+    "root_y": 233
 }

@@ -10,10 +10,10 @@
         "layer-blue"
     ],
     "created_at": 1792399814,
-    "root_width": 6,
-    "root_ratio": 0.031,
+    "root_width": 8,
+    "root_ratio": 0.041,
     "ground_ellipse": [
-        6,
+        8,
         4
     ],
     "status": "ready",
@@ -33,5 +33,11 @@
         ],
         "brief": "常绿灌木，叶片线形至披针形，灰绿色，穗状花序顶生，花蓝紫色，芳香。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5262,
+        0.996
+    ],
+    "root_x": 103.14,
+    "root_y": 249
 }

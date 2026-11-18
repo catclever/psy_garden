@@ -11,10 +11,10 @@
     "source_image": "candidate_plant_0092_翠綠龍舌蘭.jpg",
     "true_color": true,
     "created_at": 1792466860,
-    "root_width": 7,
-    "root_ratio": 0.049,
+    "root_width": 8,
+    "root_ratio": 0.056,
     "ground_ellipse": [
-        7,
+        8,
         4
     ],
     "status": "ready",
@@ -33,5 +33,11 @@
         ],
         "brief": "翠綠龍舌蘭是一種無刺的肉質灌木，葉片呈灰綠色蓮座狀排列，柔軟彎曲，花序高聳如狐尾。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.4996,
+        0.996
+    ],
+    "root_x": 71.95,
+    "root_y": 249
 }

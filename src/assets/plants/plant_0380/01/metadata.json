@@ -4,10 +4,10 @@
     "variant_id": "01",
     "width": 241,
     "height": 250,
-    "root_width": 13,
-    "root_ratio": 0.054,
+    "root_width": 12,
+    "root_ratio": 0.05,
     "ground_ellipse": [
-        13,
+        12,
         7
     ],
     "layers": [
@@ -33,5 +33,11 @@
         ],
         "brief": "具浓郁芳香的多年生草本，茎直立多分枝，羽状裂叶背面密生灰白色蛛丝状毛。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5207,
+        0.996
+    ],
+    "root_x": 125.48,
+    "root_y": 249
 }

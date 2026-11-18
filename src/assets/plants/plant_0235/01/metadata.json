@@ -4,10 +4,10 @@
     "variant_id": "01",
     "width": 176,
     "height": 250,
-    "root_width": 6,
-    "root_ratio": 0.034,
+    "root_width": 8,
+    "root_ratio": 0.045,
     "ground_ellipse": [
-        6,
+        8,
         4
     ],
     "layers": [
@@ -34,5 +34,11 @@
         ],
         "brief": "多年生半灌木，茎多分枝呈丛生灌丛状，密被线形灰绿色叶片，顶生穗状花序具芳香浓郁的蓝紫色小花。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.4879,
+        0.996
+    ],
+    "root_x": 85.86,
+    "root_y": 249
 }

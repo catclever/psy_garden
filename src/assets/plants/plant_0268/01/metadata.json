@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 173,
     "height": 250,
-    "root_width": 17,
-    "root_ratio": 0.098,
+    "root_width": 11,
+    "root_ratio": 0.064,
     "ground_ellipse": [
-        17,
-        9
+        11,
+        6
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "大型多肉植物，灰绿肉质剑叶紧凑呈莲座状排列，边缘具尖锐硬刺。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.3725,
+        0.996
+    ],
+    "root_x": 64.45,
+    "root_y": 249
 }

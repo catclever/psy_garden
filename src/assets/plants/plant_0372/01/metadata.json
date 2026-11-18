@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 238,
     "height": 250,
-    "root_width": 20,
-    "root_ratio": 0.084,
+    "root_width": 18,
+    "root_ratio": 0.076,
     "ground_ellipse": [
-        20,
-        11
+        18,
+        10
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "大型丛生竹芋，深绿色革质长叶上对称排列着粉白至银白色的优美细线条。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.4854,
+        0.996
+    ],
+    "root_x": 115.53,
+    "root_y": 249
 }

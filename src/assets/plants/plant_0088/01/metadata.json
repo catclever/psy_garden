@@ -4,10 +4,10 @@
     "variant_id": "01",
     "width": 162,
     "height": 250,
-    "root_width": 5,
-    "root_ratio": 0.031,
+    "root_width": 8,
+    "root_ratio": 0.049,
     "ground_ellipse": [
-        5,
+        8,
         4
     ],
     "layers": [
@@ -33,5 +33,11 @@
         ],
         "brief": "多年生草本，羽状分裂叶带粉白晕，折断溢出黄橙乳汁，顶生金黄色四瓣小花。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.555,
+        0.996
+    ],
+    "root_x": 89.91,
+    "root_y": 249
 }

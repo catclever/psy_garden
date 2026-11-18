@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 216,
     "height": 250,
-    "root_width": 14,
-    "root_ratio": 0.065,
+    "root_width": 13,
+    "root_ratio": 0.06,
     "ground_ellipse": [
-        14,
-        8
+        13,
+        7
     ],
     "layers": [
         "layer-red",
@@ -34,5 +34,11 @@
         ],
         "brief": "落叶灌木，枝条四棱形且多开展分枝，浆果状瘦果成熟时变为紫黑色。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5533,
+        0.996
+    ],
+    "root_x": 119.51,
+    "root_y": 249
 }

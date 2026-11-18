@@ -11,11 +11,11 @@
     "source_image": "candidate_plant_0084_臥牛.jpg",
     "true_color": true,
     "created_at": 1792461692,
-    "root_width": 24,
-    "root_ratio": 0.121,
+    "root_width": 39,
+    "root_ratio": 0.197,
     "ground_ellipse": [
-        24,
-        13
+        39,
+        21
     ],
     "status": "ready",
     "ai_analysis": {
@@ -33,5 +33,11 @@
         ],
         "brief": "葉片肥厚呈舌狀、對生排列成緊密的蓮座狀，表面粗糙且帶有深綠色斑紋，植株低矮緊湊。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.3015,
+        0.92
+    ],
+    "root_x": 59.7,
+    "root_y": 230
 }

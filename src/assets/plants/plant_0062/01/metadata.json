@@ -4,10 +4,10 @@
     "variant_id": "01",
     "width": 110,
     "height": 250,
-    "root_width": 15,
-    "root_ratio": 0.136,
+    "root_width": 14,
+    "root_ratio": 0.127,
     "ground_ellipse": [
-        15,
+        14,
         8
     ],
     "layers": [
@@ -34,5 +34,11 @@
         ],
         "brief": "紧凑对称的莲座状多肉植物，暗绿色狭长叶缘剥离出细白卷曲的丝状纤维。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5012,
+        0.996
+    ],
+    "root_x": 55.13,
+    "root_y": 249
 }

@@ -1,0 +1,45 @@
+{
+    "name": "plant_0316",
+    "display_name": "梓叶槭",
+    "variant_id": "02",
+    "width": 237,
+    "height": 250,
+    "root_anchor": [
+        0.4948,
+        0.996
+    ],
+    "root_x": 117.27,
+    "root_y": 249,
+    "root_width": 56,
+    "root_ratio": 0.236,
+    "ground_ellipse": [
+        56,
+        31
+    ],
+    "layers": [
+        "layer-red",
+        "layer-green",
+        "layer-blue"
+    ],
+    "source_image": "plant_0316.jpg",
+    "true_color": true,
+    "created_at": 1794979352,
+    "status": "ready",
+    "ai_analysis": {
+        "zh_name": "梓叶槭",
+        "scientific_name": "Acer catalpifolium",
+        "botanical_height_m": [
+            10.0,
+            25.0
+        ],
+        "plant_type": "tree",
+        "growth_habit": "canopy",
+        "suggested_game_height_px": [
+            170,
+            215
+        ],
+        "brief": "落叶大乔木，叶全缘或近基部浅裂似梓树叶，翅果开展。",
+        "status": "success"
+    },
+    "enabled": true
+}

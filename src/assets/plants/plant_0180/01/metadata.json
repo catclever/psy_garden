@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 279,
     "height": 250,
-    "root_width": 69,
-    "root_ratio": 0.247,
+    "root_width": 64,
+    "root_ratio": 0.229,
     "ground_ellipse": [
-        69,
-        38
+        64,
+        35
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "扁球形低矮仙人球，具圆润棱脊与弯曲刺，顶生艳丽绯红的大型花朵。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.4982,
+        0.996
+    ],
+    "root_x": 138.99,
+    "root_y": 249
 }

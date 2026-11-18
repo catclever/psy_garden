@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 227,
     "height": 250,
-    "root_width": 20,
-    "root_ratio": 0.088,
+    "root_width": 49,
+    "root_ratio": 0.216,
     "ground_ellipse": [
-        20,
-        11
+        49,
+        27
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "常綠針葉喬木，條狀披針形微彎葉片排成二列，種子被鮮紅色肉質假種皮包裹。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.506,
+        0.956
+    ],
+    "root_x": 114.86,
+    "root_y": 239
 }

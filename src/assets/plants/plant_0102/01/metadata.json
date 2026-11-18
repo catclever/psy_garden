@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 200,
     "height": 250,
-    "root_width": 9,
-    "root_ratio": 0.045,
+    "root_width": 8,
+    "root_ratio": 0.04,
     "ground_ellipse": [
-        9,
-        5
+        8,
+        4
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "大戟科粗壮大型灌木或亚灌木，掌状深裂大叶如伞，果序密布软刺且种子含剧毒蓖麻毒素。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.4973,
+        0.996
+    ],
+    "root_x": 99.46,
+    "root_y": 249
 }

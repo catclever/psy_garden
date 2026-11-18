@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 249,
     "height": 250,
-    "root_width": 12,
-    "root_ratio": 0.048,
+    "root_width": 76,
+    "root_ratio": 0.305,
     "ground_ellipse": [
-        12,
-        7
+        76,
+        42
     ],
     "layers": [
         "layer-red",
@@ -34,5 +34,11 @@
         ],
         "brief": "筒状莲座叶丛具银白色横向条纹，花序下垂且苞片鲜艳。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5658,
+        0.944
+    ],
+    "root_x": 140.89,
+    "root_y": 236
 }

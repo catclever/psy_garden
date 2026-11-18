@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 270,
     "height": 250,
-    "root_width": 32,
-    "root_ratio": 0.119,
+    "root_width": 97,
+    "root_ratio": 0.359,
     "ground_ellipse": [
-        32,
-        18
+        97,
+        53
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "常绿针叶乔木，树皮红褐色片状开裂，微弯镰刀状叶排成两列，成熟种子被杯状鲜红色肉质假种皮包裹。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.519,
+        0.912
+    ],
+    "root_x": 140.13,
+    "root_y": 228
 }

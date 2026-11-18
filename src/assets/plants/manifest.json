@@ -1,5 +1,5 @@
 {
-  "generated_at": 1794901900,
+  "generated_at": 1794981043,
   "total_species": 383,
   "plants": [
     {
@@ -10,11 +10,15 @@
       "path_prefix": "assets/plants/plant_0000/01",
       "width": 226,
       "height": 250,
-      "root_width": 25,
-      "root_ratio": 0.111,
+      "root_anchor": [
+        0.5121,
+        0.996
+      ],
+      "root_width": 22,
+      "root_ratio": 0.097,
       "ground_ellipse": [
-        25,
-        14
+        22,
+        12
       ],
       "true_color": true,
       "layer_files": [
@@ -56,6 +60,10 @@
       "path_prefix": "assets/plants/plant_0001/01",
       "width": 233,
       "height": 250,
+      "root_anchor": [
+        0.5148,
+        0.996
+      ],
       "root_width": 13,
       "root_ratio": 0.056,
       "ground_ellipse": [
@@ -98,10 +106,14 @@
       "path_prefix": "assets/plants/plant_0002/01",
       "width": 245,
       "height": 250,
-      "root_width": 7,
-      "root_ratio": 0.029,
+      "root_anchor": [
+        0.5166,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.033,
       "ground_ellipse": [
-        7,
+        8,
         4
       ],
       "true_color": true,
@@ -140,11 +152,15 @@
       "path_prefix": "assets/plants/plant_0003/01",
       "width": 243,
       "height": 250,
-      "root_width": 11,
-      "root_ratio": 0.045,
+      "root_anchor": [
+        0.629,
+        0.948
+      ],
+      "root_width": 38,
+      "root_ratio": 0.156,
       "ground_ellipse": [
-        11,
-        6
+        38,
+        21
       ],
       "true_color": true,
       "layer_files": [
@@ -182,11 +198,15 @@
       "path_prefix": "assets/plants/plant_0004/01",
       "width": 234,
       "height": 250,
-      "root_width": 12,
-      "root_ratio": 0.051,
+      "root_anchor": [
+        0.5143,
+        0.996
+      ],
+      "root_width": 11,
+      "root_ratio": 0.047,
       "ground_ellipse": [
-        12,
-        7
+        11,
+        6
       ],
       "true_color": true,
       "layer_files": [
@@ -228,11 +248,15 @@
       "path_prefix": "assets/plants/plant_0005/01",
       "width": 292,
       "height": 250,
-      "root_width": 60,
-      "root_ratio": 0.205,
+      "root_anchor": [
+        0.4325,
+        0.936
+      ],
+      "root_width": 80,
+      "root_ratio": 0.274,
       "ground_ellipse": [
-        60,
-        33
+        80,
+        44
       ],
       "true_color": true,
       "layer_files": [
@@ -270,6 +294,10 @@
       "path_prefix": "assets/plants/plant_0006/01",
       "width": 221,
       "height": 250,
+      "root_anchor": [
+        0.4967,
+        0.996
+      ],
       "root_width": 22,
       "root_ratio": 0.1,
       "ground_ellipse": [
@@ -312,6 +340,10 @@
       "path_prefix": "assets/plants/plant_0007/01",
       "width": 228,
       "height": 250,
+      "root_anchor": [
+        0.5228,
+        0.996
+      ],
       "root_width": 8,
       "root_ratio": 0.035,
       "ground_ellipse": [
@@ -354,6 +386,10 @@
       "path_prefix": "assets/plants/plant_0008/01",
       "width": 271,
       "height": 250,
+      "root_anchor": [
+        0.5182,
+        0.996
+      ],
       "root_width": 8,
       "root_ratio": 0.03,
       "ground_ellipse": [
@@ -396,11 +432,15 @@
       "path_prefix": "assets/plants/plant_0009/1791079165",
       "width": 243,
       "height": 250,
-      "root_width": 52,
-      "root_ratio": 0.214,
+      "root_anchor": [
+        0.4671,
+        0.996
+      ],
+      "root_width": 36,
+      "root_ratio": 0.148,
       "ground_ellipse": [
-        52,
-        29
+        36,
+        20
       ],
       "true_color": true,
       "layer_files": [
@@ -438,10 +478,14 @@
       "path_prefix": "assets/plants/plant_0010/01",
       "width": 154,
       "height": 250,
-      "root_width": 6,
-      "root_ratio": 0.039,
+      "root_anchor": [
+        0.466,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.052,
       "ground_ellipse": [
-        6,
+        8,
         4
       ],
       "true_color": true,
@@ -480,11 +524,15 @@
       "path_prefix": "assets/plants/plant_0011/01",
       "width": 197,
       "height": 250,
-      "root_width": 12,
-      "root_ratio": 0.061,
+      "root_anchor": [
+        0.5021,
+        0.996
+      ],
+      "root_width": 11,
+      "root_ratio": 0.056,
       "ground_ellipse": [
-        12,
-        7
+        11,
+        6
       ],
       "true_color": true,
       "layer_files": [
@@ -522,11 +570,15 @@
       "path_prefix": "assets/plants/plant_0012/01",
       "width": 291,
       "height": 250,
-      "root_width": 147,
-      "root_ratio": 0.505,
+      "root_anchor": [
+        0.2923,
+        0.976
+      ],
+      "root_width": 43,
+      "root_ratio": 0.148,
       "ground_ellipse": [
-        147,
-        81
+        43,
+        24
       ],
       "true_color": true,
       "layer_files": [
@@ -557,18 +609,22 @@
       }
     },
     {
-      "id": "plant_0013__01",
+      "id": "plant_0013__02",
       "name": "plant_0013",
       "display_name": "王族海棠",
-      "variant_id": "01",
-      "path_prefix": "assets/plants/plant_0013/01",
-      "width": 261,
+      "variant_id": "02",
+      "path_prefix": "assets/plants/plant_0013/02",
+      "width": 224,
       "height": 250,
-      "root_width": 13,
-      "root_ratio": 0.05,
+      "root_anchor": [
+        0.4968,
+        0.996
+      ],
+      "root_width": 72,
+      "root_ratio": 0.321,
       "ground_ellipse": [
-        13,
-        7
+        72,
+        40
       ],
       "true_color": true,
       "layer_files": [
@@ -610,11 +666,15 @@
       "path_prefix": "assets/plants/plant_0014/01",
       "width": 183,
       "height": 250,
-      "root_width": 19,
-      "root_ratio": 0.104,
+      "root_anchor": [
+        0.5242,
+        0.996
+      ],
+      "root_width": 17,
+      "root_ratio": 0.093,
       "ground_ellipse": [
-        19,
-        10
+        17,
+        9
       ],
       "true_color": true,
       "layer_files": [
@@ -652,11 +712,15 @@
       "path_prefix": "assets/plants/plant_0015/01",
       "width": 183,
       "height": 250,
-      "root_width": 46,
-      "root_ratio": 0.251,
+      "root_anchor": [
+        0.5003,
+        0.968
+      ],
+      "root_width": 40,
+      "root_ratio": 0.219,
       "ground_ellipse": [
-        46,
-        25
+        40,
+        22
       ],
       "true_color": true,
       "layer_files": [
@@ -694,11 +758,15 @@
       "path_prefix": "assets/plants/plant_0016/01",
       "width": 235,
       "height": 250,
-      "root_width": 15,
-      "root_ratio": 0.064,
+      "root_anchor": [
+        0.448,
+        0.856
+      ],
+      "root_width": 76,
+      "root_ratio": 0.323,
       "ground_ellipse": [
-        15,
-        8
+        76,
+        42
       ],
       "true_color": true,
       "layer_files": [
@@ -736,11 +804,15 @@
       "path_prefix": "assets/plants/plant_0017/01",
       "width": 243,
       "height": 250,
-      "root_width": 2,
-      "root_ratio": 0.008,
+      "root_anchor": [
+        0.5279,
+        0.956
+      ],
+      "root_width": 14,
+      "root_ratio": 0.058,
       "ground_ellipse": [
-        2,
-        4
+        14,
+        8
       ],
       "true_color": true,
       "layer_files": [
@@ -778,10 +850,14 @@
       "path_prefix": "assets/plants/plant_0018/01",
       "width": 164,
       "height": 250,
-      "root_width": 7,
-      "root_ratio": 0.043,
+      "root_anchor": [
+        0.4197,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.049,
       "ground_ellipse": [
-        7,
+        8,
         4
       ],
       "true_color": true,
@@ -820,11 +896,15 @@
       "path_prefix": "assets/plants/plant_0019/01",
       "width": 250,
       "height": 250,
-      "root_width": 37,
-      "root_ratio": 0.148,
+      "root_anchor": [
+        0.5245,
+        0.888
+      ],
+      "root_width": 29,
+      "root_ratio": 0.116,
       "ground_ellipse": [
-        37,
-        20
+        29,
+        16
       ],
       "true_color": true,
       "layer_files": [
@@ -862,11 +942,15 @@
       "path_prefix": "assets/plants/plant_0021/01",
       "width": 250,
       "height": 250,
-      "root_width": 37,
-      "root_ratio": 0.148,
+      "root_anchor": [
+        0.5072,
+        0.92
+      ],
+      "root_width": 8,
+      "root_ratio": 0.032,
       "ground_ellipse": [
-        37,
-        20
+        8,
+        4
       ],
       "true_color": true,
       "layer_files": [
@@ -908,11 +992,15 @@
       "path_prefix": "assets/plants/plant_0022/01",
       "width": 267,
       "height": 250,
-      "root_width": 54,
-      "root_ratio": 0.202,
+      "root_anchor": [
+        0.459,
+        0.936
+      ],
+      "root_width": 76,
+      "root_ratio": 0.285,
       "ground_ellipse": [
-        54,
-        30
+        76,
+        42
       ],
       "true_color": true,
       "layer_files": [
@@ -950,6 +1038,10 @@
       "path_prefix": "assets/plants/plant_0023/01",
       "width": 238,
       "height": 250,
+      "root_anchor": [
+        0.504,
+        0.996
+      ],
       "root_width": 8,
       "root_ratio": 0.034,
       "ground_ellipse": [
@@ -989,18 +1081,22 @@
       }
     },
     {
-      "id": "plant_0024__01",
+      "id": "plant_0024__02",
       "name": "plant_0024",
       "display_name": "香港巴豆",
-      "variant_id": "01",
-      "path_prefix": "assets/plants/plant_0024/01",
-      "width": 269,
+      "variant_id": "02",
+      "path_prefix": "assets/plants/plant_0024/02",
+      "width": 216,
       "height": 250,
-      "root_width": 65,
-      "root_ratio": 0.242,
+      "root_anchor": [
+        0.4777,
+        0.996
+      ],
+      "root_width": 57,
+      "root_ratio": 0.264,
       "ground_ellipse": [
-        65,
-        36
+        57,
+        31
       ],
       "true_color": true,
       "layer_files": [
@@ -1011,6 +1107,10 @@
         {
           "slot": "red",
           "file": "layer_red.png"
+        },
+        {
+          "slot": "blue",
+          "file": "layer_blue.png"
         }
       ],
       "ai_analysis": {
@@ -1038,6 +1138,10 @@
       "path_prefix": "assets/plants/plant_0025/01",
       "width": 291,
       "height": 250,
+      "root_anchor": [
+        0.4985,
+        0.996
+      ],
       "root_width": 9,
       "root_ratio": 0.031,
       "ground_ellipse": [
@@ -1080,10 +1184,14 @@
       "path_prefix": "assets/plants/plant_0026/01",
       "width": 202,
       "height": 250,
-      "root_width": 5,
-      "root_ratio": 0.025,
+      "root_anchor": [
+        0.4772,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.04,
       "ground_ellipse": [
-        5,
+        8,
         4
       ],
       "true_color": true,
@@ -1126,11 +1234,15 @@
       "path_prefix": "assets/plants/plant_0027/01",
       "width": 238,
       "height": 250,
-      "root_width": 38,
-      "root_ratio": 0.16,
+      "root_anchor": [
+        0.5898,
+        0.932
+      ],
+      "root_width": 46,
+      "root_ratio": 0.193,
       "ground_ellipse": [
-        38,
-        21
+        46,
+        25
       ],
       "true_color": true,
       "layer_files": [
@@ -1168,11 +1280,15 @@
       "path_prefix": "assets/plants/plant_0028/01",
       "width": 188,
       "height": 250,
-      "root_width": 52,
-      "root_ratio": 0.277,
+      "root_anchor": [
+        0.5429,
+        0.996
+      ],
+      "root_width": 20,
+      "root_ratio": 0.106,
       "ground_ellipse": [
-        52,
-        29
+        20,
+        11
       ],
       "true_color": true,
       "layer_files": [
@@ -1214,6 +1330,10 @@
       "path_prefix": "assets/plants/plant_0029/01",
       "width": 254,
       "height": 250,
+      "root_anchor": [
+        0.4135,
+        0.996
+      ],
       "root_width": 23,
       "root_ratio": 0.091,
       "ground_ellipse": [
@@ -1256,10 +1376,14 @@
       "path_prefix": "assets/plants/plant_0030/01",
       "width": 101,
       "height": 250,
-      "root_width": 4,
-      "root_ratio": 0.04,
+      "root_anchor": [
+        0.5023,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.079,
       "ground_ellipse": [
-        4,
+        8,
         4
       ],
       "true_color": true,
@@ -1298,10 +1422,14 @@
       "path_prefix": "assets/plants/plant_0031/01",
       "width": 160,
       "height": 250,
-      "root_width": 6,
-      "root_ratio": 0.037,
+      "root_anchor": [
+        0.5061,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.05,
       "ground_ellipse": [
-        6,
+        8,
         4
       ],
       "true_color": true,
@@ -1340,11 +1468,15 @@
       "path_prefix": "assets/plants/plant_0032/01",
       "width": 231,
       "height": 250,
-      "root_width": 21,
-      "root_ratio": 0.091,
+      "root_anchor": [
+        0.5513,
+        0.852
+      ],
+      "root_width": 66,
+      "root_ratio": 0.286,
       "ground_ellipse": [
-        21,
-        12
+        66,
+        36
       ],
       "true_color": true,
       "layer_files": [
@@ -1382,10 +1514,14 @@
       "path_prefix": "assets/plants/plant_0033/01",
       "width": 177,
       "height": 250,
-      "root_width": 7,
-      "root_ratio": 0.04,
+      "root_anchor": [
+        0.5229,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.045,
       "ground_ellipse": [
-        7,
+        8,
         4
       ],
       "true_color": true,
@@ -1417,18 +1553,22 @@
       }
     },
     {
-      "id": "plant_0034__01",
+      "id": "plant_0034__02",
       "name": "plant_0034",
       "display_name": "皱叶留兰香",
-      "variant_id": "01",
-      "path_prefix": "assets/plants/plant_0034/01",
-      "width": 211,
+      "variant_id": "02",
+      "path_prefix": "assets/plants/plant_0034/02",
+      "width": 232,
       "height": 250,
-      "root_width": 7,
-      "root_ratio": 0.033,
+      "root_anchor": [
+        0.5117,
+        0.992
+      ],
+      "root_width": 72,
+      "root_ratio": 0.31,
       "ground_ellipse": [
-        7,
-        4
+        72,
+        40
       ],
       "true_color": true,
       "layer_files": [
@@ -1470,11 +1610,15 @@
       "path_prefix": "assets/plants/plant_0035/01",
       "width": 337,
       "height": 250,
-      "root_width": 27,
-      "root_ratio": 0.08,
+      "root_anchor": [
+        0.5975,
+        0.996
+      ],
+      "root_width": 22,
+      "root_ratio": 0.065,
       "ground_ellipse": [
-        27,
-        15
+        22,
+        12
       ],
       "true_color": true,
       "layer_files": [
@@ -1516,10 +1660,14 @@
       "path_prefix": "assets/plants/plant_0036/01",
       "width": 232,
       "height": 250,
-      "root_width": 7,
-      "root_ratio": 0.03,
+      "root_anchor": [
+        0.5203,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.034,
       "ground_ellipse": [
-        7,
+        8,
         4
       ],
       "true_color": true,
@@ -1558,11 +1706,15 @@
       "path_prefix": "assets/plants/plant_0037/01",
       "width": 217,
       "height": 250,
-      "root_width": 120,
-      "root_ratio": 0.553,
+      "root_anchor": [
+        0.4881,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.037,
       "ground_ellipse": [
-        120,
-        66
+        8,
+        4
       ],
       "true_color": true,
       "layer_files": [
@@ -1604,10 +1756,14 @@
       "path_prefix": "assets/plants/plant_0038/01",
       "width": 196,
       "height": 250,
-      "root_width": 6,
-      "root_ratio": 0.031,
+      "root_anchor": [
+        0.5262,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.041,
       "ground_ellipse": [
-        6,
+        8,
         4
       ],
       "true_color": true,
@@ -1650,6 +1806,10 @@
       "path_prefix": "assets/plants/plant_0039/01",
       "width": 172,
       "height": 250,
+      "root_anchor": [
+        0.51,
+        0.996
+      ],
       "root_width": 10,
       "root_ratio": 0.058,
       "ground_ellipse": [
@@ -1696,11 +1856,15 @@
       "path_prefix": "assets/plants/plant_0040/01",
       "width": 228,
       "height": 250,
-      "root_width": 74,
-      "root_ratio": 0.325,
+      "root_anchor": [
+        0.4679,
+        0.98
+      ],
+      "root_width": 50,
+      "root_ratio": 0.219,
       "ground_ellipse": [
-        74,
-        41
+        50,
+        28
       ],
       "true_color": true,
       "layer_files": [
@@ -1738,11 +1902,15 @@
       "path_prefix": "assets/plants/plant_0041/01",
       "width": 236,
       "height": 250,
-      "root_width": 9,
-      "root_ratio": 0.038,
+      "root_anchor": [
+        0.4972,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.034,
       "ground_ellipse": [
-        9,
-        5
+        8,
+        4
       ],
       "true_color": true,
       "layer_files": [
@@ -1777,18 +1945,22 @@
       }
     },
     {
-      "id": "plant_0042__01",
+      "id": "plant_0042__02",
       "name": "plant_0042",
       "display_name": "马钱子",
-      "variant_id": "01",
-      "path_prefix": "assets/plants/plant_0042/01",
-      "width": 255,
+      "variant_id": "02",
+      "path_prefix": "assets/plants/plant_0042/02",
+      "width": 235,
       "height": 250,
-      "root_width": 8,
-      "root_ratio": 0.031,
+      "root_anchor": [
+        0.4995,
+        0.996
+      ],
+      "root_width": 56,
+      "root_ratio": 0.238,
       "ground_ellipse": [
-        8,
-        4
+        56,
+        31
       ],
       "true_color": true,
       "layer_files": [
@@ -1799,6 +1971,10 @@
         {
           "slot": "red",
           "file": "layer_red.png"
+        },
+        {
+          "slot": "blue",
+          "file": "layer_blue.png"
         }
       ],
       "ai_analysis": {
@@ -1826,10 +2002,14 @@
       "path_prefix": "assets/plants/plant_0043/01",
       "width": 251,
       "height": 250,
-      "root_width": 5,
-      "root_ratio": 0.02,
+      "root_anchor": [
+        0.5378,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.032,
       "ground_ellipse": [
-        5,
+        8,
         4
       ],
       "true_color": true,
@@ -1872,11 +2052,15 @@
       "path_prefix": "assets/plants/plant_0044/01",
       "width": 245,
       "height": 250,
-      "root_width": 9,
-      "root_ratio": 0.037,
+      "root_anchor": [
+        0.5039,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.033,
       "ground_ellipse": [
-        9,
-        5
+        8,
+        4
       ],
       "true_color": true,
       "layer_files": [
@@ -1918,11 +2102,15 @@
       "path_prefix": "assets/plants/plant_0045/01",
       "width": 209,
       "height": 250,
-      "root_width": 15,
-      "root_ratio": 0.072,
+      "root_anchor": [
+        0.5354,
+        0.996
+      ],
+      "root_width": 13,
+      "root_ratio": 0.062,
       "ground_ellipse": [
-        15,
-        8
+        13,
+        7
       ],
       "true_color": true,
       "layer_files": [
@@ -1960,11 +2148,15 @@
       "path_prefix": "assets/plants/plant_0046/01",
       "width": 222,
       "height": 250,
-      "root_width": 82,
-      "root_ratio": 0.369,
+      "root_anchor": [
+        0.5868,
+        0.996
+      ],
+      "root_width": 10,
+      "root_ratio": 0.045,
       "ground_ellipse": [
-        82,
-        45
+        10,
+        6
       ],
       "true_color": true,
       "layer_files": [
@@ -2002,6 +2194,10 @@
       "path_prefix": "assets/plants/plant_0047/01",
       "width": 238,
       "height": 250,
+      "root_anchor": [
+        0.5161,
+        0.996
+      ],
       "root_width": 10,
       "root_ratio": 0.042,
       "ground_ellipse": [
@@ -2037,18 +2233,22 @@
       }
     },
     {
-      "id": "plant_0048__01",
+      "id": "plant_0048__02",
       "name": "plant_0048",
       "display_name": "莲叶桐",
-      "variant_id": "01",
-      "path_prefix": "assets/plants/plant_0048/01",
-      "width": 258,
+      "variant_id": "02",
+      "path_prefix": "assets/plants/plant_0048/02",
+      "width": 239,
       "height": 250,
-      "root_width": 19,
-      "root_ratio": 0.074,
+      "root_anchor": [
+        0.4958,
+        0.996
+      ],
+      "root_width": 58,
+      "root_ratio": 0.243,
       "ground_ellipse": [
-        19,
-        10
+        58,
+        32
       ],
       "true_color": true,
       "layer_files": [
@@ -2059,6 +2259,10 @@
         {
           "slot": "red",
           "file": "layer_red.png"
+        },
+        {
+          "slot": "blue",
+          "file": "layer_blue.png"
         }
       ],
       "ai_analysis": {
@@ -2086,11 +2290,15 @@
       "path_prefix": "assets/plants/plant_0049/01",
       "width": 302,
       "height": 250,
-      "root_width": 140,
-      "root_ratio": 0.464,
+      "root_anchor": [
+        0.4549,
+        0.952
+      ],
+      "root_width": 107,
+      "root_ratio": 0.354,
       "ground_ellipse": [
-        140,
-        77
+        107,
+        59
       ],
       "true_color": true,
       "layer_files": [
@@ -2132,6 +2340,10 @@
       "path_prefix": "assets/plants/plant_0050/01",
       "width": 260,
       "height": 250,
+      "root_anchor": [
+        0.4934,
+        0.996
+      ],
       "root_width": 61,
       "root_ratio": 0.235,
       "ground_ellipse": [
@@ -2174,10 +2386,14 @@
       "path_prefix": "assets/plants/plant_0051/01",
       "width": 192,
       "height": 250,
-      "root_width": 7,
-      "root_ratio": 0.036,
+      "root_anchor": [
+        0.519,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.042,
       "ground_ellipse": [
-        7,
+        8,
         4
       ],
       "true_color": true,
@@ -2216,6 +2432,10 @@
       "path_prefix": "assets/plants/plant_0052/01",
       "width": 245,
       "height": 250,
+      "root_anchor": [
+        0.5261,
+        0.996
+      ],
       "root_width": 14,
       "root_ratio": 0.057,
       "ground_ellipse": [
@@ -2251,18 +2471,22 @@
       }
     },
     {
-      "id": "plant_0053__01",
+      "id": "plant_0053__02",
       "name": "plant_0053",
       "display_name": "耳墜草",
-      "variant_id": "01",
-      "path_prefix": "assets/plants/plant_0053/01",
-      "width": 223,
+      "variant_id": "02",
+      "path_prefix": "assets/plants/plant_0053/02",
+      "width": 296,
       "height": 250,
-      "root_width": 107,
-      "root_ratio": 0.48,
+      "root_anchor": [
+        0.4879,
+        0.996
+      ],
+      "root_width": 106,
+      "root_ratio": 0.358,
       "ground_ellipse": [
-        107,
-        59
+        106,
+        58
       ],
       "true_color": true,
       "layer_files": [
@@ -2273,6 +2497,10 @@
         {
           "slot": "red",
           "file": "layer_red.png"
+        },
+        {
+          "slot": "blue",
+          "file": "layer_blue.png"
         }
       ],
       "ai_analysis": {
@@ -2300,11 +2528,15 @@
       "path_prefix": "assets/plants/plant_0054/01",
       "width": 257,
       "height": 250,
-      "root_width": 59,
-      "root_ratio": 0.23,
+      "root_anchor": [
+        0.5003,
+        0.996
+      ],
+      "root_width": 52,
+      "root_ratio": 0.202,
       "ground_ellipse": [
-        59,
-        32
+        52,
+        29
       ],
       "true_color": true,
       "layer_files": [
@@ -2346,6 +2578,10 @@
       "path_prefix": "assets/plants/plant_0055/01",
       "width": 183,
       "height": 250,
+      "root_anchor": [
+        0.4996,
+        0.984
+      ],
       "root_width": 23,
       "root_ratio": 0.126,
       "ground_ellipse": [
@@ -2388,11 +2624,15 @@
       "path_prefix": "assets/plants/plant_0056/01",
       "width": 276,
       "height": 250,
-      "root_width": 58,
-      "root_ratio": 0.21,
+      "root_anchor": [
+        0.5214,
+        0.996
+      ],
+      "root_width": 53,
+      "root_ratio": 0.192,
       "ground_ellipse": [
-        58,
-        32
+        53,
+        29
       ],
       "true_color": true,
       "layer_files": [
@@ -2434,6 +2674,10 @@
       "path_prefix": "assets/plants/plant_0057/01",
       "width": 225,
       "height": 250,
+      "root_anchor": [
+        0.5241,
+        0.996
+      ],
       "root_width": 8,
       "root_ratio": 0.036,
       "ground_ellipse": [
@@ -2476,10 +2720,14 @@
       "path_prefix": "assets/plants/plant_0058/01",
       "width": 242,
       "height": 250,
-      "root_width": 5,
-      "root_ratio": 0.021,
+      "root_anchor": [
+        0.5591,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.033,
       "ground_ellipse": [
-        5,
+        8,
         4
       ],
       "true_color": true,
@@ -2522,11 +2770,15 @@
       "path_prefix": "assets/plants/plant_0059/01",
       "width": 205,
       "height": 250,
-      "root_width": 101,
-      "root_ratio": 0.493,
+      "root_anchor": [
+        0.5762,
+        0.932
+      ],
+      "root_width": 68,
+      "root_ratio": 0.332,
       "ground_ellipse": [
-        101,
-        56
+        68,
+        37
       ],
       "true_color": true,
       "layer_files": [
@@ -2568,11 +2820,15 @@
       "path_prefix": "assets/plants/plant_0060/01",
       "width": 269,
       "height": 250,
-      "root_width": 22,
-      "root_ratio": 0.082,
+      "root_anchor": [
+        0.5644,
+        0.924
+      ],
+      "root_width": 75,
+      "root_ratio": 0.279,
       "ground_ellipse": [
-        22,
-        12
+        75,
+        41
       ],
       "true_color": true,
       "layer_files": [
@@ -2610,11 +2866,15 @@
       "path_prefix": "assets/plants/plant_0061/01",
       "width": 222,
       "height": 250,
-      "root_width": 44,
-      "root_ratio": 0.198,
+      "root_anchor": [
+        0.5104,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.036,
       "ground_ellipse": [
-        44,
-        24
+        8,
+        4
       ],
       "true_color": true,
       "layer_files": [
@@ -2656,10 +2916,14 @@
       "path_prefix": "assets/plants/plant_0062/01",
       "width": 110,
       "height": 250,
-      "root_width": 15,
-      "root_ratio": 0.136,
+      "root_anchor": [
+        0.5012,
+        0.996
+      ],
+      "root_width": 14,
+      "root_ratio": 0.127,
       "ground_ellipse": [
-        15,
+        14,
         8
       ],
       "true_color": true,
@@ -2702,11 +2966,15 @@
       "path_prefix": "assets/plants/plant_0063/01",
       "width": 291,
       "height": 250,
-      "root_width": 41,
-      "root_ratio": 0.141,
+      "root_anchor": [
+        0.5559,
+        0.88
+      ],
+      "root_width": 105,
+      "root_ratio": 0.361,
       "ground_ellipse": [
-        41,
-        23
+        105,
+        58
       ],
       "true_color": true,
       "layer_files": [
@@ -2744,11 +3012,15 @@
       "path_prefix": "assets/plants/plant_0064/01",
       "width": 272,
       "height": 250,
-      "root_width": 127,
-      "root_ratio": 0.467,
+      "root_anchor": [
+        0.5499,
+        0.768
+      ],
+      "root_width": 98,
+      "root_ratio": 0.36,
       "ground_ellipse": [
-        127,
-        70
+        98,
+        54
       ],
       "true_color": true,
       "layer_files": [
@@ -2786,10 +3058,14 @@
       "path_prefix": "assets/plants/plant_0065/01",
       "width": 262,
       "height": 250,
-      "root_width": 11,
-      "root_ratio": 0.042,
+      "root_anchor": [
+        0.4994,
+        0.996
+      ],
+      "root_width": 10,
+      "root_ratio": 0.038,
       "ground_ellipse": [
-        11,
+        10,
         6
       ],
       "true_color": true,
@@ -2828,6 +3104,10 @@
       "path_prefix": "assets/plants/plant_0066/01",
       "width": 206,
       "height": 250,
+      "root_anchor": [
+        0.5388,
+        0.996
+      ],
       "root_width": 17,
       "root_ratio": 0.083,
       "ground_ellipse": [
@@ -2870,11 +3150,15 @@
       "path_prefix": "assets/plants/plant_0067/01",
       "width": 242,
       "height": 250,
-      "root_width": 72,
-      "root_ratio": 0.298,
+      "root_anchor": [
+        0.6385,
+        0.968
+      ],
+      "root_width": 47,
+      "root_ratio": 0.194,
       "ground_ellipse": [
-        72,
-        40
+        47,
+        26
       ],
       "true_color": true,
       "layer_files": [
@@ -2912,11 +3196,15 @@
       "path_prefix": "assets/plants/plant_0068/01",
       "width": 282,
       "height": 250,
-      "root_width": 29,
-      "root_ratio": 0.103,
+      "root_anchor": [
+        0.507,
+        0.98
+      ],
+      "root_width": 32,
+      "root_ratio": 0.113,
       "ground_ellipse": [
-        29,
-        16
+        32,
+        18
       ],
       "true_color": true,
       "layer_files": [
@@ -2947,18 +3235,22 @@
       }
     },
     {
-      "id": "plant_0069__01",
+      "id": "plant_0069__02",
       "name": "plant_0069",
       "display_name": "垂葉花燭",
-      "variant_id": "01",
-      "path_prefix": "assets/plants/plant_0069/01",
-      "width": 215,
+      "variant_id": "02",
+      "path_prefix": "assets/plants/plant_0069/02",
+      "width": 246,
       "height": 250,
-      "root_width": 57,
-      "root_ratio": 0.265,
+      "root_anchor": [
+        0.5,
+        0.996
+      ],
+      "root_width": 66,
+      "root_ratio": 0.268,
       "ground_ellipse": [
-        57,
-        31
+        66,
+        36
       ],
       "true_color": true,
       "layer_files": [
@@ -2996,6 +3288,10 @@
       "path_prefix": "assets/plants/plant_0070/01",
       "width": 256,
       "height": 250,
+      "root_anchor": [
+        0.532,
+        0.996
+      ],
       "root_width": 10,
       "root_ratio": 0.039,
       "ground_ellipse": [
@@ -3031,18 +3327,22 @@
       }
     },
     {
-      "id": "plant_0071__02",
+      "id": "plant_0071__03",
       "name": "plant_0071",
       "display_name": "鵝鑾鼻燈籠草",
-      "variant_id": "02",
-      "path_prefix": "assets/plants/plant_0071/02",
-      "width": 237,
+      "variant_id": "03",
+      "path_prefix": "assets/plants/plant_0071/03",
+      "width": 234,
       "height": 250,
-      "root_width": 11,
-      "root_ratio": 0.046,
+      "root_anchor": [
+        0.4957,
+        0.996
+      ],
+      "root_width": 36,
+      "root_ratio": 0.154,
       "ground_ellipse": [
-        11,
-        6
+        36,
+        20
       ],
       "true_color": true,
       "layer_files": [
@@ -3053,10 +3353,6 @@
         {
           "slot": "red",
           "file": "layer_red.png"
-        },
-        {
-          "slot": "blue",
-          "file": "layer_blue.png"
         }
       ],
       "ai_analysis": {
@@ -3084,6 +3380,10 @@
       "path_prefix": "assets/plants/plant_0072/01",
       "width": 266,
       "height": 250,
+      "root_anchor": [
+        0.4489,
+        0.888
+      ],
       "root_width": 22,
       "root_ratio": 0.083,
       "ground_ellipse": [
@@ -3130,11 +3430,15 @@
       "path_prefix": "assets/plants/plant_0073/01",
       "width": 203,
       "height": 250,
-      "root_width": 10,
-      "root_ratio": 0.049,
+      "root_anchor": [
+        0.513,
+        0.996
+      ],
+      "root_width": 9,
+      "root_ratio": 0.044,
       "ground_ellipse": [
-        10,
-        6
+        9,
+        5
       ],
       "true_color": true,
       "layer_files": [
@@ -3176,10 +3480,14 @@
       "path_prefix": "assets/plants/plant_0074/01",
       "width": 216,
       "height": 250,
-      "root_width": 7,
-      "root_ratio": 0.032,
+      "root_anchor": [
+        0.5059,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.037,
       "ground_ellipse": [
-        7,
+        8,
         4
       ],
       "true_color": true,
@@ -3215,18 +3523,22 @@
       }
     },
     {
-      "id": "plant_0075__01",
+      "id": "plant_0075__02",
       "name": "plant_0075",
       "display_name": "欧洲荚蒾",
-      "variant_id": "01",
-      "path_prefix": "assets/plants/plant_0075/01",
-      "width": 225,
+      "variant_id": "02",
+      "path_prefix": "assets/plants/plant_0075/02",
+      "width": 252,
       "height": 250,
-      "root_width": 8,
-      "root_ratio": 0.036,
+      "root_anchor": [
+        0.4858,
+        0.996
+      ],
+      "root_width": 65,
+      "root_ratio": 0.258,
       "ground_ellipse": [
-        8,
-        4
+        65,
+        36
       ],
       "true_color": true,
       "layer_files": [
@@ -3257,18 +3569,22 @@
       }
     },
     {
-      "id": "plant_0076__01",
+      "id": "plant_0076__02",
       "name": "plant_0076",
       "display_name": "歐洲冬青",
-      "variant_id": "01",
-      "path_prefix": "assets/plants/plant_0076/01",
-      "width": 214,
+      "variant_id": "02",
+      "path_prefix": "assets/plants/plant_0076/02",
+      "width": 198,
       "height": 250,
-      "root_width": 8,
-      "root_ratio": 0.037,
+      "root_anchor": [
+        0.5038,
+        0.996
+      ],
+      "root_width": 58,
+      "root_ratio": 0.293,
       "ground_ellipse": [
-        8,
-        4
+        58,
+        32
       ],
       "true_color": true,
       "layer_files": [
@@ -3279,6 +3595,10 @@
         {
           "slot": "red",
           "file": "layer_red.png"
+        },
+        {
+          "slot": "blue",
+          "file": "layer_blue.png"
         }
       ],
       "ai_analysis": {
@@ -3306,11 +3626,15 @@
       "path_prefix": "assets/plants/plant_0077/01",
       "width": 194,
       "height": 250,
-      "root_width": 58,
-      "root_ratio": 0.299,
+      "root_anchor": [
+        0.5819,
+        0.936
+      ],
+      "root_width": 24,
+      "root_ratio": 0.124,
       "ground_ellipse": [
-        58,
-        32
+        24,
+        13
       ],
       "true_color": true,
       "layer_files": [
@@ -3348,6 +3672,10 @@
       "path_prefix": "assets/plants/plant_0078/01",
       "width": 224,
       "height": 250,
+      "root_anchor": [
+        0.5436,
+        0.996
+      ],
       "root_width": 10,
       "root_ratio": 0.045,
       "ground_ellipse": [
@@ -3394,6 +3722,10 @@
       "path_prefix": "assets/plants/plant_0079/01",
       "width": 178,
       "height": 250,
+      "root_anchor": [
+        0.5088,
+        0.996
+      ],
       "root_width": 15,
       "root_ratio": 0.084,
       "ground_ellipse": [
@@ -3436,11 +3768,15 @@
       "path_prefix": "assets/plants/plant_0080/01",
       "width": 292,
       "height": 250,
-      "root_width": 4,
-      "root_ratio": 0.014,
+      "root_anchor": [
+        0.4825,
+        0.84
+      ],
+      "root_width": 66,
+      "root_ratio": 0.226,
       "ground_ellipse": [
-        4,
-        4
+        66,
+        36
       ],
       "true_color": true,
       "layer_files": [
@@ -3475,18 +3811,22 @@
       }
     },
     {
-      "id": "plant_0081__01",
+      "id": "plant_0081__02",
       "name": "plant_0081",
       "display_name": "曇花屬",
-      "variant_id": "01",
-      "path_prefix": "assets/plants/plant_0081/01",
-      "width": 228,
+      "variant_id": "02",
+      "path_prefix": "assets/plants/plant_0081/02",
+      "width": 206,
       "height": 250,
-      "root_width": 31,
-      "root_ratio": 0.136,
+      "root_anchor": [
+        0.5061,
+        0.996
+      ],
+      "root_width": 74,
+      "root_ratio": 0.359,
       "ground_ellipse": [
-        31,
-        17
+        74,
+        41
       ],
       "true_color": true,
       "layer_files": [
@@ -3497,6 +3837,10 @@
         {
           "slot": "red",
           "file": "layer_red.png"
+        },
+        {
+          "slot": "blue",
+          "file": "layer_blue.png"
         }
       ],
       "ai_analysis": {
@@ -3524,11 +3868,15 @@
       "path_prefix": "assets/plants/plant_0082/01",
       "width": 282,
       "height": 250,
-      "root_width": 20,
-      "root_ratio": 0.071,
+      "root_anchor": [
+        0.4998,
+        0.996
+      ],
+      "root_width": 18,
+      "root_ratio": 0.064,
       "ground_ellipse": [
-        20,
-        11
+        18,
+        10
       ],
       "true_color": true,
       "layer_files": [
@@ -3570,11 +3918,15 @@
       "path_prefix": "assets/plants/plant_0083/01",
       "width": 305,
       "height": 250,
-      "root_width": 29,
-      "root_ratio": 0.095,
+      "root_anchor": [
+        0.5729,
+        0.896
+      ],
+      "root_width": 70,
+      "root_ratio": 0.23,
       "ground_ellipse": [
-        29,
-        16
+        70,
+        38
       ],
       "true_color": true,
       "layer_files": [
@@ -3612,11 +3964,15 @@
       "path_prefix": "assets/plants/plant_0084/01",
       "width": 198,
       "height": 250,
-      "root_width": 24,
-      "root_ratio": 0.121,
+      "root_anchor": [
+        0.3015,
+        0.92
+      ],
+      "root_width": 39,
+      "root_ratio": 0.197,
       "ground_ellipse": [
-        24,
-        13
+        39,
+        21
       ],
       "true_color": true,
       "layer_files": [
@@ -3654,11 +4010,15 @@
       "path_prefix": "assets/plants/plant_0085/01",
       "width": 219,
       "height": 250,
-      "root_width": 73,
-      "root_ratio": 0.333,
+      "root_anchor": [
+        0.5115,
+        0.92
+      ],
+      "root_width": 74,
+      "root_ratio": 0.338,
       "ground_ellipse": [
-        73,
-        40
+        74,
+        41
       ],
       "true_color": true,
       "layer_files": [
@@ -3700,6 +4060,10 @@
       "path_prefix": "assets/plants/plant_0086/01",
       "width": 238,
       "height": 250,
+      "root_anchor": [
+        0.6676,
+        0.996
+      ],
       "root_width": 25,
       "root_ratio": 0.105,
       "ground_ellipse": [
@@ -3746,11 +4110,15 @@
       "path_prefix": "assets/plants/plant_0087/01",
       "width": 259,
       "height": 250,
-      "root_width": 94,
-      "root_ratio": 0.363,
+      "root_anchor": [
+        0.504,
+        0.996
+      ],
+      "root_width": 46,
+      "root_ratio": 0.178,
       "ground_ellipse": [
-        94,
-        52
+        46,
+        25
       ],
       "true_color": true,
       "layer_files": [
@@ -3788,10 +4156,14 @@
       "path_prefix": "assets/plants/plant_0088/01",
       "width": 162,
       "height": 250,
-      "root_width": 5,
-      "root_ratio": 0.031,
+      "root_anchor": [
+        0.555,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.049,
       "ground_ellipse": [
-        5,
+        8,
         4
       ],
       "true_color": true,
@@ -3830,11 +4202,15 @@
       "path_prefix": "assets/plants/plant_0089/01",
       "width": 216,
       "height": 250,
-      "root_width": 12,
-      "root_ratio": 0.056,
+      "root_anchor": [
+        0.5198,
+        0.996
+      ],
+      "root_width": 11,
+      "root_ratio": 0.051,
       "ground_ellipse": [
-        12,
-        7
+        11,
+        6
       ],
       "true_color": true,
       "layer_files": [
@@ -3876,10 +4252,14 @@
       "path_prefix": "assets/plants/plant_0090/01",
       "width": 214,
       "height": 250,
-      "root_width": 5,
-      "root_ratio": 0.023,
+      "root_anchor": [
+        0.5208,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.037,
       "ground_ellipse": [
-        5,
+        8,
         4
       ],
       "true_color": true,
@@ -3918,10 +4298,14 @@
       "path_prefix": "assets/plants/plant_0091/01",
       "width": 223,
       "height": 250,
-      "root_width": 6,
-      "root_ratio": 0.027,
+      "root_anchor": [
+        0.497,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.036,
       "ground_ellipse": [
-        6,
+        8,
         4
       ],
       "true_color": true,
@@ -3964,10 +4348,14 @@
       "path_prefix": "assets/plants/plant_0092/01",
       "width": 144,
       "height": 250,
-      "root_width": 7,
-      "root_ratio": 0.049,
+      "root_anchor": [
+        0.4996,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.056,
       "ground_ellipse": [
-        7,
+        8,
         4
       ],
       "true_color": true,
@@ -4006,10 +4394,14 @@
       "path_prefix": "assets/plants/plant_0093/01",
       "width": 187,
       "height": 250,
-      "root_width": 5,
-      "root_ratio": 0.027,
+      "root_anchor": [
+        0.5125,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.043,
       "ground_ellipse": [
-        5,
+        8,
         4
       ],
       "true_color": true,
@@ -4052,11 +4444,15 @@
       "path_prefix": "assets/plants/plant_0094/01",
       "width": 233,
       "height": 250,
-      "root_width": 21,
-      "root_ratio": 0.09,
+      "root_anchor": [
+        0.4976,
+        0.996
+      ],
+      "root_width": 19,
+      "root_ratio": 0.082,
       "ground_ellipse": [
-        21,
-        12
+        19,
+        10
       ],
       "true_color": true,
       "layer_files": [
@@ -4098,10 +4494,14 @@
       "path_prefix": "assets/plants/plant_0095/01",
       "width": 176,
       "height": 250,
-      "root_width": 7,
-      "root_ratio": 0.04,
+      "root_anchor": [
+        0.5256,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.045,
       "ground_ellipse": [
-        7,
+        8,
         4
       ],
       "true_color": true,
@@ -4144,11 +4544,15 @@
       "path_prefix": "assets/plants/plant_0096/01",
       "width": 163,
       "height": 250,
-      "root_width": 74,
-      "root_ratio": 0.454,
+      "root_anchor": [
+        0.5008,
+        0.996
+      ],
+      "root_width": 48,
+      "root_ratio": 0.294,
       "ground_ellipse": [
-        74,
-        41
+        48,
+        26
       ],
       "true_color": true,
       "layer_files": [
@@ -4190,10 +4594,14 @@
       "path_prefix": "assets/plants/plant_0097/01",
       "width": 209,
       "height": 250,
-      "root_width": 6,
-      "root_ratio": 0.029,
+      "root_anchor": [
+        0.5339,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.038,
       "ground_ellipse": [
-        6,
+        8,
         4
       ],
       "true_color": true,
@@ -4236,11 +4644,15 @@
       "path_prefix": "assets/plants/plant_0098/01",
       "width": 251,
       "height": 250,
-      "root_width": 40,
-      "root_ratio": 0.159,
+      "root_anchor": [
+        0.5729,
+        0.996
+      ],
+      "root_width": 33,
+      "root_ratio": 0.131,
       "ground_ellipse": [
-        40,
-        22
+        33,
+        18
       ],
       "true_color": true,
       "layer_files": [
@@ -4282,6 +4694,10 @@
       "path_prefix": "assets/plants/plant_0099/01",
       "width": 235,
       "height": 250,
+      "root_anchor": [
+        0.5015,
+        0.996
+      ],
       "root_width": 19,
       "root_ratio": 0.081,
       "ground_ellipse": [
@@ -4324,11 +4740,15 @@
       "path_prefix": "assets/plants/plant_0100/01",
       "width": 243,
       "height": 250,
-      "root_width": 60,
-      "root_ratio": 0.247,
+      "root_anchor": [
+        0.536,
+        0.98
+      ],
+      "root_width": 53,
+      "root_ratio": 0.218,
       "ground_ellipse": [
-        60,
-        33
+        53,
+        29
       ],
       "true_color": true,
       "layer_files": [
@@ -4366,11 +4786,15 @@
       "path_prefix": "assets/plants/plant_0101/01",
       "width": 207,
       "height": 250,
-      "root_width": 72,
-      "root_ratio": 0.348,
+      "root_anchor": [
+        0.4311,
+        0.996
+      ],
+      "root_width": 48,
+      "root_ratio": 0.232,
       "ground_ellipse": [
-        72,
-        40
+        48,
+        26
       ],
       "true_color": true,
       "layer_files": [
@@ -4408,11 +4832,15 @@
       "path_prefix": "assets/plants/plant_0102/01",
       "width": 200,
       "height": 250,
-      "root_width": 9,
-      "root_ratio": 0.045,
+      "root_anchor": [
+        0.4973,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.04,
       "ground_ellipse": [
-        9,
-        5
+        8,
+        4
       ],
       "true_color": true,
       "layer_files": [
@@ -4450,11 +4878,15 @@
       "path_prefix": "assets/plants/plant_0103/01",
       "width": 333,
       "height": 250,
-      "root_width": 97,
-      "root_ratio": 0.291,
+      "root_anchor": [
+        0.5388,
+        0.996
+      ],
+      "root_width": 92,
+      "root_ratio": 0.276,
       "ground_ellipse": [
-        97,
-        53
+        92,
+        51
       ],
       "true_color": true,
       "layer_files": [
@@ -4485,18 +4917,22 @@
       }
     },
     {
-      "id": "plant_0104__01",
+      "id": "plant_0104__02",
       "name": "plant_0104",
       "display_name": "蟹爪兰",
-      "variant_id": "01",
-      "path_prefix": "assets/plants/plant_0104/01",
-      "width": 250,
+      "variant_id": "02",
+      "path_prefix": "assets/plants/plant_0104/02",
+      "width": 271,
       "height": 250,
-      "root_width": 37,
-      "root_ratio": 0.148,
+      "root_anchor": [
+        0.4833,
+        0.996
+      ],
+      "root_width": 75,
+      "root_ratio": 0.277,
       "ground_ellipse": [
-        37,
-        20
+        75,
+        41
       ],
       "true_color": true,
       "layer_files": [
@@ -4507,6 +4943,10 @@
         {
           "slot": "red",
           "file": "layer_red.png"
+        },
+        {
+          "slot": "blue",
+          "file": "layer_blue.png"
         }
       ],
       "ai_analysis": {
@@ -4534,11 +4974,15 @@
       "path_prefix": "assets/plants/plant_0105/01",
       "width": 334,
       "height": 250,
-      "root_width": 122,
-      "root_ratio": 0.365,
+      "root_anchor": [
+        0.6031,
+        0.988
+      ],
+      "root_width": 32,
+      "root_ratio": 0.096,
       "ground_ellipse": [
-        122,
-        67
+        32,
+        18
       ],
       "true_color": true,
       "layer_files": [
@@ -4580,11 +5024,15 @@
       "path_prefix": "assets/plants/plant_0106/01",
       "width": 142,
       "height": 250,
-      "root_width": 32,
-      "root_ratio": 0.225,
+      "root_anchor": [
+        0.4981,
+        0.996
+      ],
+      "root_width": 29,
+      "root_ratio": 0.204,
       "ground_ellipse": [
-        32,
-        18
+        29,
+        16
       ],
       "true_color": true,
       "layer_files": [
@@ -4615,18 +5063,22 @@
       }
     },
     {
-      "id": "plant_0107__01",
+      "id": "plant_0107__02",
       "name": "plant_0107",
       "display_name": "菊蒿",
-      "variant_id": "01",
-      "path_prefix": "assets/plants/plant_0107/01",
-      "width": 234,
+      "variant_id": "02",
+      "path_prefix": "assets/plants/plant_0107/02",
+      "width": 193,
       "height": 250,
-      "root_width": 8,
-      "root_ratio": 0.034,
+      "root_anchor": [
+        0.5033,
+        0.988
+      ],
+      "root_width": 12,
+      "root_ratio": 0.062,
       "ground_ellipse": [
-        8,
-        4
+        12,
+        7
       ],
       "true_color": true,
       "layer_files": [
@@ -4637,6 +5089,10 @@
         {
           "slot": "red",
           "file": "layer_red.png"
+        },
+        {
+          "slot": "blue",
+          "file": "layer_blue.png"
         }
       ],
       "ai_analysis": {
@@ -4664,11 +5120,15 @@
       "path_prefix": "assets/plants/plant_0108/01",
       "width": 289,
       "height": 250,
-      "root_width": 29,
-      "root_ratio": 0.1,
+      "root_anchor": [
+        0.5914,
+        0.98
+      ],
+      "root_width": 34,
+      "root_ratio": 0.118,
       "ground_ellipse": [
-        29,
-        16
+        34,
+        19
       ],
       "true_color": true,
       "layer_files": [
@@ -4710,11 +5170,15 @@
       "path_prefix": "assets/plants/plant_0109/01",
       "width": 274,
       "height": 250,
-      "root_width": 34,
-      "root_ratio": 0.124,
+      "root_anchor": [
+        0.5752,
+        0.996
+      ],
+      "root_width": 31,
+      "root_ratio": 0.113,
       "ground_ellipse": [
-        34,
-        19
+        31,
+        17
       ],
       "true_color": true,
       "layer_files": [
@@ -4756,6 +5220,10 @@
       "path_prefix": "assets/plants/plant_0110/01",
       "width": 245,
       "height": 250,
+      "root_anchor": [
+        0.5823,
+        0.984
+      ],
       "root_width": 26,
       "root_ratio": 0.106,
       "ground_ellipse": [
@@ -4802,6 +5270,10 @@
       "path_prefix": "assets/plants/plant_0111/01",
       "width": 239,
       "height": 250,
+      "root_anchor": [
+        0.5143,
+        0.996
+      ],
       "root_width": 9,
       "root_ratio": 0.038,
       "ground_ellipse": [
@@ -4844,11 +5316,15 @@
       "path_prefix": "assets/plants/plant_0112/01",
       "width": 164,
       "height": 250,
-      "root_width": 11,
-      "root_ratio": 0.067,
+      "root_anchor": [
+        0.5672,
+        0.916
+      ],
+      "root_width": 46,
+      "root_ratio": 0.28,
       "ground_ellipse": [
-        11,
-        6
+        46,
+        25
       ],
       "true_color": true,
       "layer_files": [
@@ -4890,11 +5366,15 @@
       "path_prefix": "assets/plants/plant_0114/01",
       "width": 222,
       "height": 250,
-      "root_width": 109,
-      "root_ratio": 0.491,
+      "root_anchor": [
+        0.6555,
+        0.872
+      ],
+      "root_width": 77,
+      "root_ratio": 0.347,
       "ground_ellipse": [
-        109,
-        60
+        77,
+        42
       ],
       "true_color": true,
       "layer_files": [
@@ -4936,10 +5416,14 @@
       "path_prefix": "assets/plants/plant_0115/01",
       "width": 249,
       "height": 250,
-      "root_width": 5,
-      "root_ratio": 0.02,
+      "root_anchor": [
+        0.5661,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.032,
       "ground_ellipse": [
-        5,
+        8,
         4
       ],
       "true_color": true,
@@ -4978,11 +5462,15 @@
       "path_prefix": "assets/plants/plant_0116/01",
       "width": 276,
       "height": 250,
-      "root_width": 34,
-      "root_ratio": 0.123,
+      "root_anchor": [
+        0.5187,
+        0.996
+      ],
+      "root_width": 31,
+      "root_ratio": 0.112,
       "ground_ellipse": [
-        34,
-        19
+        31,
+        17
       ],
       "true_color": true,
       "layer_files": [
@@ -5024,11 +5512,15 @@
       "path_prefix": "assets/plants/plant_0117/01",
       "width": 280,
       "height": 250,
-      "root_width": 31,
-      "root_ratio": 0.111,
+      "root_anchor": [
+        0.6347,
+        0.86
+      ],
+      "root_width": 60,
+      "root_ratio": 0.214,
       "ground_ellipse": [
-        31,
-        17
+        60,
+        33
       ],
       "true_color": true,
       "layer_files": [
@@ -5066,11 +5558,15 @@
       "path_prefix": "assets/plants/plant_0118/01",
       "width": 279,
       "height": 250,
-      "root_width": 67,
-      "root_ratio": 0.24,
+      "root_anchor": [
+        0.6107,
+        0.976
+      ],
+      "root_width": 74,
+      "root_ratio": 0.265,
       "ground_ellipse": [
-        67,
-        37
+        74,
+        41
       ],
       "true_color": true,
       "layer_files": [
@@ -5105,18 +5601,22 @@
       }
     },
     {
-      "id": "plant_0119__01",
+      "id": "plant_0119__02",
       "name": "plant_0119",
       "display_name": "黄芩",
-      "variant_id": "01",
-      "path_prefix": "assets/plants/plant_0119/01",
-      "width": 250,
+      "variant_id": "02",
+      "path_prefix": "assets/plants/plant_0119/02",
+      "width": 192,
       "height": 250,
-      "root_width": 250,
-      "root_ratio": 1.0,
+      "root_anchor": [
+        0.5288,
+        0.988
+      ],
+      "root_width": 70,
+      "root_ratio": 0.365,
       "ground_ellipse": [
-        250,
-        138
+        70,
+        38
       ],
       "true_color": true,
       "layer_files": [
@@ -5158,6 +5658,10 @@
       "path_prefix": "assets/plants/plant_0120/01",
       "width": 224,
       "height": 250,
+      "root_anchor": [
+        0.5198,
+        0.996
+      ],
       "root_width": 16,
       "root_ratio": 0.071,
       "ground_ellipse": [
@@ -5200,11 +5704,15 @@
       "path_prefix": "assets/plants/plant_0121/01",
       "width": 298,
       "height": 250,
-      "root_width": 26,
-      "root_ratio": 0.087,
+      "root_anchor": [
+        0.5152,
+        0.916
+      ],
+      "root_width": 61,
+      "root_ratio": 0.205,
       "ground_ellipse": [
-        26,
-        14
+        61,
+        34
       ],
       "true_color": true,
       "layer_files": [
@@ -5235,18 +5743,22 @@
       }
     },
     {
-      "id": "plant_0122__01",
+      "id": "plant_0122__02",
       "name": "plant_0122",
       "display_name": "马兜铃",
-      "variant_id": "01",
-      "path_prefix": "assets/plants/plant_0122/01",
-      "width": 232,
+      "variant_id": "02",
+      "path_prefix": "assets/plants/plant_0122/02",
+      "width": 154,
       "height": 250,
-      "root_width": 14,
-      "root_ratio": 0.06,
+      "root_anchor": [
+        0.5075,
+        0.988
+      ],
+      "root_width": 19,
+      "root_ratio": 0.123,
       "ground_ellipse": [
-        14,
-        8
+        19,
+        10
       ],
       "true_color": true,
       "layer_files": [
@@ -5257,6 +5769,10 @@
         {
           "slot": "red",
           "file": "layer_red.png"
+        },
+        {
+          "slot": "blue",
+          "file": "layer_blue.png"
         }
       ],
       "ai_analysis": {
@@ -5284,11 +5800,15 @@
       "path_prefix": "assets/plants/plant_0123/01",
       "width": 237,
       "height": 250,
-      "root_width": 63,
-      "root_ratio": 0.266,
+      "root_anchor": [
+        0.5024,
+        0.996
+      ],
+      "root_width": 56,
+      "root_ratio": 0.236,
       "ground_ellipse": [
-        63,
-        35
+        56,
+        31
       ],
       "true_color": true,
       "layer_files": [
@@ -5330,11 +5850,15 @@
       "path_prefix": "assets/plants/plant_0124/01",
       "width": 232,
       "height": 250,
-      "root_width": 3,
-      "root_ratio": 0.013,
+      "root_anchor": [
+        0.4836,
+        0.828
+      ],
+      "root_width": 79,
+      "root_ratio": 0.341,
       "ground_ellipse": [
-        3,
-        4
+        79,
+        43
       ],
       "true_color": true,
       "layer_files": [
@@ -5372,11 +5896,15 @@
       "path_prefix": "assets/plants/plant_0125/01",
       "width": 290,
       "height": 250,
-      "root_width": 31,
-      "root_ratio": 0.107,
+      "root_anchor": [
+        0.6363,
+        0.996
+      ],
+      "root_width": 29,
+      "root_ratio": 0.1,
       "ground_ellipse": [
-        31,
-        17
+        29,
+        16
       ],
       "true_color": true,
       "layer_files": [
@@ -5418,11 +5946,15 @@
       "path_prefix": "assets/plants/plant_0126/01",
       "width": 262,
       "height": 250,
-      "root_width": 84,
-      "root_ratio": 0.321,
+      "root_anchor": [
+        0.5057,
+        0.984
+      ],
+      "root_width": 25,
+      "root_ratio": 0.095,
       "ground_ellipse": [
-        84,
-        46
+        25,
+        14
       ],
       "true_color": true,
       "layer_files": [
@@ -5457,18 +5989,22 @@
       }
     },
     {
-      "id": "plant_0127__01",
+      "id": "plant_0127__02",
       "name": "plant_0127",
       "display_name": "鈴蘭",
-      "variant_id": "01",
-      "path_prefix": "assets/plants/plant_0127/01",
-      "width": 192,
+      "variant_id": "02",
+      "path_prefix": "assets/plants/plant_0127/02",
+      "width": 238,
       "height": 250,
-      "root_width": 6,
-      "root_ratio": 0.031,
+      "root_anchor": [
+        0.4801,
+        0.996
+      ],
+      "root_width": 29,
+      "root_ratio": 0.122,
       "ground_ellipse": [
-        6,
-        4
+        29,
+        16
       ],
       "true_color": true,
       "layer_files": [
@@ -5479,6 +6015,10 @@
         {
           "slot": "red",
           "file": "layer_red.png"
+        },
+        {
+          "slot": "blue",
+          "file": "layer_blue.png"
         }
       ],
       "ai_analysis": {
@@ -5506,6 +6046,10 @@
       "path_prefix": "assets/plants/plant_0128/01",
       "width": 211,
       "height": 250,
+      "root_anchor": [
+        0.5026,
+        0.996
+      ],
       "root_width": 23,
       "root_ratio": 0.109,
       "ground_ellipse": [
@@ -5541,18 +6085,22 @@
       }
     },
     {
-      "id": "plant_0129__01",
+      "id": "plant_0129__02",
       "name": "plant_0129",
       "display_name": "毛地黄属",
-      "variant_id": "01",
-      "path_prefix": "assets/plants/plant_0129/01",
-      "width": 134,
+      "variant_id": "02",
+      "path_prefix": "assets/plants/plant_0129/02",
+      "width": 128,
       "height": 250,
-      "root_width": 5,
-      "root_ratio": 0.037,
+      "root_anchor": [
+        0.4808,
+        0.976
+      ],
+      "root_width": 47,
+      "root_ratio": 0.367,
       "ground_ellipse": [
-        5,
-        4
+        47,
+        26
       ],
       "true_color": true,
       "layer_files": [
@@ -5587,18 +6135,22 @@
       }
     },
     {
-      "id": "plant_0130__01",
+      "id": "plant_0130__02",
       "name": "plant_0130",
       "display_name": "含羞草",
-      "variant_id": "01",
-      "path_prefix": "assets/plants/plant_0130/01",
+      "variant_id": "02",
+      "path_prefix": "assets/plants/plant_0130/02",
       "width": 250,
       "height": 250,
-      "root_width": 37,
-      "root_ratio": 0.148,
+      "root_anchor": [
+        0.4683,
+        0.996
+      ],
+      "root_width": 57,
+      "root_ratio": 0.228,
       "ground_ellipse": [
-        37,
-        20
+        57,
+        31
       ],
       "true_color": true,
       "layer_files": [
@@ -5640,6 +6192,10 @@
       "path_prefix": "assets/plants/plant_0131/01",
       "width": 233,
       "height": 250,
+      "root_anchor": [
+        0.5063,
+        0.996
+      ],
       "root_width": 9,
       "root_ratio": 0.039,
       "ground_ellipse": [
@@ -5682,11 +6238,15 @@
       "path_prefix": "assets/plants/plant_0132/01",
       "width": 231,
       "height": 250,
-      "root_width": 12,
-      "root_ratio": 0.052,
+      "root_anchor": [
+        0.5125,
+        0.996
+      ],
+      "root_width": 10,
+      "root_ratio": 0.043,
       "ground_ellipse": [
-        12,
-        7
+        10,
+        6
       ],
       "true_color": true,
       "layer_files": [
@@ -5728,11 +6288,15 @@
       "path_prefix": "assets/plants/plant_0133/01",
       "width": 224,
       "height": 250,
-      "root_width": 9,
-      "root_ratio": 0.04,
+      "root_anchor": [
+        0.5359,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.036,
       "ground_ellipse": [
-        9,
-        5
+        8,
+        4
       ],
       "true_color": true,
       "layer_files": [
@@ -5767,18 +6331,22 @@
       }
     },
     {
-      "id": "plant_0134__01",
+      "id": "plant_0134__02",
       "name": "plant_0134",
       "display_name": "银杏",
-      "variant_id": "01",
-      "path_prefix": "assets/plants/plant_0134/01",
-      "width": 221,
+      "variant_id": "02",
+      "path_prefix": "assets/plants/plant_0134/02",
+      "width": 228,
       "height": 250,
-      "root_width": 10,
-      "root_ratio": 0.045,
+      "root_anchor": [
+        0.4874,
+        0.996
+      ],
+      "root_width": 82,
+      "root_ratio": 0.36,
       "ground_ellipse": [
-        10,
-        6
+        82,
+        45
       ],
       "true_color": true,
       "layer_files": [
@@ -5789,6 +6357,10 @@
         {
           "slot": "red",
           "file": "layer_red.png"
+        },
+        {
+          "slot": "blue",
+          "file": "layer_blue.png"
         }
       ],
       "ai_analysis": {
@@ -5816,11 +6388,15 @@
       "path_prefix": "assets/plants/plant_0135/01",
       "width": 167,
       "height": 250,
-      "root_width": 47,
-      "root_ratio": 0.281,
+      "root_anchor": [
+        0.5227,
+        0.996
+      ],
+      "root_width": 45,
+      "root_ratio": 0.269,
       "ground_ellipse": [
-        47,
-        26
+        45,
+        25
       ],
       "true_color": true,
       "layer_files": [
@@ -5858,11 +6434,15 @@
       "path_prefix": "assets/plants/plant_0136/01",
       "width": 283,
       "height": 250,
-      "root_width": 25,
-      "root_ratio": 0.088,
+      "root_anchor": [
+        0.6707,
+        0.972
+      ],
+      "root_width": 52,
+      "root_ratio": 0.184,
       "ground_ellipse": [
-        25,
-        14
+        52,
+        29
       ],
       "true_color": true,
       "layer_files": [
@@ -5904,11 +6484,15 @@
       "path_prefix": "assets/plants/plant_0137/01",
       "width": 220,
       "height": 250,
-      "root_width": 12,
-      "root_ratio": 0.055,
+      "root_anchor": [
+        0.5033,
+        0.996
+      ],
+      "root_width": 11,
+      "root_ratio": 0.05,
       "ground_ellipse": [
-        12,
-        7
+        11,
+        6
       ],
       "true_color": true,
       "layer_files": [
@@ -5939,18 +6523,22 @@
       }
     },
     {
-      "id": "plant_0138__01",
+      "id": "plant_0138__02",
       "name": "plant_0138",
       "display_name": "油桐",
-      "variant_id": "01",
-      "path_prefix": "assets/plants/plant_0138/01",
-      "width": 260,
+      "variant_id": "02",
+      "path_prefix": "assets/plants/plant_0138/02",
+      "width": 221,
       "height": 250,
-      "root_width": 6,
-      "root_ratio": 0.023,
+      "root_anchor": [
+        0.4996,
+        0.996
+      ],
+      "root_width": 72,
+      "root_ratio": 0.326,
       "ground_ellipse": [
-        6,
-        4
+        72,
+        40
       ],
       "true_color": true,
       "layer_files": [
@@ -5992,6 +6580,10 @@
       "path_prefix": "assets/plants/plant_0139/01",
       "width": 201,
       "height": 250,
+      "root_anchor": [
+        0.4967,
+        0.996
+      ],
       "root_width": 15,
       "root_ratio": 0.075,
       "ground_ellipse": [
@@ -6034,10 +6626,14 @@
       "path_prefix": "assets/plants/plant_0140/01",
       "width": 265,
       "height": 250,
-      "root_width": 6,
-      "root_ratio": 0.023,
+      "root_anchor": [
+        0.5233,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.03,
       "ground_ellipse": [
-        6,
+        8,
         4
       ],
       "true_color": true,
@@ -6076,11 +6672,15 @@
       "path_prefix": "assets/plants/plant_0141/01",
       "width": 227,
       "height": 250,
-      "root_width": 18,
-      "root_ratio": 0.079,
+      "root_anchor": [
+        0.5376,
+        0.996
+      ],
+      "root_width": 15,
+      "root_ratio": 0.066,
       "ground_ellipse": [
-        18,
-        10
+        15,
+        8
       ],
       "true_color": true,
       "layer_files": [
@@ -6115,18 +6715,22 @@
       }
     },
     {
-      "id": "plant_0142__01",
+      "id": "plant_0142__02",
       "name": "plant_0142",
       "display_name": "铁线莲状马兜铃",
-      "variant_id": "01",
-      "path_prefix": "assets/plants/plant_0142/01",
-      "width": 183,
+      "variant_id": "02",
+      "path_prefix": "assets/plants/plant_0142/02",
+      "width": 205,
       "height": 250,
-      "root_width": 31,
-      "root_ratio": 0.169,
+      "root_anchor": [
+        0.4923,
+        0.996
+      ],
+      "root_width": 49,
+      "root_ratio": 0.239,
       "ground_ellipse": [
-        31,
-        17
+        49,
+        27
       ],
       "true_color": true,
       "layer_files": [
@@ -6137,6 +6741,10 @@
         {
           "slot": "red",
           "file": "layer_red.png"
+        },
+        {
+          "slot": "blue",
+          "file": "layer_blue.png"
         }
       ],
       "ai_analysis": {
@@ -6164,11 +6772,15 @@
       "path_prefix": "assets/plants/plant_0143/01",
       "width": 258,
       "height": 250,
-      "root_width": 56,
-      "root_ratio": 0.217,
+      "root_anchor": [
+        0.5096,
+        0.996
+      ],
+      "root_width": 43,
+      "root_ratio": 0.167,
       "ground_ellipse": [
-        56,
-        31
+        43,
+        24
       ],
       "true_color": true,
       "layer_files": [
@@ -6203,18 +6815,22 @@
       }
     },
     {
-      "id": "plant_0144__01",
+      "id": "plant_0144__02",
       "name": "plant_0144",
       "display_name": "崖柏",
-      "variant_id": "01",
-      "path_prefix": "assets/plants/plant_0144/01",
-      "width": 191,
+      "variant_id": "02",
+      "path_prefix": "assets/plants/plant_0144/02",
+      "width": 169,
       "height": 250,
-      "root_width": 46,
-      "root_ratio": 0.241,
+      "root_anchor": [
+        0.4928,
+        0.996
+      ],
+      "root_width": 61,
+      "root_ratio": 0.361,
       "ground_ellipse": [
-        46,
-        25
+        61,
+        34
       ],
       "true_color": true,
       "layer_files": [
@@ -6245,18 +6861,22 @@
       }
     },
     {
-      "id": "plant_0145__01",
+      "id": "plant_0145__02",
       "name": "plant_0145",
       "display_name": "藻玲玉屬",
-      "variant_id": "01",
-      "path_prefix": "assets/plants/plant_0145/01",
-      "width": 202,
+      "variant_id": "02",
+      "path_prefix": "assets/plants/plant_0145/02",
+      "width": 289,
       "height": 250,
-      "root_width": 38,
-      "root_ratio": 0.188,
+      "root_anchor": [
+        0.47,
+        0.992
+      ],
+      "root_width": 104,
+      "root_ratio": 0.36,
       "ground_ellipse": [
-        38,
-        21
+        104,
+        57
       ],
       "true_color": true,
       "layer_files": [
@@ -6267,6 +6887,10 @@
         {
           "slot": "red",
           "file": "layer_red.png"
+        },
+        {
+          "slot": "blue",
+          "file": "layer_blue.png"
         }
       ],
       "ai_analysis": {
@@ -6294,6 +6918,10 @@
       "path_prefix": "assets/plants/plant_0146/01",
       "width": 176,
       "height": 250,
+      "root_anchor": [
+        0.5373,
+        0.996
+      ],
       "root_width": 12,
       "root_ratio": 0.068,
       "ground_ellipse": [
@@ -6336,6 +6964,10 @@
       "path_prefix": "assets/plants/plant_0147/01",
       "width": 170,
       "height": 250,
+      "root_anchor": [
+        0.5573,
+        0.996
+      ],
       "root_width": 11,
       "root_ratio": 0.065,
       "ground_ellipse": [
@@ -6378,11 +7010,15 @@
       "path_prefix": "assets/plants/plant_0148/01",
       "width": 254,
       "height": 250,
-      "root_width": 10,
-      "root_ratio": 0.039,
+      "root_anchor": [
+        0.5002,
+        0.996
+      ],
+      "root_width": 9,
+      "root_ratio": 0.035,
       "ground_ellipse": [
-        10,
-        6
+        9,
+        5
       ],
       "true_color": true,
       "layer_files": [
@@ -6424,11 +7060,15 @@
       "path_prefix": "assets/plants/plant_0149/01",
       "width": 248,
       "height": 250,
-      "root_width": 22,
-      "root_ratio": 0.089,
+      "root_anchor": [
+        0.5049,
+        0.996
+      ],
+      "root_width": 17,
+      "root_ratio": 0.069,
       "ground_ellipse": [
-        22,
-        12
+        17,
+        9
       ],
       "true_color": true,
       "layer_files": [
@@ -6466,10 +7106,14 @@
       "path_prefix": "assets/plants/plant_0150/01",
       "width": 229,
       "height": 250,
-      "root_width": 7,
-      "root_ratio": 0.031,
+      "root_anchor": [
+        0.5228,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.035,
       "ground_ellipse": [
-        7,
+        8,
         4
       ],
       "true_color": true,
@@ -6508,11 +7152,15 @@
       "path_prefix": "assets/plants/plant_0151/01",
       "width": 224,
       "height": 250,
-      "root_width": 27,
-      "root_ratio": 0.121,
+      "root_anchor": [
+        0.557,
+        0.996
+      ],
+      "root_width": 19,
+      "root_ratio": 0.085,
       "ground_ellipse": [
-        27,
-        15
+        19,
+        10
       ],
       "true_color": true,
       "layer_files": [
@@ -6550,11 +7198,15 @@
       "path_prefix": "assets/plants/plant_0152/01",
       "width": 203,
       "height": 250,
-      "root_width": 70,
-      "root_ratio": 0.345,
+      "root_anchor": [
+        0.531,
+        0.996
+      ],
+      "root_width": 57,
+      "root_ratio": 0.281,
       "ground_ellipse": [
-        70,
-        38
+        57,
+        31
       ],
       "true_color": true,
       "layer_files": [
@@ -6592,6 +7244,10 @@
       "path_prefix": "assets/plants/plant_0153/01",
       "width": 272,
       "height": 250,
+      "root_anchor": [
+        0.5033,
+        0.996
+      ],
       "root_width": 11,
       "root_ratio": 0.04,
       "ground_ellipse": [
@@ -6634,6 +7290,10 @@
       "path_prefix": "assets/plants/plant_0154/01",
       "width": 230,
       "height": 250,
+      "root_anchor": [
+        0.4986,
+        0.996
+      ],
       "root_width": 12,
       "root_ratio": 0.052,
       "ground_ellipse": [
@@ -6673,18 +7333,22 @@
       }
     },
     {
-      "id": "plant_0155__01",
+      "id": "plant_0155__02",
       "name": "plant_0155",
       "display_name": "牛眼馬錢",
-      "variant_id": "01",
-      "path_prefix": "assets/plants/plant_0155/01",
-      "width": 222,
+      "variant_id": "02",
+      "path_prefix": "assets/plants/plant_0155/02",
+      "width": 251,
       "height": 250,
-      "root_width": 63,
-      "root_ratio": 0.284,
+      "root_anchor": [
+        0.4939,
+        0.996
+      ],
+      "root_width": 53,
+      "root_ratio": 0.211,
       "ground_ellipse": [
-        63,
-        35
+        53,
+        29
       ],
       "true_color": true,
       "layer_files": [
@@ -6715,17 +7379,21 @@
       }
     },
     {
-      "id": "plant_0156__01",
+      "id": "plant_0156__02",
       "name": "plant_0156",
       "display_name": "菊三七",
-      "variant_id": "01",
-      "path_prefix": "assets/plants/plant_0156/01",
-      "width": 231,
+      "variant_id": "02",
+      "path_prefix": "assets/plants/plant_0156/02",
+      "width": 198,
       "height": 250,
-      "root_width": 7,
-      "root_ratio": 0.03,
+      "root_anchor": [
+        0.6938,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.04,
       "ground_ellipse": [
-        7,
+        8,
         4
       ],
       "true_color": true,
@@ -6737,6 +7405,10 @@
         {
           "slot": "red",
           "file": "layer_red.png"
+        },
+        {
+          "slot": "blue",
+          "file": "layer_blue.png"
         }
       ],
       "ai_analysis": {
@@ -6764,10 +7436,14 @@
       "path_prefix": "assets/plants/plant_0157/01",
       "width": 215,
       "height": 250,
-      "root_width": 48,
-      "root_ratio": 0.223,
+      "root_anchor": [
+        0.4583,
+        0.996
+      ],
+      "root_width": 47,
+      "root_ratio": 0.219,
       "ground_ellipse": [
-        48,
+        47,
         26
       ],
       "true_color": true,
@@ -6806,6 +7482,10 @@
       "path_prefix": "assets/plants/plant_0158/01",
       "width": 240,
       "height": 250,
+      "root_anchor": [
+        0.5022,
+        0.996
+      ],
       "root_width": 13,
       "root_ratio": 0.054,
       "ground_ellipse": [
@@ -6848,11 +7528,15 @@
       "path_prefix": "assets/plants/plant_0159/01",
       "width": 194,
       "height": 250,
-      "root_width": 22,
-      "root_ratio": 0.113,
+      "root_anchor": [
+        0.5038,
+        0.996
+      ],
+      "root_width": 20,
+      "root_ratio": 0.103,
       "ground_ellipse": [
-        22,
-        12
+        20,
+        11
       ],
       "true_color": true,
       "layer_files": [
@@ -6890,6 +7574,10 @@
       "path_prefix": "assets/plants/plant_0160/01",
       "width": 228,
       "height": 250,
+      "root_anchor": [
+        0.518,
+        0.996
+      ],
       "root_width": 8,
       "root_ratio": 0.035,
       "ground_ellipse": [
@@ -6936,11 +7624,15 @@
       "path_prefix": "assets/plants/plant_0161/01",
       "width": 115,
       "height": 250,
-      "root_width": 26,
-      "root_ratio": 0.226,
+      "root_anchor": [
+        0.5851,
+        0.876
+      ],
+      "root_width": 29,
+      "root_ratio": 0.252,
       "ground_ellipse": [
-        26,
-        14
+        29,
+        16
       ],
       "true_color": true,
       "layer_files": [
@@ -6982,6 +7674,10 @@
       "path_prefix": "assets/plants/plant_0162/01",
       "width": 236,
       "height": 250,
+      "root_anchor": [
+        0.4897,
+        0.996
+      ],
       "root_width": 33,
       "root_ratio": 0.14,
       "ground_ellipse": [
@@ -7024,6 +7720,10 @@
       "path_prefix": "assets/plants/plant_0163/01",
       "width": 217,
       "height": 250,
+      "root_anchor": [
+        0.4471,
+        0.996
+      ],
       "root_width": 8,
       "root_ratio": 0.037,
       "ground_ellipse": [
@@ -7066,6 +7766,10 @@
       "path_prefix": "assets/plants/plant_0164/01",
       "width": 250,
       "height": 250,
+      "root_anchor": [
+        0.4978,
+        0.86
+      ],
       "root_width": 30,
       "root_ratio": 0.12,
       "ground_ellipse": [
@@ -7108,11 +7812,15 @@
       "path_prefix": "assets/plants/plant_0165/01",
       "width": 227,
       "height": 250,
-      "root_width": 20,
-      "root_ratio": 0.088,
+      "root_anchor": [
+        0.506,
+        0.956
+      ],
+      "root_width": 49,
+      "root_ratio": 0.216,
       "ground_ellipse": [
-        20,
-        11
+        49,
+        27
       ],
       "true_color": true,
       "layer_files": [
@@ -7150,11 +7858,15 @@
       "path_prefix": "assets/plants/plant_0166/01",
       "width": 275,
       "height": 250,
-      "root_width": 46,
-      "root_ratio": 0.167,
+      "root_anchor": [
+        0.5006,
+        0.996
+      ],
+      "root_width": 41,
+      "root_ratio": 0.149,
       "ground_ellipse": [
-        46,
-        25
+        41,
+        23
       ],
       "true_color": true,
       "layer_files": [
@@ -7185,18 +7897,22 @@
       }
     },
     {
-      "id": "plant_0167__01",
+      "id": "plant_0167__02",
       "name": "plant_0167",
       "display_name": "颠茄",
-      "variant_id": "01",
-      "path_prefix": "assets/plants/plant_0167/01",
-      "width": 195,
+      "variant_id": "02",
+      "path_prefix": "assets/plants/plant_0167/02",
+      "width": 260,
       "height": 250,
-      "root_width": 6,
-      "root_ratio": 0.031,
+      "root_anchor": [
+        0.5052,
+        0.996
+      ],
+      "root_width": 16,
+      "root_ratio": 0.062,
       "ground_ellipse": [
-        6,
-        4
+        16,
+        9
       ],
       "true_color": true,
       "layer_files": [
@@ -7238,11 +7954,15 @@
       "path_prefix": "assets/plants/plant_0168/01",
       "width": 215,
       "height": 250,
-      "root_width": 98,
-      "root_ratio": 0.456,
+      "root_anchor": [
+        0.4402,
+        0.848
+      ],
+      "root_width": 77,
+      "root_ratio": 0.358,
       "ground_ellipse": [
-        98,
-        54
+        77,
+        42
       ],
       "true_color": true,
       "layer_files": [
@@ -7280,11 +8000,15 @@
       "path_prefix": "assets/plants/plant_0169/01",
       "width": 230,
       "height": 250,
-      "root_width": 45,
-      "root_ratio": 0.196,
+      "root_anchor": [
+        0.5161,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.035,
       "ground_ellipse": [
-        45,
-        25
+        8,
+        4
       ],
       "true_color": true,
       "layer_files": [
@@ -7315,18 +8039,22 @@
       }
     },
     {
-      "id": "plant_0170__01",
+      "id": "plant_0170__02",
       "name": "plant_0170",
       "display_name": "蒺藜",
-      "variant_id": "01",
-      "path_prefix": "assets/plants/plant_0170/01",
-      "width": 318,
+      "variant_id": "02",
+      "path_prefix": "assets/plants/plant_0170/02",
+      "width": 414,
       "height": 250,
-      "root_width": 66,
-      "root_ratio": 0.208,
+      "root_anchor": [
+        0.3191,
+        0.944
+      ],
+      "root_width": 52,
+      "root_ratio": 0.126,
       "ground_ellipse": [
-        66,
-        36
+        52,
+        29
       ],
       "true_color": true,
       "layer_files": [
@@ -7364,11 +8092,15 @@
       "path_prefix": "assets/plants/plant_0171/01",
       "width": 249,
       "height": 250,
-      "root_width": 12,
-      "root_ratio": 0.048,
+      "root_anchor": [
+        0.52,
+        0.996
+      ],
+      "root_width": 10,
+      "root_ratio": 0.04,
       "ground_ellipse": [
-        12,
-        7
+        10,
+        6
       ],
       "true_color": true,
       "layer_files": [
@@ -7403,18 +8135,22 @@
       }
     },
     {
-      "id": "plant_0172__01",
+      "id": "plant_0172__02",
       "name": "plant_0172",
       "display_name": "毒漆藤",
-      "variant_id": "01",
-      "path_prefix": "assets/plants/plant_0172/01",
-      "width": 236,
+      "variant_id": "02",
+      "path_prefix": "assets/plants/plant_0172/02",
+      "width": 260,
       "height": 250,
-      "root_width": 25,
-      "root_ratio": 0.106,
+      "root_anchor": [
+        0.4891,
+        0.996
+      ],
+      "root_width": 18,
+      "root_ratio": 0.069,
       "ground_ellipse": [
-        25,
-        14
+        18,
+        10
       ],
       "true_color": true,
       "layer_files": [
@@ -7425,6 +8161,10 @@
         {
           "slot": "red",
           "file": "layer_red.png"
+        },
+        {
+          "slot": "blue",
+          "file": "layer_blue.png"
         }
       ],
       "ai_analysis": {
@@ -7452,10 +8192,14 @@
       "path_prefix": "assets/plants/plant_0173/01",
       "width": 221,
       "height": 250,
-      "root_width": 7,
-      "root_ratio": 0.032,
+      "root_anchor": [
+        0.5105,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.036,
       "ground_ellipse": [
-        7,
+        8,
         4
       ],
       "true_color": true,
@@ -7498,11 +8242,15 @@
       "path_prefix": "assets/plants/plant_0174/01",
       "width": 261,
       "height": 250,
-      "root_width": 30,
-      "root_ratio": 0.115,
+      "root_anchor": [
+        0.5261,
+        0.928
+      ],
+      "root_width": 74,
+      "root_ratio": 0.284,
       "ground_ellipse": [
-        30,
-        16
+        74,
+        41
       ],
       "true_color": true,
       "layer_files": [
@@ -7540,6 +8288,10 @@
       "path_prefix": "assets/plants/plant_0175/01",
       "width": 238,
       "height": 250,
+      "root_anchor": [
+        0.514,
+        0.996
+      ],
       "root_width": 9,
       "root_ratio": 0.038,
       "ground_ellipse": [
@@ -7579,18 +8331,22 @@
       }
     },
     {
-      "id": "plant_0176__01",
+      "id": "plant_0176__02",
       "name": "plant_0176",
       "display_name": "百歲蘭",
-      "variant_id": "01",
-      "path_prefix": "assets/plants/plant_0176/01",
-      "width": 333,
+      "variant_id": "02",
+      "path_prefix": "assets/plants/plant_0176/02",
+      "width": 517,
       "height": 250,
-      "root_width": 47,
-      "root_ratio": 0.141,
+      "root_anchor": [
+        0.4923,
+        0.996
+      ],
+      "root_width": 186,
+      "root_ratio": 0.36,
       "ground_ellipse": [
-        47,
-        26
+        186,
+        102
       ],
       "true_color": true,
       "layer_files": [
@@ -7601,6 +8357,10 @@
         {
           "slot": "red",
           "file": "layer_red.png"
+        },
+        {
+          "slot": "blue",
+          "file": "layer_blue.png"
         }
       ],
       "ai_analysis": {
@@ -7621,18 +8381,22 @@
       }
     },
     {
-      "id": "plant_0177__01",
+      "id": "plant_0177__02",
       "name": "plant_0177",
       "display_name": "曼陀罗 (植物)",
-      "variant_id": "01",
-      "path_prefix": "assets/plants/plant_0177/01",
-      "width": 250,
+      "variant_id": "02",
+      "path_prefix": "assets/plants/plant_0177/02",
+      "width": 262,
       "height": 250,
-      "root_width": 46,
-      "root_ratio": 0.184,
+      "root_anchor": [
+        0.494,
+        0.996
+      ],
+      "root_width": 60,
+      "root_ratio": 0.229,
       "ground_ellipse": [
-        46,
-        25
+        60,
+        33
       ],
       "true_color": true,
       "layer_files": [
@@ -7667,18 +8431,22 @@
       }
     },
     {
-      "id": "plant_0178__01",
+      "id": "plant_0178__02",
       "name": "plant_0178",
       "display_name": "棣棠花",
-      "variant_id": "01",
-      "path_prefix": "assets/plants/plant_0178/01",
-      "width": 209,
+      "variant_id": "02",
+      "path_prefix": "assets/plants/plant_0178/02",
+      "width": 254,
       "height": 250,
-      "root_width": 5,
-      "root_ratio": 0.024,
+      "root_anchor": [
+        0.4947,
+        0.996
+      ],
+      "root_width": 40,
+      "root_ratio": 0.157,
       "ground_ellipse": [
-        5,
-        4
+        40,
+        22
       ],
       "true_color": true,
       "layer_files": [
@@ -7689,6 +8457,10 @@
         {
           "slot": "red",
           "file": "layer_red.png"
+        },
+        {
+          "slot": "blue",
+          "file": "layer_blue.png"
         }
       ],
       "ai_analysis": {
@@ -7716,6 +8488,10 @@
       "path_prefix": "assets/plants/plant_0179/01",
       "width": 217,
       "height": 250,
+      "root_anchor": [
+        0.5256,
+        0.996
+      ],
       "root_width": 16,
       "root_ratio": 0.074,
       "ground_ellipse": [
@@ -7758,11 +8534,15 @@
       "path_prefix": "assets/plants/plant_0180/01",
       "width": 279,
       "height": 250,
-      "root_width": 69,
-      "root_ratio": 0.247,
+      "root_anchor": [
+        0.4982,
+        0.996
+      ],
+      "root_width": 64,
+      "root_ratio": 0.229,
       "ground_ellipse": [
-        69,
-        38
+        64,
+        35
       ],
       "true_color": true,
       "layer_files": [
@@ -7800,10 +8580,14 @@
       "path_prefix": "assets/plants/plant_0181/01",
       "width": 190,
       "height": 250,
-      "root_width": 6,
-      "root_ratio": 0.032,
+      "root_anchor": [
+        0.5064,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.042,
       "ground_ellipse": [
-        6,
+        8,
         4
       ],
       "true_color": true,
@@ -7839,18 +8623,22 @@
       }
     },
     {
-      "id": "plant_0182__01",
+      "id": "plant_0182__02",
       "name": "plant_0182",
       "display_name": "香草",
-      "variant_id": "01",
-      "path_prefix": "assets/plants/plant_0182/01",
-      "width": 232,
+      "variant_id": "02",
+      "path_prefix": "assets/plants/plant_0182/02",
+      "width": 156,
       "height": 250,
-      "root_width": 6,
-      "root_ratio": 0.026,
+      "root_anchor": [
+        0.5218,
+        0.996
+      ],
+      "root_width": 16,
+      "root_ratio": 0.103,
       "ground_ellipse": [
-        6,
-        4
+        16,
+        9
       ],
       "true_color": true,
       "layer_files": [
@@ -7892,6 +8680,10 @@
       "path_prefix": "assets/plants/plant_0183/01",
       "width": 210,
       "height": 250,
+      "root_anchor": [
+        0.5134,
+        0.996
+      ],
       "root_width": 17,
       "root_ratio": 0.081,
       "ground_ellipse": [
@@ -7934,11 +8726,15 @@
       "path_prefix": "assets/plants/plant_0184/01",
       "width": 303,
       "height": 250,
-      "root_width": 25,
-      "root_ratio": 0.083,
+      "root_anchor": [
+        0.755,
+        0.996
+      ],
+      "root_width": 20,
+      "root_ratio": 0.066,
       "ground_ellipse": [
-        25,
-        14
+        20,
+        11
       ],
       "true_color": true,
       "layer_files": [
@@ -7976,11 +8772,15 @@
       "path_prefix": "assets/plants/plant_0185/01",
       "width": 267,
       "height": 250,
-      "root_width": 15,
-      "root_ratio": 0.056,
+      "root_anchor": [
+        0.5487,
+        0.908
+      ],
+      "root_width": 63,
+      "root_ratio": 0.236,
       "ground_ellipse": [
-        15,
-        8
+        63,
+        35
       ],
       "true_color": true,
       "layer_files": [
@@ -8018,11 +8818,15 @@
       "path_prefix": "assets/plants/plant_0186/01",
       "width": 236,
       "height": 250,
-      "root_width": 23,
-      "root_ratio": 0.097,
+      "root_anchor": [
+        0.5125,
+        0.996
+      ],
+      "root_width": 19,
+      "root_ratio": 0.081,
       "ground_ellipse": [
-        23,
-        13
+        19,
+        10
       ],
       "true_color": true,
       "layer_files": [
@@ -8060,11 +8864,15 @@
       "path_prefix": "assets/plants/plant_0187/01",
       "width": 227,
       "height": 250,
-      "root_width": 16,
-      "root_ratio": 0.07,
+      "root_anchor": [
+        0.5272,
+        0.996
+      ],
+      "root_width": 14,
+      "root_ratio": 0.062,
       "ground_ellipse": [
-        16,
-        9
+        14,
+        8
       ],
       "true_color": true,
       "layer_files": [
@@ -8102,6 +8910,10 @@
       "path_prefix": "assets/plants/plant_0188/01",
       "width": 248,
       "height": 250,
+      "root_anchor": [
+        0.5081,
+        0.996
+      ],
       "root_width": 15,
       "root_ratio": 0.06,
       "ground_ellipse": [
@@ -8141,18 +8953,22 @@
       }
     },
     {
-      "id": "plant_0189__01",
+      "id": "plant_0189__02",
       "name": "plant_0189",
       "display_name": "卧茎宫灯长寿",
-      "variant_id": "01",
-      "path_prefix": "assets/plants/plant_0189/01",
-      "width": 290,
+      "variant_id": "02",
+      "path_prefix": "assets/plants/plant_0189/02",
+      "width": 244,
       "height": 250,
-      "root_width": 14,
-      "root_ratio": 0.048,
+      "root_anchor": [
+        0.5136,
+        0.996
+      ],
+      "root_width": 23,
+      "root_ratio": 0.094,
       "ground_ellipse": [
-        14,
-        8
+        23,
+        13
       ],
       "true_color": true,
       "layer_files": [
@@ -8163,6 +8979,10 @@
         {
           "slot": "red",
           "file": "layer_red.png"
+        },
+        {
+          "slot": "blue",
+          "file": "layer_blue.png"
         }
       ],
       "ai_analysis": {
@@ -8190,10 +9010,14 @@
       "path_prefix": "assets/plants/plant_0190/01",
       "width": 191,
       "height": 250,
-      "root_width": 5,
-      "root_ratio": 0.026,
+      "root_anchor": [
+        0.5113,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.042,
       "ground_ellipse": [
-        5,
+        8,
         4
       ],
       "true_color": true,
@@ -8232,6 +9056,10 @@
       "path_prefix": "assets/plants/plant_0191/01",
       "width": 255,
       "height": 250,
+      "root_anchor": [
+        0.5146,
+        0.996
+      ],
       "root_width": 8,
       "root_ratio": 0.031,
       "ground_ellipse": [
@@ -8278,11 +9106,15 @@
       "path_prefix": "assets/plants/plant_0192/01",
       "width": 250,
       "height": 250,
-      "root_width": 37,
-      "root_ratio": 0.148,
+      "root_anchor": [
+        0.4978,
+        0.716
+      ],
+      "root_width": 66,
+      "root_ratio": 0.264,
       "ground_ellipse": [
-        37,
-        20
+        66,
+        36
       ],
       "true_color": true,
       "layer_files": [
@@ -8320,11 +9152,15 @@
       "path_prefix": "assets/plants/plant_0193/01",
       "width": 292,
       "height": 250,
-      "root_width": 139,
-      "root_ratio": 0.476,
+      "root_anchor": [
+        0.5594,
+        0.96
+      ],
+      "root_width": 37,
+      "root_ratio": 0.127,
       "ground_ellipse": [
-        139,
-        76
+        37,
+        20
       ],
       "true_color": true,
       "layer_files": [
@@ -8362,6 +9198,10 @@
       "path_prefix": "assets/plants/plant_0194/01",
       "width": 259,
       "height": 250,
+      "root_anchor": [
+        0.5192,
+        0.996
+      ],
       "root_width": 53,
       "root_ratio": 0.205,
       "ground_ellipse": [
@@ -8404,10 +9244,14 @@
       "path_prefix": "assets/plants/plant_0195/01",
       "width": 215,
       "height": 250,
-      "root_width": 7,
-      "root_ratio": 0.033,
+      "root_anchor": [
+        0.509,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.037,
       "ground_ellipse": [
-        7,
+        8,
         4
       ],
       "true_color": true,
@@ -8450,11 +9294,15 @@
       "path_prefix": "assets/plants/plant_0196/01",
       "width": 243,
       "height": 250,
-      "root_width": 72,
-      "root_ratio": 0.296,
+      "root_anchor": [
+        0.5231,
+        0.996
+      ],
+      "root_width": 42,
+      "root_ratio": 0.173,
       "ground_ellipse": [
-        72,
-        40
+        42,
+        23
       ],
       "true_color": true,
       "layer_files": [
@@ -8492,11 +9340,15 @@
       "path_prefix": "assets/plants/plant_0197/01",
       "width": 248,
       "height": 250,
-      "root_width": 15,
-      "root_ratio": 0.06,
+      "root_anchor": [
+        0.522,
+        0.996
+      ],
+      "root_width": 13,
+      "root_ratio": 0.052,
       "ground_ellipse": [
-        15,
-        8
+        13,
+        7
       ],
       "true_color": true,
       "layer_files": [
@@ -8534,10 +9386,14 @@
       "path_prefix": "assets/plants/plant_0198/01",
       "width": 193,
       "height": 250,
-      "root_width": 2,
-      "root_ratio": 0.01,
+      "root_anchor": [
+        0.3581,
+        0.992
+      ],
+      "root_width": 8,
+      "root_ratio": 0.041,
       "ground_ellipse": [
-        2,
+        8,
         4
       ],
       "true_color": true,
@@ -8580,11 +9436,15 @@
       "path_prefix": "assets/plants/plant_0199/01",
       "width": 268,
       "height": 250,
-      "root_width": 61,
-      "root_ratio": 0.228,
+      "root_anchor": [
+        0.3742,
+        0.94
+      ],
+      "root_width": 74,
+      "root_ratio": 0.276,
       "ground_ellipse": [
-        61,
-        34
+        74,
+        41
       ],
       "true_color": true,
       "layer_files": [
@@ -8622,10 +9482,14 @@
       "path_prefix": "assets/plants/plant_0200/01",
       "width": 200,
       "height": 250,
-      "root_width": 4,
-      "root_ratio": 0.02,
+      "root_anchor": [
+        0.5046,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.04,
       "ground_ellipse": [
-        4,
+        8,
         4
       ],
       "true_color": true,
@@ -8668,11 +9532,15 @@
       "path_prefix": "assets/plants/plant_0201/01",
       "width": 216,
       "height": 250,
-      "root_width": 14,
-      "root_ratio": 0.065,
+      "root_anchor": [
+        0.5533,
+        0.996
+      ],
+      "root_width": 13,
+      "root_ratio": 0.06,
       "ground_ellipse": [
-        14,
-        8
+        13,
+        7
       ],
       "true_color": true,
       "layer_files": [
@@ -8714,11 +9582,15 @@
       "path_prefix": "assets/plants/plant_0202/01",
       "width": 207,
       "height": 250,
-      "root_width": 17,
-      "root_ratio": 0.082,
+      "root_anchor": [
+        0.5612,
+        0.884
+      ],
+      "root_width": 40,
+      "root_ratio": 0.193,
       "ground_ellipse": [
-        17,
-        9
+        40,
+        22
       ],
       "true_color": true,
       "layer_files": [
@@ -8760,10 +9632,14 @@
       "path_prefix": "assets/plants/plant_0203/01",
       "width": 257,
       "height": 250,
-      "root_width": 22,
-      "root_ratio": 0.086,
+      "root_anchor": [
+        0.472,
+        0.996
+      ],
+      "root_width": 21,
+      "root_ratio": 0.082,
       "ground_ellipse": [
-        22,
+        21,
         12
       ],
       "true_color": true,
@@ -8795,18 +9671,22 @@
       }
     },
     {
-      "id": "plant_0204__01",
+      "id": "plant_0204__02",
       "name": "plant_0204",
       "display_name": "蔓綠絨屬",
-      "variant_id": "01",
-      "path_prefix": "assets/plants/plant_0204/01",
-      "width": 234,
+      "variant_id": "02",
+      "path_prefix": "assets/plants/plant_0204/02",
+      "width": 292,
       "height": 250,
-      "root_width": 22,
-      "root_ratio": 0.094,
+      "root_anchor": [
+        0.4936,
+        0.996
+      ],
+      "root_width": 44,
+      "root_ratio": 0.151,
       "ground_ellipse": [
-        22,
-        12
+        44,
+        24
       ],
       "true_color": true,
       "layer_files": [
@@ -8817,6 +9697,10 @@
         {
           "slot": "red",
           "file": "layer_red.png"
+        },
+        {
+          "slot": "blue",
+          "file": "layer_blue.png"
         }
       ],
       "ai_analysis": {
@@ -8837,18 +9721,22 @@
       }
     },
     {
-      "id": "plant_0205__01",
+      "id": "plant_0205__02",
       "name": "plant_0205",
       "display_name": "风铃玉",
-      "variant_id": "01",
-      "path_prefix": "assets/plants/plant_0205/01",
-      "width": 231,
+      "variant_id": "02",
+      "path_prefix": "assets/plants/plant_0205/02",
+      "width": 284,
       "height": 250,
-      "root_width": 10,
-      "root_ratio": 0.043,
+      "root_anchor": [
+        0.526,
+        0.996
+      ],
+      "root_width": 38,
+      "root_ratio": 0.134,
       "ground_ellipse": [
-        10,
-        6
+        38,
+        21
       ],
       "true_color": true,
       "layer_files": [
@@ -8879,18 +9767,22 @@
       }
     },
     {
-      "id": "plant_0206__01",
+      "id": "plant_0206__02",
       "name": "plant_0206",
       "display_name": "銀合歡",
-      "variant_id": "01",
-      "path_prefix": "assets/plants/plant_0206/01",
-      "width": 183,
+      "variant_id": "02",
+      "path_prefix": "assets/plants/plant_0206/02",
+      "width": 238,
       "height": 250,
-      "root_width": 7,
-      "root_ratio": 0.038,
+      "root_anchor": [
+        0.4927,
+        0.996
+      ],
+      "root_width": 31,
+      "root_ratio": 0.13,
       "ground_ellipse": [
-        7,
-        4
+        31,
+        17
       ],
       "true_color": true,
       "layer_files": [
@@ -8928,10 +9820,14 @@
       "path_prefix": "assets/plants/plant_0207/01",
       "width": 224,
       "height": 250,
-      "root_width": 6,
-      "root_ratio": 0.027,
+      "root_anchor": [
+        0.5306,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.036,
       "ground_ellipse": [
-        6,
+        8,
         4
       ],
       "true_color": true,
@@ -8967,18 +9863,22 @@
       }
     },
     {
-      "id": "plant_0208__01",
+      "id": "plant_0208__02",
       "name": "plant_0208",
       "display_name": "田野薄荷",
-      "variant_id": "01",
-      "path_prefix": "assets/plants/plant_0208/01",
-      "width": 251,
+      "variant_id": "02",
+      "path_prefix": "assets/plants/plant_0208/02",
+      "width": 222,
       "height": 250,
-      "root_width": 33,
-      "root_ratio": 0.131,
+      "root_anchor": [
+        0.4816,
+        0.992
+      ],
+      "root_width": 64,
+      "root_ratio": 0.288,
       "ground_ellipse": [
-        33,
-        18
+        64,
+        35
       ],
       "true_color": true,
       "layer_files": [
@@ -9013,18 +9913,22 @@
       }
     },
     {
-      "id": "plant_0209__01",
+      "id": "plant_0209__02",
       "name": "plant_0209",
       "display_name": "日中花属",
-      "variant_id": "01",
-      "path_prefix": "assets/plants/plant_0209/01",
-      "width": 224,
+      "variant_id": "02",
+      "path_prefix": "assets/plants/plant_0209/02",
+      "width": 330,
       "height": 250,
-      "root_width": 4,
-      "root_ratio": 0.018,
+      "root_anchor": [
+        0.5055,
+        0.996
+      ],
+      "root_width": 83,
+      "root_ratio": 0.252,
       "ground_ellipse": [
-        4,
-        4
+        83,
+        46
       ],
       "true_color": true,
       "layer_files": [
@@ -9059,18 +9963,22 @@
       }
     },
     {
-      "id": "plant_0210__01",
+      "id": "plant_0210__02",
       "name": "plant_0210",
       "display_name": "木荷",
-      "variant_id": "01",
-      "path_prefix": "assets/plants/plant_0210/01",
-      "width": 231,
+      "variant_id": "02",
+      "path_prefix": "assets/plants/plant_0210/02",
+      "width": 228,
       "height": 250,
-      "root_width": 8,
-      "root_ratio": 0.035,
+      "root_anchor": [
+        0.4974,
+        0.996
+      ],
+      "root_width": 42,
+      "root_ratio": 0.184,
       "ground_ellipse": [
-        8,
-        4
+        42,
+        23
       ],
       "true_color": true,
       "layer_files": [
@@ -9112,11 +10020,15 @@
       "path_prefix": "assets/plants/plant_0211/01",
       "width": 260,
       "height": 250,
-      "root_width": 59,
-      "root_ratio": 0.227,
+      "root_anchor": [
+        0.5455,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.031,
       "ground_ellipse": [
-        59,
-        32
+        8,
+        4
       ],
       "true_color": true,
       "layer_files": [
@@ -9158,6 +10070,10 @@
       "path_prefix": "assets/plants/plant_0212/01",
       "width": 264,
       "height": 250,
+      "root_anchor": [
+        0.7582,
+        0.98
+      ],
       "root_width": 74,
       "root_ratio": 0.28,
       "ground_ellipse": [
@@ -9200,10 +10116,14 @@
       "path_prefix": "assets/plants/plant_0213/01",
       "width": 173,
       "height": 250,
-      "root_width": 6,
-      "root_ratio": 0.035,
+      "root_anchor": [
+        0.5133,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.046,
       "ground_ellipse": [
-        6,
+        8,
         4
       ],
       "true_color": true,
@@ -9239,18 +10159,22 @@
       }
     },
     {
-      "id": "plant_0214__01",
+      "id": "plant_0214__02",
       "name": "plant_0214",
       "display_name": "樹蘭亞科",
-      "variant_id": "01",
-      "path_prefix": "assets/plants/plant_0214/01",
-      "width": 227,
+      "variant_id": "02",
+      "path_prefix": "assets/plants/plant_0214/02",
+      "width": 219,
       "height": 250,
-      "root_width": 15,
-      "root_ratio": 0.066,
+      "root_anchor": [
+        0.4984,
+        0.996
+      ],
+      "root_width": 75,
+      "root_ratio": 0.342,
       "ground_ellipse": [
-        15,
-        8
+        75,
+        41
       ],
       "true_color": true,
       "layer_files": [
@@ -9292,10 +10216,14 @@
       "path_prefix": "assets/plants/plant_0215/01",
       "width": 273,
       "height": 250,
-      "root_width": 35,
-      "root_ratio": 0.128,
+      "root_anchor": [
+        0.6279,
+        0.996
+      ],
+      "root_width": 34,
+      "root_ratio": 0.125,
       "ground_ellipse": [
-        35,
+        34,
         19
       ],
       "true_color": true,
@@ -9338,11 +10266,15 @@
       "path_prefix": "assets/plants/plant_0216/01",
       "width": 285,
       "height": 250,
-      "root_width": 95,
-      "root_ratio": 0.333,
+      "root_anchor": [
+        0.529,
+        0.996
+      ],
+      "root_width": 67,
+      "root_ratio": 0.235,
       "ground_ellipse": [
-        95,
-        52
+        67,
+        37
       ],
       "true_color": true,
       "layer_files": [
@@ -9380,10 +10312,14 @@
       "path_prefix": "assets/plants/plant_0217/01",
       "width": 245,
       "height": 250,
-      "root_width": 24,
-      "root_ratio": 0.098,
+      "root_anchor": [
+        0.5173,
+        0.996
+      ],
+      "root_width": 23,
+      "root_ratio": 0.094,
       "ground_ellipse": [
-        24,
+        23,
         13
       ],
       "true_color": true,
@@ -9422,10 +10358,14 @@
       "path_prefix": "assets/plants/plant_0218/01",
       "width": 253,
       "height": 250,
-      "root_width": 6,
-      "root_ratio": 0.024,
+      "root_anchor": [
+        0.5169,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.032,
       "ground_ellipse": [
-        6,
+        8,
         4
       ],
       "true_color": true,
@@ -9464,6 +10404,10 @@
       "path_prefix": "assets/plants/plant_0219/01",
       "width": 246,
       "height": 250,
+      "root_anchor": [
+        0.527,
+        0.996
+      ],
       "root_width": 13,
       "root_ratio": 0.053,
       "ground_ellipse": [
@@ -9506,11 +10450,15 @@
       "path_prefix": "assets/plants/plant_0220/01",
       "width": 200,
       "height": 250,
-      "root_width": 33,
-      "root_ratio": 0.165,
+      "root_anchor": [
+        0.481,
+        0.712
+      ],
+      "root_width": 72,
+      "root_ratio": 0.36,
       "ground_ellipse": [
-        33,
-        18
+        72,
+        40
       ],
       "true_color": true,
       "layer_files": [
@@ -9552,11 +10500,15 @@
       "path_prefix": "assets/plants/plant_0221/01",
       "width": 250,
       "height": 250,
-      "root_width": 61,
-      "root_ratio": 0.244,
+      "root_anchor": [
+        0.5202,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.032,
       "ground_ellipse": [
-        61,
-        34
+        8,
+        4
       ],
       "true_color": true,
       "layer_files": [
@@ -9598,11 +10550,15 @@
       "path_prefix": "assets/plants/plant_0222/01",
       "width": 271,
       "height": 250,
-      "root_width": 30,
-      "root_ratio": 0.111,
+      "root_anchor": [
+        0.5037,
+        0.844
+      ],
+      "root_width": 97,
+      "root_ratio": 0.358,
       "ground_ellipse": [
-        30,
-        16
+        97,
+        53
       ],
       "true_color": true,
       "layer_files": [
@@ -9644,11 +10600,15 @@
       "path_prefix": "assets/plants/plant_0223/01",
       "width": 224,
       "height": 250,
-      "root_width": 9,
-      "root_ratio": 0.04,
+      "root_anchor": [
+        0.4984,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.036,
       "ground_ellipse": [
-        9,
-        5
+        8,
+        4
       ],
       "true_color": true,
       "layer_files": [
@@ -9686,10 +10646,14 @@
       "path_prefix": "assets/plants/plant_0224/01",
       "width": 140,
       "height": 250,
-      "root_width": 11,
-      "root_ratio": 0.079,
+      "root_anchor": [
+        0.4969,
+        0.996
+      ],
+      "root_width": 10,
+      "root_ratio": 0.071,
       "ground_ellipse": [
-        11,
+        10,
         6
       ],
       "true_color": true,
@@ -9728,6 +10692,10 @@
       "path_prefix": "assets/plants/plant_0225/01",
       "width": 222,
       "height": 250,
+      "root_anchor": [
+        0.5444,
+        0.996
+      ],
       "root_width": 8,
       "root_ratio": 0.036,
       "ground_ellipse": [
@@ -9770,10 +10738,14 @@
       "path_prefix": "assets/plants/plant_0226/01",
       "width": 220,
       "height": 250,
-      "root_width": 7,
-      "root_ratio": 0.032,
+      "root_anchor": [
+        0.5037,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.036,
       "ground_ellipse": [
-        7,
+        8,
         4
       ],
       "true_color": true,
@@ -9812,10 +10784,14 @@
       "path_prefix": "assets/plants/plant_0227/01",
       "width": 253,
       "height": 250,
-      "root_width": 13,
-      "root_ratio": 0.051,
+      "root_anchor": [
+        0.5184,
+        0.996
+      ],
+      "root_width": 12,
+      "root_ratio": 0.047,
       "ground_ellipse": [
-        13,
+        12,
         7
       ],
       "true_color": true,
@@ -9854,11 +10830,15 @@
       "path_prefix": "assets/plants/plant_0228/01",
       "width": 219,
       "height": 250,
-      "root_width": 26,
-      "root_ratio": 0.119,
+      "root_anchor": [
+        0.5095,
+        0.904
+      ],
+      "root_width": 52,
+      "root_ratio": 0.237,
       "ground_ellipse": [
-        26,
-        14
+        52,
+        29
       ],
       "true_color": true,
       "layer_files": [
@@ -9900,6 +10880,10 @@
       "path_prefix": "assets/plants/plant_0229/01",
       "width": 253,
       "height": 250,
+      "root_anchor": [
+        0.5042,
+        0.996
+      ],
       "root_width": 14,
       "root_ratio": 0.055,
       "ground_ellipse": [
@@ -9935,18 +10919,22 @@
       }
     },
     {
-      "id": "plant_0230__01",
+      "id": "plant_0230__02",
       "name": "plant_0230",
       "display_name": "吊兰",
-      "variant_id": "01",
-      "path_prefix": "assets/plants/plant_0230/01",
-      "width": 201,
+      "variant_id": "02",
+      "path_prefix": "assets/plants/plant_0230/02",
+      "width": 278,
       "height": 250,
-      "root_width": 28,
-      "root_ratio": 0.139,
+      "root_anchor": [
+        0.4994,
+        0.996
+      ],
+      "root_width": 23,
+      "root_ratio": 0.083,
       "ground_ellipse": [
-        28,
-        15
+        23,
+        13
       ],
       "true_color": true,
       "layer_files": [
@@ -9957,6 +10945,10 @@
         {
           "slot": "red",
           "file": "layer_red.png"
+        },
+        {
+          "slot": "blue",
+          "file": "layer_blue.png"
         }
       ],
       "ai_analysis": {
@@ -9984,11 +10976,15 @@
       "path_prefix": "assets/plants/plant_0231/01",
       "width": 254,
       "height": 250,
-      "root_width": 16,
-      "root_ratio": 0.063,
+      "root_anchor": [
+        0.6092,
+        0.896
+      ],
+      "root_width": 49,
+      "root_ratio": 0.193,
       "ground_ellipse": [
-        16,
-        9
+        49,
+        27
       ],
       "true_color": true,
       "layer_files": [
@@ -10019,18 +11015,22 @@
       }
     },
     {
-      "id": "plant_0232__01",
+      "id": "plant_0232__02",
       "name": "plant_0232",
       "display_name": "流星毬蘭",
-      "variant_id": "01",
-      "path_prefix": "assets/plants/plant_0232/01",
-      "width": 184,
+      "variant_id": "02",
+      "path_prefix": "assets/plants/plant_0232/02",
+      "width": 222,
       "height": 250,
-      "root_width": 37,
-      "root_ratio": 0.201,
+      "root_anchor": [
+        0.507,
+        0.996
+      ],
+      "root_width": 12,
+      "root_ratio": 0.054,
       "ground_ellipse": [
-        37,
-        20
+        12,
+        7
       ],
       "true_color": true,
       "layer_files": [
@@ -10072,6 +11072,10 @@
       "path_prefix": "assets/plants/plant_0233/01",
       "width": 255,
       "height": 250,
+      "root_anchor": [
+        0.5347,
+        0.996
+      ],
       "root_width": 10,
       "root_ratio": 0.039,
       "ground_ellipse": [
@@ -10114,10 +11118,14 @@
       "path_prefix": "assets/plants/plant_0234/01",
       "width": 257,
       "height": 250,
-      "root_width": 7,
-      "root_ratio": 0.027,
+      "root_anchor": [
+        0.5452,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.031,
       "ground_ellipse": [
-        7,
+        8,
         4
       ],
       "true_color": true,
@@ -10160,10 +11168,14 @@
       "path_prefix": "assets/plants/plant_0235/01",
       "width": 176,
       "height": 250,
-      "root_width": 6,
-      "root_ratio": 0.034,
+      "root_anchor": [
+        0.4879,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.045,
       "ground_ellipse": [
-        6,
+        8,
         4
       ],
       "true_color": true,
@@ -10199,18 +11211,22 @@
       }
     },
     {
-      "id": "plant_0236__01",
+      "id": "plant_0236__02",
       "name": "plant_0236",
       "display_name": "全缘钓宫灯",
-      "variant_id": "01",
-      "path_prefix": "assets/plants/plant_0236/01",
-      "width": 264,
+      "variant_id": "02",
+      "path_prefix": "assets/plants/plant_0236/02",
+      "width": 207,
       "height": 250,
-      "root_width": 132,
-      "root_ratio": 0.5,
+      "root_anchor": [
+        0.541,
+        0.996
+      ],
+      "root_width": 19,
+      "root_ratio": 0.092,
       "ground_ellipse": [
-        132,
-        73
+        19,
+        10
       ],
       "true_color": true,
       "layer_files": [
@@ -10221,6 +11237,10 @@
         {
           "slot": "red",
           "file": "layer_red.png"
+        },
+        {
+          "slot": "blue",
+          "file": "layer_blue.png"
         }
       ],
       "ai_analysis": {
@@ -10248,11 +11268,15 @@
       "path_prefix": "assets/plants/plant_0237/01",
       "width": 200,
       "height": 250,
-      "root_width": 60,
-      "root_ratio": 0.3,
+      "root_anchor": [
+        0.4618,
+        0.996
+      ],
+      "root_width": 55,
+      "root_ratio": 0.275,
       "ground_ellipse": [
-        60,
-        33
+        55,
+        30
       ],
       "true_color": true,
       "layer_files": [
@@ -10290,6 +11314,10 @@
       "path_prefix": "assets/plants/plant_0238/01",
       "width": 211,
       "height": 250,
+      "root_anchor": [
+        0.497,
+        0.996
+      ],
       "root_width": 8,
       "root_ratio": 0.038,
       "ground_ellipse": [
@@ -10332,11 +11360,15 @@
       "path_prefix": "assets/plants/plant_0239/01",
       "width": 241,
       "height": 250,
-      "root_width": 36,
-      "root_ratio": 0.149,
+      "root_anchor": [
+        0.3786,
+        0.928
+      ],
+      "root_width": 52,
+      "root_ratio": 0.216,
       "ground_ellipse": [
-        36,
-        20
+        52,
+        29
       ],
       "true_color": true,
       "layer_files": [
@@ -10378,11 +11410,15 @@
       "path_prefix": "assets/plants/plant_0240/01",
       "width": 267,
       "height": 250,
-      "root_width": 40,
-      "root_ratio": 0.15,
+      "root_anchor": [
+        0.3625,
+        0.996
+      ],
+      "root_width": 39,
+      "root_ratio": 0.146,
       "ground_ellipse": [
-        40,
-        22
+        39,
+        21
       ],
       "true_color": true,
       "layer_files": [
@@ -10420,11 +11456,15 @@
       "path_prefix": "assets/plants/plant_0241/01",
       "width": 270,
       "height": 250,
-      "root_width": 32,
-      "root_ratio": 0.119,
+      "root_anchor": [
+        0.519,
+        0.912
+      ],
+      "root_width": 97,
+      "root_ratio": 0.359,
       "ground_ellipse": [
-        32,
-        18
+        97,
+        53
       ],
       "true_color": true,
       "layer_files": [
@@ -10462,11 +11502,15 @@
       "path_prefix": "assets/plants/plant_0242/01",
       "width": 185,
       "height": 250,
-      "root_width": 28,
-      "root_ratio": 0.151,
+      "root_anchor": [
+        0.5054,
+        0.996
+      ],
+      "root_width": 26,
+      "root_ratio": 0.141,
       "ground_ellipse": [
-        28,
-        15
+        26,
+        14
       ],
       "true_color": true,
       "layer_files": [
@@ -10501,18 +11545,22 @@
       }
     },
     {
-      "id": "plant_0243__01",
+      "id": "plant_0243__02",
       "name": "plant_0243",
       "display_name": "钓宫灯",
-      "variant_id": "01",
-      "path_prefix": "assets/plants/plant_0243/01",
-      "width": 239,
+      "variant_id": "02",
+      "path_prefix": "assets/plants/plant_0243/02",
+      "width": 240,
       "height": 250,
-      "root_width": 9,
-      "root_ratio": 0.038,
+      "root_anchor": [
+        0.4917,
+        0.996
+      ],
+      "root_width": 44,
+      "root_ratio": 0.183,
       "ground_ellipse": [
-        9,
-        5
+        44,
+        24
       ],
       "true_color": true,
       "layer_files": [
@@ -10523,6 +11571,10 @@
         {
           "slot": "red",
           "file": "layer_red.png"
+        },
+        {
+          "slot": "blue",
+          "file": "layer_blue.png"
         }
       ],
       "ai_analysis": {
@@ -10550,6 +11602,10 @@
       "path_prefix": "assets/plants/plant_0244/01",
       "width": 283,
       "height": 250,
+      "root_anchor": [
+        0.5241,
+        0.996
+      ],
       "root_width": 43,
       "root_ratio": 0.152,
       "ground_ellipse": [
@@ -10592,6 +11648,10 @@
       "path_prefix": "assets/plants/plant_0245/01",
       "width": 250,
       "height": 250,
+      "root_anchor": [
+        0.5134,
+        0.996
+      ],
       "root_width": 14,
       "root_ratio": 0.056,
       "ground_ellipse": [
@@ -10634,10 +11694,14 @@
       "path_prefix": "assets/plants/plant_0246/01",
       "width": 233,
       "height": 250,
-      "root_width": 4,
-      "root_ratio": 0.017,
+      "root_anchor": [
+        0.5253,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.034,
       "ground_ellipse": [
-        4,
+        8,
         4
       ],
       "true_color": true,
@@ -10676,6 +11740,10 @@
       "path_prefix": "assets/plants/plant_0247/01",
       "width": 274,
       "height": 250,
+      "root_anchor": [
+        0.5129,
+        0.996
+      ],
       "root_width": 14,
       "root_ratio": 0.051,
       "ground_ellipse": [
@@ -10722,10 +11790,14 @@
       "path_prefix": "assets/plants/plant_0248/01",
       "width": 244,
       "height": 250,
-      "root_width": 6,
-      "root_ratio": 0.025,
+      "root_anchor": [
+        0.4895,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.033,
       "ground_ellipse": [
-        6,
+        8,
         4
       ],
       "true_color": true,
@@ -10768,10 +11840,14 @@
       "path_prefix": "assets/plants/plant_0249/01",
       "width": 256,
       "height": 250,
-      "root_width": 25,
-      "root_ratio": 0.098,
+      "root_anchor": [
+        0.524,
+        0.984
+      ],
+      "root_width": 26,
+      "root_ratio": 0.102,
       "ground_ellipse": [
-        25,
+        26,
         14
       ],
       "true_color": true,
@@ -10810,11 +11886,15 @@
       "path_prefix": "assets/plants/plant_0250/01",
       "width": 263,
       "height": 250,
-      "root_width": 81,
-      "root_ratio": 0.308,
+      "root_anchor": [
+        0.5597,
+        0.996
+      ],
+      "root_width": 56,
+      "root_ratio": 0.213,
       "ground_ellipse": [
-        81,
-        45
+        56,
+        31
       ],
       "true_color": true,
       "layer_files": [
@@ -10856,6 +11936,10 @@
       "path_prefix": "assets/plants/plant_0251/01",
       "width": 257,
       "height": 250,
+      "root_anchor": [
+        0.5039,
+        0.996
+      ],
       "root_width": 8,
       "root_ratio": 0.031,
       "ground_ellipse": [
@@ -10902,10 +11986,14 @@
       "path_prefix": "assets/plants/plant_0252/01",
       "width": 177,
       "height": 250,
-      "root_width": 5,
-      "root_ratio": 0.028,
+      "root_anchor": [
+        0.5113,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.045,
       "ground_ellipse": [
-        5,
+        8,
         4
       ],
       "true_color": true,
@@ -10944,6 +12032,10 @@
       "path_prefix": "assets/plants/plant_0253/01",
       "width": 182,
       "height": 250,
+      "root_anchor": [
+        0.4989,
+        0.996
+      ],
       "root_width": 21,
       "root_ratio": 0.115,
       "ground_ellipse": [
@@ -10990,6 +12082,10 @@
       "path_prefix": "assets/plants/plant_0254/01",
       "width": 250,
       "height": 250,
+      "root_anchor": [
+        0.5107,
+        0.864
+      ],
       "root_width": 37,
       "root_ratio": 0.148,
       "ground_ellipse": [
@@ -11032,10 +12128,14 @@
       "path_prefix": "assets/plants/plant_0255/01",
       "width": 223,
       "height": 250,
-      "root_width": 6,
-      "root_ratio": 0.027,
+      "root_anchor": [
+        0.5071,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.036,
       "ground_ellipse": [
-        6,
+        8,
         4
       ],
       "true_color": true,
@@ -11074,11 +12174,15 @@
       "path_prefix": "assets/plants/plant_0256/01",
       "width": 218,
       "height": 250,
-      "root_width": 19,
-      "root_ratio": 0.087,
+      "root_anchor": [
+        0.5365,
+        0.896
+      ],
+      "root_width": 64,
+      "root_ratio": 0.294,
       "ground_ellipse": [
-        19,
-        10
+        64,
+        35
       ],
       "true_color": true,
       "layer_files": [
@@ -11116,10 +12220,14 @@
       "path_prefix": "assets/plants/plant_0257/01",
       "width": 194,
       "height": 250,
-      "root_width": 6,
-      "root_ratio": 0.031,
+      "root_anchor": [
+        0.5026,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.041,
       "ground_ellipse": [
-        6,
+        8,
         4
       ],
       "true_color": true,
@@ -11151,18 +12259,22 @@
       }
     },
     {
-      "id": "plant_0258__01",
+      "id": "plant_0258__02",
       "name": "plant_0258",
       "display_name": "雞母珠",
-      "variant_id": "01",
-      "path_prefix": "assets/plants/plant_0258/01",
-      "width": 250,
+      "variant_id": "02",
+      "path_prefix": "assets/plants/plant_0258/02",
+      "width": 262,
       "height": 250,
-      "root_width": 37,
-      "root_ratio": 0.148,
+      "root_anchor": [
+        0.4933,
+        0.996
+      ],
+      "root_width": 15,
+      "root_ratio": 0.057,
       "ground_ellipse": [
-        37,
-        20
+        15,
+        8
       ],
       "true_color": true,
       "layer_files": [
@@ -11173,6 +12285,10 @@
         {
           "slot": "red",
           "file": "layer_red.png"
+        },
+        {
+          "slot": "blue",
+          "file": "layer_blue.png"
         }
       ],
       "ai_analysis": {
@@ -11200,6 +12316,10 @@
       "path_prefix": "assets/plants/plant_0259/01",
       "width": 224,
       "height": 250,
+      "root_anchor": [
+        0.5307,
+        0.996
+      ],
       "root_width": 11,
       "root_ratio": 0.049,
       "ground_ellipse": [
@@ -11242,10 +12362,14 @@
       "path_prefix": "assets/plants/plant_0260/01",
       "width": 200,
       "height": 250,
-      "root_width": 30,
-      "root_ratio": 0.15,
+      "root_anchor": [
+        0.4912,
+        0.996
+      ],
+      "root_width": 29,
+      "root_ratio": 0.145,
       "ground_ellipse": [
-        30,
+        29,
         16
       ],
       "true_color": true,
@@ -11284,11 +12408,15 @@
       "path_prefix": "assets/plants/plant_0261/01",
       "width": 266,
       "height": 250,
-      "root_width": 51,
-      "root_ratio": 0.192,
+      "root_anchor": [
+        0.4747,
+        0.996
+      ],
+      "root_width": 44,
+      "root_ratio": 0.165,
       "ground_ellipse": [
-        51,
-        28
+        44,
+        24
       ],
       "true_color": true,
       "layer_files": [
@@ -11330,11 +12458,15 @@
       "path_prefix": "assets/plants/plant_0262/01",
       "width": 204,
       "height": 250,
-      "root_width": 10,
-      "root_ratio": 0.049,
+      "root_anchor": [
+        0.4993,
+        0.996
+      ],
+      "root_width": 9,
+      "root_ratio": 0.044,
       "ground_ellipse": [
-        10,
-        6
+        9,
+        5
       ],
       "true_color": true,
       "layer_files": [
@@ -11372,10 +12504,14 @@
       "path_prefix": "assets/plants/plant_0263/01",
       "width": 162,
       "height": 250,
-      "root_width": 5,
-      "root_ratio": 0.031,
+      "root_anchor": [
+        0.5188,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.049,
       "ground_ellipse": [
-        5,
+        8,
         4
       ],
       "true_color": true,
@@ -11414,6 +12550,10 @@
       "path_prefix": "assets/plants/plant_0264/01",
       "width": 221,
       "height": 250,
+      "root_anchor": [
+        0.515,
+        0.996
+      ],
       "root_width": 13,
       "root_ratio": 0.059,
       "ground_ellipse": [
@@ -11449,18 +12589,22 @@
       }
     },
     {
-      "id": "plant_0265__01",
+      "id": "plant_0265__02",
       "name": "plant_0265",
       "display_name": "香球蘭",
-      "variant_id": "01",
-      "path_prefix": "assets/plants/plant_0265/01",
-      "width": 257,
+      "variant_id": "02",
+      "path_prefix": "assets/plants/plant_0265/02",
+      "width": 221,
       "height": 250,
-      "root_width": 5,
-      "root_ratio": 0.019,
+      "root_anchor": [
+        0.4911,
+        0.996
+      ],
+      "root_width": 10,
+      "root_ratio": 0.045,
       "ground_ellipse": [
-        5,
-        4
+        10,
+        6
       ],
       "true_color": true,
       "layer_files": [
@@ -11471,6 +12615,10 @@
         {
           "slot": "red",
           "file": "layer_red.png"
+        },
+        {
+          "slot": "blue",
+          "file": "layer_blue.png"
         }
       ],
       "ai_analysis": {
@@ -11498,11 +12646,15 @@
       "path_prefix": "assets/plants/plant_0266/01",
       "width": 199,
       "height": 250,
-      "root_width": 15,
-      "root_ratio": 0.075,
+      "root_anchor": [
+        0.5204,
+        0.952
+      ],
+      "root_width": 39,
+      "root_ratio": 0.196,
       "ground_ellipse": [
-        15,
-        8
+        39,
+        21
       ],
       "true_color": true,
       "layer_files": [
@@ -11540,11 +12692,15 @@
       "path_prefix": "assets/plants/plant_0267/01",
       "width": 248,
       "height": 250,
-      "root_width": 19,
-      "root_ratio": 0.077,
+      "root_anchor": [
+        0.5564,
+        0.932
+      ],
+      "root_width": 41,
+      "root_ratio": 0.165,
       "ground_ellipse": [
-        19,
-        10
+        41,
+        23
       ],
       "true_color": true,
       "layer_files": [
@@ -11586,11 +12742,15 @@
       "path_prefix": "assets/plants/plant_0268/01",
       "width": 173,
       "height": 250,
-      "root_width": 17,
-      "root_ratio": 0.098,
+      "root_anchor": [
+        0.3725,
+        0.996
+      ],
+      "root_width": 11,
+      "root_ratio": 0.064,
       "ground_ellipse": [
-        17,
-        9
+        11,
+        6
       ],
       "true_color": true,
       "layer_files": [
@@ -11628,6 +12788,10 @@
       "path_prefix": "assets/plants/plant_0269/01",
       "width": 230,
       "height": 250,
+      "root_anchor": [
+        0.4929,
+        0.996
+      ],
       "root_width": 8,
       "root_ratio": 0.035,
       "ground_ellipse": [
@@ -11667,18 +12831,22 @@
       }
     },
     {
-      "id": "plant_0270__01",
+      "id": "plant_0270__02",
       "name": "plant_0270",
       "display_name": "加拿大紫荊",
-      "variant_id": "01",
-      "path_prefix": "assets/plants/plant_0270/01",
-      "width": 249,
+      "variant_id": "02",
+      "path_prefix": "assets/plants/plant_0270/02",
+      "width": 242,
       "height": 250,
-      "root_width": 10,
-      "root_ratio": 0.04,
+      "root_anchor": [
+        0.4965,
+        0.996
+      ],
+      "root_width": 66,
+      "root_ratio": 0.273,
       "ground_ellipse": [
-        10,
-        6
+        66,
+        36
       ],
       "true_color": true,
       "layer_files": [
@@ -11720,11 +12888,15 @@
       "path_prefix": "assets/plants/plant_0271/01",
       "width": 306,
       "height": 250,
-      "root_width": 32,
-      "root_ratio": 0.105,
+      "root_anchor": [
+        0.3896,
+        0.944
+      ],
+      "root_width": 68,
+      "root_ratio": 0.222,
       "ground_ellipse": [
-        32,
-        18
+        68,
+        37
       ],
       "true_color": true,
       "layer_files": [
@@ -11762,6 +12934,10 @@
       "path_prefix": "assets/plants/plant_0272/01",
       "width": 272,
       "height": 250,
+      "root_anchor": [
+        0.5412,
+        0.996
+      ],
       "root_width": 16,
       "root_ratio": 0.059,
       "ground_ellipse": [
@@ -11804,11 +12980,15 @@
       "path_prefix": "assets/plants/plant_0273/01",
       "width": 256,
       "height": 250,
-      "root_width": 51,
-      "root_ratio": 0.199,
+      "root_anchor": [
+        0.5173,
+        0.996
+      ],
+      "root_width": 42,
+      "root_ratio": 0.164,
       "ground_ellipse": [
-        51,
-        28
+        42,
+        23
       ],
       "true_color": true,
       "layer_files": [
@@ -11843,18 +13023,22 @@
       }
     },
     {
-      "id": "plant_0274__01",
+      "id": "plant_0274__02",
       "name": "plant_0274",
       "display_name": "浪葉花燭",
-      "variant_id": "01",
-      "path_prefix": "assets/plants/plant_0274/01",
-      "width": 233,
+      "variant_id": "02",
+      "path_prefix": "assets/plants/plant_0274/02",
+      "width": 303,
       "height": 250,
-      "root_width": 8,
-      "root_ratio": 0.034,
+      "root_anchor": [
+        0.4994,
+        0.996
+      ],
+      "root_width": 43,
+      "root_ratio": 0.142,
       "ground_ellipse": [
-        8,
-        4
+        43,
+        24
       ],
       "true_color": true,
       "layer_files": [
@@ -11892,10 +13076,14 @@
       "path_prefix": "assets/plants/plant_0275/01",
       "width": 233,
       "height": 250,
-      "root_width": 5,
-      "root_ratio": 0.021,
+      "root_anchor": [
+        0.4975,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.034,
       "ground_ellipse": [
-        5,
+        8,
         4
       ],
       "true_color": true,
@@ -11938,11 +13126,15 @@
       "path_prefix": "assets/plants/plant_0276/01",
       "width": 260,
       "height": 250,
-      "root_width": 103,
-      "root_ratio": 0.396,
+      "root_anchor": [
+        0.4995,
+        0.996
+      ],
+      "root_width": 29,
+      "root_ratio": 0.112,
       "ground_ellipse": [
-        103,
-        57
+        29,
+        16
       ],
       "true_color": true,
       "layer_files": [
@@ -11980,11 +13172,15 @@
       "path_prefix": "assets/plants/plant_0277/01",
       "width": 239,
       "height": 250,
-      "root_width": 62,
-      "root_ratio": 0.259,
+      "root_anchor": [
+        0.4302,
+        0.948
+      ],
+      "root_width": 80,
+      "root_ratio": 0.335,
       "ground_ellipse": [
-        62,
-        34
+        80,
+        44
       ],
       "true_color": true,
       "layer_files": [
@@ -12022,10 +13218,14 @@
       "path_prefix": "assets/plants/plant_0278/01",
       "width": 262,
       "height": 250,
-      "root_width": 6,
-      "root_ratio": 0.023,
+      "root_anchor": [
+        0.5018,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.031,
       "ground_ellipse": [
-        6,
+        8,
         4
       ],
       "true_color": true,
@@ -12068,11 +13268,15 @@
       "path_prefix": "assets/plants/plant_0279/01",
       "width": 246,
       "height": 250,
-      "root_width": 31,
-      "root_ratio": 0.126,
+      "root_anchor": [
+        0.5035,
+        0.996
+      ],
+      "root_width": 30,
+      "root_ratio": 0.122,
       "ground_ellipse": [
-        31,
-        17
+        30,
+        16
       ],
       "true_color": true,
       "layer_files": [
@@ -12114,6 +13318,10 @@
       "path_prefix": "assets/plants/plant_0280/01",
       "width": 201,
       "height": 250,
+      "root_anchor": [
+        0.3611,
+        0.996
+      ],
       "root_width": 34,
       "root_ratio": 0.169,
       "ground_ellipse": [
@@ -12156,10 +13364,14 @@
       "path_prefix": "assets/plants/plant_0281/01",
       "width": 223,
       "height": 250,
-      "root_width": 7,
-      "root_ratio": 0.031,
+      "root_anchor": [
+        0.4757,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.036,
       "ground_ellipse": [
-        7,
+        8,
         4
       ],
       "true_color": true,
@@ -12198,11 +13410,15 @@
       "path_prefix": "assets/plants/plant_0282/01",
       "width": 235,
       "height": 250,
-      "root_width": 21,
-      "root_ratio": 0.089,
+      "root_anchor": [
+        0.5211,
+        0.996
+      ],
+      "root_width": 20,
+      "root_ratio": 0.085,
       "ground_ellipse": [
-        21,
-        12
+        20,
+        11
       ],
       "true_color": true,
       "layer_files": [
@@ -12244,11 +13460,15 @@
       "path_prefix": "assets/plants/plant_0283/01",
       "width": 233,
       "height": 250,
-      "root_width": 25,
-      "root_ratio": 0.107,
+      "root_anchor": [
+        0.5017,
+        0.996
+      ],
+      "root_width": 24,
+      "root_ratio": 0.103,
       "ground_ellipse": [
-        25,
-        14
+        24,
+        13
       ],
       "true_color": true,
       "layer_files": [
@@ -12279,18 +13499,22 @@
       }
     },
     {
-      "id": "plant_0284__01",
+      "id": "plant_0284__02",
       "name": "plant_0284",
       "display_name": "晃玉",
-      "variant_id": "01",
-      "path_prefix": "assets/plants/plant_0284/01",
-      "width": 206,
+      "variant_id": "02",
+      "path_prefix": "assets/plants/plant_0284/02",
+      "width": 241,
       "height": 250,
-      "root_width": 23,
-      "root_ratio": 0.112,
+      "root_anchor": [
+        0.5011,
+        0.996
+      ],
+      "root_width": 87,
+      "root_ratio": 0.361,
       "ground_ellipse": [
-        23,
-        13
+        87,
+        48
       ],
       "true_color": true,
       "layer_files": [
@@ -12328,10 +13552,14 @@
       "path_prefix": "assets/plants/plant_0285/01",
       "width": 204,
       "height": 250,
-      "root_width": 7,
-      "root_ratio": 0.034,
+      "root_anchor": [
+        0.5216,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.039,
       "ground_ellipse": [
-        7,
+        8,
         4
       ],
       "true_color": true,
@@ -12374,11 +13602,15 @@
       "path_prefix": "assets/plants/plant_0286/01",
       "width": 285,
       "height": 250,
-      "root_width": 113,
-      "root_ratio": 0.396,
+      "root_anchor": [
+        0.5248,
+        0.896
+      ],
+      "root_width": 103,
+      "root_ratio": 0.361,
       "ground_ellipse": [
-        113,
-        62
+        103,
+        57
       ],
       "true_color": true,
       "layer_files": [
@@ -12420,6 +13652,10 @@
       "path_prefix": "assets/plants/plant_0287/01",
       "width": 276,
       "height": 250,
+      "root_anchor": [
+        0.559,
+        0.996
+      ],
       "root_width": 29,
       "root_ratio": 0.105,
       "ground_ellipse": [
@@ -12462,11 +13698,15 @@
       "path_prefix": "assets/plants/plant_0288/01",
       "width": 237,
       "height": 250,
-      "root_width": 71,
-      "root_ratio": 0.3,
+      "root_anchor": [
+        0.4954,
+        0.996
+      ],
+      "root_width": 24,
+      "root_ratio": 0.101,
       "ground_ellipse": [
-        71,
-        39
+        24,
+        13
       ],
       "true_color": true,
       "layer_files": [
@@ -12508,11 +13748,15 @@
       "path_prefix": "assets/plants/plant_0289/01",
       "width": 223,
       "height": 250,
-      "root_width": 43,
-      "root_ratio": 0.193,
+      "root_anchor": [
+        0.4505,
+        0.992
+      ],
+      "root_width": 42,
+      "root_ratio": 0.188,
       "ground_ellipse": [
-        43,
-        24
+        42,
+        23
       ],
       "true_color": true,
       "layer_files": [
@@ -12550,6 +13794,10 @@
       "path_prefix": "assets/plants/plant_0290/01",
       "width": 274,
       "height": 250,
+      "root_anchor": [
+        0.5153,
+        0.996
+      ],
       "root_width": 15,
       "root_ratio": 0.055,
       "ground_ellipse": [
@@ -12596,6 +13844,10 @@
       "path_prefix": "assets/plants/plant_0291/01",
       "width": 249,
       "height": 250,
+      "root_anchor": [
+        0.5051,
+        0.996
+      ],
       "root_width": 9,
       "root_ratio": 0.036,
       "ground_ellipse": [
@@ -12635,18 +13887,22 @@
       }
     },
     {
-      "id": "plant_0292__01",
+      "id": "plant_0292__02",
       "name": "plant_0292",
       "display_name": "栗蕨",
-      "variant_id": "01",
-      "path_prefix": "assets/plants/plant_0292/01",
-      "width": 269,
+      "variant_id": "02",
+      "path_prefix": "assets/plants/plant_0292/02",
+      "width": 262,
       "height": 250,
-      "root_width": 6,
-      "root_ratio": 0.022,
+      "root_anchor": [
+        0.4869,
+        0.996
+      ],
+      "root_width": 48,
+      "root_ratio": 0.183,
       "ground_ellipse": [
-        6,
-        4
+        48,
+        26
       ],
       "true_color": true,
       "layer_files": [
@@ -12657,6 +13913,10 @@
         {
           "slot": "red",
           "file": "layer_red.png"
+        },
+        {
+          "slot": "blue",
+          "file": "layer_blue.png"
         }
       ],
       "ai_analysis": {
@@ -12684,11 +13944,15 @@
       "path_prefix": "assets/plants/plant_0293/01",
       "width": 197,
       "height": 250,
-      "root_width": 13,
-      "root_ratio": 0.066,
+      "root_anchor": [
+        0.4866,
+        0.948
+      ],
+      "root_width": 92,
+      "root_ratio": 0.467,
       "ground_ellipse": [
-        13,
-        7
+        92,
+        51
       ],
       "true_color": true,
       "layer_files": [
@@ -12726,11 +13990,15 @@
       "path_prefix": "assets/plants/plant_0295/01",
       "width": 271,
       "height": 250,
-      "root_width": 32,
-      "root_ratio": 0.118,
+      "root_anchor": [
+        0.4925,
+        0.996
+      ],
+      "root_width": 31,
+      "root_ratio": 0.114,
       "ground_ellipse": [
-        32,
-        18
+        31,
+        17
       ],
       "true_color": true,
       "layer_files": [
@@ -12768,11 +14036,15 @@
       "path_prefix": "assets/plants/plant_0296/01",
       "width": 249,
       "height": 250,
-      "root_width": 12,
-      "root_ratio": 0.048,
+      "root_anchor": [
+        0.5658,
+        0.944
+      ],
+      "root_width": 76,
+      "root_ratio": 0.305,
       "ground_ellipse": [
-        12,
-        7
+        76,
+        42
       ],
       "true_color": true,
       "layer_files": [
@@ -12814,10 +14086,14 @@
       "path_prefix": "assets/plants/plant_0297/01",
       "width": 217,
       "height": 250,
-      "root_width": 7,
-      "root_ratio": 0.032,
+      "root_anchor": [
+        0.5098,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.037,
       "ground_ellipse": [
-        7,
+        8,
         4
       ],
       "true_color": true,
@@ -12860,10 +14136,14 @@
       "path_prefix": "assets/plants/plant_0298/01",
       "width": 202,
       "height": 250,
-      "root_width": 7,
-      "root_ratio": 0.035,
+      "root_anchor": [
+        0.5186,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.04,
       "ground_ellipse": [
-        7,
+        8,
         4
       ],
       "true_color": true,
@@ -12902,6 +14182,10 @@
       "path_prefix": "assets/plants/plant_0299/01",
       "width": 266,
       "height": 250,
+      "root_anchor": [
+        0.5186,
+        0.996
+      ],
       "root_width": 9,
       "root_ratio": 0.034,
       "ground_ellipse": [
@@ -12948,6 +14232,10 @@
       "path_prefix": "assets/plants/plant_0300/01",
       "width": 277,
       "height": 250,
+      "root_anchor": [
+        0.5156,
+        0.996
+      ],
       "root_width": 17,
       "root_ratio": 0.061,
       "ground_ellipse": [
@@ -12983,18 +14271,22 @@
       }
     },
     {
-      "id": "plant_0301__01",
+      "id": "plant_0301__02",
       "name": "plant_0301",
       "display_name": "有毒植物",
-      "variant_id": "01",
-      "path_prefix": "assets/plants/plant_0301/01",
-      "width": 179,
+      "variant_id": "02",
+      "path_prefix": "assets/plants/plant_0301/02",
+      "width": 257,
       "height": 250,
-      "root_width": 8,
-      "root_ratio": 0.045,
+      "root_anchor": [
+        0.5051,
+        0.996
+      ],
+      "root_width": 93,
+      "root_ratio": 0.362,
       "ground_ellipse": [
-        8,
-        4
+        93,
+        51
       ],
       "true_color": true,
       "layer_files": [
@@ -13036,11 +14328,15 @@
       "path_prefix": "assets/plants/plant_0302/01",
       "width": 208,
       "height": 250,
-      "root_width": 45,
-      "root_ratio": 0.216,
+      "root_anchor": [
+        0.5017,
+        0.996
+      ],
+      "root_width": 44,
+      "root_ratio": 0.212,
       "ground_ellipse": [
-        45,
-        25
+        44,
+        24
       ],
       "true_color": true,
       "layer_files": [
@@ -13071,18 +14367,22 @@
       }
     },
     {
-      "id": "plant_0303__01",
+      "id": "plant_0303__02",
       "name": "plant_0303",
       "display_name": "馬尾杉屬",
-      "variant_id": "01",
-      "path_prefix": "assets/plants/plant_0303/01",
-      "width": 189,
+      "variant_id": "02",
+      "path_prefix": "assets/plants/plant_0303/02",
+      "width": 198,
       "height": 250,
-      "root_width": 21,
-      "root_ratio": 0.111,
+      "root_anchor": [
+        0.5343,
+        0.996
+      ],
+      "root_width": 65,
+      "root_ratio": 0.328,
       "ground_ellipse": [
-        21,
-        12
+        65,
+        36
       ],
       "true_color": true,
       "layer_files": [
@@ -13093,6 +14393,10 @@
         {
           "slot": "red",
           "file": "layer_red.png"
+        },
+        {
+          "slot": "blue",
+          "file": "layer_blue.png"
         }
       ],
       "ai_analysis": {
@@ -13120,11 +14424,15 @@
       "path_prefix": "assets/plants/plant_0304/01",
       "width": 270,
       "height": 250,
-      "root_width": 76,
-      "root_ratio": 0.281,
+      "root_anchor": [
+        0.3775,
+        0.932
+      ],
+      "root_width": 85,
+      "root_ratio": 0.315,
       "ground_ellipse": [
-        76,
-        42
+        85,
+        47
       ],
       "true_color": true,
       "layer_files": [
@@ -13162,6 +14470,10 @@
       "path_prefix": "assets/plants/plant_0305/01",
       "width": 245,
       "height": 250,
+      "root_anchor": [
+        0.5028,
+        0.996
+      ],
       "root_width": 18,
       "root_ratio": 0.073,
       "ground_ellipse": [
@@ -13204,10 +14516,14 @@
       "path_prefix": "assets/plants/plant_0306/01",
       "width": 217,
       "height": 250,
-      "root_width": 11,
-      "root_ratio": 0.051,
+      "root_anchor": [
+        0.5175,
+        0.996
+      ],
+      "root_width": 10,
+      "root_ratio": 0.046,
       "ground_ellipse": [
-        11,
+        10,
         6
       ],
       "true_color": true,
@@ -13239,18 +14555,22 @@
       }
     },
     {
-      "id": "plant_0307__01",
+      "id": "plant_0307__02",
       "name": "plant_0307",
       "display_name": "月桂葉",
-      "variant_id": "01",
-      "path_prefix": "assets/plants/plant_0307/01",
-      "width": 199,
+      "variant_id": "02",
+      "path_prefix": "assets/plants/plant_0307/02",
+      "width": 194,
       "height": 250,
-      "root_width": 7,
-      "root_ratio": 0.035,
+      "root_anchor": [
+        0.5092,
+        0.996
+      ],
+      "root_width": 44,
+      "root_ratio": 0.227,
       "ground_ellipse": [
-        7,
-        4
+        44,
+        24
       ],
       "true_color": true,
       "layer_files": [
@@ -13261,6 +14581,10 @@
         {
           "slot": "red",
           "file": "layer_red.png"
+        },
+        {
+          "slot": "blue",
+          "file": "layer_blue.png"
         }
       ],
       "ai_analysis": {
@@ -13288,6 +14612,10 @@
       "path_prefix": "assets/plants/plant_0308/01",
       "width": 258,
       "height": 250,
+      "root_anchor": [
+        0.4859,
+        0.996
+      ],
       "root_width": 16,
       "root_ratio": 0.062,
       "ground_ellipse": [
@@ -13323,18 +14651,22 @@
       }
     },
     {
-      "id": "plant_0309__01",
+      "id": "plant_0309__02",
       "name": "plant_0309",
       "display_name": "海马齿",
-      "variant_id": "01",
-      "path_prefix": "assets/plants/plant_0309/01",
-      "width": 269,
+      "variant_id": "02",
+      "path_prefix": "assets/plants/plant_0309/02",
+      "width": 361,
       "height": 250,
-      "root_width": 29,
-      "root_ratio": 0.108,
+      "root_anchor": [
+        0.4611,
+        0.996
+      ],
+      "root_width": 98,
+      "root_ratio": 0.271,
       "ground_ellipse": [
-        29,
-        16
+        98,
+        54
       ],
       "true_color": true,
       "layer_files": [
@@ -13345,10 +14677,6 @@
         {
           "slot": "red",
           "file": "layer_red.png"
-        },
-        {
-          "slot": "blue",
-          "file": "layer_blue.png"
         }
       ],
       "ai_analysis": {
@@ -13376,11 +14704,15 @@
       "path_prefix": "assets/plants/plant_0310/01",
       "width": 208,
       "height": 250,
-      "root_width": 31,
-      "root_ratio": 0.149,
+      "root_anchor": [
+        0.356,
+        0.888
+      ],
+      "root_width": 10,
+      "root_ratio": 0.048,
       "ground_ellipse": [
-        31,
-        17
+        10,
+        6
       ],
       "true_color": true,
       "layer_files": [
@@ -13422,11 +14754,15 @@
       "path_prefix": "assets/plants/plant_0311/01",
       "width": 234,
       "height": 250,
-      "root_width": 12,
-      "root_ratio": 0.051,
+      "root_anchor": [
+        0.5141,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.034,
       "ground_ellipse": [
-        12,
-        7
+        8,
+        4
       ],
       "true_color": true,
       "layer_files": [
@@ -13461,18 +14797,22 @@
       }
     },
     {
-      "id": "plant_0312__01",
+      "id": "plant_0312__02",
       "name": "plant_0312",
       "display_name": "黃蟬",
-      "variant_id": "01",
-      "path_prefix": "assets/plants/plant_0312/01",
-      "width": 201,
+      "variant_id": "02",
+      "path_prefix": "assets/plants/plant_0312/02",
+      "width": 229,
       "height": 250,
-      "root_width": 8,
-      "root_ratio": 0.04,
+      "root_anchor": [
+        0.5051,
+        0.996
+      ],
+      "root_width": 59,
+      "root_ratio": 0.258,
       "ground_ellipse": [
-        8,
-        4
+        59,
+        32
       ],
       "true_color": true,
       "layer_files": [
@@ -13483,6 +14823,10 @@
         {
           "slot": "red",
           "file": "layer_red.png"
+        },
+        {
+          "slot": "blue",
+          "file": "layer_blue.png"
         }
       ],
       "ai_analysis": {
@@ -13510,10 +14854,14 @@
       "path_prefix": "assets/plants/plant_0313/01",
       "width": 244,
       "height": 250,
-      "root_width": 11,
-      "root_ratio": 0.045,
+      "root_anchor": [
+        0.4927,
+        0.996
+      ],
+      "root_width": 10,
+      "root_ratio": 0.041,
       "ground_ellipse": [
-        11,
+        10,
         6
       ],
       "true_color": true,
@@ -13556,6 +14904,10 @@
       "path_prefix": "assets/plants/plant_0314/01",
       "width": 273,
       "height": 250,
+      "root_anchor": [
+        0.5155,
+        0.996
+      ],
       "root_width": 12,
       "root_ratio": 0.044,
       "ground_ellipse": [
@@ -13598,11 +14950,15 @@
       "path_prefix": "assets/plants/plant_0315/01",
       "width": 200,
       "height": 250,
-      "root_width": 53,
-      "root_ratio": 0.265,
+      "root_anchor": [
+        0.5144,
+        0.996
+      ],
+      "root_width": 49,
+      "root_ratio": 0.245,
       "ground_ellipse": [
-        53,
-        29
+        49,
+        27
       ],
       "true_color": true,
       "layer_files": [
@@ -13633,18 +14989,22 @@
       }
     },
     {
-      "id": "plant_0316__01",
+      "id": "plant_0316__02",
       "name": "plant_0316",
       "display_name": "梓叶槭",
-      "variant_id": "01",
-      "path_prefix": "assets/plants/plant_0316/01",
-      "width": 218,
+      "variant_id": "02",
+      "path_prefix": "assets/plants/plant_0316/02",
+      "width": 237,
       "height": 250,
-      "root_width": 8,
-      "root_ratio": 0.037,
+      "root_anchor": [
+        0.4948,
+        0.996
+      ],
+      "root_width": 56,
+      "root_ratio": 0.236,
       "ground_ellipse": [
-        8,
-        4
+        56,
+        31
       ],
       "true_color": true,
       "layer_files": [
@@ -13655,6 +15015,10 @@
         {
           "slot": "red",
           "file": "layer_red.png"
+        },
+        {
+          "slot": "blue",
+          "file": "layer_blue.png"
         }
       ],
       "ai_analysis": {
@@ -13682,6 +15046,10 @@
       "path_prefix": "assets/plants/plant_0317/01",
       "width": 229,
       "height": 250,
+      "root_anchor": [
+        0.3644,
+        0.996
+      ],
       "root_width": 11,
       "root_ratio": 0.048,
       "ground_ellipse": [
@@ -13728,11 +15096,15 @@
       "path_prefix": "assets/plants/plant_0318/01",
       "width": 210,
       "height": 250,
-      "root_width": 49,
-      "root_ratio": 0.233,
+      "root_anchor": [
+        0.5124,
+        0.996
+      ],
+      "root_width": 41,
+      "root_ratio": 0.195,
       "ground_ellipse": [
-        49,
-        27
+        41,
+        23
       ],
       "true_color": true,
       "layer_files": [
@@ -13770,11 +15142,15 @@
       "path_prefix": "assets/plants/plant_0319/01",
       "width": 219,
       "height": 250,
-      "root_width": 98,
-      "root_ratio": 0.447,
+      "root_anchor": [
+        0.4946,
+        0.996
+      ],
+      "root_width": 79,
+      "root_ratio": 0.361,
       "ground_ellipse": [
-        98,
-        54
+        79,
+        43
       ],
       "true_color": true,
       "layer_files": [
@@ -13816,11 +15192,15 @@
       "path_prefix": "assets/plants/plant_0320/01",
       "width": 239,
       "height": 250,
-      "root_width": 19,
-      "root_ratio": 0.079,
+      "root_anchor": [
+        0.613,
+        0.896
+      ],
+      "root_width": 38,
+      "root_ratio": 0.159,
       "ground_ellipse": [
-        19,
-        10
+        38,
+        21
       ],
       "true_color": true,
       "layer_files": [
@@ -13862,11 +15242,15 @@
       "path_prefix": "assets/plants/plant_0321/01",
       "width": 244,
       "height": 250,
-      "root_width": 80,
-      "root_ratio": 0.328,
+      "root_anchor": [
+        0.5047,
+        0.996
+      ],
+      "root_width": 40,
+      "root_ratio": 0.164,
       "ground_ellipse": [
-        80,
-        44
+        40,
+        22
       ],
       "true_color": true,
       "layer_files": [
@@ -13908,10 +15292,14 @@
       "path_prefix": "assets/plants/plant_0322/01",
       "width": 141,
       "height": 250,
-      "root_width": 5,
-      "root_ratio": 0.035,
+      "root_anchor": [
+        0.6563,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.057,
       "ground_ellipse": [
-        5,
+        8,
         4
       ],
       "true_color": true,
@@ -13943,18 +15331,22 @@
       }
     },
     {
-      "id": "plant_0323__01",
+      "id": "plant_0323__02",
       "name": "plant_0323",
       "display_name": "馬纓丹",
-      "variant_id": "01",
-      "path_prefix": "assets/plants/plant_0323/01",
-      "width": 209,
+      "variant_id": "02",
+      "path_prefix": "assets/plants/plant_0323/02",
+      "width": 274,
       "height": 250,
-      "root_width": 12,
-      "root_ratio": 0.057,
+      "root_anchor": [
+        0.4931,
+        0.996
+      ],
+      "root_width": 52,
+      "root_ratio": 0.19,
       "ground_ellipse": [
-        12,
-        7
+        52,
+        29
       ],
       "true_color": true,
       "layer_files": [
@@ -13965,6 +15357,10 @@
         {
           "slot": "red",
           "file": "layer_red.png"
+        },
+        {
+          "slot": "blue",
+          "file": "layer_blue.png"
         }
       ],
       "ai_analysis": {
@@ -13992,11 +15388,15 @@
       "path_prefix": "assets/plants/plant_0324/01",
       "width": 225,
       "height": 250,
-      "root_width": 10,
-      "root_ratio": 0.044,
+      "root_anchor": [
+        0.5104,
+        0.996
+      ],
+      "root_width": 9,
+      "root_ratio": 0.04,
       "ground_ellipse": [
-        10,
-        6
+        9,
+        5
       ],
       "true_color": true,
       "layer_files": [
@@ -14038,11 +15438,15 @@
       "path_prefix": "assets/plants/plant_0325/01",
       "width": 222,
       "height": 250,
-      "root_width": 57,
-      "root_ratio": 0.257,
+      "root_anchor": [
+        0.4732,
+        0.968
+      ],
+      "root_width": 50,
+      "root_ratio": 0.225,
       "ground_ellipse": [
-        57,
-        31
+        50,
+        28
       ],
       "true_color": true,
       "layer_files": [
@@ -14084,11 +15488,15 @@
       "path_prefix": "assets/plants/plant_0326/01",
       "width": 247,
       "height": 250,
-      "root_width": 53,
-      "root_ratio": 0.215,
+      "root_anchor": [
+        0.5079,
+        0.928
+      ],
+      "root_width": 71,
+      "root_ratio": 0.287,
       "ground_ellipse": [
-        53,
-        29
+        71,
+        39
       ],
       "true_color": true,
       "layer_files": [
@@ -14126,11 +15534,15 @@
       "path_prefix": "assets/plants/plant_0327/01",
       "width": 267,
       "height": 250,
-      "root_width": 57,
-      "root_ratio": 0.213,
+      "root_anchor": [
+        0.5423,
+        0.996
+      ],
+      "root_width": 49,
+      "root_ratio": 0.184,
       "ground_ellipse": [
-        57,
-        31
+        49,
+        27
       ],
       "true_color": true,
       "layer_files": [
@@ -14172,11 +15584,15 @@
       "path_prefix": "assets/plants/plant_0328/01",
       "width": 204,
       "height": 250,
-      "root_width": 13,
-      "root_ratio": 0.064,
+      "root_anchor": [
+        0.5057,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.039,
       "ground_ellipse": [
-        13,
-        7
+        8,
+        4
       ],
       "true_color": true,
       "layer_files": [
@@ -14218,11 +15634,15 @@
       "path_prefix": "assets/plants/plant_0329/01",
       "width": 250,
       "height": 250,
-      "root_width": 10,
-      "root_ratio": 0.04,
+      "root_anchor": [
+        0.4326,
+        0.952
+      ],
+      "root_width": 45,
+      "root_ratio": 0.18,
       "ground_ellipse": [
-        10,
-        6
+        45,
+        25
       ],
       "true_color": true,
       "layer_files": [
@@ -14260,10 +15680,14 @@
       "path_prefix": "assets/plants/plant_0330/01",
       "width": 245,
       "height": 250,
-      "root_width": 7,
-      "root_ratio": 0.029,
+      "root_anchor": [
+        0.4809,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.033,
       "ground_ellipse": [
-        7,
+        8,
         4
       ],
       "true_color": true,
@@ -14299,18 +15723,22 @@
       }
     },
     {
-      "id": "plant_0331__01",
+      "id": "plant_0331__02",
       "name": "plant_0331",
       "display_name": "垂序商陆",
-      "variant_id": "01",
-      "path_prefix": "assets/plants/plant_0331/01",
-      "width": 234,
+      "variant_id": "02",
+      "path_prefix": "assets/plants/plant_0331/02",
+      "width": 200,
       "height": 250,
-      "root_width": 35,
-      "root_ratio": 0.15,
+      "root_anchor": [
+        0.4947,
+        0.996
+      ],
+      "root_width": 22,
+      "root_ratio": 0.11,
       "ground_ellipse": [
-        35,
-        19
+        22,
+        12
       ],
       "true_color": true,
       "layer_files": [
@@ -14352,6 +15780,10 @@
       "path_prefix": "assets/plants/plant_0332/01",
       "width": 238,
       "height": 250,
+      "root_anchor": [
+        0.501,
+        0.996
+      ],
       "root_width": 9,
       "root_ratio": 0.038,
       "ground_ellipse": [
@@ -14394,11 +15826,15 @@
       "path_prefix": "assets/plants/plant_0333/01",
       "width": 204,
       "height": 250,
-      "root_width": 10,
-      "root_ratio": 0.049,
+      "root_anchor": [
+        0.4948,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.039,
       "ground_ellipse": [
-        10,
-        6
+        8,
+        4
       ],
       "true_color": true,
       "layer_files": [
@@ -14429,18 +15865,22 @@
       }
     },
     {
-      "id": "plant_0334__01",
+      "id": "plant_0334__02",
       "name": "plant_0334",
       "display_name": "绣球花",
-      "variant_id": "01",
-      "path_prefix": "assets/plants/plant_0334/01",
-      "width": 277,
+      "variant_id": "02",
+      "path_prefix": "assets/plants/plant_0334/02",
+      "width": 255,
       "height": 250,
-      "root_width": 16,
-      "root_ratio": 0.058,
+      "root_anchor": [
+        0.5076,
+        0.996
+      ],
+      "root_width": 20,
+      "root_ratio": 0.078,
       "ground_ellipse": [
-        16,
-        9
+        20,
+        11
       ],
       "true_color": true,
       "layer_files": [
@@ -14482,11 +15922,15 @@
       "path_prefix": "assets/plants/plant_0335/01",
       "width": 250,
       "height": 250,
-      "root_width": 37,
-      "root_ratio": 0.148,
+      "root_anchor": [
+        0.5137,
+        0.84
+      ],
+      "root_width": 10,
+      "root_ratio": 0.04,
       "ground_ellipse": [
-        37,
-        20
+        10,
+        6
       ],
       "true_color": true,
       "layer_files": [
@@ -14524,10 +15968,14 @@
       "path_prefix": "assets/plants/plant_0336/01",
       "width": 194,
       "height": 250,
-      "root_width": 22,
-      "root_ratio": 0.113,
+      "root_anchor": [
+        0.5767,
+        0.996
+      ],
+      "root_width": 21,
+      "root_ratio": 0.108,
       "ground_ellipse": [
-        22,
+        21,
         12
       ],
       "true_color": true,
@@ -14566,10 +16014,14 @@
       "path_prefix": "assets/plants/plant_0337/01",
       "width": 201,
       "height": 250,
-      "root_width": 5,
-      "root_ratio": 0.025,
+      "root_anchor": [
+        0.5218,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.04,
       "ground_ellipse": [
-        5,
+        8,
         4
       ],
       "true_color": true,
@@ -14612,10 +16064,14 @@
       "path_prefix": "assets/plants/plant_0338/01",
       "width": 178,
       "height": 250,
-      "root_width": 7,
-      "root_ratio": 0.039,
+      "root_anchor": [
+        0.5253,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.045,
       "ground_ellipse": [
-        7,
+        8,
         4
       ],
       "true_color": true,
@@ -14658,11 +16114,15 @@
       "path_prefix": "assets/plants/plant_0339/01",
       "width": 249,
       "height": 250,
-      "root_width": 37,
-      "root_ratio": 0.149,
+      "root_anchor": [
+        0.5106,
+        0.944
+      ],
+      "root_width": 8,
+      "root_ratio": 0.032,
       "ground_ellipse": [
-        37,
-        20
+        8,
+        4
       ],
       "true_color": true,
       "layer_files": [
@@ -14700,11 +16160,15 @@
       "path_prefix": "assets/plants/plant_0340/01",
       "width": 235,
       "height": 250,
-      "root_width": 73,
-      "root_ratio": 0.311,
+      "root_anchor": [
+        0.5601,
+        0.996
+      ],
+      "root_width": 48,
+      "root_ratio": 0.204,
       "ground_ellipse": [
-        73,
-        40
+        48,
+        26
       ],
       "true_color": true,
       "layer_files": [
@@ -14746,11 +16210,15 @@
       "path_prefix": "assets/plants/plant_0341/01",
       "width": 277,
       "height": 250,
-      "root_width": 64,
-      "root_ratio": 0.231,
+      "root_anchor": [
+        0.4844,
+        0.968
+      ],
+      "root_width": 54,
+      "root_ratio": 0.195,
       "ground_ellipse": [
-        64,
-        35
+        54,
+        30
       ],
       "true_color": true,
       "layer_files": [
@@ -14781,18 +16249,22 @@
       }
     },
     {
-      "id": "plant_0342__01",
+      "id": "plant_0342__02",
       "name": "plant_0342",
       "display_name": "網紋草",
-      "variant_id": "01",
-      "path_prefix": "assets/plants/plant_0342/01",
-      "width": 307,
+      "variant_id": "02",
+      "path_prefix": "assets/plants/plant_0342/02",
+      "width": 364,
       "height": 250,
-      "root_width": 211,
-      "root_ratio": 0.687,
+      "root_anchor": [
+        0.503,
+        0.996
+      ],
+      "root_width": 131,
+      "root_ratio": 0.36,
       "ground_ellipse": [
-        211,
-        116
+        131,
+        72
       ],
       "true_color": true,
       "layer_files": [
@@ -14803,6 +16275,10 @@
         {
           "slot": "red",
           "file": "layer_red.png"
+        },
+        {
+          "slot": "blue",
+          "file": "layer_blue.png"
         }
       ],
       "ai_analysis": {
@@ -14830,11 +16306,15 @@
       "path_prefix": "assets/plants/plant_0343/01",
       "width": 283,
       "height": 250,
-      "root_width": 25,
-      "root_ratio": 0.088,
+      "root_anchor": [
+        0.1868,
+        0.996
+      ],
+      "root_width": 23,
+      "root_ratio": 0.081,
       "ground_ellipse": [
-        25,
-        14
+        23,
+        13
       ],
       "true_color": true,
       "layer_files": [
@@ -14872,6 +16352,10 @@
       "path_prefix": "assets/plants/plant_0344/01",
       "width": 163,
       "height": 250,
+      "root_anchor": [
+        0.5214,
+        0.996
+      ],
       "root_width": 21,
       "root_ratio": 0.129,
       "ground_ellipse": [
@@ -14918,10 +16402,14 @@
       "path_prefix": "assets/plants/plant_0345/01",
       "width": 241,
       "height": 250,
-      "root_width": 7,
-      "root_ratio": 0.029,
+      "root_anchor": [
+        0.5187,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.033,
       "ground_ellipse": [
-        7,
+        8,
         4
       ],
       "true_color": true,
@@ -14960,10 +16448,14 @@
       "path_prefix": "assets/plants/plant_0346/01",
       "width": 191,
       "height": 250,
-      "root_width": 15,
-      "root_ratio": 0.079,
+      "root_anchor": [
+        0.4972,
+        0.996
+      ],
+      "root_width": 14,
+      "root_ratio": 0.073,
       "ground_ellipse": [
-        15,
+        14,
         8
       ],
       "true_color": true,
@@ -14995,18 +16487,22 @@
       }
     },
     {
-      "id": "plant_0347__01",
+      "id": "plant_0347__02",
       "name": "plant_0347",
       "display_name": "鉤吻",
-      "variant_id": "01",
-      "path_prefix": "assets/plants/plant_0347/01",
-      "width": 215,
+      "variant_id": "02",
+      "path_prefix": "assets/plants/plant_0347/02",
+      "width": 261,
       "height": 250,
-      "root_width": 5,
-      "root_ratio": 0.023,
+      "root_anchor": [
+        0.5037,
+        0.996
+      ],
+      "root_width": 22,
+      "root_ratio": 0.084,
       "ground_ellipse": [
-        5,
-        4
+        22,
+        12
       ],
       "true_color": true,
       "layer_files": [
@@ -15017,6 +16513,10 @@
         {
           "slot": "red",
           "file": "layer_red.png"
+        },
+        {
+          "slot": "blue",
+          "file": "layer_blue.png"
         }
       ],
       "ai_analysis": {
@@ -15044,10 +16544,14 @@
       "path_prefix": "assets/plants/plant_0348/01",
       "width": 247,
       "height": 250,
-      "root_width": 7,
-      "root_ratio": 0.028,
+      "root_anchor": [
+        0.5058,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.032,
       "ground_ellipse": [
-        7,
+        8,
         4
       ],
       "true_color": true,
@@ -15083,18 +16587,22 @@
       }
     },
     {
-      "id": "plant_0349__01",
+      "id": "plant_0349__02",
       "name": "plant_0349",
       "display_name": "大花四照花",
-      "variant_id": "01",
-      "path_prefix": "assets/plants/plant_0349/01",
-      "width": 279,
+      "variant_id": "02",
+      "path_prefix": "assets/plants/plant_0349/02",
+      "width": 255,
       "height": 250,
-      "root_width": 30,
-      "root_ratio": 0.108,
+      "root_anchor": [
+        0.4931,
+        0.996
+      ],
+      "root_width": 23,
+      "root_ratio": 0.09,
       "ground_ellipse": [
-        30,
-        16
+        23,
+        13
       ],
       "true_color": true,
       "layer_files": [
@@ -15105,6 +16613,10 @@
         {
           "slot": "red",
           "file": "layer_red.png"
+        },
+        {
+          "slot": "blue",
+          "file": "layer_blue.png"
         }
       ],
       "ai_analysis": {
@@ -15125,18 +16637,22 @@
       }
     },
     {
-      "id": "plant_0350__01",
+      "id": "plant_0350__02",
       "name": "plant_0350",
       "display_name": "心叶日中花",
-      "variant_id": "01",
-      "path_prefix": "assets/plants/plant_0350/01",
-      "width": 283,
+      "variant_id": "02",
+      "path_prefix": "assets/plants/plant_0350/02",
+      "width": 321,
       "height": 250,
-      "root_width": 58,
-      "root_ratio": 0.205,
+      "root_anchor": [
+        0.5039,
+        0.996
+      ],
+      "root_width": 22,
+      "root_ratio": 0.069,
       "ground_ellipse": [
-        58,
-        32
+        22,
+        12
       ],
       "true_color": true,
       "layer_files": [
@@ -15147,6 +16663,10 @@
         {
           "slot": "red",
           "file": "layer_red.png"
+        },
+        {
+          "slot": "blue",
+          "file": "layer_blue.png"
         }
       ],
       "ai_analysis": {
@@ -15174,11 +16694,15 @@
       "path_prefix": "assets/plants/plant_0351/01",
       "width": 278,
       "height": 250,
-      "root_width": 7,
-      "root_ratio": 0.025,
+      "root_anchor": [
+        0.5178,
+        0.872
+      ],
+      "root_width": 32,
+      "root_ratio": 0.115,
       "ground_ellipse": [
-        7,
-        4
+        32,
+        18
       ],
       "true_color": true,
       "layer_files": [
@@ -15216,10 +16740,14 @@
       "path_prefix": "assets/plants/plant_0352/01",
       "width": 247,
       "height": 250,
-      "root_width": 7,
-      "root_ratio": 0.028,
+      "root_anchor": [
+        0.522,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.032,
       "ground_ellipse": [
-        7,
+        8,
         4
       ],
       "true_color": true,
@@ -15258,11 +16786,15 @@
       "path_prefix": "assets/plants/plant_0353/01",
       "width": 260,
       "height": 250,
-      "root_width": 62,
-      "root_ratio": 0.238,
+      "root_anchor": [
+        0.5351,
+        0.884
+      ],
+      "root_width": 86,
+      "root_ratio": 0.331,
       "ground_ellipse": [
-        62,
-        34
+        86,
+        47
       ],
       "true_color": true,
       "layer_files": [
@@ -15304,11 +16836,15 @@
       "path_prefix": "assets/plants/plant_0354/01",
       "width": 169,
       "height": 250,
-      "root_width": 10,
-      "root_ratio": 0.059,
+      "root_anchor": [
+        0.5095,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.047,
       "ground_ellipse": [
-        10,
-        6
+        8,
+        4
       ],
       "true_color": true,
       "layer_files": [
@@ -15350,11 +16886,15 @@
       "path_prefix": "assets/plants/plant_0355/01",
       "width": 167,
       "height": 250,
-      "root_width": 108,
-      "root_ratio": 0.647,
+      "root_anchor": [
+        0.5458,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.048,
       "ground_ellipse": [
-        108,
-        59
+        8,
+        4
       ],
       "true_color": true,
       "layer_files": [
@@ -15396,10 +16936,14 @@
       "path_prefix": "assets/plants/plant_0356/01",
       "width": 230,
       "height": 250,
-      "root_width": 17,
-      "root_ratio": 0.074,
+      "root_anchor": [
+        0.5497,
+        0.996
+      ],
+      "root_width": 16,
+      "root_ratio": 0.07,
       "ground_ellipse": [
-        17,
+        16,
         9
       ],
       "true_color": true,
@@ -15442,11 +16986,15 @@
       "path_prefix": "assets/plants/plant_0357/01",
       "width": 226,
       "height": 250,
-      "root_width": 22,
-      "root_ratio": 0.097,
+      "root_anchor": [
+        0.5382,
+        0.92
+      ],
+      "root_width": 37,
+      "root_ratio": 0.164,
       "ground_ellipse": [
-        22,
-        12
+        37,
+        20
       ],
       "true_color": true,
       "layer_files": [
@@ -15488,10 +17036,14 @@
       "path_prefix": "assets/plants/plant_0358/01",
       "width": 238,
       "height": 250,
-      "root_width": 7,
-      "root_ratio": 0.029,
+      "root_anchor": [
+        0.5269,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.034,
       "ground_ellipse": [
-        7,
+        8,
         4
       ],
       "true_color": true,
@@ -15534,10 +17086,14 @@
       "path_prefix": "assets/plants/plant_0359/01",
       "width": 215,
       "height": 250,
-      "root_width": 76,
-      "root_ratio": 0.353,
+      "root_anchor": [
+        0.4741,
+        0.944
+      ],
+      "root_width": 77,
+      "root_ratio": 0.358,
       "ground_ellipse": [
-        76,
+        77,
         42
       ],
       "true_color": true,
@@ -15576,10 +17132,14 @@
       "path_prefix": "assets/plants/plant_0360/01",
       "width": 236,
       "height": 250,
-      "root_width": 7,
-      "root_ratio": 0.03,
+      "root_anchor": [
+        0.5083,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.034,
       "ground_ellipse": [
-        7,
+        8,
         4
       ],
       "true_color": true,
@@ -15618,11 +17178,15 @@
       "path_prefix": "assets/plants/plant_0361/01",
       "width": 255,
       "height": 250,
-      "root_width": 90,
-      "root_ratio": 0.353,
+      "root_anchor": [
+        0.3746,
+        0.9
+      ],
+      "root_width": 80,
+      "root_ratio": 0.314,
       "ground_ellipse": [
-        90,
-        50
+        80,
+        44
       ],
       "true_color": true,
       "layer_files": [
@@ -15664,11 +17228,15 @@
       "path_prefix": "assets/plants/plant_0362/01",
       "width": 250,
       "height": 250,
-      "root_width": 37,
-      "root_ratio": 0.148,
+      "root_anchor": [
+        0.5126,
+        0.872
+      ],
+      "root_width": 8,
+      "root_ratio": 0.032,
       "ground_ellipse": [
-        37,
-        20
+        8,
+        4
       ],
       "true_color": true,
       "layer_files": [
@@ -15699,18 +17267,22 @@
       }
     },
     {
-      "id": "plant_0363__01",
+      "id": "plant_0363__02",
       "name": "plant_0363",
       "display_name": "星果鳳梨",
-      "variant_id": "01",
-      "path_prefix": "assets/plants/plant_0363/01",
-      "width": 221,
+      "variant_id": "02",
+      "path_prefix": "assets/plants/plant_0363/02",
+      "width": 195,
       "height": 250,
-      "root_width": 7,
-      "root_ratio": 0.032,
+      "root_anchor": [
+        0.4824,
+        0.96
+      ],
+      "root_width": 40,
+      "root_ratio": 0.205,
       "ground_ellipse": [
-        7,
-        4
+        40,
+        22
       ],
       "true_color": true,
       "layer_files": [
@@ -15721,6 +17293,10 @@
         {
           "slot": "red",
           "file": "layer_red.png"
+        },
+        {
+          "slot": "blue",
+          "file": "layer_blue.png"
         }
       ],
       "ai_analysis": {
@@ -15748,11 +17324,15 @@
       "path_prefix": "assets/plants/plant_0364/01",
       "width": 229,
       "height": 250,
-      "root_width": 74,
-      "root_ratio": 0.323,
+      "root_anchor": [
+        0.4369,
+        0.996
+      ],
+      "root_width": 64,
+      "root_ratio": 0.279,
       "ground_ellipse": [
-        74,
-        41
+        64,
+        35
       ],
       "true_color": true,
       "layer_files": [
@@ -15790,11 +17370,15 @@
       "path_prefix": "assets/plants/plant_0365/01",
       "width": 259,
       "height": 250,
-      "root_width": 22,
-      "root_ratio": 0.085,
+      "root_anchor": [
+        0.3149,
+        0.944
+      ],
+      "root_width": 78,
+      "root_ratio": 0.301,
       "ground_ellipse": [
-        22,
-        12
+        78,
+        43
       ],
       "true_color": true,
       "layer_files": [
@@ -15836,6 +17420,10 @@
       "path_prefix": "assets/plants/plant_0366/01",
       "width": 304,
       "height": 250,
+      "root_anchor": [
+        0.5209,
+        0.996
+      ],
       "root_width": 15,
       "root_ratio": 0.049,
       "ground_ellipse": [
@@ -15878,6 +17466,10 @@
       "path_prefix": "assets/plants/plant_0367/01",
       "width": 266,
       "height": 250,
+      "root_anchor": [
+        0.3236,
+        0.996
+      ],
       "root_width": 18,
       "root_ratio": 0.068,
       "ground_ellipse": [
@@ -15924,11 +17516,15 @@
       "path_prefix": "assets/plants/plant_0368/01",
       "width": 277,
       "height": 250,
-      "root_width": 26,
-      "root_ratio": 0.094,
+      "root_anchor": [
+        0.5093,
+        0.996
+      ],
+      "root_width": 12,
+      "root_ratio": 0.043,
       "ground_ellipse": [
-        26,
-        14
+        12,
+        7
       ],
       "true_color": true,
       "layer_files": [
@@ -15959,18 +17555,22 @@
       }
     },
     {
-      "id": "plant_0369__01",
+      "id": "plant_0369__02",
       "name": "plant_0369",
       "display_name": "车窝草",
-      "variant_id": "01",
-      "path_prefix": "assets/plants/plant_0369/01",
-      "width": 185,
+      "variant_id": "02",
+      "path_prefix": "assets/plants/plant_0369/02",
+      "width": 208,
       "height": 250,
-      "root_width": 25,
-      "root_ratio": 0.135,
+      "root_anchor": [
+        0.5051,
+        0.956
+      ],
+      "root_width": 62,
+      "root_ratio": 0.298,
       "ground_ellipse": [
-        25,
-        14
+        62,
+        34
       ],
       "true_color": true,
       "layer_files": [
@@ -16012,11 +17612,15 @@
       "path_prefix": "assets/plants/plant_0370/01",
       "width": 229,
       "height": 250,
-      "root_width": 35,
-      "root_ratio": 0.153,
+      "root_anchor": [
+        0.4756,
+        0.996
+      ],
+      "root_width": 21,
+      "root_ratio": 0.092,
       "ground_ellipse": [
-        35,
-        19
+        21,
+        12
       ],
       "true_color": true,
       "layer_files": [
@@ -16058,11 +17662,15 @@
       "path_prefix": "assets/plants/plant_0371/01",
       "width": 245,
       "height": 250,
-      "root_width": 43,
-      "root_ratio": 0.176,
+      "root_anchor": [
+        0.4879,
+        0.996
+      ],
+      "root_width": 42,
+      "root_ratio": 0.171,
       "ground_ellipse": [
-        43,
-        24
+        42,
+        23
       ],
       "true_color": true,
       "layer_files": [
@@ -16100,11 +17708,15 @@
       "path_prefix": "assets/plants/plant_0372/01",
       "width": 238,
       "height": 250,
-      "root_width": 20,
-      "root_ratio": 0.084,
+      "root_anchor": [
+        0.4854,
+        0.996
+      ],
+      "root_width": 18,
+      "root_ratio": 0.076,
       "ground_ellipse": [
-        20,
-        11
+        18,
+        10
       ],
       "true_color": true,
       "layer_files": [
@@ -16142,11 +17754,15 @@
       "path_prefix": "assets/plants/plant_0373/01",
       "width": 260,
       "height": 250,
-      "root_width": 11,
-      "root_ratio": 0.042,
+      "root_anchor": [
+        0.5142,
+        0.996
+      ],
+      "root_width": 9,
+      "root_ratio": 0.035,
       "ground_ellipse": [
-        11,
-        6
+        9,
+        5
       ],
       "true_color": true,
       "layer_files": [
@@ -16188,10 +17804,14 @@
       "path_prefix": "assets/plants/plant_0374/01",
       "width": 251,
       "height": 250,
-      "root_width": 7,
-      "root_ratio": 0.028,
+      "root_anchor": [
+        0.5449,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.032,
       "ground_ellipse": [
-        7,
+        8,
         4
       ],
       "true_color": true,
@@ -16223,18 +17843,22 @@
       }
     },
     {
-      "id": "plant_0375__01",
+      "id": "plant_0375__02",
       "name": "plant_0375",
       "display_name": "愛之蔓",
-      "variant_id": "01",
-      "path_prefix": "assets/plants/plant_0375/01",
-      "width": 176,
+      "variant_id": "02",
+      "path_prefix": "assets/plants/plant_0375/02",
+      "width": 277,
       "height": 250,
-      "root_width": 6,
-      "root_ratio": 0.034,
+      "root_anchor": [
+        0.4977,
+        0.996
+      ],
+      "root_width": 54,
+      "root_ratio": 0.195,
       "ground_ellipse": [
-        6,
-        4
+        54,
+        30
       ],
       "true_color": true,
       "layer_files": [
@@ -16245,6 +17869,10 @@
         {
           "slot": "red",
           "file": "layer_red.png"
+        },
+        {
+          "slot": "blue",
+          "file": "layer_blue.png"
         }
       ],
       "ai_analysis": {
@@ -16272,6 +17900,10 @@
       "path_prefix": "assets/plants/plant_0376/01",
       "width": 215,
       "height": 250,
+      "root_anchor": [
+        0.4439,
+        0.996
+      ],
       "root_width": 40,
       "root_ratio": 0.186,
       "ground_ellipse": [
@@ -16314,6 +17946,10 @@
       "path_prefix": "assets/plants/plant_0377/01",
       "width": 304,
       "height": 250,
+      "root_anchor": [
+        0.5083,
+        0.996
+      ],
       "root_width": 62,
       "root_ratio": 0.204,
       "ground_ellipse": [
@@ -16356,6 +17992,10 @@
       "path_prefix": "assets/plants/plant_0378/01",
       "width": 209,
       "height": 250,
+      "root_anchor": [
+        0.5301,
+        0.996
+      ],
       "root_width": 12,
       "root_ratio": 0.057,
       "ground_ellipse": [
@@ -16398,11 +18038,15 @@
       "path_prefix": "assets/plants/plant_0379/01",
       "width": 270,
       "height": 250,
-      "root_width": 9,
-      "root_ratio": 0.033,
+      "root_anchor": [
+        0.513,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.03,
       "ground_ellipse": [
-        9,
-        5
+        8,
+        4
       ],
       "true_color": true,
       "layer_files": [
@@ -16440,10 +18084,14 @@
       "path_prefix": "assets/plants/plant_0380/01",
       "width": 241,
       "height": 250,
-      "root_width": 13,
-      "root_ratio": 0.054,
+      "root_anchor": [
+        0.5207,
+        0.996
+      ],
+      "root_width": 12,
+      "root_ratio": 0.05,
       "ground_ellipse": [
-        13,
+        12,
         7
       ],
       "true_color": true,
@@ -16482,6 +18130,10 @@
       "path_prefix": "assets/plants/plant_0381/01",
       "width": 172,
       "height": 250,
+      "root_anchor": [
+        0.5028,
+        0.996
+      ],
       "root_width": 8,
       "root_ratio": 0.047,
       "ground_ellipse": [
@@ -16528,6 +18180,10 @@
       "path_prefix": "assets/plants/plant_0382/01",
       "width": 114,
       "height": 250,
+      "root_anchor": [
+        0.4816,
+        0.996
+      ],
       "root_width": 23,
       "root_ratio": 0.202,
       "ground_ellipse": [
@@ -16570,11 +18226,15 @@
       "path_prefix": "assets/plants/plant_0383/01",
       "width": 249,
       "height": 250,
-      "root_width": 21,
-      "root_ratio": 0.084,
+      "root_anchor": [
+        0.4845,
+        0.956
+      ],
+      "root_width": 44,
+      "root_ratio": 0.177,
       "ground_ellipse": [
-        21,
-        12
+        44,
+        24
       ],
       "true_color": true,
       "layer_files": [
@@ -16616,10 +18276,14 @@
       "path_prefix": "assets/plants/plant_0384/01",
       "width": 136,
       "height": 250,
-      "root_width": 5,
-      "root_ratio": 0.037,
+      "root_anchor": [
+        0.507,
+        0.996
+      ],
+      "root_width": 8,
+      "root_ratio": 0.059,
       "ground_ellipse": [
-        5,
+        8,
         4
       ],
       "true_color": true,
@@ -16662,11 +18326,15 @@
       "path_prefix": "assets/plants/plant_0385/01",
       "width": 268,
       "height": 250,
-      "root_width": 10,
-      "root_ratio": 0.037,
+      "root_anchor": [
+        0.5287,
+        0.996
+      ],
+      "root_width": 9,
+      "root_ratio": 0.034,
       "ground_ellipse": [
-        10,
-        6
+        9,
+        5
       ],
       "true_color": true,
       "layer_files": [

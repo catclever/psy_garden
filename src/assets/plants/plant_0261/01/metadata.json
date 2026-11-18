@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 266,
     "height": 250,
-    "root_width": 51,
-    "root_ratio": 0.192,
+    "root_width": 44,
+    "root_ratio": 0.165,
     "ground_ellipse": [
-        51,
-        28
+        44,
+        24
     ],
     "layers": [
         "layer-red",
@@ -34,5 +34,11 @@
         ],
         "brief": "落叶灌木或小乔木，单叶对生，春季盛开由紫、白或粉小花组成的密集圆锥花序，芳香浓烈。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.4747,
+        0.996
+    ],
+    "root_x": 126.28,
+    "root_y": 249
 }

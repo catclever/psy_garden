@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 239,
     "height": 250,
-    "root_width": 62,
-    "root_ratio": 0.259,
+    "root_width": 80,
+    "root_ratio": 0.335,
     "ground_ellipse": [
-        62,
-        34
+        80,
+        44
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "常绿针叶乔木，深绿针叶微弯并呈不规则二列排列，秋季结出杯状鲜红假种皮果实。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.4302,
+        0.948
+    ],
+    "root_x": 102.82,
+    "root_y": 237
 }

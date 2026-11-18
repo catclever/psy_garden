@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 248,
     "height": 250,
-    "root_width": 15,
-    "root_ratio": 0.06,
+    "root_width": 13,
+    "root_ratio": 0.052,
     "ground_ellipse": [
-        15,
-        8
+        13,
+        7
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "一年生草本植物，茎直立细弱，顶生黄色小巧的头状花序。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.522,
+        0.996
+    ],
+    "root_x": 129.45,
+    "root_y": 249
 }

@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 197,
     "height": 250,
-    "root_width": 12,
-    "root_ratio": 0.061,
+    "root_width": 11,
+    "root_ratio": 0.056,
     "ground_ellipse": [
-        12,
-        7
+        11,
+        6
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "繖形科多年生芳香草本，羽狀裂葉細如絲狀，頂生黃色複繖形花序。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5021,
+        0.996
+    ],
+    "root_x": 98.91,
+    "root_y": 249
 }

@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 194,
     "height": 250,
-    "root_width": 22,
-    "root_ratio": 0.113,
+    "root_width": 20,
+    "root_ratio": 0.103,
     "ground_ellipse": [
-        22,
-        12
+        20,
+        11
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "血皮草科草本，管狀花被外披濃密紅綠天鵝絨狀毛，形似袋鼠前爪。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5038,
+        0.996
+    ],
+    "root_x": 97.74,
+    "root_y": 249
 }

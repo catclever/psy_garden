@@ -4,10 +4,10 @@
     "variant_id": "01",
     "width": 253,
     "height": 250,
-    "root_width": 6,
-    "root_ratio": 0.024,
+    "root_width": 8,
+    "root_ratio": 0.032,
     "ground_ellipse": [
-        6,
+        8,
         4
     ],
     "layers": [
@@ -33,5 +33,11 @@
         ],
         "brief": "常绿小灌木，掌状深裂叶具细长线形小叶裂片，形态宛如展开的纤细鸟爪。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5169,
+        0.996
+    ],
+    "root_x": 130.76,
+    "root_y": 249
 }

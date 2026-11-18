@@ -11,11 +11,11 @@
     "source_image": "candidate_plant_0152_硬斗柯.jpg",
     "true_color": true,
     "created_at": 1792466858,
-    "root_width": 70,
-    "root_ratio": 0.345,
+    "root_width": 57,
+    "root_ratio": 0.281,
     "ground_ellipse": [
-        70,
-        38
+        57,
+        31
     ],
     "status": "ready",
     "ai_analysis": {
@@ -33,5 +33,11 @@
         ],
         "brief": "硬斗柯为常绿乔木，树皮纵裂，叶革质全缘，雄花序穗状，壳斗杯状且苞片紧密排列，坚果坚硬。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.531,
+        0.996
+    ],
+    "root_x": 107.8,
+    "root_y": 249
 }

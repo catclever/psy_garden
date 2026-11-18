@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 280,
     "height": 250,
-    "root_width": 31,
-    "root_ratio": 0.111,
+    "root_width": 60,
+    "root_ratio": 0.214,
     "ground_ellipse": [
-        31,
-        17
+        60,
+        33
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "多浆肉质常绿灌木，茎干粗壮肉质多分枝，叶片卵圆形翠绿有光泽，顶生淡粉色或白色星状花簇。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.6347,
+        0.86
+    ],
+    "root_x": 177.72,
+    "root_y": 215
 }

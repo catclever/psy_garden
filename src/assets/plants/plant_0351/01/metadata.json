@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 278,
     "height": 250,
-    "root_width": 7,
-    "root_ratio": 0.025,
+    "root_width": 32,
+    "root_ratio": 0.115,
     "ground_ellipse": [
-        7,
-        4
+        32,
+        18
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "多年生常绿蕨类，一回羽状复叶细长披垂，株形丰满柔韧。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5178,
+        0.872
+    ],
+    "root_x": 143.94,
+    "root_y": 218
 }

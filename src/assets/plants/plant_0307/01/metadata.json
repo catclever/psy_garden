@@ -33,5 +33,6 @@
         ],
         "brief": "常绿乔木或大灌木，革质叶椭圆形富含芳香油，边缘微波状。",
         "status": "success"
-    }
+    },
+    "enabled": false
 }

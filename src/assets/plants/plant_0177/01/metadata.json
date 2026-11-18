@@ -34,5 +34,6 @@
         ],
         "brief": "直立粗壮的一年生草本，开大型漏斗状白花，结具刺的卵球形蒴果。",
         "status": "success"
-    }
+    },
+    "enabled": false
 }

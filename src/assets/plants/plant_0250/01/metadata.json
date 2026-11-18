@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 263,
     "height": 250,
-    "root_width": 81,
-    "root_ratio": 0.308,
+    "root_width": 56,
+    "root_ratio": 0.213,
     "ground_ellipse": [
-        81,
-        45
+        56,
+        31
     ],
     "layers": [
         "layer-red",
@@ -34,5 +34,11 @@
         ],
         "brief": "芳香多年生草本，具发达匍匐茎，圆卵形皱叶带苹果或柠檬清香，顶生密穗状白花。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5597,
+        0.996
+    ],
+    "root_x": 147.2,
+    "root_y": 249
 }

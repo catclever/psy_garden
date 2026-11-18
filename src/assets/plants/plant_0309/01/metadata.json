@@ -34,5 +34,6 @@
         ],
         "brief": "多年生肉质海滩匍匐草本，叶线形肉质，开粉红色小花。",
         "status": "success"
-    }
+    },
+    "enabled": false
 }

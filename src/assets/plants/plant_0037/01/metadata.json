@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 217,
     "height": 250,
-    "root_width": 120,
-    "root_ratio": 0.553,
+    "root_width": 8,
+    "root_ratio": 0.037,
     "ground_ellipse": [
-        120,
-        66
+        8,
+        4
     ],
     "layers": [
         "layer-red",
@@ -34,5 +34,11 @@
         ],
         "brief": "豆科缠绕藤本草质植物，具三出羽状复叶、总状花序及扁平镰刀状荚果。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.4881,
+        0.996
+    ],
+    "root_x": 105.91,
+    "root_y": 249
 }

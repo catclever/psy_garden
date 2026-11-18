@@ -4,10 +4,10 @@
     "variant_id": "01",
     "width": 238,
     "height": 250,
-    "root_width": 7,
-    "root_ratio": 0.029,
+    "root_width": 8,
+    "root_ratio": 0.034,
     "ground_ellipse": [
-        7,
+        8,
         4
     ],
     "layers": [
@@ -34,5 +34,11 @@
         ],
         "brief": "一年生芳香草本，茎呈四棱形，卵形绿色叶片散发独特辛香气息。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5269,
+        0.996
+    ],
+    "root_x": 125.41,
+    "root_y": 249
 }

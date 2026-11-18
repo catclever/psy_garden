@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 227,
     "height": 250,
-    "root_width": 18,
-    "root_ratio": 0.079,
+    "root_width": 15,
+    "root_ratio": 0.066,
     "ground_ellipse": [
-        18,
-        10
+        15,
+        8
     ],
     "layers": [
         "layer-red",
@@ -34,5 +34,11 @@
         ],
         "brief": "毛茛科多年生草本，具有精緻的扇形小葉與花距奇異優雅的懸垂狀花朵。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5376,
+        0.996
+    ],
+    "root_x": 122.04,
+    "root_y": 249
 }

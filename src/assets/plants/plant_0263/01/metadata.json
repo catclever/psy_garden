@@ -4,10 +4,10 @@
     "variant_id": "01",
     "width": 162,
     "height": 250,
-    "root_width": 5,
-    "root_ratio": 0.031,
+    "root_width": 8,
+    "root_ratio": 0.049,
     "ground_ellipse": [
-        5,
+        8,
         4
     ],
     "layers": [
@@ -33,5 +33,11 @@
         ],
         "brief": "多年生林下草本，二至三回三出羽状复叶，密生白色总状花序，果实为亮红或黑色毒浆果。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5188,
+        0.996
+    ],
+    "root_x": 84.05,
+    "root_y": 249
 }

@@ -1,0 +1,45 @@
+{
+    "name": "plant_0230",
+    "display_name": "吊兰",
+    "variant_id": "02",
+    "width": 278,
+    "height": 250,
+    "root_anchor": [
+        0.4994,
+        0.996
+    ],
+    "root_x": 138.83,
+    "root_y": 249,
+    "root_width": 23,
+    "root_ratio": 0.083,
+    "ground_ellipse": [
+        23,
+        13
+    ],
+    "layers": [
+        "layer-red",
+        "layer-green",
+        "layer-blue"
+    ],
+    "source_image": "plant_0230.jpg",
+    "true_color": true,
+    "created_at": 1794979347,
+    "status": "ready",
+    "ai_analysis": {
+        "zh_name": "吊兰",
+        "scientific_name": "Chlorophytum comosum",
+        "botanical_height_m": [
+            0.2,
+            0.45
+        ],
+        "plant_type": "groundcover",
+        "growth_habit": "slender",
+        "suggested_game_height_px": [
+            40,
+            75
+        ],
+        "brief": "多年生常绿草本植物，叶基生成丛且狭长柔韧，抽生下垂的长匍匐茎并在节上形成带气生根的微型幼株。",
+        "status": "success"
+    },
+    "enabled": true
+}

@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 250,
     "height": 250,
-    "root_width": 37,
-    "root_ratio": 0.148,
+    "root_width": 29,
+    "root_ratio": 0.116,
     "ground_ellipse": [
-        37,
-        20
+        29,
+        16
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "多肉肉質灌木，基部莖幹肥大膨凸如壺狀，枝頂綻放鮮紅漏斗花。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5245,
+        0.888
+    ],
+    "root_x": 131.14,
+    "root_y": 222
 }

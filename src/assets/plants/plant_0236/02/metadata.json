@@ -1,0 +1,45 @@
+{
+    "name": "plant_0236",
+    "display_name": "全缘钓宫灯",
+    "variant_id": "02",
+    "width": 207,
+    "height": 250,
+    "root_anchor": [
+        0.541,
+        0.996
+    ],
+    "root_x": 111.99,
+    "root_y": 249,
+    "root_width": 19,
+    "root_ratio": 0.092,
+    "ground_ellipse": [
+        19,
+        10
+    ],
+    "layers": [
+        "layer-red",
+        "layer-green",
+        "layer-blue"
+    ],
+    "source_image": "plant_0236.jpg",
+    "true_color": true,
+    "created_at": 1794979347,
+    "status": "ready",
+    "ai_analysis": {
+        "zh_name": "全缘钓宫灯",
+        "scientific_name": "Fuchsia integrifolia",
+        "botanical_height_m": [
+            1.0,
+            2.5
+        ],
+        "plant_type": "shrub",
+        "growth_habit": "bush",
+        "suggested_game_height_px": [
+            85,
+            135
+        ],
+        "brief": "枝条纤长舒展，具全缘卵形叶与下垂如吊钟宫灯般的鲜艳筒状花朵。",
+        "status": "success"
+    },
+    "enabled": true
+}

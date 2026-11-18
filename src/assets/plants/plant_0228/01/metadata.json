@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 219,
     "height": 250,
-    "root_width": 26,
-    "root_ratio": 0.119,
+    "root_width": 52,
+    "root_ratio": 0.237,
     "ground_ellipse": [
-        26,
-        14
+        52,
+        29
     ],
     "layers": [
         "layer-red",
@@ -34,5 +34,11 @@
         ],
         "brief": "唇形科薄荷属多年生草本，茎直立具四棱，具芳香气味，叶卵状披针形，轮伞花序在茎顶聚集成穗状。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5095,
+        0.904
+    ],
+    "root_x": 111.59,
+    "root_y": 226
 }

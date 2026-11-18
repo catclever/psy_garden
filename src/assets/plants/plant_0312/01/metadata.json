@@ -33,5 +33,6 @@
         ],
         "brief": "直立或半攀援常绿灌木，叶轮生，开大型漏斗状鲜黄色花朵。",
         "status": "success"
-    }
+    },
+    "enabled": false
 }

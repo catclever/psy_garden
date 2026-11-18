@@ -4,10 +4,10 @@
     "variant_id": "01",
     "width": 209,
     "height": 250,
-    "root_width": 6,
-    "root_ratio": 0.029,
+    "root_width": 8,
+    "root_ratio": 0.038,
     "ground_ellipse": [
-        6,
+        8,
         4
     ],
     "layers": [
@@ -34,5 +34,11 @@
         ],
         "brief": "唇形科芳香多年生宿根草本，具四棱形直立茎和走茎，轮伞花序在枝顶紧密聚生。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5339,
+        0.996
+    ],
+    "root_x": 111.58,
+    "root_y": 249
 }

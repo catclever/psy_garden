@@ -11,11 +11,11 @@
     "source_image": "candidate_plant_0009_酒瓶兰.jpg",
     "true_color": true,
     "created_at": 1792466861,
-    "root_width": 52,
-    "root_ratio": 0.214,
+    "root_width": 36,
+    "root_ratio": 0.148,
     "ground_ellipse": [
-        52,
-        29
+        36,
+        20
     ],
     "status": "ready",
     "ai_analysis": {
@@ -33,5 +33,11 @@
         ],
         "brief": "酒瓶兰茎干基部膨大如酒瓶，细长弯曲的叶片簇生于顶端，形似喷泉。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.4671,
+        0.996
+    ],
+    "root_x": 113.51,
+    "root_y": 249
 }

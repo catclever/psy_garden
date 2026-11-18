@@ -4,10 +4,10 @@
     "variant_id": "01",
     "width": 177,
     "height": 250,
-    "root_width": 5,
-    "root_ratio": 0.028,
+    "root_width": 8,
+    "root_ratio": 0.045,
     "ground_ellipse": [
-        5,
+        8,
         4
     ],
     "layers": [
@@ -33,5 +33,11 @@
         ],
         "brief": "多年生直立草本，具乳汁，伞形花序橙红与金黄色相间，是斑蝶的重要寄主植物。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5113,
+        0.996
+    ],
+    "root_x": 90.5,
+    "root_y": 249
 }

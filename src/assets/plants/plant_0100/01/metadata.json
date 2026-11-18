@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 243,
     "height": 250,
-    "root_width": 60,
-    "root_ratio": 0.247,
+    "root_width": 53,
+    "root_ratio": 0.218,
     "ground_ellipse": [
-        60,
-        33
+        53,
+        29
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "仙人掌科原始攀援灌木，茎具刺但具肉质真叶，开芳香的白绿或浅黄色花朵。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.536,
+        0.98
+    ],
+    "root_x": 130.24,
+    "root_y": 245
 }

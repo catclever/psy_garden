@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 258,
     "height": 250,
-    "root_width": 56,
-    "root_ratio": 0.217,
+    "root_width": 43,
+    "root_ratio": 0.167,
     "ground_ellipse": [
-        56,
-        31
+        43,
+        24
     ],
     "layers": [
         "layer-red",
@@ -34,5 +34,11 @@
         ],
         "brief": "仙人掌科扁球形無刺多肉植物，表皮藍綠柔軟，具放射狀波浪稜與頂生粉花。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5096,
+        0.996
+    ],
+    "root_x": 131.48,
+    "root_y": 249
 }

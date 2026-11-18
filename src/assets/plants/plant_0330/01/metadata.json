@@ -4,10 +4,10 @@
     "variant_id": "01",
     "width": 245,
     "height": 250,
-    "root_width": 7,
-    "root_ratio": 0.029,
+    "root_width": 8,
+    "root_ratio": 0.033,
     "ground_ellipse": [
-        7,
+        8,
         4
     ],
     "layers": [
@@ -34,5 +34,11 @@
         ],
         "brief": "原产澳洲的常绿灌木，揉碎小叶具强薄荷芳香，春季密开紫蓝唇形花。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.4809,
+        0.996
+    ],
+    "root_x": 117.81,
+    "root_y": 249
 }

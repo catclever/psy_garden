@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 251,
     "height": 250,
-    "root_width": 40,
-    "root_ratio": 0.159,
+    "root_width": 33,
+    "root_ratio": 0.131,
     "ground_ellipse": [
-        40,
-        22
+        33,
+        18
     ],
     "layers": [
         "layer-red",
@@ -34,5 +34,11 @@
         ],
         "brief": "景天科小型肉质植物，匙形长叶聚成紧凑莲座丛，群生蔓延如微型地被。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5729,
+        0.996
+    ],
+    "root_x": 143.79,
+    "root_y": 249
 }

@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 250,
     "height": 250,
-    "root_width": 37,
-    "root_ratio": 0.148,
+    "root_width": 8,
+    "root_ratio": 0.032,
     "ground_ellipse": [
-        37,
-        20
+        8,
+        4
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "肉质常绿灌木，肉质茎呈之字形曲折生长，红色苞片形似鞋状小雀。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5126,
+        0.872
+    ],
+    "root_x": 128.14,
+    "root_y": 218
 }

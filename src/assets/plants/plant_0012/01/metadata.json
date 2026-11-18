@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 291,
     "height": 250,
-    "root_width": 147,
-    "root_ratio": 0.505,
+    "root_width": 43,
+    "root_ratio": 0.148,
     "ground_ellipse": [
-        147,
-        81
+        43,
+        24
     ],
     "layers": [
         "layer-red",
@@ -33,5 +33,11 @@
         ],
         "brief": "景天科小型肉質草本，葉腋常著生肉質珠芽，呈匍匐狀覆地生長。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.2923,
+        0.976
+    ],
+    "root_x": 85.07,
+    "root_y": 244
 }

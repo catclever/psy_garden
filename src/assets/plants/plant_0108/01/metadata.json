@@ -4,11 +4,11 @@
     "variant_id": "01",
     "width": 289,
     "height": 250,
-    "root_width": 29,
-    "root_ratio": 0.1,
+    "root_width": 34,
+    "root_ratio": 0.118,
     "ground_ellipse": [
-        29,
-        16
+        34,
+        19
     ],
     "layers": [
         "layer-red",
@@ -34,5 +34,11 @@
         ],
         "brief": "番杏科一年生低矮肉质草本，叶被晶莹闪光水泡细胞，雏菊状花色泽鲜艳似虹彩。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5914,
+        0.98
+    ],
+    "root_x": 170.91,
+    "root_y": 245
 }

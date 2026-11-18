@@ -4,10 +4,10 @@
     "variant_id": "01",
     "width": 202,
     "height": 250,
-    "root_width": 7,
-    "root_ratio": 0.035,
+    "root_width": 8,
+    "root_ratio": 0.04,
     "ground_ellipse": [
-        7,
+        8,
         4
     ],
     "layers": [
@@ -33,5 +33,11 @@
         ],
         "brief": "灌木或攀援状灌木，花瓣先端延长呈线状，蓇葖果叉生似羊角。",
         "status": "success"
-    }
+    },
+    "root_anchor": [
+        0.5186,
+        0.996
+    ],
+    "root_x": 104.76,
+    "root_y": 249
 }
