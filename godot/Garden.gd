@@ -28,10 +28,17 @@ var _http_busy: Dictionary = {}
 var _http_queue: Array = []
 var _in_flight_callbacks: Dictionary = {}
 
+const DEPTH_Y_MIN: float = 140.0
+const DEPTH_Y_MAX: float = 840.0
+const DEPTH_Y_REF: float = 490.0
+const DEPTH_HALF_SPAN: float = 350.0
+const BASE_PERSPECTIVE_SLOPE: float = 0.25
+
 var sun_angle_deg: float = 45.0
 var sun_length: float = 1.0
 var lantern_intensity: float = 1.0
 var lantern_radius: float = 520.0
+var perspective_strength: float = 1.0
 
 var color_red: Color = Color.WHITE
 var color_green: Color = Color.WHITE
@@ -39,6 +46,8 @@ var color_blue: Color = Color.WHITE
 
 var fleet_status_label: Label = null
 var btn_toggle_footprints: Button = null
+var perspective_label: Label = null
+var perspective_slider: HSlider = null
 
 func _ready():
 	mouse_lantern.global_position = Vector2(680, 420)
@@ -46,6 +55,16 @@ func _ready():
 	_init_http_pool()
 	generate_demo_layout()
 	call_deferred("_load_manifest")
+
+func get_depth_scale(y_pos: float, strength: float = -1.0) -> float:
+	var eff_strength: float = perspective_strength if strength < 0.0 else clampf(strength, 0.0, 1.5)
+	var norm_y: float = clampf((y_pos - DEPTH_Y_REF) / DEPTH_HALF_SPAN, -1.35, 1.35)
+	return clampf(1.0 + norm_y * BASE_PERSPECTIVE_SLOPE * eff_strength, 0.45, 1.85)
+
+func _refresh_all_plants_perspective():
+	for p in active_plants:
+		if is_instance_valid(p) and p.has_method("set_perspective_scale"):
+			p.set_perspective_scale(get_depth_scale(p.global_position.y))
 
 func _process(delta):
 	var raw_mouse = get_global_mouse_position()
@@ -161,6 +180,7 @@ func add_plant(id: String, pos: Vector2):
 	p.plant_id = id
 	p.show_footprint_ring = footprints_visible
 	p.global_position = pos
+	p.perspective_scale = get_depth_scale(pos.y)
 	y_sort.add_child(p)
 	active_plants.append(p)
 	placed_footprints.append({"pos": pos, "fp_w": p.fp_w, "fp_h": p.fp_h})
@@ -180,7 +200,7 @@ func update_plant_colors(p=null):
 
 func can_place_plant(pos: Vector2, fp_w: float, fp_h: float) -> bool:
 	# Avoid HUD top-left panel
-	if pos.x < 290.0 and pos.y < 600.0:
+	if pos.x < 290.0 and pos.y < 640.0:
 		return false
 	# Avoid IncenseBurner within 65px of (720, 450)
 	var incense_pos: Vector2 = incense_burner.global_position if is_instance_valid(incense_burner) else Vector2(720.0, 450.0)
@@ -191,8 +211,8 @@ func can_place_plant(pos: Vector2, fp_w: float, fp_h: float) -> bool:
 		var other_pos: Vector2 = other["pos"]
 		var dx: float = pos.x - other_pos.x
 		var dy: float = pos.y - other_pos.y
-		var a: float = (fp_w + float(other["fp_w"])) * 0.5 + 12.0
-		var b: float = (fp_h + float(other["fp_h"])) * 0.5 + 8.0
+		var a: float = (fp_w * 1.15 + float(other["fp_w"]) * 1.15) * 0.5 + 14.0
+		var b: float = (fp_h * 1.15 + float(other["fp_h"]) * 1.15) * 0.5 + 9.0
 		if ((dx / a) * (dx / a) + (dy / b) * (dy / b)) < 1.0:
 			return false
 	return true
@@ -228,7 +248,10 @@ func generate_random_garden(count: int = 36):
 			var id = available_plants[randi() % available_plants.size()]
 			for _attempt in range(30):
 				var pos = Vector2(randf_range(130.0, 1330.0), randf_range(140.0, 840.0))
-				if can_place_plant(pos, 24.0, 14.0):
+				var depth_s: float = get_depth_scale(pos.y)
+				var eff_fp_w: float = max(10.0, 24.0 * depth_s)
+				var eff_fp_h: float = max(6.0, 14.0 * depth_s)
+				if can_place_plant(pos, eff_fp_w, eff_fp_h):
 					add_plant(id, pos)
 					break
 		return
@@ -265,12 +288,15 @@ func generate_random_garden(count: int = 36):
 
 		for _attempt in range(40):
 			var pos = Vector2(randf_range(130.0, 1330.0), randf_range(140.0, 840.0))
-			if can_place_plant(pos, fp_w, fp_h):
-				spawn_manifest_plant(rec, pos, target_h, root_w, fp_w, fp_h)
-				placed_footprints.append({"pos": pos, "fp_w": fp_w, "fp_h": fp_h})
+			var depth_s: float = get_depth_scale(pos.y)
+			var eff_fp_w: float = max(10.0, fp_w * depth_s)
+			var eff_fp_h: float = max(6.0, eff_fp_w * 0.55)
+			if can_place_plant(pos, eff_fp_w, eff_fp_h):
+				spawn_manifest_plant(rec, pos, target_h, root_w, eff_fp_w, eff_fp_h, depth_s)
+				placed_footprints.append({"pos": pos, "fp_w": eff_fp_w, "fp_h": eff_fp_h})
 				break
 
-func spawn_manifest_plant(rec: Dictionary, pos: Vector2, target_h: float, root_w: float, fp_w: float, fp_h: float):
+func spawn_manifest_plant(rec: Dictionary, pos: Vector2, target_h: float, root_w: float, fp_w: float, fp_h: float, depth_scale: float = 1.0):
 	var p = plant_scene.instantiate()
 	var rec_id: String = str(rec.get("name", rec.get("id", "unknown")))
 	p.plant_id = rec_id
@@ -281,6 +307,7 @@ func spawn_manifest_plant(rec: Dictionary, pos: Vector2, target_h: float, root_w
 	p.fp_h = fp_h
 	p.show_footprint_ring = footprints_visible
 	p.global_position = pos
+	p.perspective_scale = depth_scale
 	p.set_meta("gen_id", generation_id)
 	y_sort.add_child(p)
 	active_plants.append(p)
@@ -297,7 +324,7 @@ func spawn_manifest_plant(rec: Dictionary, pos: Vector2, target_h: float, root_w
 					slot_files[slot] = file_name
 
 	if slot_files.is_empty():
-		return
+		return p
 
 	var anchor_uv: Vector2 = Vector2(-1.0, -1.0)
 	var raw_anchor = rec.get("root_anchor", null)
@@ -329,6 +356,8 @@ func spawn_manifest_plant(rec: Dictionary, pos: Vector2, target_h: float, root_w
 						p.show_footprint_ring = footprints_visible
 						update_plant_colors(p)
 		)
+
+	return p
 
 func _load_manifest():
 	if OS.has_feature("web"):
@@ -503,6 +532,31 @@ func _ready_ui():
 	sun_length_slider.value_changed.connect(func(v): sun_length = v)
 	lantern_slider.value_changed.connect(func(v): lantern_intensity = v)
 
+	var vbox = $HUD/MarginContainer/VBoxContainer
+
+	perspective_label = Label.new()
+	perspective_label.name = "PerspectiveLabel"
+	perspective_label.text = "Perspective Depth (%.2fx)" % perspective_strength
+	vbox.add_child(perspective_label)
+
+	perspective_slider = HSlider.new()
+	perspective_slider.name = "PerspectiveSlider"
+	perspective_slider.min_value = 0.0
+	perspective_slider.max_value = 1.5
+	perspective_slider.step = 0.05
+	perspective_slider.value = perspective_strength
+	vbox.add_child(perspective_slider)
+
+	var insert_idx: int = lantern_slider.get_index() + 1
+	vbox.move_child(perspective_label, insert_idx)
+	vbox.move_child(perspective_slider, insert_idx + 1)
+
+	perspective_slider.value_changed.connect(func(v: float):
+		perspective_strength = v
+		perspective_label.text = "Perspective Depth (%.2fx)" % perspective_strength
+		_refresh_all_plants_perspective()
+	)
+
 	var cr = $HUD/MarginContainer/VBoxContainer/ColorRed
 	var cg = $HUD/MarginContainer/VBoxContainer/ColorGreen
 	var cb = $HUD/MarginContainer/VBoxContainer/ColorBlue
@@ -514,7 +568,6 @@ func _ready_ui():
 	$HUD/MarginContainer/VBoxContainer/BtnRandomLayout.pressed.connect(func(): generate_random_garden())
 	$HUD/MarginContainer/VBoxContainer/BtnDemoLayout.pressed.connect(generate_demo_layout)
 
-	var vbox = $HUD/MarginContainer/VBoxContainer
 	btn_toggle_footprints = Button.new()
 	btn_toggle_footprints.name = "BtnToggleFootprints"
 	btn_toggle_footprints.text = "Footprints: ON"

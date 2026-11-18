@@ -12,6 +12,13 @@ var desired_height_px: float = -1.0
 var meta_root_width: float = -1.0
 var fp_w: float = 24.0
 var fp_h: float = 14.0
+var perspective_scale: float = 1.0
+var _cached_base_scale: float = 1.0
+var _cached_raw_w: float = 100.0
+var _cached_raw_h: float = 100.0
+var _cached_base_rw: float = 20.0
+var _textures_ready: bool = false
+
 var show_footprint_ring: bool = true:
 	set(value):
 		if show_footprint_ring != value:
@@ -44,6 +51,40 @@ func _draw():
 	draw_set_transform(Vector2.ZERO, 0.0, Vector2(1.0, 0.55))
 	draw_arc(Vector2.ZERO, fp_w * 0.5, 0.0, TAU, 36, Color(0.55, 0.92, 0.65, 0.52), 1.5, true)
 	draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+
+func set_perspective_scale(p_scale: float):
+	perspective_scale = clampf(p_scale, 0.35, 2.5)
+	if _textures_ready:
+		_apply_effective_scale()
+
+func _apply_effective_scale():
+	var s: float = _cached_base_scale * clampf(perspective_scale, 0.35, 2.5)
+
+	visual_width = _cached_raw_w * s
+	visual_height = _cached_raw_h * s
+
+	fp_w = max(10.0, _cached_base_rw * s)
+	fp_h = max(6.0, fp_w * 0.55)
+
+	if contact_shadow:
+		contact_shadow.position = Vector2.ZERO
+		var cs: float = clampf(fp_w / 24.0, 0.45, 2.6)
+		contact_shadow.scale = Vector2(cs, cs)
+
+	for spr in [sprite_red, sprite_green, sprite_blue]:
+		if spr and spr.visible:
+			spr.centered = false
+			spr.offset = -root_anchor
+			spr.scale = Vector2(s, s)
+
+	for shadow in [sun_shadow, lantern_shadow, incense_shadow]:
+		if not shadow:
+			continue
+		shadow.centered = false
+		shadow.offset = -root_anchor
+		shadow.scale = Vector2(s, s)
+
+	queue_redraw()
 
 func load_plant(id: String):
 	plant_id = id
@@ -178,19 +219,12 @@ func setup_with_textures(id: String, tex_red: Texture2D, tex_green: Texture2D, t
 
 	var raw_w: float = max(24.0, float(max_x - min_x))
 	var raw_h: float = max(24.0, float(bottom_y - top_y))
-	var s: float = (target_h_px / raw_h) if target_h_px > 0.0 else 1.0
 
-	visual_width = raw_w * s
-	visual_height = raw_h * s
-
-	var base_rw: float = root_w_px if root_w_px > 0.0 else max(10.0, raw_w * 0.15)
-	fp_w = max(10.0, base_rw * s)
-	fp_h = max(6.0, fp_w * 0.55)
-
-	if contact_shadow:
-		contact_shadow.position = Vector2.ZERO
-		var cs: float = clampf(fp_w / 24.0, 0.45, 2.2)
-		contact_shadow.scale = Vector2(cs, cs)
+	_cached_raw_w = raw_w
+	_cached_raw_h = raw_h
+	_cached_base_scale = (target_h_px / raw_h) if target_h_px > 0.0 else 1.0
+	_cached_base_rw = root_w_px if root_w_px > 0.0 else max(10.0, raw_w * 0.15)
+	_textures_ready = true
 
 	# Configure Foliage Sprites
 	var setups = [
@@ -209,7 +243,6 @@ func setup_with_textures(id: String, tex_red: Texture2D, tex_green: Texture2D, t
 			spr.texture = tex
 			spr.centered = false
 			spr.offset = -root_anchor
-			spr.scale = Vector2(s, s)
 			if spr.material:
 				var mat = spr.material.duplicate() as ShaderMaterial
 				mat.set_shader_parameter("root_uv_y", root_uv_y)
@@ -225,7 +258,6 @@ func setup_with_textures(id: String, tex_red: Texture2D, tex_green: Texture2D, t
 		shadow.texture = ref_tex
 		shadow.centered = false
 		shadow.offset = -root_anchor
-		shadow.scale = Vector2(s, s)
 		if shadow.material:
 			var smat = shadow.material.duplicate() as ShaderMaterial
 			smat.set_shader_parameter("tRed", tex_red)
@@ -234,4 +266,4 @@ func setup_with_textures(id: String, tex_red: Texture2D, tex_green: Texture2D, t
 			smat.set_shader_parameter("root_uv_y", root_uv_y)
 			shadow.material = smat
 
-	queue_redraw()
+	_apply_effective_scale()
