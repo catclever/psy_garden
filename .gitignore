@@ -13,3 +13,5 @@ tools/trash/
 tools/ai_config.json
 godot/.godot/
 godot/*.import
+__pycache__/
+*.py[cod]
