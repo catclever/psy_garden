@@ -49,6 +49,7 @@ var target_orbit_deg: float = 0.0
 var xray_enabled: bool = true
 var _right_dragging: bool = false
 var _syncing_orbit_ui: bool = false
+var _test_mouse_override: Vector2 = Vector2(-99999.0, -99999.0)
 var ground_canvas: Node2D = null
 var pitch_label: Label = null
 var pitch_slider: HSlider = null
@@ -223,6 +224,24 @@ func _unhandled_input(event):
 	elif event is InputEventMouseMotion and _right_dragging:
 		target_orbit_deg = _wrap_deg_180(target_orbit_deg + event.relative.x * 0.35)
 
+func compute_lantern_xray_alpha(p, light_pos: Vector2) -> float:
+	if not xray_enabled or not is_instance_valid(p):
+		return 1.0
+	if p.visual_height <= 48.0:
+		return 1.0
+	var dy_front: float = p.global_position.y - light_pos.y
+	if dy_front <= 6.0:
+		return 1.0
+	var front_factor: float = smoothstep(6.0, 26.0, dy_front)
+	var canopy_top_y: float = p.global_position.y - p.visual_height * 0.96
+	var top_clearance: float = (light_pos.y + 22.0) - canopy_top_y
+	var canopy_factor: float = smoothstep(0.0, 36.0, top_clearance)
+	var horiz_reach: float = max(p.visual_width * 0.46, 36.0) + 28.0
+	var dx: float = abs(p.global_position.x - light_pos.x)
+	var horiz_factor: float = 1.0 - smoothstep(horiz_reach * 0.55, horiz_reach, dx)
+	var occ: float = front_factor * canopy_factor * horiz_factor
+	return lerpf(1.0, 0.32, occ)
+
 func _process(delta):
 	var key_dir: float = 0.0
 	if Input.is_physical_key_pressed(KEY_Q):
@@ -246,9 +265,13 @@ func _process(delta):
 			_syncing_orbit_ui = false
 		_refresh_courtyard_projection()
 
-	var raw_mouse = get_global_mouse_position()
-	var target_mouse = raw_mouse if raw_mouse.length_squared() > 4.0 else Vector2(680, 420)
-	mouse_lantern.global_position = mouse_lantern.global_position.lerp(target_mouse, 25.0 * delta)
+	var target_mouse: Vector2
+	if _test_mouse_override.x > -90000.0:
+		target_mouse = _test_mouse_override
+	else:
+		var raw_mouse = get_global_mouse_position()
+		target_mouse = raw_mouse if raw_mouse.length_squared() > 4.0 else Vector2(680, 420)
+	mouse_lantern.global_position = mouse_lantern.global_position.lerp(target_mouse, min(1.0, 25.0 * delta))
 	var mouse_pos = mouse_lantern.global_position
 	mouse_lantern_light.energy = lantern_intensity * 0.85
 
@@ -346,21 +369,12 @@ func _process(delta):
 				mat.set_shader_parameter("occlusion_height", cover_height)
 				mat.set_shader_parameter("occlusion_darken", cover_strength)
 
-	# 3. Dynamic X-Ray pass for tall front plants overlapping rear plants
+	# 3. Directional lantern-only X-Ray pass: fade only plants strictly between camera and lantern
 	var xray_weight: float = min(1.0, 10.0 * delta)
 	for f in active_plants:
 		if not is_instance_valid(f):
 			continue
-		f.target_xray_alpha = 1.0
-		if xray_enabled and f.visual_height > 52.0:
-			for r in active_plants:
-				if r == f or not is_instance_valid(r):
-					continue
-				if f.global_position.y > r.global_position.y + 8.0:
-					if (f.global_position.y - f.visual_height * 0.92) < (r.global_position.y - r.visual_height * 0.18):
-						if abs(f.global_position.x - r.global_position.x) < (f.visual_width * 0.36 + r.visual_width * 0.18):
-							var fade_target: float = 0.34 if r.global_position.distance_to(mouse_pos) < 160.0 else 0.48
-							f.target_xray_alpha = min(f.target_xray_alpha, fade_target)
+		f.target_xray_alpha = compute_lantern_xray_alpha(f, mouse_pos)
 		f.current_xray_alpha = lerpf(f.current_xray_alpha, f.target_xray_alpha, xray_weight)
 		if f.has_method("set_xray_alpha"):
 			f.set_xray_alpha(f.current_xray_alpha)

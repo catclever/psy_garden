@@ -146,7 +146,7 @@ func _init():
 	# Reset orbit cleanly before next checks
 	garden._set_orbit_target(0.0, true)
 
-	# (d) Dynamic X-Ray test with two synthetic Plant nodes at x=700
+	# (d) Directional lantern-only X-Ray test: only plants strictly in front of lantern fade
 	garden.clear_garden()
 	var img = Image.create(100, 200, false, Image.FORMAT_RGBA8)
 	img.fill(Color(0, 0, 0, 0))
@@ -155,34 +155,59 @@ func _init():
 			img.set_pixel(x, y, Color(0.2, 0.8, 0.3, 1.0))
 	var synth_tex = ImageTexture.create_from_image(img)
 
-	var p_rear = plant_scene.instantiate()
-	p_rear.skip_auto_load = true
-	p_rear.global_position = Vector2(700.0, 465.0)
-	p_rear.ground_pitch_ratio = garden.camera_pitch_ratio
-	p_rear.courtyard_pos = garden.screen_to_courtyard(p_rear.global_position)
-	p_rear.has_courtyard_pos = true
-	garden.y_sort.add_child(p_rear)
-	garden.active_plants.append(p_rear)
-	p_rear.setup_with_textures("synth_rear", synth_tex, synth_tex, null, 60.0, 18.0)
+	var _spawn_synth = func(name_id: String, pos: Vector2, target_h: float, root_w: float):
+		var sp = plant_scene.instantiate()
+		sp.skip_auto_load = true
+		sp.global_position = pos
+		sp.ground_pitch_ratio = garden.camera_pitch_ratio
+		sp.courtyard_pos = garden.screen_to_courtyard(pos)
+		sp.has_courtyard_pos = true
+		garden.y_sort.add_child(sp)
+		garden.active_plants.append(sp)
+		sp.setup_with_textures(name_id, synth_tex, synth_tex, null, target_h, root_w)
+		return sp
 
-	var p_front = plant_scene.instantiate()
-	p_front.skip_auto_load = true
-	p_front.global_position = Vector2(700.0, 530.0)
-	p_front.ground_pitch_ratio = garden.camera_pitch_ratio
-	p_front.courtyard_pos = garden.screen_to_courtyard(p_front.global_position)
-	p_front.has_courtyard_pos = true
-	garden.y_sort.add_child(p_front)
-	garden.active_plants.append(p_front)
-	p_front.setup_with_textures("synth_front", synth_tex, synth_tex, null, 180.0, 30.0)
+	var p_behind = _spawn_synth.call("synth_behind", Vector2(700.0, 380.0), 160.0, 24.0)
+	var p_at = _spawn_synth.call("synth_at", Vector2(700.0, 440.0), 60.0, 18.0)
+	var p_front = _spawn_synth.call("synth_front", Vector2(700.0, 530.0), 180.0, 30.0)
+	var p_far_away = _spawn_synth.call("synth_far_away", Vector2(1120.0, 530.0), 180.0, 30.0)
 
+	garden._test_mouse_override = Vector2(700.0, 440.0)
 	garden._process(0.6)
 	garden._process(0.6)
-	if p_front.current_xray_alpha > 0.55:
-		push_error("VERIFY_FAIL: Expected front plant current_xray_alpha <= 0.55, got %f" % p_front.current_xray_alpha)
+
+	if p_front.current_xray_alpha > 0.40:
+		push_error("VERIFY_FAIL: Expected front-of-lantern plant current_xray_alpha <= 0.40, got %f" % p_front.current_xray_alpha)
 		quit(1)
 		return
-	if p_rear.current_xray_alpha < 0.99:
-		push_error("VERIFY_FAIL: Expected rear plant current_xray_alpha >= 0.99, got %f" % p_rear.current_xray_alpha)
+	if p_behind.current_xray_alpha < 0.99:
+		push_error("VERIFY_FAIL: Expected behind-lantern plant to stay solid >= 0.99, got %f" % p_behind.current_xray_alpha)
+		quit(1)
+		return
+	if p_at.current_xray_alpha < 0.99:
+		push_error("VERIFY_FAIL: Expected at-lantern plant to stay solid >= 0.99, got %f" % p_at.current_xray_alpha)
+		quit(1)
+		return
+	if p_far_away.current_xray_alpha < 0.99:
+		push_error("VERIFY_FAIL: Expected away-from-lantern overlapping plant to stay solid >= 0.99, got %f" % p_far_away.current_xray_alpha)
+		quit(1)
+		return
+
+	# Moving lantern in front of p_front must restore p_front to solid 1.0
+	garden._test_mouse_override = Vector2(700.0, 580.0)
+	garden._process(0.6)
+	garden._process(0.6)
+	if p_front.current_xray_alpha < 0.99:
+		push_error("VERIFY_FAIL: Expected p_front to become solid >= 0.99 when lantern moves in front of it, got %f" % p_front.current_xray_alpha)
+		quit(1)
+		return
+
+	# Put lantern back behind p_front, confirm fade, then toggle X-Ray OFF to restore solid 1.0
+	garden._test_mouse_override = Vector2(700.0, 440.0)
+	garden._process(0.6)
+	garden._process(0.6)
+	if p_front.current_xray_alpha > 0.40:
+		push_error("VERIFY_FAIL: Expected p_front <= 0.40 before toggle OFF, got %f" % p_front.current_xray_alpha)
 		quit(1)
 		return
 
@@ -193,6 +218,8 @@ func _init():
 		push_error("VERIFY_FAIL: Expected front plant current_xray_alpha >= 0.99 after X-Ray toggle OFF, got %f" % p_front.current_xray_alpha)
 		quit(1)
 		return
+
+	garden._test_mouse_override = Vector2(-99999.0, -99999.0)
 
 	# (e) Adjusting pitch_slider.value = 0.62 updates camera_pitch_ratio and GroundShadowPlane.scale.y
 	if not garden.pitch_slider:
