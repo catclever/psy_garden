@@ -35,6 +35,7 @@ const DEPTH_HALF_SPAN: float = 350.0
 const BASE_PERSPECTIVE_SLOPE: float = 0.25
 
 const COURTYARD_CENTER: Vector2 = Vector2(720.0, 450.0)
+const COURTYARD_HALF_SIZE: float = 420.0
 const DEFAULT_PITCH_RATIO: float = 0.76
 
 var sun_angle_deg: float = 45.0
@@ -94,16 +95,20 @@ func project_courtyard_point(courtyard_pt: Vector2, orbit_deg: float = NAN, pitc
 	var sn: float = sin(rad)
 	var rx: float = courtyard_pt.x * c - courtyard_pt.y * sn
 	var ry: float = courtyard_pt.x * sn + courtyard_pt.y * c
-	var sy: float = COURTYARD_CENTER.y + ry * eff_pitch
+	var m: float = (BASE_PERSPECTIVE_SLOPE * eff_persp) / DEPTH_HALF_SPAN
+	var p0: float = 1.0 + m * (COURTYARD_CENTER.y - DEPTH_Y_REF)
+	var denom: float = max(0.32, 1.0 - m * eff_pitch * ry)
+	var p_proj: float = clampf(p0 / denom, 0.45, 1.85)
+	var sy: float = COURTYARD_CENTER.y + ry * eff_pitch * p_proj
+	var sx: float = COURTYARD_CENTER.x + rx * p_proj
 	var d_scale: float = get_depth_scale(sy, eff_persp)
-	var sx: float = COURTYARD_CENTER.x + rx * d_scale
 	return {"screen_pos": Vector2(sx, sy), "depth_scale": d_scale, "rx": rx, "ry": ry}
 
 func screen_to_courtyard(screen_pos: Vector2) -> Vector2:
 	var d_scale: float = max(get_depth_scale(screen_pos.y), 0.25)
 	var eff_pitch: float = max(camera_pitch_ratio, 0.25)
 	var rx: float = (screen_pos.x - COURTYARD_CENTER.x) / d_scale
-	var ry: float = (screen_pos.y - COURTYARD_CENTER.y) / eff_pitch
+	var ry: float = (screen_pos.y - COURTYARD_CENTER.y) / (eff_pitch * d_scale)
 	var rad: float = -deg_to_rad(orbit_angle_deg)
 	var c: float = cos(rad)
 	var sn: float = sin(rad)
@@ -153,8 +158,8 @@ func _draw_zen_ground():
 	var border_col: Color = Color(0.76, 0.80, 0.86, 0.22) if is_dark else Color(0.24, 0.19, 0.13, 0.26)
 	var axis_col: Color = Color(0.82, 0.86, 0.92, 0.16) if is_dark else Color(0.25, 0.21, 0.14, 0.18)
 
-	# Karesansui raked-sand concentric rings
-	var ring_radii: Array = [85.0, 135.0, 190.0, 250.0, 320.0, 395.0]
+	# Karesansui raked-sand concentric rings strictly inside courtyard square
+	var ring_radii: Array = [85.0, 140.0, 195.0, 255.0, 315.0, 375.0]
 	var segs: int = 48
 	for r in ring_radii:
 		var pts := PackedVector2Array()
@@ -164,52 +169,53 @@ func _draw_zen_ground():
 			pts.append(project_courtyard_point(pt)["screen_pos"])
 		ground_canvas.draw_polyline(pts, ring_col, 1.25, true)
 
-	# Perspective courtyard inner grid lines step 130 (subdivided 16 segments per line)
-	var half_w: float = 520.0
-	var half_h: float = 360.0
+	# Symmetric 6x6 perspective courtyard inner grid lines step 140
+	var half_size: float = COURTYARD_HALF_SIZE
 	var grid_segs: int = 16
-	for gx in [-390.0, -260.0, -130.0, 0.0, 130.0, 260.0, 390.0]:
+	for gx in [-280.0, -140.0, 0.0, 140.0, 280.0]:
 		var pts := PackedVector2Array()
 		for i in range(grid_segs + 1):
 			var t: float = float(i) / float(grid_segs)
-			var gy: float = lerpf(-half_h, half_h, t)
+			var gy: float = lerpf(-half_size, half_size, t)
 			pts.append(project_courtyard_point(Vector2(gx, gy))["screen_pos"])
 		ground_canvas.draw_polyline(pts, grid_col, 1.0, true)
 
-	for gy in [-260.0, -130.0, 0.0, 130.0, 260.0]:
+	for gy in [-280.0, -140.0, 0.0, 140.0, 280.0]:
 		var pts := PackedVector2Array()
 		for i in range(grid_segs + 1):
 			var t: float = float(i) / float(grid_segs)
-			var gx: float = lerpf(-half_w, half_w, t)
+			var gx: float = lerpf(-half_size, half_size, t)
 			pts.append(project_courtyard_point(Vector2(gx, gy))["screen_pos"])
 		ground_canvas.draw_polyline(pts, grid_col, 1.0, true)
 
-	# Perspective courtyard timber/stone outer border [-520..520, -360..360]
-	var border_corners: Array = [
-		Vector2(-half_w, -half_h),
-		Vector2(half_w, -half_h),
-		Vector2(half_w, half_h),
-		Vector2(-half_w, half_h)
-	]
-	var border_pts := PackedVector2Array()
-	for c_idx in range(4):
-		var p0: Vector2 = border_corners[c_idx]
-		var p1: Vector2 = border_corners[(c_idx + 1) % 4]
-		for i in range(grid_segs):
-			var t: float = float(i) / float(grid_segs)
-			border_pts.append(project_courtyard_point(p0.lerp(p1, t))["screen_pos"])
-	border_pts.append(project_courtyard_point(border_corners[0])["screen_pos"])
-	ground_canvas.draw_polyline(border_pts, border_col, 2.0, true)
+	# Perspective courtyard timber/stone double border (symmetric world square)
+	for b_half in [half_size, half_size - 12.0]:
+		var border_corners: Array = [
+			Vector2(-b_half, -b_half),
+			Vector2(b_half, -b_half),
+			Vector2(b_half, b_half),
+			Vector2(-b_half, b_half)
+		]
+		var border_pts := PackedVector2Array()
+		for c_idx in range(4):
+			var p0: Vector2 = border_corners[c_idx]
+			var p1: Vector2 = border_corners[(c_idx + 1) % 4]
+			for i in range(grid_segs):
+				var t: float = float(i) / float(grid_segs)
+				border_pts.append(project_courtyard_point(p0.lerp(p1, t))["screen_pos"])
+		border_pts.append(project_courtyard_point(border_corners[0])["screen_pos"])
+		var b_width: float = 2.0 if abs(b_half - half_size) < 1.0 else 1.0
+		var b_color: Color = border_col if abs(b_half - half_size) < 1.0 else grid_col
+		ground_canvas.draw_polyline(border_pts, b_color, b_width, true)
 
-	# Cardinal markers along X/Y axes
-	var marker_dist_x: float = 475.0
-	var marker_dist_y: float = 325.0
-	var marker_len: float = 22.0
+	# Symmetric cardinal markers along X/Y axes
+	var marker_dist: float = 390.0
+	var marker_len: float = 20.0
 	var cardinal_segs: Array = [
-		[Vector2(marker_dist_x - marker_len, 0.0), Vector2(marker_dist_x + marker_len, 0.0)],
-		[Vector2(-marker_dist_x - marker_len, 0.0), Vector2(-marker_dist_x + marker_len, 0.0)],
-		[Vector2(0.0, marker_dist_y - marker_len), Vector2(0.0, marker_dist_y + marker_len)],
-		[Vector2(0.0, -marker_dist_y - marker_len), Vector2(0.0, -marker_dist_y + marker_len)]
+		[Vector2(marker_dist - marker_len, 0.0), Vector2(marker_dist + marker_len, 0.0)],
+		[Vector2(-marker_dist - marker_len, 0.0), Vector2(-marker_dist + marker_len, 0.0)],
+		[Vector2(0.0, marker_dist - marker_len), Vector2(0.0, marker_dist + marker_len)],
+		[Vector2(0.0, -marker_dist - marker_len), Vector2(0.0, -marker_dist + marker_len)]
 	]
 	for seg in cardinal_segs:
 		var a: Vector2 = project_courtyard_point(seg[0])["screen_pos"]
@@ -461,13 +467,18 @@ func _sample_record_metrics(rec: Dictionary) -> Dictionary:
 
 func generate_random_garden(count: int = 36):
 	clear_garden()
+	var scatter_limit: float = COURTYARD_HALF_SIZE - 35.0
 	if manifest_records.is_empty():
 		var fallback_count: int = min(count, 16)
 		for i in range(fallback_count):
 			var id = available_plants[randi() % available_plants.size()]
-			for _attempt in range(80):
-				var pos = Vector2(randf_range(130.0, 1330.0), randf_range(140.0, 840.0))
-				var depth_s: float = get_depth_scale(pos.y)
+			for _attempt in range(120):
+				var w_pt = Vector2(randf_range(-scatter_limit, scatter_limit), randf_range(-scatter_limit, scatter_limit))
+				var proj: Dictionary = project_courtyard_point(w_pt)
+				var pos: Vector2 = proj["screen_pos"]
+				if pos.x < 110.0 or pos.x > 1350.0 or pos.y < 130.0 or pos.y > 855.0:
+					continue
+				var depth_s: float = proj["depth_scale"]
 				var eff_fp_w: float = max(10.0, 24.0 * depth_s)
 				var eff_fp_h: float = max(6.0, 24.0 * depth_s * camera_pitch_ratio)
 				if can_place_plant(pos, eff_fp_w, eff_fp_h):
@@ -508,9 +519,13 @@ func generate_random_garden(count: int = 36):
 		var target_h: float = metrics["target_h"]
 		var root_w: float = metrics["root_w"]
 
-		for _attempt in range(80):
-			var pos = Vector2(randf_range(130.0, 1330.0), randf_range(140.0, 840.0))
-			var depth_s: float = get_depth_scale(pos.y)
+		for _attempt in range(120):
+			var w_pt = Vector2(randf_range(-scatter_limit, scatter_limit), randf_range(-scatter_limit, scatter_limit))
+			var proj: Dictionary = project_courtyard_point(w_pt)
+			var pos: Vector2 = proj["screen_pos"]
+			if pos.x < 110.0 or pos.x > 1350.0 or pos.y < 130.0 or pos.y > 855.0:
+				continue
+			var depth_s: float = proj["depth_scale"]
 			var eff_fp_w: float = max(10.0, fp_w * depth_s)
 			var eff_fp_h: float = max(6.0, eff_fp_w * camera_pitch_ratio)
 			if can_place_plant(pos, eff_fp_w, eff_fp_h):

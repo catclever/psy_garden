@@ -243,6 +243,49 @@ func _init():
 			quit(1)
 			return
 
+	# (f) Projective homography: symmetric square courtyard -> invariant trapezoid at 0/90 deg
+	#     and straight collinear edges at oblique angles
+	garden.pitch_slider.value = garden.DEFAULT_PITCH_RATIO
+	garden._set_orbit_target(0.0, true)
+	var half_c: float = garden.COURTYARD_HALF_SIZE
+	var p_tl0: Vector2 = garden.project_courtyard_point(Vector2(-half_c, -half_c))["screen_pos"]
+	var p_tr0: Vector2 = garden.project_courtyard_point(Vector2(half_c, -half_c))["screen_pos"]
+	var p_br0: Vector2 = garden.project_courtyard_point(Vector2(half_c, half_c))["screen_pos"]
+	var p_bl0: Vector2 = garden.project_courtyard_point(Vector2(-half_c, half_c))["screen_pos"]
+	var w_top0: float = abs(p_tr0.x - p_tl0.x)
+	var w_bot0: float = abs(p_br0.x - p_bl0.x)
+	var h_trap0: float = abs(p_bl0.y - p_tl0.y)
+	if not (w_bot0 / max(w_top0, 1.0) > 1.45):
+		push_error("VERIFY_FAIL: Expected strong perspective trapezoid w_bot/w_top > 1.45, got %f / %f" % [w_bot0, w_top0])
+		quit(1)
+		return
+
+	garden._set_orbit_target(90.0, true)
+	var p_tl90: Vector2 = garden.project_courtyard_point(Vector2(-half_c, half_c))["screen_pos"]
+	var p_tr90: Vector2 = garden.project_courtyard_point(Vector2(-half_c, -half_c))["screen_pos"]
+	var p_bl90: Vector2 = garden.project_courtyard_point(Vector2(half_c, half_c))["screen_pos"]
+	var p_br90: Vector2 = garden.project_courtyard_point(Vector2(half_c, -half_c))["screen_pos"]
+	var w_top90: float = abs(p_tr90.x - p_tl90.x)
+	var w_bot90: float = abs(p_br90.x - p_bl90.x)
+	var h_trap90: float = abs(p_bl90.y - p_tl90.y)
+	if abs(w_top90 - w_top0) > 0.01 or abs(w_bot90 - w_bot0) > 0.01 or abs(h_trap90 - h_trap0) > 0.01:
+		push_error("VERIFY_FAIL: Aspect swapped at 90 deg: 0deg=(%f,%f,%f) vs 90deg=(%f,%f,%f)" % [w_top0, w_bot0, h_trap0, w_top90, w_bot90, h_trap90])
+		quit(1)
+		return
+
+	# Check straight collinearity at 35 deg
+	garden._set_orbit_target(35.0, true)
+	var a35: Vector2 = garden.project_courtyard_point(Vector2(-half_c, -half_c))["screen_pos"]
+	var m35: Vector2 = garden.project_courtyard_point(Vector2(0.0, -half_c))["screen_pos"]
+	var b35: Vector2 = garden.project_courtyard_point(Vector2(half_c, -half_c))["screen_pos"]
+	var ab: Vector2 = (b35 - a35)
+	var perp_err: float = abs(ab.cross(m35 - a35)) / max(ab.length(), 1.0)
+	if perp_err >= 0.05:
+		push_error("VERIFY_FAIL: Expected projective edge linearity < 0.05px at 35 deg, got %fpx" % perp_err)
+		quit(1)
+		return
+
+	garden._set_orbit_target(0.0, true)
 	print("VERIFY_OK: Godot 2.5D courtyard pitch, zen ground, orbit, and dynamic X-Ray passed!")
 	quit(0)
 """
