@@ -23,6 +23,7 @@ var generation_id: int = 0
 var manifest_loaded_once: bool = false
 
 const MAX_CONCURRENT_HTTP: int = 8
+const LAB_ASSET_VER: String = "044"
 var _http_pool: Array = []
 var _http_busy: Dictionary = {}
 var _http_queue: Array = []
@@ -736,7 +737,7 @@ func _load_layer_texture(path_prefix: String, file_name: String, callback: Calla
 		return
 
 	_in_flight_callbacks[cache_key] = [callback]
-	var url: String = web_base_url + cache_key
+	var url: String = web_base_url + cache_key + "?v=" + LAB_ASSET_VER
 	_http_queue.append({"url": url, "cache_key": cache_key})
 	_pump_http_queue()
 
@@ -1077,7 +1078,7 @@ func _load_json_asset(rel_path: String, cb: Callable):
 				return
 			cb.call(null)
 		)
-		if req.request(web_base_url + rel_path) != OK:
+		if req.request(web_base_url + rel_path + "?v=" + LAB_ASSET_VER) != OK:
 			req.queue_free()
 			cb.call(null)
 		return

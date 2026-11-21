@@ -23,7 +23,7 @@ if str(TOOLS_DIR) not in sys.path:
 
 from root_anchor_calibrator import calibrate_root_anchor
 
-DEFAULT_INPUT_MP4 = REPO_ROOT / "tools" / "candidates" / "turntable_lab_sheets" / "plant_0000_video_360.mp4"
+DEFAULT_INPUT_MP4 = REPO_ROOT / "tools" / "candidates" / "turntable_lab_sheets" / "plant_0000_video_360_6s.mp4"
 DEFAULT_OUT_DIR = REPO_ROOT / "src" / "assets" / "turntable_lab" / "plant_0000_video36"
 
 
@@ -152,6 +152,42 @@ def key_white_background_rgba(rgb_frame: np.ndarray) -> np.ndarray:
     return rgba
 
 
+def _sample_segment_indices(frames_seg: np.ndarray, count: int, sampling: str) -> tuple[list[int], dict]:
+    n = len(frames_seg)
+    if n < 2:
+        raise RuntimeError(f"Expected >= 2 frames in segment, got {n}")
+    frames_f = frames_seg.astype(np.float32)
+    diffs = np.array([float(np.abs(frames_f[i + 1] - frames_f[i]).mean()) for i in range(n - 1)], dtype=np.float64)
+    median_raw_diff = float(np.median(diffs))
+    max_raw_diff = float(np.max(diffs))
+    cut_spike_ratio = round(max_raw_diff / max(median_raw_diff, 1e-6), 2)
+
+    if sampling == "arclength" and n > count:
+        w_d = np.maximum(diffs, 0.25 * max(median_raw_diff, 1e-6))
+        cum = np.concatenate([[0.0], np.cumsum(w_d)])
+        targets = np.linspace(0.0, cum[-1], count, endpoint=False)
+        indices = [int(np.clip(np.searchsorted(cum, t, side="left"), 0, n - 2)) for t in targets]
+    else:
+        indices = np.linspace(0, max(0, n - 2), count, dtype=int).tolist()
+
+    return indices, {
+        "segment_frames": int(n),
+        "median_raw_diff": round(median_raw_diff, 3),
+        "max_raw_diff": round(max_raw_diff, 3),
+        "cut_spike_ratio": cut_spike_ratio,
+    }
+
+
+def _infer_path_prefix(out_dir: Path, explicit_prefix: str | None) -> str:
+    if explicit_prefix:
+        return explicit_prefix.strip("/")
+    src_root = (REPO_ROOT / "src").resolve()
+    try:
+        return out_dir.resolve().relative_to(src_root).as_posix()
+    except ValueError:
+        return "assets/turntable_lab/plant_0000_video36"
+
+
 def build_video_atlas(
     input_mp4: Path,
     out_dir: Path,
@@ -159,24 +195,70 @@ def build_video_atlas(
     frame_count: int = 36,
     cell_size: int = 220,
     target_crown_h: float = 188.0,
+    sampling: str = "arclength",
+    stitch_second_half: Path | None = None,
+    second_half_start: int = 48,
+    second_half_end: int = -1,
+    reverse_first_half: bool = False,
+    reverse_second_half: bool = False,
+    path_prefix: str | None = None,
 ) -> dict:
     import imageio.v3 as iio
 
-    frames = iio.imread(str(input_mp4), plugin="FFMPEG")
-    n_frames = len(frames)
-    if n_frames < 8:
-        raise RuntimeError(f"Expected >= 8 frames in {input_mp4}, got {n_frames}")
+    frames1 = iio.imread(str(input_mp4), plugin="FFMPEG")
+    n1 = len(frames1)
+    if n1 < 8:
+        raise RuntimeError(f"Expected >= 8 frames in {input_mp4}, got {n1}")
 
-    indices = np.linspace(0, max(0, n_frames - 2), frame_count, dtype=int).tolist()
-    if reverse_spin:
-        indices = [indices[0]] + list(reversed(indices[1:]))
+    selected_frames: list[np.ndarray] = []
+    if stitch_second_half is not None:
+        frames2_all = iio.imread(str(stitch_second_half), plugin="FFMPEG")
+        end2 = len(frames2_all) if second_half_end < 0 else min(len(frames2_all), second_half_end)
+        seg2 = frames2_all[max(0, second_half_start) : end2]
+        if len(seg2) < 8:
+            raise RuntimeError(f"Expected >= 8 frames in second half segment [{second_half_start}:{end2}], got {len(seg2)}")
+
+        seg1 = frames1[::-1] if reverse_first_half else frames1
+        seg2_ord = seg2[::-1] if reverse_second_half else seg2
+
+        half1 = frame_count // 2
+        half2 = frame_count - half1
+        idx1, stats1 = _sample_segment_indices(seg1, half1, sampling)
+        idx2, stats2 = _sample_segment_indices(seg2_ord, half2, sampling)
+
+        selected_frames = [seg1[k] for k in idx1] + [seg2_ord[k] for k in idx2]
+        indices = idx1 + [int(k + max(0, second_half_start)) for k in idx2]
+        median_raw_diff = round((stats1["median_raw_diff"] + stats2["median_raw_diff"]) * 0.5, 3)
+        max_raw_diff = round(max(stats1["max_raw_diff"], stats2["max_raw_diff"]), 3)
+        cut_spike_ratio = round(max(stats1["cut_spike_ratio"], stats2["cut_spike_ratio"]), 2)
+        n_frames = int(n1 + len(seg2))
+        extra_meta = {
+            "stitched": True,
+            "first_half_stats": stats1,
+            "second_half_stats": stats2,
+            "stitch_seam_diff": round(float(np.abs(selected_frames[half1].astype(np.float32) - selected_frames[half1 - 1].astype(np.float32)).mean()), 3),
+            "loop_seam_diff": round(float(np.abs(selected_frames[0].astype(np.float32) - selected_frames[-1].astype(np.float32)).mean()), 3),
+        }
+    else:
+        n_frames = n1
+        indices, stats = _sample_segment_indices(frames1, frame_count, sampling)
+        if reverse_spin:
+            indices = [indices[0]] + list(reversed(indices[1:]))
+        selected_frames = [frames1[k] for k in indices]
+        median_raw_diff = stats["median_raw_diff"]
+        max_raw_diff = stats["max_raw_diff"]
+        cut_spike_ratio = stats["cut_spike_ratio"]
+        extra_meta = {
+            "stitched": False,
+            "loop_seam_diff": round(float(np.abs(selected_frames[0].astype(np.float32) - selected_frames[-1].astype(np.float32)).mean()), 3),
+        }
 
     out_dir.mkdir(parents=True, exist_ok=True)
     processed_rgba: list[np.ndarray] = []
     raw_metrics: list[dict] = []
 
-    for i, f_idx in enumerate(indices):
-        rgba = key_white_background_rgba(frames[f_idx])
+    for frame_rgb in selected_frames:
+        rgba = key_white_background_rgba(frame_rgb)
         processed_rgba.append(rgba)
 
         alpha = rgba[:, :, 3]
@@ -274,13 +356,14 @@ def build_video_atlas(
     cs_path = out_dir / "video_36_contact_sheet.jpg"
     contact_sheet.save(cs_path, quality=92)
 
+    resolved_prefix = _infer_path_prefix(out_dir, path_prefix)
     metadata = {
         "generated_at": int(time.time()),
         "plant_id": "plant_0000",
         "label_ascii": "Calathea",
         "display_name": "孔雀竹芋",
         "atlas_file": "atlas_36.webp",
-        "path_prefix": "assets/turntable_lab/plant_0000_video36",
+        "path_prefix": resolved_prefix,
         "hframes": hframes,
         "vframes": vframes,
         "frame_count": frame_count,
@@ -294,9 +377,14 @@ def build_video_atlas(
         "root_width": 22.0,
         "default_lab_height_px": 150.0,
         "reverse_spin": bool(reverse_spin),
+        "sampling_mode": sampling,
+        "median_raw_diff": round(median_raw_diff, 3),
+        "max_raw_diff": round(max_raw_diff, 3),
+        "cut_spike_ratio": cut_spike_ratio,
         "source_frames_total": int(n_frames),
         "sampled_indices": indices,
         "webp_bytes": int(atlas_path.stat().st_size),
+        **extra_meta,
     }
     meta_path = out_dir / "metadata.json"
     meta_path.write_text(json.dumps(metadata, ensure_ascii=False, indent=2), encoding="utf-8")
@@ -312,6 +400,13 @@ def main() -> int:
     parser.add_argument("--frame-count", type=int, default=36)
     parser.add_argument("--cell-size", type=int, default=220)
     parser.add_argument("--crown-h", type=float, default=188.0)
+    parser.add_argument("--sampling", choices=["arclength", "linear"], default="arclength")
+    parser.add_argument("--stitch-second-half", type=Path, default=None)
+    parser.add_argument("--second-half-start", type=int, default=48)
+    parser.add_argument("--second-half-end", type=int, default=-1)
+    parser.add_argument("--reverse-first-half", action="store_true")
+    parser.add_argument("--reverse-second-half", action="store_true")
+    parser.add_argument("--path-prefix", default=None)
     args = parser.parse_args()
 
     build_video_atlas(
@@ -321,6 +416,13 @@ def main() -> int:
         frame_count=args.frame_count,
         cell_size=args.cell_size,
         target_crown_h=args.crown_h,
+        sampling=args.sampling,
+        stitch_second_half=args.stitch_second_half,
+        second_half_start=args.second_half_start,
+        second_half_end=args.second_half_end,
+        reverse_first_half=args.reverse_first_half,
+        reverse_second_half=args.reverse_second_half,
+        path_prefix=args.path_prefix,
     )
     return 0
 

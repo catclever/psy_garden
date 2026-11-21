@@ -22,36 +22,81 @@ if str(TOOLS_DIR) not in sys.path:
 
 from build_turntable_lab_assets import clean_view_image, load_source_views
 
-DEFAULT_OUT_MP4 = REPO_ROOT / "tools" / "candidates" / "turntable_lab_sheets" / "plant_0000_video_360.mp4"
-DEFAULT_META_JSON = REPO_ROOT / "tools" / "candidates" / "turntable_lab_sheets" / "plant_0000_video_360_meta.json"
-DEFAULT_REFS_DIR = Path(
-    "/Users/kael/.gemini/antigravity/brain/5d790e93-04e6-43ef-b03b-bd7f64dac343/scratch/video_refs_0000"
-)
-DEFAULT_PREVIEW_GRID = Path(
-    "/Users/kael/.gemini/antigravity/brain/5d790e93-04e6-43ef-b03b-bd7f64dac343/scratch/raw_video_36frames_preview.jpg"
-)
+SCRATCH_DIR = Path("/Users/kael/.gemini/antigravity/brain/5d790e93-04e6-43ef-b03b-bd7f64dac343/scratch")
+CANDIDATES_DIR = REPO_ROOT / "tools" / "candidates" / "turntable_lab_sheets"
+DEFAULT_REFS_DIR = SCRATCH_DIR / "video_refs_0000"
 OMNI_VIDEO_SCRIPT = Path(
     "/Users/kael/.gemini/config/plugins/gemini-api/skills/gemini-omni-flash-api/scripts/video/generate_video.py"
 )
 
-VIDEO_PROMPT = (
-    "Single unbroken locked-camera studio turnaround animation of the exact Calathea makoyana "
-    "botanical watercolor and fine-ink illustration on a pure solid #FFFFFF seamless white background, "
-    "with zero scene cuts, zero camera pan, zero zoom, zero floor shadows, zero turntable pedestal, "
-    "zero wind sway, and completely rigid leaves. "
-    "Use the first image (0-degree green feathered front view) as both the starting frame at 0s and "
-    "the final frame at 4s (the second image). Rotate the whole plant clump smoothly clockwise when "
-    "viewed from above around its fixed bottom-center brown petiole stem axis at a perfectly constant "
-    "angular speed of 90 degrees per second, completing one full 360-degree revolution in 4 seconds: "
-    "[0s] start on the first image (0-degree cream-and-green feathered front); "
-    "[1s] pass smoothly through the third image (90-degree narrow right-side profile); "
-    "[2s] reach the fourth image (180-degree pure rear view showing rich deep burgundy-purple leaf undersides); "
-    "[3s] pass smoothly through the fifth image (270-degree narrow left-side profile); "
-    "[4s] seamlessly close the 360-degree loop back into the second image (0-degree front). "
-    "Use the sixth 2x2 image strictly as multi-angle structural reference for the intermediate diagonal "
-    "angles (top-left 45-degree, top-right 135-degree, bottom-left 225-degree, bottom-right 315-degree), "
-    "never showing a grid. Maintain the exact hand-drawn botanical watercolor and fine dark ink outline "
-    "style on every frame. Silent video, no music, no sound effects, no dialogue."
+MODE_DEFAULTS = {
+    "opt1_solo": {
+        "duration": "4s",
+        "output": CANDIDATES_DIR / "plant_0000_video_360_opt1_solo4s.mp4",
+        "meta_output": CANDIDATES_DIR / "plant_0000_video_360_opt1_solo4s_meta.json",
+        "preview_grid": SCRATCH_DIR / "raw_video_opt1_solo4s_preview.jpg",
+    },
+    "opt2_half": {
+        "duration": "3s",
+        "output": CANDIDATES_DIR / "plant_0000_video_180_opt2_half3s.mp4",
+        "meta_output": CANDIDATES_DIR / "plant_0000_video_180_opt2_half3s_meta.json",
+        "preview_grid": SCRATCH_DIR / "raw_video_opt2_half3s_preview.jpg",
+    },
+    "multi6": {
+        "duration": "6s",
+        "output": CANDIDATES_DIR / "plant_0000_video_360_6s.mp4",
+        "meta_output": CANDIDATES_DIR / "plant_0000_video_360_6s_meta.json",
+        "preview_grid": SCRATCH_DIR / "raw_video_36frames_preview_6s.jpg",
+    },
+}
+
+PROMPT_OPT1_SOLO = (
+    "One single continuous unbroken locked-camera 360-degree studio turntable animation of this exact "
+    "Calathea makoyana botanical watercolor and fine-ink illustration on a pure solid #FFFFFF seamless "
+    "white background, with ZERO cuts, ZERO jump cuts, ZERO cross-dissolves, and ZERO pauses. "
+    "Use the first image as the starting frame and the second image as the final loop frame. "
+    "Right from the very first frame, rotate the entire plant clump smoothly and continuously clockwise "
+    "when viewed from above around its fixed bottom-center brown petiole stem axis at a completely "
+    "steady constant angular speed (90 degrees per second), completing one full 360-degree revolution "
+    "and returning seamlessly into the final loop frame. As the plant clump turns to show its rear "
+    "halfway through the continuous turn, naturally reveal the rich deep burgundy-purple undersides of "
+    "these striped Calathea leaves. Locked static tripod camera, zero camera pan, zero zoom, zero "
+    "floor shadows, zero turntable pedestal, completely rigid leaves with zero wind sway, exact "
+    "hand-drawn botanical watercolor and fine dark ink outline style on every frame. Silent video."
+)
+
+PROMPT_OPT2_HALF = (
+    "One single continuous unbroken locked-camera 180-degree studio turntable half-turn animation of "
+    "this exact Calathea makoyana botanical watercolor and fine-ink illustration on a pure solid #FFFFFF "
+    "seamless white background, with ZERO cuts, ZERO jump cuts, ZERO cross-dissolves, and ZERO pauses. "
+    "Use the first image (0-degree cream-and-green striped front view) as the starting frame and the "
+    "second image (180-degree rich deep burgundy-purple rear view) as the final frame. "
+    "Right from the very first frame, smoothly rotate the entire plant clump in 3D space at a completely "
+    "constant angular velocity (60 degrees per second, clockwise when viewed from above) around its "
+    "fixed bottom-center brown petiole stem axis—turning continuously through its narrow side-on profile "
+    "(with green-striped front leaves rotating toward the left while deep burgundy leaf undersides swing "
+    "into view on the right) until smoothly arriving at the exact 180-degree rear view on the final frame. "
+    "Rigid 3D physical rotation only: never fade, morph-dissolve, or cut. Locked static tripod camera, "
+    "zero camera pan, zero zoom, zero floor shadows, zero turntable pedestal, completely rigid leaves, "
+    "exact hand-drawn botanical watercolor and fine dark ink outline style on every frame. Silent video."
+)
+
+VIDEO_PROMPT_MULTI6 = (
+    "One single continuous unbroken locked-camera 360-degree studio turnaround shot of the exact "
+    "Calathea makoyana botanical watercolor and fine-ink illustration on a pure solid #FFFFFF "
+    "seamless white background, with ZERO cuts, ZERO jump cuts, ZERO cross-dissolves, ZERO abrupt "
+    "transitions, and ZERO pauses. Locked static tripod camera, zero camera pan, zero zoom, zero "
+    "floor shadows, zero turntable pedestal, zero wind sway, and completely rigid leaves. "
+    "Use the first image as the starting frame and the second image as the final loop frame. "
+    "Start rotating smoothly and continuously right from the very first frame around its fixed "
+    "bottom-center brown petiole stem axis at a completely steady, uniform constant angular speed "
+    "(clockwise when viewed from above), completing one full smooth 360-degree revolution and "
+    "returning smoothly into the final loop frame while showing rich deep burgundy-purple leaf "
+    "undersides at the back half of the turn. Use the remaining four images strictly as 3D botanical "
+    "appearance and color references during the uninterrupted fluid rotation—never cut, snap, or "
+    "jump between reference views, and never show any grid layout. Preserve the exact hand-drawn "
+    "botanical watercolor and fine dark ink outline illustration style on every frame. Silent "
+    "video, no music, no sound effects, no dialogue."
 )
 
 
@@ -176,11 +221,26 @@ def extract_preview_contact_sheet(mp4_path: Path, out_jpg: Path, sample_count: i
 
     out_jpg.parent.mkdir(parents=True, exist_ok=True)
     sheet.save(out_jpg, quality=90)
+
+    frames_f = frames.astype(np.float32)
+    if n_frames > 1:
+        diffs = [float(np.abs(frames_f[i + 1] - frames_f[i]).mean()) for i in range(n_frames - 1)]
+        median_diff = float(np.median(diffs))
+        max_diff = float(max(diffs))
+        cut_spike_ratio = round(max_diff / max(median_diff, 1e-6), 2)
+        top_jumps = sorted([(round(d, 2), idx) for idx, d in enumerate(diffs)], reverse=True)[:5]
+    else:
+        median_diff, max_diff, cut_spike_ratio, top_jumps = 0.0, 0.0, 0.0, []
+
     return {
         "total_decoded_frames": int(n_frames),
         "fps": float(meta.get("fps", 24.0)),
         "size": list(meta.get("size", [frames.shape[2], frames.shape[1]])),
         "duration": float(meta.get("duration", n_frames / max(float(meta.get("fps", 24.0)), 1.0))),
+        "median_frame_diff": round(median_diff, 3),
+        "max_frame_diff": round(max_diff, 3),
+        "cut_spike_ratio": cut_spike_ratio,
+        "top_5_jumps": top_jumps,
         "preview_contact_sheet": str(out_jpg),
     }
 
@@ -252,18 +312,25 @@ def _find_output_video(interaction):
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Generate 360-deg studio turnaround video for plant_0000")
+    parser = argparse.ArgumentParser(description="Generate studio turnaround video for plant_0000")
     parser.add_argument("--prep-only", action="store_true", help="Only build reference images and exit")
+    parser.add_argument("--mode", choices=["opt1_solo", "opt2_half", "multi6"], default="opt1_solo")
     parser.add_argument("--refs-dir", type=Path, default=DEFAULT_REFS_DIR)
-    parser.add_argument("--output", type=Path, default=DEFAULT_OUT_MP4)
-    parser.add_argument("--meta-output", type=Path, default=DEFAULT_META_JSON)
-    parser.add_argument("--preview-grid", type=Path, default=DEFAULT_PREVIEW_GRID)
+    parser.add_argument("--output", type=Path, default=None)
+    parser.add_argument("--meta-output", type=Path, default=None)
+    parser.add_argument("--preview-grid", type=Path, default=None)
     parser.add_argument("--model", default="gemini-omni-1.2-flash")
     parser.add_argument("--api-version", default="v1beta")
-    parser.add_argument("--duration", default="4s")
+    parser.add_argument("--duration", default=None)
     parser.add_argument("--resolution", default="720p")
     parser.add_argument("--timeout", type=int, default=600)
     args = parser.parse_args()
+
+    defaults = MODE_DEFAULTS[args.mode]
+    out_mp4: Path = args.output or defaults["output"]
+    meta_json: Path = args.meta_output or defaults["meta_output"]
+    preview_grid: Path = args.preview_grid or defaults["preview_grid"]
+    req_duration: str = args.duration or defaults["duration"]
 
     ref_paths = prepare_reference_images(args.refs_dir)
     for k, p in ref_paths.items():
@@ -277,39 +344,46 @@ def main() -> int:
     from google import genai
     from google.genai import types, errors
 
-    args.output.parent.mkdir(parents=True, exist_ok=True)
+    out_mp4.parent.mkdir(parents=True, exist_ok=True)
     t0 = time.time()
 
     client = genai.Client(http_options=types.HttpOptions(api_version=args.api_version, timeout=int(args.timeout) * 1000))
 
-    first_path = str(ref_paths["ref_000"])
-    ref_list = [
-        str(ref_paths["ref_090"]),
-        str(ref_paths["ref_180"]),
-        str(ref_paths["ref_270"]),
-        str(ref_paths["ref_diagonals"]),
-    ]
+    f1_uri, f1_mime = _upload_and_wait(client, str(ref_paths["ref_000"]), "image/png", omni_mod.normalize_file_uri)
 
-    f1_uri, f1_mime = _upload_and_wait(client, first_path, "image/png", omni_mod.normalize_file_uri)
-    input_parts = [
-        {"type": "image", "uri": f1_uri, "mime_type": f1_mime},
-        {"type": "image", "uri": f1_uri, "mime_type": f1_mime},
-    ]
-    for rpath in ref_list:
-        r_uri, r_mime = _upload_and_wait(client, rpath, "image/png", omni_mod.normalize_file_uri)
-        input_parts.append({"type": "image", "uri": r_uri, "mime_type": r_mime})
-    input_parts.append({"type": "text", "text": VIDEO_PROMPT})
+    if args.mode == "opt1_solo":
+        input_parts = [
+            {"type": "image", "uri": f1_uri, "mime_type": f1_mime},
+            {"type": "image", "uri": f1_uri, "mime_type": f1_mime},
+            {"type": "text", "text": PROMPT_OPT1_SOLO},
+        ]
+    elif args.mode == "opt2_half":
+        f2_uri, f2_mime = _upload_and_wait(client, str(ref_paths["ref_180"]), "image/png", omni_mod.normalize_file_uri)
+        input_parts = [
+            {"type": "image", "uri": f1_uri, "mime_type": f1_mime},
+            {"type": "image", "uri": f2_uri, "mime_type": f2_mime},
+            {"type": "text", "text": PROMPT_OPT2_HALF},
+        ]
+    else:
+        input_parts = [
+            {"type": "image", "uri": f1_uri, "mime_type": f1_mime},
+            {"type": "image", "uri": f1_uri, "mime_type": f1_mime},
+        ]
+        for rkey in ("ref_090", "ref_180", "ref_270", "ref_diagonals"):
+            r_uri, r_mime = _upload_and_wait(client, str(ref_paths[rkey]), "image/png", omni_mod.normalize_file_uri)
+            input_parts.append({"type": "image", "uri": r_uri, "mime_type": r_mime})
+        input_parts.append({"type": "text", "text": VIDEO_PROMPT_MULTI6})
 
     video_config = {
         "type": "video",
         "delivery": "uri",
         "aspect_ratio": "16:9",
-        "duration": omni_mod.parse_and_validate_duration(args.duration),
+        "duration": omni_mod.parse_and_validate_duration(req_duration),
         "resolution": omni_mod.parse_and_validate_resolution(args.resolution),
     }
 
     print(
-        f"\nSending generation request using model '{args.model}' (api_version='{args.api_version}')...\n"
+        f"\nSending [{args.mode}] request using model '{args.model}' (api_version='{args.api_version}')...\n"
         f"Duration: {video_config['duration']} | Resolution: {video_config['resolution']} | Refs: {len(input_parts) - 1} images"
     )
     try:
@@ -333,37 +407,38 @@ def main() -> int:
     video_data = getattr(output_video, "data", None)
     if video_uri:
         try:
-            omni_mod.download_video_file(output_video, str(args.output), client=client)
+            omni_mod.download_video_file(output_video, str(out_mp4), client=client)
         except Exception as dl_err:
             print(f"Retrying download with default client after {args.api_version} download note: {omni_mod.sanitize_error(dl_err)}")
-            omni_mod.download_video_file(output_video, str(args.output), client=genai.Client())
+            omni_mod.download_video_file(output_video, str(out_mp4), client=genai.Client())
     elif video_data:
         import base64
 
         raw_bytes = video_data if isinstance(video_data, (bytes, bytearray)) else base64.b64decode(video_data)
-        args.output.write_bytes(raw_bytes)
-        print(f"Video bytes saved directly to: {args.output}")
+        out_mp4.write_bytes(raw_bytes)
+        print(f"Video bytes saved directly to: {out_mp4}")
     else:
         raise RuntimeError(f"No video URI or inline bytes found in interaction {interaction_id} (status={getattr(interaction, 'status', None)})")
 
     elapsed = round(time.time() - t0, 2)
 
-    preview_info = extract_preview_contact_sheet(args.output, args.preview_grid, sample_count=36)
+    preview_info = extract_preview_contact_sheet(out_mp4, preview_grid, sample_count=36)
     meta_out = {
         "plant_id": "plant_0000",
+        "mode": args.mode,
         "model": args.model,
         "api_version": args.api_version,
         "interaction_id": interaction_id,
         "aspect_ratio": "16:9",
-        "requested_duration": args.duration,
+        "requested_duration": req_duration,
         "resolution": args.resolution,
         "elapsed_sec": elapsed,
-        "output_mp4": str(args.output),
-        "mp4_bytes": args.output.stat().st_size,
+        "output_mp4": str(out_mp4),
+        "mp4_bytes": out_mp4.stat().st_size,
         **preview_info,
     }
-    args.meta_output.write_text(json.dumps(meta_out, ensure_ascii=False, indent=2), encoding="utf-8")
-    print(f"Video generation summary saved to {args.meta_output}")
+    meta_json.write_text(json.dumps(meta_out, ensure_ascii=False, indent=2), encoding="utf-8")
+    print(f"Video generation summary saved to {meta_json}")
     print(json.dumps(meta_out, ensure_ascii=False, indent=2))
     return 0
 
