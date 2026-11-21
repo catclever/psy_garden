@@ -6,6 +6,7 @@ uniform float occlusion_height = 0.0;
 uniform float occlusion_darken = 0.0;
 uniform vec3 shadow_ambient_color : source_color = vec3(0.28, 0.34, 0.42);
 uniform float xray_alpha : hint_range(0.15, 1.0) = 1.0;
+uniform float crossfade_alpha : hint_range(0.0, 1.0) = 1.0;
 
 void fragment() {
 	vec4 tex_color = texture(TEXTURE, UV);
@@ -22,7 +23,7 @@ void fragment() {
 	vec3 darkened_color = mix(base_color, base_color * shadow_ambient_color, in_shadow * occlusion_darken);
 
 	float xray_weight = smoothstep(0.08, 0.36, h_norm);
-	float eff_alpha = alpha * mix(1.0, xray_alpha, xray_weight);
+	float eff_alpha = alpha * mix(1.0, xray_alpha, xray_weight) * crossfade_alpha;
 	COLOR = vec4(darkened_color, eff_alpha);
 }
 

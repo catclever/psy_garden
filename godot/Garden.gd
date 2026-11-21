@@ -67,6 +67,16 @@ var btn_toggle_footprints: Button = null
 var perspective_label: Label = null
 var perspective_slider: HSlider = null
 
+var turntable_lab_active: bool = false
+var turntable_sector_count: int = 8
+var turntable_transition_mode: int = 1
+var turntable_index_data: Dictionary = {}
+var _turntable_index_loading: bool = false
+var _pending_url_lab: bool = false
+var btn_turntable_lab: Button = null
+var btn_turntable_dirs: Button = null
+var btn_turntable_transition: Button = null
+
 func _ready():
 	mouse_lantern.global_position = Vector2(680, 420)
 	ground_canvas = Node2D.new()
@@ -77,7 +87,14 @@ func _ready():
 	ground_canvas.draw.connect(_draw_zen_ground)
 	_ready_ui()
 	_init_http_pool()
-	generate_demo_layout()
+	if OS.has_feature("web"):
+		var lab_param = JavaScriptBridge.eval("(function(){try{return new URLSearchParams(window.location.search).get(\"lab\")||new URLSearchParams(window.top.location.search).get(\"lab\")||\"\";}catch(e){return \"\";}})()", true)
+		if str(lab_param).strip_edges().to_lower() == "3a":
+			_pending_url_lab = true
+	if _pending_url_lab:
+		call_deferred("enter_turntable_lab")
+	else:
+		generate_demo_layout()
 	call_deferred("_load_manifest")
 	ground_canvas.queue_redraw()
 
@@ -141,6 +158,10 @@ func _refresh_courtyard_projection():
 				p.set_ground_pitch(camera_pitch_ratio)
 			if p.has_method("set_perspective_scale"):
 				p.set_perspective_scale(proj["depth_scale"])
+			if p.is_turntable and p.has_method("update_turntable_orbit"):
+				p.update_turntable_orbit(orbit_angle_deg, 0.0, false)
+	if turntable_lab_active:
+		_update_lab_status_label()
 	if ground_canvas:
 		ground_canvas.queue_redraw()
 
@@ -271,6 +292,11 @@ func _process(delta):
 			_syncing_orbit_ui = false
 		_refresh_courtyard_projection()
 
+	if turntable_lab_active:
+		for p in active_plants:
+			if is_instance_valid(p) and p.is_turntable and p.has_method("update_turntable_orbit"):
+				p.update_turntable_orbit(orbit_angle_deg, delta, false)
+
 	var target_mouse: Vector2
 	if _test_mouse_override.x > -90000.0:
 		target_mouse = _test_mouse_override
@@ -368,8 +394,8 @@ func _process(delta):
 					cover_height = max(cover_height, reach_ratio)
 					cover_strength = clamp(cover_strength + strength, 0.0, 0.70)
 
-		# Apply to B's shaders (all 3 sprites)
-		for sprite in [b.sprite_red, b.sprite_green, b.sprite_blue]:
+		# Apply to B's shaders (all 3 sprites + ghost sprites if turntable)
+		for sprite in [b.sprite_red, b.sprite_green, b.sprite_blue, b._prev_red, b._prev_green, b._prev_blue]:
 			if sprite and sprite.visible and sprite.material:
 				var mat = sprite.material as ShaderMaterial
 				mat.set_shader_parameter("occlusion_height", cover_height)
@@ -416,12 +442,15 @@ func update_plant_colors(p=null):
 	var targets = [p] if p else active_plants
 	for t in targets:
 		if not is_instance_valid(t): continue
-		if t.sprite_red and t.sprite_red.material:
-			(t.sprite_red.material as ShaderMaterial).set_shader_parameter("tint_color", color_red)
-		if t.sprite_green and t.sprite_green.material:
-			(t.sprite_green.material as ShaderMaterial).set_shader_parameter("tint_color", color_green)
-		if t.sprite_blue and t.sprite_blue.material:
-			(t.sprite_blue.material as ShaderMaterial).set_shader_parameter("tint_color", color_blue)
+		for spr in [t.sprite_red, t._prev_red]:
+			if spr and spr.material:
+				(spr.material as ShaderMaterial).set_shader_parameter("tint_color", color_red)
+		for spr in [t.sprite_green, t._prev_green]:
+			if spr and spr.material:
+				(spr.material as ShaderMaterial).set_shader_parameter("tint_color", color_green)
+		for spr in [t.sprite_blue, t._prev_blue]:
+			if spr and spr.material:
+				(spr.material as ShaderMaterial).set_shader_parameter("tint_color", color_blue)
 
 func can_place_plant(pos: Vector2, fp_w: float, fp_h: float) -> bool:
 	# Avoid HUD top-left panel
@@ -642,7 +671,7 @@ func _load_manifest():
 func _parse_and_activate_manifest(json_text: String):
 	var parsed = JSON.parse_string(json_text)
 	if not (parsed is Dictionary) or not (parsed.get("plants") is Array):
-		if fleet_status_label:
+		if fleet_status_label and not turntable_lab_active:
 			fleet_status_label.text = "Fleet: manifest parse error"
 		return
 	manifest_records.clear()
@@ -650,6 +679,11 @@ func _parse_and_activate_manifest(json_text: String):
 		if rec is Dictionary:
 			if rec.get("enabled", true) and rec.get("true_color", true):
 				manifest_records.append(rec)
+
+	if turntable_lab_active or _pending_url_lab:
+		if not manifest_records.is_empty():
+			manifest_loaded_once = true
+		return
 
 	if fleet_status_label:
 		fleet_status_label.text = "Fleet: %d species loaded" % manifest_records.size()
@@ -890,25 +924,364 @@ func _ready_ui():
 	cg.color_changed.connect(func(c): color_green = c; update_plant_colors())
 	cb.color_changed.connect(func(c): color_blue = c; update_plant_colors())
 
-	$HUD/MarginContainer/VBoxContainer/BtnRandomLayout.pressed.connect(func(): generate_random_garden())
-	$HUD/MarginContainer/VBoxContainer/BtnDemoLayout.pressed.connect(generate_demo_layout)
+	$HUD/MarginContainer/VBoxContainer/BtnRandomLayout.pressed.connect(func():
+		if turntable_lab_active:
+			exit_turntable_lab(false)
+		generate_random_garden()
+	)
+	$HUD/MarginContainer/VBoxContainer/BtnDemoLayout.pressed.connect(func():
+		if turntable_lab_active:
+			exit_turntable_lab(false)
+		generate_demo_layout()
+	)
 
 	btn_toggle_footprints = Button.new()
 	btn_toggle_footprints.name = "BtnToggleFootprints"
 	btn_toggle_footprints.text = "Footprints: ON"
+	btn_toggle_footprints.custom_minimum_size.y = 24
 	btn_toggle_footprints.pressed.connect(_on_toggle_footprints_pressed)
 	vbox.add_child(btn_toggle_footprints)
 
 	btn_toggle_xray = Button.new()
 	btn_toggle_xray.name = "BtnToggleXRay"
 	btn_toggle_xray.text = "X-Ray Peek: ON"
+	btn_toggle_xray.custom_minimum_size.y = 24
 	btn_toggle_xray.pressed.connect(_on_toggle_xray_pressed)
 	vbox.add_child(btn_toggle_xray)
+
+	btn_turntable_lab = Button.new()
+	btn_turntable_lab.name = "BtnTurntableLab"
+	btn_turntable_lab.text = "3A Turntable Lab: OFF"
+	btn_turntable_lab.custom_minimum_size.y = 24
+	btn_turntable_lab.pressed.connect(_on_turntable_lab_pressed)
+	vbox.add_child(btn_turntable_lab)
+
+	var turntable_ctrl_row := HBoxContainer.new()
+	turntable_ctrl_row.name = "TurntableCtrlRow"
+	turntable_ctrl_row.custom_minimum_size.y = 24
+	vbox.add_child(turntable_ctrl_row)
+
+	btn_turntable_dirs = Button.new()
+	btn_turntable_dirs.name = "BtnTurntableDirs"
+	btn_turntable_dirs.text = "Angles: 8-Way"
+	btn_turntable_dirs.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	btn_turntable_dirs.custom_minimum_size.y = 24
+	btn_turntable_dirs.pressed.connect(_on_turntable_dirs_pressed)
+	turntable_ctrl_row.add_child(btn_turntable_dirs)
+
+	btn_turntable_transition = Button.new()
+	btn_turntable_transition.name = "BtnTurntableTransition"
+	btn_turntable_transition.text = "Feel: Cross-Fade"
+	btn_turntable_transition.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	btn_turntable_transition.custom_minimum_size.y = 24
+	btn_turntable_transition.pressed.connect(_on_turntable_transition_pressed)
+	turntable_ctrl_row.add_child(btn_turntable_transition)
 
 	fleet_status_label = Label.new()
 	fleet_status_label.name = "FleetStatusLabel"
 	fleet_status_label.text = "Fleet: loading manifest..."
 	vbox.add_child(fleet_status_label)
+
+func _transition_mode_name() -> String:
+	if turntable_transition_mode == 1:
+		return "Cross-Fade"
+	elif turntable_transition_mode == 2:
+		return "Pop-Flip"
+	return "Crisp Snap"
+
+func _update_lab_status_label():
+	if fleet_status_label and turntable_lab_active:
+		fleet_status_label.text = "3A Lab: %d-Way | %s | orbit %d deg" % [turntable_sector_count, _transition_mode_name(), int(round(orbit_angle_deg))]
+
+func _on_turntable_lab_pressed():
+	if turntable_lab_active:
+		exit_turntable_lab(true)
+	else:
+		enter_turntable_lab()
+
+func _on_turntable_dirs_pressed():
+	turntable_sector_count = 4 if turntable_sector_count >= 8 else 8
+	if btn_turntable_dirs:
+		btn_turntable_dirs.text = "Angles: 8-Way" if turntable_sector_count >= 8 else "Angles: 4-Way"
+	for p in active_plants:
+		if is_instance_valid(p) and p.is_turntable:
+			p.turntable_sector_count = turntable_sector_count
+			p.update_turntable_orbit(orbit_angle_deg, 0.0, true)
+	if turntable_lab_active:
+		_update_lab_status_label()
+
+func _on_turntable_transition_pressed():
+	if turntable_transition_mode == 1:
+		turntable_transition_mode = 2
+	elif turntable_transition_mode == 2:
+		turntable_transition_mode = 0
+	else:
+		turntable_transition_mode = 1
+	if btn_turntable_transition:
+		btn_turntable_transition.text = "Feel: %s" % _transition_mode_name()
+	for p in active_plants:
+		if is_instance_valid(p) and p.is_turntable:
+			p.turntable_transition_mode = turntable_transition_mode
+			p.update_turntable_orbit(orbit_angle_deg, 0.0, false)
+	if turntable_lab_active:
+		_update_lab_status_label()
+
+func enter_turntable_lab():
+	turntable_lab_active = true
+	_pending_url_lab = false
+	if btn_turntable_lab:
+		btn_turntable_lab.text = "3A Turntable Lab: ON"
+
+	if not turntable_index_data.is_empty():
+		_populate_turntable_lab()
+		return
+
+	if OS.has_feature("web"):
+		if web_base_url == "":
+			var evaluated = JavaScriptBridge.eval("new URL('../', window.location.href).href", true)
+			web_base_url = str(evaluated) if evaluated != null else ""
+			if web_base_url != "" and not web_base_url.ends_with("/"):
+				web_base_url += "/"
+		if _turntable_index_loading:
+			return
+		_turntable_index_loading = true
+		if fleet_status_label:
+			fleet_status_label.text = "3A Lab: loading turntable index..."
+		var index_url: String = web_base_url + "assets/turntable_lab/index.json"
+		var req := HTTPRequest.new()
+		add_child(req)
+		req.request_completed.connect(func(result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray):
+			req.queue_free()
+			_turntable_index_loading = false
+			if result == HTTPRequest.RESULT_SUCCESS and response_code == 200:
+				var parsed = JSON.parse_string(body.get_string_from_utf8())
+				if parsed is Dictionary and parsed.get("species") is Array:
+					turntable_index_data = parsed
+					if turntable_lab_active:
+						_populate_turntable_lab()
+					return
+			if fleet_status_label and turntable_lab_active:
+				fleet_status_label.text = "3A Lab: index load failed"
+		)
+		var err = req.request(index_url)
+		if err != OK:
+			req.queue_free()
+			_turntable_index_loading = false
+			if fleet_status_label:
+				fleet_status_label.text = "3A Lab: index request error"
+		return
+
+	var local_candidates = [
+		"res://../src/assets/turntable_lab/index.json",
+		ProjectSettings.globalize_path("res://").path_join("../src/assets/turntable_lab/index.json").simplify_path()
+	]
+	for path in local_candidates:
+		if FileAccess.file_exists(path):
+			var json_text: String = FileAccess.get_file_as_string(path)
+			var parsed = JSON.parse_string(json_text)
+			if parsed is Dictionary and parsed.get("species") is Array:
+				turntable_index_data = parsed
+				_populate_turntable_lab()
+				return
+
+	if fleet_status_label:
+		fleet_status_label.text = "3A Lab: index.json missing"
+
+func exit_turntable_lab(restore_garden: bool = true):
+	turntable_lab_active = false
+	_pending_url_lab = false
+	if btn_turntable_lab:
+		btn_turntable_lab.text = "3A Turntable Lab: OFF"
+	if fleet_status_label:
+		if not manifest_records.is_empty():
+			fleet_status_label.text = "Fleet: %d species loaded" % manifest_records.size()
+		else:
+			fleet_status_label.text = "Fleet: 10 fallback species"
+	if restore_garden:
+		generate_random_garden(36)
+
+func _populate_turntable_lab():
+	clear_garden()
+	var species_map: Dictionary = {}
+	for sp in turntable_index_data.get("species", []):
+		if sp is Dictionary and sp.has("name"):
+			species_map[str(sp["name"])] = sp
+
+	var sp_cal: Dictionary = species_map.get("plant_0000", {})
+	var sp_dat: Dictionary = species_map.get("plant_0177", {})
+
+	if not sp_cal.is_empty():
+		_spawn_legacy_lab_plant(sp_cal, Vector2(-195.0, 135.0), 150.0, "Calathea [Legacy 1-View]")
+		_spawn_turntable_lab_plant(sp_cal, Vector2(195.0, 135.0), 150.0, 0.0, "Calathea")
+		_spawn_turntable_lab_plant(sp_cal, Vector2(0.0, 235.0), 135.0, 90.0, "Calathea")
+
+	if not sp_dat.is_empty():
+		_spawn_legacy_lab_plant(sp_dat, Vector2(-195.0, -145.0), 185.0, "Datura [Legacy 1-View]")
+		_spawn_turntable_lab_plant(sp_dat, Vector2(195.0, -145.0), 185.0, 0.0, "Datura")
+		_spawn_turntable_lab_plant(sp_dat, Vector2(0.0, -235.0), 175.0, 180.0, "Datura")
+
+	_update_lab_status_label()
+	if ground_canvas:
+		ground_canvas.queue_redraw()
+
+func _spawn_legacy_lab_plant(sp: Dictionary, c_pos: Vector2, target_h: float, caption: String):
+	var legacy: Dictionary = sp.get("legacy", {})
+	if legacy.is_empty():
+		return null
+	var proj: Dictionary = project_courtyard_point(c_pos)
+	var pos: Vector2 = proj["screen_pos"]
+	var depth_s: float = proj["depth_scale"]
+	var root_w: float = float(legacy.get("root_width", sp.get("root_width", 24.0)))
+	var raw_h: float = max(float(legacy.get("height", 250.0)), 1.0)
+	var fp_w: float = max(10.0, root_w * (target_h / raw_h) * depth_s)
+	var fp_h: float = max(6.0, fp_w * camera_pitch_ratio)
+
+	var p = plant_scene.instantiate()
+	var rec_id: String = str(legacy.get("name", sp.get("name", "unknown")))
+	p.plant_id = rec_id
+	p.skip_auto_load = true
+	p.is_turntable = false
+	p.desired_height_px = target_h
+	p.meta_root_width = root_w
+	p.fp_w = fp_w
+	p.fp_h = fp_h
+	p.show_footprint_ring = footprints_visible
+	p.global_position = pos
+	p.ground_pitch_ratio = camera_pitch_ratio
+	p.courtyard_pos = c_pos
+	p.has_courtyard_pos = true
+	p.perspective_scale = depth_s
+	p.set_meta("gen_id", generation_id)
+	y_sort.add_child(p)
+	p.set_ground_pitch(camera_pitch_ratio)
+	p.set_lab_caption(caption)
+	active_plants.append(p)
+
+	var path_prefix: String = str(legacy.get("path_prefix", ""))
+	var slot_files: Dictionary = {}
+	var layer_files = legacy.get("layer_files", [])
+	if layer_files is Array:
+		for lf in layer_files:
+			if lf is Dictionary:
+				var slot: String = str(lf.get("slot", ""))
+				var fname: String = str(lf.get("file", ""))
+				if slot in ["red", "green", "blue"] and fname != "":
+					slot_files[slot] = fname
+	if slot_files.is_empty():
+		return p
+
+	var anchor_uv: Vector2 = Vector2(-1.0, -1.0)
+	var raw_anchor = legacy.get("root_anchor", null)
+	if raw_anchor is Array and raw_anchor.size() >= 2:
+		anchor_uv = Vector2(float(raw_anchor[0]), float(raw_anchor[1]))
+
+	var my_gen_id: int = generation_id
+	var loaded_textures: Dictionary = {"red": null, "green": null, "blue": null}
+	var remaining: Array = [slot_files.size()]
+	for slot in slot_files.keys():
+		_load_layer_texture(path_prefix, slot_files[slot], func(tex: Texture2D):
+			loaded_textures[slot] = tex
+			remaining[0] -= 1
+			if remaining[0] == 0:
+				if is_instance_valid(p) and my_gen_id == generation_id:
+					if loaded_textures["red"] or loaded_textures["green"] or loaded_textures["blue"]:
+						p.setup_with_textures(
+							rec_id,
+							loaded_textures["red"],
+							loaded_textures["green"],
+							loaded_textures["blue"],
+							target_h,
+							root_w,
+							anchor_uv
+						)
+						p.set_ground_pitch(camera_pitch_ratio)
+						var cur_proj: Dictionary = project_courtyard_point(p.courtyard_pos)
+						p.global_position = cur_proj["screen_pos"]
+						p.set_perspective_scale(cur_proj["depth_scale"])
+						p.show_footprint_ring = footprints_visible
+						update_plant_colors(p)
+		)
+	return p
+
+func _spawn_turntable_lab_plant(sp: Dictionary, c_pos: Vector2, target_h: float, yaw_deg: float, caption_prefix: String):
+	var proj: Dictionary = project_courtyard_point(c_pos)
+	var pos: Vector2 = proj["screen_pos"]
+	var depth_s: float = proj["depth_scale"]
+	var root_w: float = float(sp.get("root_width", 24.0))
+	var sp_name: String = str(sp.get("name", "plant_0000"))
+
+	var p = plant_scene.instantiate()
+	p.plant_id = sp_name
+	p.skip_auto_load = true
+	p.is_turntable = true
+	p.base_yaw_deg = yaw_deg
+	p.turntable_sector_count = turntable_sector_count
+	p.turntable_transition_mode = turntable_transition_mode
+	p.caption_prefix = caption_prefix
+	p.desired_height_px = target_h
+	p.meta_root_width = root_w
+	p.show_footprint_ring = footprints_visible
+	p.global_position = pos
+	p.ground_pitch_ratio = camera_pitch_ratio
+	p.courtyard_pos = c_pos
+	p.has_courtyard_pos = true
+	p.perspective_scale = depth_s
+	p.set_meta("gen_id", generation_id)
+	y_sort.add_child(p)
+	p.set_ground_pitch(camera_pitch_ratio)
+	p.set_lab_caption("%s [0 deg]" % caption_prefix)
+	active_plants.append(p)
+
+	var views: Dictionary = sp.get("views", {})
+	var my_gen_id: int = generation_id
+	for ang_key in views.keys():
+		var view: Dictionary = views[ang_key]
+		var ang_int: int = int(ang_key)
+		var path_prefix: String = str(view.get("path_prefix", ""))
+		var crown_h: float = float(view.get("crown_h", -1.0))
+		var anchor_uv: Vector2 = Vector2(-1.0, -1.0)
+		var raw_anchor = view.get("root_anchor", null)
+		if raw_anchor is Array and raw_anchor.size() >= 2:
+			anchor_uv = Vector2(float(raw_anchor[0]), float(raw_anchor[1]))
+
+		var slot_files: Dictionary = {}
+		var layer_files = view.get("layer_files", [])
+		if layer_files is Array:
+			for lf in layer_files:
+				if lf is Dictionary:
+					var slot: String = str(lf.get("slot", ""))
+					var fname: String = str(lf.get("file", ""))
+					if slot in ["red", "green", "blue"] and fname != "":
+						slot_files[slot] = fname
+		if slot_files.is_empty():
+			continue
+
+		var loaded_textures: Dictionary = {"red": null, "green": null, "blue": null}
+		var remaining: Array = [slot_files.size()]
+		for slot in slot_files.keys():
+			_load_layer_texture(path_prefix, slot_files[slot], func(tex: Texture2D):
+				loaded_textures[slot] = tex
+				remaining[0] -= 1
+				if remaining[0] == 0:
+					if is_instance_valid(p) and my_gen_id == generation_id:
+						if loaded_textures["red"] or loaded_textures["green"] or loaded_textures["blue"]:
+							p.register_turntable_frame(
+								ang_int,
+								loaded_textures["red"],
+								loaded_textures["green"],
+								loaded_textures["blue"],
+								anchor_uv,
+								crown_h
+							)
+							p.update_turntable_orbit(orbit_angle_deg, 0.0, true)
+							p.set_ground_pitch(camera_pitch_ratio)
+							var cur_proj: Dictionary = project_courtyard_point(p.courtyard_pos)
+							p.global_position = cur_proj["screen_pos"]
+							p.set_perspective_scale(cur_proj["depth_scale"])
+							p.show_footprint_ring = footprints_visible
+							update_plant_colors(p)
+			)
+	return p
 
 func _on_toggle_footprints_pressed():
 	footprints_visible = not footprints_visible

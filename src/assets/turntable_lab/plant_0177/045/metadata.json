@@ -1,0 +1,29 @@
+{
+    "name": "plant_0177",
+    "display_name": "曼陀罗 (植物)",
+    "variant_id": "045",
+    "width": 226,
+    "height": 250,
+    "root_anchor": [
+        0.4126,
+        0.992
+    ],
+    "root_x": 93.25,
+    "root_y": 248,
+    "root_width": 44,
+    "root_ratio": 0.195,
+    "ground_ellipse": [
+        44,
+        24
+    ],
+    "layers": [
+        "layer-red",
+        "layer-green",
+        "layer-blue"
+    ],
+    "source_image": "plant_0177_045.png",
+    "true_color": true,
+    "created_at": 1795251917,
+    "status": "ai_analyzing",
+    "ai_analysis": null
+}

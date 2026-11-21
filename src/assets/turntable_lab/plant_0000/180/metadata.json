@@ -1,0 +1,29 @@
+{
+    "name": "plant_0000",
+    "display_name": "孔雀竹芋",
+    "variant_id": "180",
+    "width": 222,
+    "height": 250,
+    "root_anchor": [
+        0.4886,
+        0.996
+    ],
+    "root_x": 108.48,
+    "root_y": 249,
+    "root_width": 22,
+    "root_ratio": 0.099,
+    "ground_ellipse": [
+        22,
+        12
+    ],
+    "layers": [
+        "layer-red",
+        "layer-green",
+        "layer-blue"
+    ],
+    "source_image": "plant_0000_180.png",
+    "true_color": true,
+    "created_at": 1795251915,
+    "status": "ai_analyzing",
+    "ai_analysis": null
+}

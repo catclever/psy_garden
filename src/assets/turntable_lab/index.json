@@ -1,0 +1,533 @@
+{
+  "generated_at": 1795251920,
+  "angles": [
+    0,
+    45,
+    90,
+    135,
+    180,
+    225,
+    270,
+    315
+  ],
+  "species": [
+    {
+      "name": "plant_0000",
+      "label_ascii": "Calathea",
+      "display_name": "孔雀竹芋",
+      "default_lab_height_px": 150.0,
+      "root_width": 22,
+      "legacy": {
+        "id": "plant_0000__01",
+        "name": "plant_0000",
+        "display_name": "孔雀竹芋",
+        "variant_id": "01",
+        "path_prefix": "assets/plants/plant_0000/01",
+        "width": 226,
+        "height": 250,
+        "root_anchor": [
+          0.5121,
+          0.996
+        ],
+        "root_width": 22,
+        "root_ratio": 0.097,
+        "ground_ellipse": [
+          22,
+          12
+        ],
+        "true_color": true,
+        "layer_files": [
+          {
+            "slot": "green",
+            "file": "layer_green.png"
+          },
+          {
+            "slot": "red",
+            "file": "layer_red.png"
+          },
+          {
+            "slot": "blue",
+            "file": "layer_blue.png"
+          }
+        ],
+        "ai_analysis": {
+          "zh_name": "孔雀竹芋",
+          "scientific_name": "Calathea makoyana",
+          "botanical_height_m": [
+            0.3,
+            0.6
+          ],
+          "plant_type": "groundcover",
+          "growth_habit": "bush",
+          "suggested_game_height_px": [
+            35,
+            60
+          ],
+          "brief": "孔雀竹芋为竹芋科多年生草本，株型丛生，叶片卵状椭圆形，叶面绿色具深绿色羽状斑纹，叶背紫红色，形似孔雀尾羽。",
+          "status": "success"
+        }
+      },
+      "views": {
+        "0": {
+          "path_prefix": "assets/turntable_lab/plant_0000/000",
+          "width": 226,
+          "height": 250,
+          "root_anchor": [
+            0.5121,
+            0.996
+          ],
+          "crown_h": 249.0,
+          "root_width": 22,
+          "layer_files": [
+            {
+              "slot": "green",
+              "file": "layer_green.png"
+            },
+            {
+              "slot": "red",
+              "file": "layer_red.png"
+            },
+            {
+              "slot": "blue",
+              "file": "layer_blue.png"
+            }
+          ]
+        },
+        "45": {
+          "path_prefix": "assets/turntable_lab/plant_0000/045",
+          "width": 231,
+          "height": 250,
+          "root_anchor": [
+            0.5121,
+            0.996
+          ],
+          "crown_h": 249.0,
+          "root_width": 25,
+          "layer_files": [
+            {
+              "slot": "green",
+              "file": "layer_green.png"
+            },
+            {
+              "slot": "red",
+              "file": "layer_red.png"
+            },
+            {
+              "slot": "blue",
+              "file": "layer_blue.png"
+            }
+          ]
+        },
+        "90": {
+          "path_prefix": "assets/turntable_lab/plant_0000/090",
+          "width": 167,
+          "height": 250,
+          "root_anchor": [
+            0.5098,
+            0.996
+          ],
+          "crown_h": 249.0,
+          "root_width": 24,
+          "layer_files": [
+            {
+              "slot": "green",
+              "file": "layer_green.png"
+            },
+            {
+              "slot": "red",
+              "file": "layer_red.png"
+            },
+            {
+              "slot": "blue",
+              "file": "layer_blue.png"
+            }
+          ]
+        },
+        "135": {
+          "path_prefix": "assets/turntable_lab/plant_0000/135",
+          "width": 207,
+          "height": 250,
+          "root_anchor": [
+            0.4533,
+            0.996
+          ],
+          "crown_h": 249.0,
+          "root_width": 22,
+          "layer_files": [
+            {
+              "slot": "green",
+              "file": "layer_green.png"
+            },
+            {
+              "slot": "red",
+              "file": "layer_red.png"
+            },
+            {
+              "slot": "blue",
+              "file": "layer_blue.png"
+            }
+          ]
+        },
+        "180": {
+          "path_prefix": "assets/turntable_lab/plant_0000/180",
+          "width": 222,
+          "height": 250,
+          "root_anchor": [
+            0.4886,
+            0.996
+          ],
+          "crown_h": 249.0,
+          "root_width": 22,
+          "layer_files": [
+            {
+              "slot": "green",
+              "file": "layer_green.png"
+            },
+            {
+              "slot": "red",
+              "file": "layer_red.png"
+            },
+            {
+              "slot": "blue",
+              "file": "layer_blue.png"
+            }
+          ]
+        },
+        "225": {
+          "path_prefix": "assets/turntable_lab/plant_0000/225",
+          "width": 230,
+          "height": 250,
+          "root_anchor": [
+            0.4812,
+            0.996
+          ],
+          "crown_h": 249.0,
+          "root_width": 24,
+          "layer_files": [
+            {
+              "slot": "green",
+              "file": "layer_green.png"
+            },
+            {
+              "slot": "red",
+              "file": "layer_red.png"
+            },
+            {
+              "slot": "blue",
+              "file": "layer_blue.png"
+            }
+          ]
+        },
+        "270": {
+          "path_prefix": "assets/turntable_lab/plant_0000/270",
+          "width": 166,
+          "height": 250,
+          "root_anchor": [
+            0.4964,
+            0.996
+          ],
+          "crown_h": 249.0,
+          "root_width": 19,
+          "layer_files": [
+            {
+              "slot": "green",
+              "file": "layer_green.png"
+            },
+            {
+              "slot": "red",
+              "file": "layer_red.png"
+            },
+            {
+              "slot": "blue",
+              "file": "layer_blue.png"
+            }
+          ]
+        },
+        "315": {
+          "path_prefix": "assets/turntable_lab/plant_0000/315",
+          "width": 206,
+          "height": 250,
+          "root_anchor": [
+            0.5129,
+            0.996
+          ],
+          "crown_h": 249.0,
+          "root_width": 22,
+          "layer_files": [
+            {
+              "slot": "green",
+              "file": "layer_green.png"
+            },
+            {
+              "slot": "red",
+              "file": "layer_red.png"
+            },
+            {
+              "slot": "blue",
+              "file": "layer_blue.png"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "plant_0177",
+      "label_ascii": "Datura",
+      "display_name": "曼陀罗 (植物)",
+      "default_lab_height_px": 185.0,
+      "root_width": 60,
+      "legacy": {
+        "id": "plant_0177__02",
+        "name": "plant_0177",
+        "display_name": "曼陀罗 (植物)",
+        "variant_id": "02",
+        "path_prefix": "assets/plants/plant_0177/02",
+        "width": 262,
+        "height": 250,
+        "root_anchor": [
+          0.494,
+          0.996
+        ],
+        "root_width": 60,
+        "root_ratio": 0.229,
+        "ground_ellipse": [
+          60,
+          33
+        ],
+        "true_color": true,
+        "layer_files": [
+          {
+            "slot": "green",
+            "file": "layer_green.png"
+          },
+          {
+            "slot": "red",
+            "file": "layer_red.png"
+          },
+          {
+            "slot": "blue",
+            "file": "layer_blue.png"
+          }
+        ],
+        "ai_analysis": {
+          "zh_name": "曼陀罗",
+          "scientific_name": "Datura stramonium",
+          "botanical_height_m": [
+            0.5,
+            1.5
+          ],
+          "plant_type": "flower",
+          "growth_habit": "bush",
+          "suggested_game_height_px": [
+            70,
+            110
+          ],
+          "brief": "直立粗壮的一年生草本，开大型漏斗状白花，结具刺的卵球形蒴果。",
+          "status": "success"
+        }
+      },
+      "views": {
+        "0": {
+          "path_prefix": "assets/turntable_lab/plant_0177/000",
+          "width": 262,
+          "height": 250,
+          "root_anchor": [
+            0.494,
+            0.996
+          ],
+          "crown_h": 249.0,
+          "root_width": 60,
+          "layer_files": [
+            {
+              "slot": "green",
+              "file": "layer_green.png"
+            },
+            {
+              "slot": "red",
+              "file": "layer_red.png"
+            },
+            {
+              "slot": "blue",
+              "file": "layer_blue.png"
+            }
+          ]
+        },
+        "45": {
+          "path_prefix": "assets/turntable_lab/plant_0177/045",
+          "width": 226,
+          "height": 250,
+          "root_anchor": [
+            0.4126,
+            0.992
+          ],
+          "crown_h": 248.0,
+          "root_width": 44,
+          "layer_files": [
+            {
+              "slot": "green",
+              "file": "layer_green.png"
+            },
+            {
+              "slot": "red",
+              "file": "layer_red.png"
+            },
+            {
+              "slot": "blue",
+              "file": "layer_blue.png"
+            }
+          ]
+        },
+        "90": {
+          "path_prefix": "assets/turntable_lab/plant_0177/090",
+          "width": 151,
+          "height": 250,
+          "root_anchor": [
+            0.509,
+            0.996
+          ],
+          "crown_h": 249.0,
+          "root_width": 50,
+          "layer_files": [
+            {
+              "slot": "green",
+              "file": "layer_green.png"
+            },
+            {
+              "slot": "red",
+              "file": "layer_red.png"
+            },
+            {
+              "slot": "blue",
+              "file": "layer_blue.png"
+            }
+          ]
+        },
+        "135": {
+          "path_prefix": "assets/turntable_lab/plant_0177/135",
+          "width": 194,
+          "height": 250,
+          "root_anchor": [
+            0.5017,
+            0.992
+          ],
+          "crown_h": 248.0,
+          "root_width": 45,
+          "layer_files": [
+            {
+              "slot": "green",
+              "file": "layer_green.png"
+            },
+            {
+              "slot": "red",
+              "file": "layer_red.png"
+            },
+            {
+              "slot": "blue",
+              "file": "layer_blue.png"
+            }
+          ]
+        },
+        "180": {
+          "path_prefix": "assets/turntable_lab/plant_0177/180",
+          "width": 262,
+          "height": 250,
+          "root_anchor": [
+            0.5015,
+            0.992
+          ],
+          "crown_h": 248.0,
+          "root_width": 60,
+          "layer_files": [
+            {
+              "slot": "green",
+              "file": "layer_green.png"
+            },
+            {
+              "slot": "red",
+              "file": "layer_red.png"
+            },
+            {
+              "slot": "blue",
+              "file": "layer_blue.png"
+            }
+          ]
+        },
+        "225": {
+          "path_prefix": "assets/turntable_lab/plant_0177/225",
+          "width": 194,
+          "height": 250,
+          "root_anchor": [
+            0.5025,
+            0.996
+          ],
+          "crown_h": 249.0,
+          "root_width": 45,
+          "layer_files": [
+            {
+              "slot": "green",
+              "file": "layer_green.png"
+            },
+            {
+              "slot": "red",
+              "file": "layer_red.png"
+            },
+            {
+              "slot": "blue",
+              "file": "layer_blue.png"
+            }
+          ]
+        },
+        "270": {
+          "path_prefix": "assets/turntable_lab/plant_0177/270",
+          "width": 151,
+          "height": 250,
+          "root_anchor": [
+            0.5498,
+            0.996
+          ],
+          "crown_h": 249.0,
+          "root_width": 45,
+          "layer_files": [
+            {
+              "slot": "green",
+              "file": "layer_green.png"
+            },
+            {
+              "slot": "red",
+              "file": "layer_red.png"
+            },
+            {
+              "slot": "blue",
+              "file": "layer_blue.png"
+            }
+          ]
+        },
+        "315": {
+          "path_prefix": "assets/turntable_lab/plant_0177/315",
+          "width": 189,
+          "height": 250,
+          "root_anchor": [
+            0.492,
+            0.996
+          ],
+          "crown_h": 249.0,
+          "root_width": 43,
+          "layer_files": [
+            {
+              "slot": "green",
+              "file": "layer_green.png"
+            },
+            {
+              "slot": "red",
+              "file": "layer_red.png"
+            },
+            {
+              "slot": "blue",
+              "file": "layer_blue.png"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

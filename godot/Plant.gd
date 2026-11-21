@@ -1,5 +1,9 @@
 extends Node2D
 
+const TRANSITION_SNAP: int = 0
+const TRANSITION_CROSSFADE: int = 1
+const TRANSITION_POP: int = 2
+
 @export var plant_id: String = "plant_0000"
 
 var root_anchor: Vector2 = Vector2.ZERO
@@ -23,6 +27,23 @@ var _cached_raw_w: float = 100.0
 var _cached_raw_h: float = 100.0
 var _cached_base_rw: float = 20.0
 var _textures_ready: bool = false
+
+var is_turntable: bool = false
+var base_yaw_deg: float = 0.0
+var turntable_sector_count: int = 8
+var turntable_transition_mode: int = TRANSITION_CROSSFADE
+var turntable_frames: Dictionary = {}
+var current_sector_deg: int = 0
+var prev_sector_deg: int = 0
+var transition_progress: float = 1.0
+var sub_sector_norm: float = 0.0
+var caption_prefix: String = ""
+var caption_label: Label = null
+
+var _prev_red: Sprite2D = null
+var _prev_green: Sprite2D = null
+var _prev_blue: Sprite2D = null
+var _materials_uniqued: bool = false
 
 var show_footprint_ring: bool = true:
 	set(value):
@@ -48,16 +69,72 @@ var skip_auto_load: bool = false
 @onready var incense_shadow_pivot = $GroundShadowPlane/IncenseShadowPivot
 
 func _ready():
-	if not ground_shadow_plane:
-		ground_shadow_plane = get_node_or_null("GroundShadowPlane")
+	_ensure_node_refs()
 	if ground_shadow_plane:
 		ground_shadow_plane.scale = Vector2(1.0, ground_pitch_ratio)
 	if not skip_auto_load and plant_id != "":
 		load_plant(plant_id)
-	if not ground_shadow_plane:
-		ground_shadow_plane = get_node_or_null("GroundShadowPlane")
+	_ensure_node_refs()
 	if ground_shadow_plane:
 		ground_shadow_plane.scale = Vector2(1.0, ground_pitch_ratio)
+
+func _ensure_node_refs():
+	if not sprite_red: sprite_red = get_node_or_null("RedSprite")
+	if not sprite_green: sprite_green = get_node_or_null("GreenSprite")
+	if not sprite_blue: sprite_blue = get_node_or_null("BlueSprite")
+	if not ground_shadow_plane: ground_shadow_plane = get_node_or_null("GroundShadowPlane")
+	if not contact_shadow: contact_shadow = get_node_or_null("GroundShadowPlane/ContactShadow")
+	if not sun_shadow: sun_shadow = get_node_or_null("GroundShadowPlane/SunShadowPivot/SunShadowSprite")
+	if not lantern_shadow: lantern_shadow = get_node_or_null("GroundShadowPlane/LanternShadowPivot/LanternShadowSprite")
+	if not incense_shadow: incense_shadow = get_node_or_null("GroundShadowPlane/IncenseShadowPivot/IncenseShadowSprite")
+	if not sun_shadow_pivot: sun_shadow_pivot = get_node_or_null("GroundShadowPlane/SunShadowPivot")
+	if not lantern_shadow_pivot: lantern_shadow_pivot = get_node_or_null("GroundShadowPlane/LanternShadowPivot")
+	if not incense_shadow_pivot: incense_shadow_pivot = get_node_or_null("GroundShadowPlane/IncenseShadowPivot")
+
+func _ensure_unique_materials():
+	if _materials_uniqued:
+		return
+	_ensure_node_refs()
+	for spr in [sprite_red, sprite_green, sprite_blue]:
+		if spr and spr.material:
+			spr.material = spr.material.duplicate()
+	for shadow in [sun_shadow, lantern_shadow, incense_shadow]:
+		if shadow and shadow.material:
+			shadow.material = shadow.material.duplicate()
+	_materials_uniqued = true
+
+func _ensure_ghost_sprites():
+	if _prev_red != null:
+		return
+	_ensure_node_refs()
+	_ensure_unique_materials()
+
+	_prev_red = Sprite2D.new()
+	_prev_red.name = "PrevRedSprite"
+	_prev_green = Sprite2D.new()
+	_prev_green.name = "PrevGreenSprite"
+	_prev_blue = Sprite2D.new()
+	_prev_blue.name = "PrevBlueSprite"
+
+	var pairs = [
+		[_prev_red, sprite_red],
+		[_prev_green, sprite_green],
+		[_prev_blue, sprite_blue]
+	]
+	for pair in pairs:
+		var ps: Sprite2D = pair[0]
+		var src = pair[1]
+		ps.centered = false
+		ps.visible = false
+		if src and src.material:
+			ps.material = src.material.duplicate()
+		add_child(ps)
+
+	if sprite_red:
+		var target_idx: int = sprite_red.get_index()
+		move_child(_prev_red, target_idx)
+		move_child(_prev_green, target_idx + 1)
+		move_child(_prev_blue, target_idx + 2)
 
 func _draw():
 	if not show_footprint_ring:
@@ -85,9 +162,112 @@ func set_ground_pitch(ratio: float):
 
 func set_xray_alpha(alpha_val: float):
 	current_xray_alpha = clampf(alpha_val, 0.2, 1.0)
-	for spr in [sprite_red, sprite_green, sprite_blue]:
+	for spr in [sprite_red, sprite_green, sprite_blue, _prev_red, _prev_green, _prev_blue]:
 		if spr and spr.material:
 			(spr.material as ShaderMaterial).set_shader_parameter("xray_alpha", current_xray_alpha)
+
+func set_lab_caption(text_str: String):
+	if caption_label == null:
+		caption_label = Label.new()
+		caption_label.name = "LabCaptionLabel"
+		caption_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		caption_label.custom_minimum_size = Vector2(240.0, 22.0)
+		caption_label.position = Vector2(-120.0, 10.0)
+		caption_label.z_index = 20
+		caption_label.add_theme_font_size_override("font_size", 13)
+		caption_label.add_theme_constant_override("outline_size", 3)
+		caption_label.add_theme_color_override("font_outline_color", Color(0.05, 0.06, 0.08, 0.92))
+		caption_label.add_theme_color_override("font_color", Color(0.96, 0.97, 0.92, 1.0))
+		add_child(caption_label)
+	caption_label.text = text_str
+	caption_label.visible = (text_str != "")
+
+func _hide_ghost_sprites():
+	for ps in [_prev_red, _prev_green, _prev_blue]:
+		if ps:
+			ps.visible = false
+
+func _update_turntable_transition_visuals(s: float):
+	if turntable_transition_mode == TRANSITION_SNAP:
+		_hide_ghost_sprites()
+		for spr in [sprite_red, sprite_green, sprite_blue]:
+			if spr:
+				spr.position = Vector2.ZERO
+				spr.scale = Vector2(s, s)
+				if spr.material:
+					(spr.material as ShaderMaterial).set_shader_parameter("crossfade_alpha", 1.0)
+		return
+
+	if turntable_transition_mode == TRANSITION_CROSSFADE:
+		if transition_progress < 0.999 and prev_sector_deg != current_sector_deg and turntable_frames.has(prev_sector_deg):
+			var prev_alpha: float = 1.0 - smoothstep(0.35, 1.0, transition_progress)
+			var curr_alpha: float = smoothstep(0.0, 0.75, transition_progress)
+			var pf: Dictionary = turntable_frames[prev_sector_deg]
+			var prev_base_s: float = (desired_height_px / float(pf["crown_h"])) if desired_height_px > 0.0 else 1.0
+			var prev_s: float = prev_base_s * clampf(perspective_scale, 0.35, 2.5)
+
+			var pairs = [
+				[_prev_red, sprite_red, "tex_red"],
+				[_prev_green, sprite_green, "tex_green"],
+				[_prev_blue, sprite_blue, "tex_blue"]
+			]
+			for pair in pairs:
+				var prev_spr: Sprite2D = pair[0]
+				var act_spr = pair[1]
+				var key: String = pair[2]
+				if not prev_spr:
+					continue
+				var ptex: Texture2D = pf.get(key, null)
+				if ptex:
+					prev_spr.visible = true
+					prev_spr.texture = ptex
+					prev_spr.centered = false
+					prev_spr.offset = -pf["root_anchor"]
+					prev_spr.position = Vector2.ZERO
+					prev_spr.scale = Vector2(prev_s, prev_s)
+					if prev_spr.material:
+						var pmat = prev_spr.material as ShaderMaterial
+						pmat.set_shader_parameter("root_uv_y", pf["root_uv_y"])
+						pmat.set_shader_parameter("crossfade_alpha", prev_alpha)
+						pmat.set_shader_parameter("xray_alpha", current_xray_alpha)
+						if act_spr and act_spr.material:
+							var amat = act_spr.material as ShaderMaterial
+							pmat.set_shader_parameter("tint_color", amat.get_shader_parameter("tint_color"))
+							pmat.set_shader_parameter("occlusion_height", amat.get_shader_parameter("occlusion_height"))
+							pmat.set_shader_parameter("occlusion_darken", amat.get_shader_parameter("occlusion_darken"))
+				else:
+					prev_spr.visible = false
+
+			for spr in [sprite_red, sprite_green, sprite_blue]:
+				if spr:
+					spr.position = Vector2.ZERO
+					spr.scale = Vector2(s, s)
+					if spr.material:
+						(spr.material as ShaderMaterial).set_shader_parameter("crossfade_alpha", curr_alpha)
+		else:
+			_hide_ghost_sprites()
+			for spr in [sprite_red, sprite_green, sprite_blue]:
+				if spr:
+					spr.position = Vector2.ZERO
+					spr.scale = Vector2(s, s)
+					if spr.material:
+						(spr.material as ShaderMaterial).set_shader_parameter("crossfade_alpha", 1.0)
+		return
+
+	if turntable_transition_mode == TRANSITION_POP:
+		_hide_ghost_sprites()
+		var pop_x: float = lerpf(0.84, 1.0, 1.0 - pow(1.0 - transition_progress, 3.0))
+		for spr in [sprite_red, sprite_green, sprite_blue]:
+			if spr:
+				spr.scale = Vector2(s * pop_x, s)
+				if spr.material:
+					(spr.material as ShaderMaterial).set_shader_parameter("crossfade_alpha", 1.0)
+		if sprite_green:
+			sprite_green.position = Vector2.ZERO
+		if sprite_red:
+			sprite_red.position = Vector2(-sub_sector_norm * 3.5 * perspective_scale, 0.0)
+		if sprite_blue:
+			sprite_blue.position = Vector2(sub_sector_norm * 2.5 * perspective_scale, 0.0)
 
 func _apply_effective_scale():
 	var s: float = _cached_base_scale * clampf(perspective_scale, 0.35, 2.5)
@@ -121,7 +301,205 @@ func _apply_effective_scale():
 		shadow.offset = -root_anchor
 		shadow.scale = Vector2(s, s)
 
+	if is_turntable:
+		_update_turntable_transition_visuals(s)
+
 	queue_redraw()
+
+func register_turntable_frame(angle_deg: int, tex_red: Texture2D, tex_green: Texture2D, tex_blue: Texture2D, anchor_uv: Vector2, crown_h_override: float = -1.0):
+	_ensure_node_refs()
+	var ref_tex = tex_green if tex_green else (tex_red if tex_red else tex_blue)
+	if not ref_tex:
+		return
+
+	var images: Array = []
+	for t in [tex_red, tex_green, tex_blue]:
+		if t:
+			var img = t.get_image()
+			if img:
+				if img.is_compressed():
+					img.decompress()
+				images.append(img)
+
+	if images.is_empty():
+		return
+
+	var width: int = images[0].get_width()
+	var height: int = images[0].get_height()
+	var top_y: int = height
+	var bottom_y: int = -1
+	var min_x: int = width
+	var max_x: int = 0
+
+	for img in images:
+		var used: Rect2i = img.get_used_rect()
+		if used.size.x > 0 and used.size.y > 0:
+			top_y = min(top_y, used.position.y)
+			bottom_y = max(bottom_y, used.position.y + used.size.y - 1)
+			min_x = min(min_x, used.position.x)
+			max_x = max(max_x, used.position.x + used.size.x - 1)
+
+	if min_x > max_x:
+		min_x = 0
+		max_x = max(0, width - 1)
+	if bottom_y == -1:
+		bottom_y = max(0, height - 1)
+	if top_y >= bottom_y:
+		top_y = 0
+
+	var f_root_anchor: Vector2
+	var f_root_uv_y: float
+	if anchor_uv.x >= 0.0 and anchor_uv.y > 0.0:
+		f_root_anchor = Vector2(
+			clampf(anchor_uv.x, 0.05, 0.95) * float(width),
+			clampf(anchor_uv.y, 0.60, 1.0) * float(height)
+		)
+		f_root_uv_y = clampf(anchor_uv.y, 0.05, 1.0)
+	else:
+		f_root_anchor = Vector2(float(width) * 0.5, float(bottom_y))
+		f_root_uv_y = float(bottom_y) / float(max(height, 1))
+
+	var raw_w: float = max(24.0, float(max_x - min_x))
+	var crown_h: float = crown_h_override if crown_h_override > 1.0 else max(24.0, f_root_anchor.y - float(top_y))
+
+	turntable_frames[angle_deg] = {
+		"angle_deg": angle_deg,
+		"tex_red": tex_red,
+		"tex_green": tex_green,
+		"tex_blue": tex_blue,
+		"ref_tex": ref_tex,
+		"width": width,
+		"height": height,
+		"root_anchor": f_root_anchor,
+		"root_uv_y": f_root_uv_y,
+		"raw_w": raw_w,
+		"crown_h": crown_h
+	}
+
+	is_turntable = true
+	_ensure_ghost_sprites()
+
+	if angle_deg == current_sector_deg or not _textures_ready:
+		if not _textures_ready:
+			current_sector_deg = angle_deg
+			prev_sector_deg = angle_deg
+		_apply_turntable_frame(turntable_frames[angle_deg])
+
+func _apply_turntable_frame(frame: Dictionary):
+	_ensure_node_refs()
+	_ensure_unique_materials()
+
+	root_anchor = frame["root_anchor"]
+	root_uv_y = frame["root_uv_y"]
+	_cached_raw_w = frame["raw_w"]
+	_cached_raw_h = frame["crown_h"]
+	_cached_base_scale = (desired_height_px / frame["crown_h"]) if desired_height_px > 0.0 else 1.0
+	_cached_base_rw = meta_root_width if meta_root_width > 0.0 else max(10.0, _cached_raw_w * 0.15)
+	_textures_ready = true
+
+	var tex_red = frame["tex_red"]
+	var tex_green = frame["tex_green"]
+	var tex_blue = frame["tex_blue"]
+	var ref_tex = frame["ref_tex"]
+
+	var setups = [
+		{"sprite": sprite_red, "tex": tex_red},
+		{"sprite": sprite_green, "tex": tex_green},
+		{"sprite": sprite_blue, "tex": tex_blue}
+	]
+	for setup in setups:
+		var spr = setup.sprite
+		var tex = setup.tex
+		if not spr:
+			continue
+		if tex:
+			spr.visible = true
+			spr.texture = tex
+			spr.centered = false
+			spr.offset = -root_anchor
+			if spr.material:
+				(spr.material as ShaderMaterial).set_shader_parameter("root_uv_y", root_uv_y)
+		else:
+			spr.visible = false
+			spr.texture = null
+
+	set_xray_alpha(current_xray_alpha)
+
+	for shadow in [sun_shadow, lantern_shadow, incense_shadow]:
+		if not shadow:
+			continue
+		shadow.texture = ref_tex
+		shadow.centered = false
+		shadow.offset = -root_anchor
+		if shadow.material:
+			var smat = shadow.material as ShaderMaterial
+			smat.set_shader_parameter("tRed", tex_red)
+			smat.set_shader_parameter("tGreen", tex_green)
+			smat.set_shader_parameter("tBlue", tex_blue)
+			smat.set_shader_parameter("root_uv_y", root_uv_y)
+
+	_apply_effective_scale()
+
+func update_turntable_orbit(orbit_deg: float, delta: float = 0.016, force_instant: bool = false):
+	if not is_turntable or turntable_frames.is_empty():
+		return
+
+	var eff_deg: float = fposmod(orbit_deg + base_yaw_deg, 360.0)
+	var step_int: int = 45 if turntable_sector_count >= 8 else 90
+	var step_deg: float = float(step_int)
+	var num_sectors: int = int(360 / step_int)
+	var sector_idx: int = int(round(eff_deg / step_deg)) % num_sectors
+	var target_sector: int = (sector_idx * step_int) % 360
+
+	var chosen_sector: int = target_sector
+	var curr_valid_for_mode: bool = (current_sector_deg % step_int) == 0 and turntable_frames.has(current_sector_deg)
+	if not force_instant and curr_valid_for_mode and target_sector != current_sector_deg:
+		var dist_from_curr: float = abs(fposmod(eff_deg - float(current_sector_deg) + 180.0, 360.0) - 180.0)
+		if dist_from_curr <= (step_deg * 0.5 + 1.5):
+			chosen_sector = current_sector_deg
+
+	if not turntable_frames.has(chosen_sector):
+		var best_ang: int = current_sector_deg
+		var best_dist: float = 9999.0
+		for k in turntable_frames.keys():
+			var k_int: int = int(k)
+			if (k_int % step_int) != 0 and turntable_frames.has(0):
+				continue
+			var d: float = abs(fposmod(eff_deg - float(k_int) + 180.0, 360.0) - 180.0)
+			if d < best_dist:
+				best_dist = d
+				best_ang = k_int
+		if best_dist > 9000.0:
+			for k in turntable_frames.keys():
+				var k_int: int = int(k)
+				var d: float = abs(fposmod(eff_deg - float(k_int) + 180.0, 360.0) - 180.0)
+				if d < best_dist:
+					best_dist = d
+					best_ang = k_int
+		chosen_sector = best_ang
+
+	var sector_changed: bool = (chosen_sector != current_sector_deg)
+	if sector_changed:
+		prev_sector_deg = current_sector_deg
+		current_sector_deg = chosen_sector
+		if turntable_frames.has(current_sector_deg):
+			_apply_turntable_frame(turntable_frames[current_sector_deg])
+		if force_instant or turntable_transition_mode == TRANSITION_SNAP:
+			transition_progress = 1.0
+		else:
+			transition_progress = min(1.0, max(0.0, delta) / 0.13)
+	else:
+		if force_instant or turntable_transition_mode == TRANSITION_SNAP:
+			transition_progress = 1.0
+		else:
+			transition_progress = min(1.0, transition_progress + max(0.0, delta) / 0.13)
+
+	var delta_from_sector: float = fposmod(eff_deg - float(current_sector_deg) + 180.0, 360.0) - 180.0
+	sub_sector_norm = clampf(delta_from_sector / (step_deg * 0.5), -1.0, 1.0)
+
+	_apply_effective_scale()
+	if caption_prefix != "":
+		set_lab_caption("%s [%d deg]" % [caption_prefix, current_sector_deg])
 
 func load_plant(id: String):
 	plant_id = id
@@ -158,14 +536,7 @@ func load_plant(id: String):
 	setup_with_textures(id, tex_red, tex_green, tex_blue, target_h, root_w, override_anchor_uv)
 
 func setup_with_textures(id: String, tex_red: Texture2D, tex_green: Texture2D, tex_blue: Texture2D, target_h_px: float = -1.0, root_w_px: float = -1.0, override_anchor_uv: Vector2 = Vector2(-1.0, -1.0)):
-	if not sprite_red: sprite_red = get_node_or_null("RedSprite")
-	if not sprite_green: sprite_green = get_node_or_null("GreenSprite")
-	if not sprite_blue: sprite_blue = get_node_or_null("BlueSprite")
-	if not ground_shadow_plane: ground_shadow_plane = get_node_or_null("GroundShadowPlane")
-	if not contact_shadow: contact_shadow = get_node_or_null("GroundShadowPlane/ContactShadow")
-	if not sun_shadow: sun_shadow = get_node_or_null("GroundShadowPlane/SunShadowPivot/SunShadowSprite")
-	if not lantern_shadow: lantern_shadow = get_node_or_null("GroundShadowPlane/LanternShadowPivot/LanternShadowSprite")
-	if not incense_shadow: incense_shadow = get_node_or_null("GroundShadowPlane/IncenseShadowPivot/IncenseShadowSprite")
+	_ensure_node_refs()
 
 	plant_id = id
 	desired_height_px = target_h_px
