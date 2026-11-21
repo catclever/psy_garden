@@ -77,6 +77,12 @@ var btn_turntable_lab: Button = null
 var btn_turntable_dirs: Button = null
 var btn_turntable_transition: Button = null
 
+var video_lab_active: bool = false
+var video_atlas_meta: Dictionary = {}
+var _video_meta_loading: bool = false
+var _pending_url_video_lab: bool = false
+var btn_video_lab: Button = null
+
 func _ready():
 	mouse_lantern.global_position = Vector2(680, 420)
 	ground_canvas = Node2D.new()
@@ -89,10 +95,15 @@ func _ready():
 	_init_http_pool()
 	if OS.has_feature("web"):
 		var lab_param = JavaScriptBridge.eval("(function(){try{return new URLSearchParams(window.location.search).get(\"lab\")||new URLSearchParams(window.top.location.search).get(\"lab\")||\"\";}catch(e){return \"\";}})()", true)
-		if str(lab_param).strip_edges().to_lower() == "3a":
+		var lab_str: String = str(lab_param).strip_edges().to_lower()
+		if lab_str == "3a":
 			_pending_url_lab = true
+		elif lab_str == "video36":
+			_pending_url_video_lab = true
 	if _pending_url_lab:
 		call_deferred("enter_turntable_lab")
+	elif _pending_url_video_lab:
+		call_deferred("enter_video_turntable_lab")
 	else:
 		generate_demo_layout()
 	call_deferred("_load_manifest")
@@ -160,7 +171,7 @@ func _refresh_courtyard_projection():
 				p.set_perspective_scale(proj["depth_scale"])
 			if p.is_turntable and p.has_method("update_turntable_orbit"):
 				p.update_turntable_orbit(orbit_angle_deg, 0.0, false)
-	if turntable_lab_active:
+	if turntable_lab_active or video_lab_active:
 		_update_lab_status_label()
 	if ground_canvas:
 		ground_canvas.queue_redraw()
@@ -292,7 +303,7 @@ func _process(delta):
 			_syncing_orbit_ui = false
 		_refresh_courtyard_projection()
 
-	if turntable_lab_active:
+	if turntable_lab_active or video_lab_active:
 		for p in active_plants:
 			if is_instance_valid(p) and p.is_turntable and p.has_method("update_turntable_orbit"):
 				p.update_turntable_orbit(orbit_angle_deg, delta, false)
@@ -442,6 +453,10 @@ func update_plant_colors(p=null):
 	var targets = [p] if p else active_plants
 	for t in targets:
 		if not is_instance_valid(t): continue
+		if t.is_video_atlas:
+			if t.sprite_green and t.sprite_green.material:
+				(t.sprite_green.material as ShaderMaterial).set_shader_parameter("tint_color", Color.WHITE)
+			continue
 		for spr in [t.sprite_red, t._prev_red]:
 			if spr and spr.material:
 				(spr.material as ShaderMaterial).set_shader_parameter("tint_color", color_red)
@@ -671,7 +686,7 @@ func _load_manifest():
 func _parse_and_activate_manifest(json_text: String):
 	var parsed = JSON.parse_string(json_text)
 	if not (parsed is Dictionary) or not (parsed.get("plants") is Array):
-		if fleet_status_label and not turntable_lab_active:
+		if fleet_status_label and not turntable_lab_active and not video_lab_active:
 			fleet_status_label.text = "Fleet: manifest parse error"
 		return
 	manifest_records.clear()
@@ -680,7 +695,7 @@ func _parse_and_activate_manifest(json_text: String):
 			if rec.get("enabled", true) and rec.get("true_color", true):
 				manifest_records.append(rec)
 
-	if turntable_lab_active or _pending_url_lab:
+	if turntable_lab_active or _pending_url_lab or video_lab_active or _pending_url_video_lab:
 		if not manifest_records.is_empty():
 			manifest_loaded_once = true
 		return
@@ -753,7 +768,12 @@ func _on_http_pool_completed(result: int, response_code: int, _headers: PackedSt
 	var tex: Texture2D = null
 	if result == HTTPRequest.RESULT_SUCCESS and response_code == 200 and body.size() > 0:
 		var img := Image.new()
-		if img.load_png_from_buffer(body) == OK:
+		var load_ok: int = ERR_INVALID_DATA
+		if cache_key.to_lower().ends_with(".webp"):
+			load_ok = img.load_webp_from_buffer(body)
+		else:
+			load_ok = img.load_png_from_buffer(body)
+		if load_ok == OK:
 			tex = ImageTexture.create_from_image(img)
 			if cache_key != "":
 				texture_cache[cache_key] = tex
@@ -927,11 +947,15 @@ func _ready_ui():
 	$HUD/MarginContainer/VBoxContainer/BtnRandomLayout.pressed.connect(func():
 		if turntable_lab_active:
 			exit_turntable_lab(false)
+		if video_lab_active:
+			exit_video_turntable_lab(false)
 		generate_random_garden()
 	)
 	$HUD/MarginContainer/VBoxContainer/BtnDemoLayout.pressed.connect(func():
 		if turntable_lab_active:
 			exit_turntable_lab(false)
+		if video_lab_active:
+			exit_video_turntable_lab(false)
 		generate_demo_layout()
 	)
 
@@ -977,6 +1001,13 @@ func _ready_ui():
 	btn_turntable_transition.pressed.connect(_on_turntable_transition_pressed)
 	turntable_ctrl_row.add_child(btn_turntable_transition)
 
+	btn_video_lab = Button.new()
+	btn_video_lab.name = "BtnVideoLab"
+	btn_video_lab.text = "Video 36F Lab: OFF"
+	btn_video_lab.custom_minimum_size.y = 24
+	btn_video_lab.pressed.connect(_on_video_lab_pressed)
+	vbox.add_child(btn_video_lab)
+
 	fleet_status_label = Label.new()
 	fleet_status_label.name = "FleetStatusLabel"
 	fleet_status_label.text = "Fleet: loading manifest..."
@@ -990,7 +1021,11 @@ func _transition_mode_name() -> String:
 	return "Crisp Snap"
 
 func _update_lab_status_label():
-	if fleet_status_label and turntable_lab_active:
+	if not fleet_status_label:
+		return
+	if video_lab_active:
+		fleet_status_label.text = "Video 36F Lab: 1-View vs 8-Way vs 36F | orbit %d deg" % int(round(orbit_angle_deg))
+	elif turntable_lab_active:
 		fleet_status_label.text = "3A Lab: %d-Way | %s | orbit %d deg" % [turntable_sector_count, _transition_mode_name(), int(round(orbit_angle_deg))]
 
 func _on_turntable_lab_pressed():
@@ -1007,7 +1042,7 @@ func _on_turntable_dirs_pressed():
 		if is_instance_valid(p) and p.is_turntable:
 			p.turntable_sector_count = turntable_sector_count
 			p.update_turntable_orbit(orbit_angle_deg, 0.0, true)
-	if turntable_lab_active:
+	if turntable_lab_active or video_lab_active:
 		_update_lab_status_label()
 
 func _on_turntable_transition_pressed():
@@ -1023,10 +1058,181 @@ func _on_turntable_transition_pressed():
 		if is_instance_valid(p) and p.is_turntable:
 			p.turntable_transition_mode = turntable_transition_mode
 			p.update_turntable_orbit(orbit_angle_deg, 0.0, false)
-	if turntable_lab_active:
+	if turntable_lab_active or video_lab_active:
 		_update_lab_status_label()
 
+func _load_json_asset(rel_path: String, cb: Callable):
+	if OS.has_feature("web"):
+		if web_base_url == "":
+			var evaluated = JavaScriptBridge.eval("new URL('../', window.location.href).href", true)
+			web_base_url = str(evaluated) if evaluated != null else ""
+			if web_base_url != "" and not web_base_url.ends_with("/"):
+				web_base_url += "/"
+		var req := HTTPRequest.new()
+		add_child(req)
+		req.request_completed.connect(func(result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray):
+			req.queue_free()
+			if result == HTTPRequest.RESULT_SUCCESS and response_code == 200:
+				cb.call(JSON.parse_string(body.get_string_from_utf8()))
+				return
+			cb.call(null)
+		)
+		if req.request(web_base_url + rel_path) != OK:
+			req.queue_free()
+			cb.call(null)
+		return
+
+	var local_candidates = [
+		"res://../src/" + rel_path,
+		ProjectSettings.globalize_path("res://").path_join("../src/" + rel_path).simplify_path()
+	]
+	for path in local_candidates:
+		if FileAccess.file_exists(path):
+			var json_text: String = FileAccess.get_file_as_string(path)
+			cb.call(JSON.parse_string(json_text))
+			return
+	cb.call(null)
+
+func _on_video_lab_pressed():
+	if video_lab_active:
+		exit_video_turntable_lab(true)
+	else:
+		enter_video_turntable_lab()
+
+func enter_video_turntable_lab():
+	if turntable_lab_active:
+		turntable_lab_active = false
+		_pending_url_lab = false
+		if btn_turntable_lab:
+			btn_turntable_lab.text = "3A Turntable Lab: OFF"
+	video_lab_active = true
+	_pending_url_video_lab = false
+	if btn_video_lab:
+		btn_video_lab.text = "Video 36F Lab: ON"
+
+	if not turntable_index_data.is_empty() and not video_atlas_meta.is_empty():
+		_populate_video_turntable_lab()
+		return
+
+	if fleet_status_label:
+		fleet_status_label.text = "Video 36F Lab: loading assets..."
+
+	if turntable_index_data.is_empty() and not _turntable_index_loading:
+		_turntable_index_loading = true
+		_load_json_asset("assets/turntable_lab/index.json", func(parsed):
+			_turntable_index_loading = false
+			if parsed is Dictionary and parsed.get("species") is Array:
+				turntable_index_data = parsed
+			if video_lab_active and not turntable_index_data.is_empty() and not video_atlas_meta.is_empty():
+				_populate_video_turntable_lab()
+			elif fleet_status_label and video_lab_active and turntable_index_data.is_empty():
+				fleet_status_label.text = "Video 36F Lab: 3A index load failed"
+		)
+
+	if video_atlas_meta.is_empty() and not _video_meta_loading:
+		_video_meta_loading = true
+		_load_json_asset("assets/turntable_lab/plant_0000_video36/metadata.json", func(parsed):
+			_video_meta_loading = false
+			if parsed is Dictionary and parsed.has("atlas_file"):
+				video_atlas_meta = parsed
+			if video_lab_active and not turntable_index_data.is_empty() and not video_atlas_meta.is_empty():
+				_populate_video_turntable_lab()
+			elif fleet_status_label and video_lab_active and video_atlas_meta.is_empty():
+				fleet_status_label.text = "Video 36F Lab: metadata load failed"
+		)
+
+func exit_video_turntable_lab(restore_garden: bool = true):
+	video_lab_active = false
+	_pending_url_video_lab = false
+	if btn_video_lab:
+		btn_video_lab.text = "Video 36F Lab: OFF"
+	if fleet_status_label:
+		if not manifest_records.is_empty():
+			fleet_status_label.text = "Fleet: %d species loaded" % manifest_records.size()
+		else:
+			fleet_status_label.text = "Fleet: 10 fallback species"
+	if restore_garden:
+		generate_random_garden(36)
+
+func _populate_video_turntable_lab():
+	clear_garden()
+	var species_map: Dictionary = {}
+	for sp in turntable_index_data.get("species", []):
+		if sp is Dictionary and sp.has("name"):
+			species_map[str(sp["name"])] = sp
+
+	var sp_cal: Dictionary = species_map.get("plant_0000", {})
+	if not sp_cal.is_empty():
+		_spawn_legacy_lab_plant(sp_cal, Vector2(-240.0, 100.0), 150.0, "Calathea [Legacy 1-View]")
+		_spawn_turntable_lab_plant(sp_cal, Vector2(0.0, 100.0), 150.0, 0.0, "Calathea [8-Way 3A]")
+
+	if not video_atlas_meta.is_empty():
+		_spawn_video_atlas_lab_plant(video_atlas_meta, Vector2(240.0, 100.0), 150.0, 0.0, "Calathea")
+		_spawn_video_atlas_lab_plant(video_atlas_meta, Vector2(0.0, -165.0), 150.0, 180.0, "Calathea Back")
+
+	_update_lab_status_label()
+	if ground_canvas:
+		ground_canvas.queue_redraw()
+
+func _spawn_video_atlas_lab_plant(meta: Dictionary, c_pos: Vector2, target_h: float, yaw_deg: float, caption_pfx: String):
+	var proj: Dictionary = project_courtyard_point(c_pos)
+	var pos: Vector2 = proj["screen_pos"]
+	var depth_s: float = proj["depth_scale"]
+	var root_w: float = float(meta.get("root_width", 22.0))
+	var sp_name: String = str(meta.get("plant_id", "plant_0000"))
+
+	var p = plant_scene.instantiate()
+	p.plant_id = sp_name
+	p.skip_auto_load = true
+	p.is_turntable = true
+	p.is_video_atlas = true
+	p.base_yaw_deg = yaw_deg
+	p.caption_prefix = caption_pfx
+	p.desired_height_px = target_h
+	p.meta_root_width = root_w
+	p.show_footprint_ring = footprints_visible
+	p.global_position = pos
+	p.ground_pitch_ratio = camera_pitch_ratio
+	p.courtyard_pos = c_pos
+	p.has_courtyard_pos = true
+	p.perspective_scale = depth_s
+	p.set_meta("gen_id", generation_id)
+	y_sort.add_child(p)
+	p.set_ground_pitch(camera_pitch_ratio)
+	p.set_lab_caption("%s [Video 36F: loading]" % caption_pfx)
+	active_plants.append(p)
+
+	var path_prefix: String = str(meta.get("path_prefix", "assets/turntable_lab/plant_0000_video36"))
+	var atlas_file: String = str(meta.get("atlas_file", "atlas_36.webp"))
+	var hf: int = int(meta.get("hframes", 6))
+	var vf: int = int(meta.get("vframes", 6))
+	var fc: int = int(meta.get("frame_count", 36))
+	var crown_h: float = float(meta.get("crown_h", 188.0))
+	var raw_anchor = meta.get("root_anchor_px", [110.0, 212.0])
+	var anchor_px := Vector2(110.0, 212.0)
+	if raw_anchor is Array and raw_anchor.size() >= 2:
+		anchor_px = Vector2(float(raw_anchor[0]), float(raw_anchor[1]))
+
+	var my_gen_id: int = generation_id
+	_load_layer_texture(path_prefix, atlas_file, func(tex: Texture2D):
+		if is_instance_valid(p) and my_gen_id == generation_id and tex != null:
+			p.setup_video_atlas_turntable(sp_name, tex, hf, vf, fc, anchor_px, crown_h, target_h, root_w)
+			p.update_turntable_orbit(orbit_angle_deg, 0.0, true)
+			p.set_ground_pitch(camera_pitch_ratio)
+			var cur_proj: Dictionary = project_courtyard_point(p.courtyard_pos)
+			p.global_position = cur_proj["screen_pos"]
+			p.set_perspective_scale(cur_proj["depth_scale"])
+			p.show_footprint_ring = footprints_visible
+			update_plant_colors(p)
+	)
+	return p
+
 func enter_turntable_lab():
+	if video_lab_active:
+		video_lab_active = false
+		_pending_url_video_lab = false
+		if btn_video_lab:
+			btn_video_lab.text = "Video 36F Lab: OFF"
 	turntable_lab_active = true
 	_pending_url_lab = false
 	if btn_turntable_lab:

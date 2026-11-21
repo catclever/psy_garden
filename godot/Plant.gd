@@ -29,6 +29,12 @@ var _cached_base_rw: float = 20.0
 var _textures_ready: bool = false
 
 var is_turntable: bool = false
+var is_video_atlas: bool = false
+var video_atlas_tex: Texture2D = null
+var video_hframes: int = 6
+var video_vframes: int = 6
+var video_frame_count: int = 36
+var current_video_frame: int = 0
 var base_yaw_deg: float = 0.0
 var turntable_sector_count: int = 8
 var turntable_transition_mode: int = TRANSITION_CROSSFADE
@@ -188,6 +194,15 @@ func _hide_ghost_sprites():
 			ps.visible = false
 
 func _update_turntable_transition_visuals(s: float):
+	if is_video_atlas:
+		_hide_ghost_sprites()
+		if sprite_green:
+			sprite_green.position = Vector2.ZERO
+			sprite_green.scale = Vector2(s, s)
+			if sprite_green.material:
+				(sprite_green.material as ShaderMaterial).set_shader_parameter("crossfade_alpha", 1.0)
+		return
+
 	if turntable_transition_mode == TRANSITION_SNAP:
 		_hide_ghost_sprites()
 		for spr in [sprite_red, sprite_green, sprite_blue]:
@@ -440,7 +455,111 @@ func _apply_turntable_frame(frame: Dictionary):
 
 	_apply_effective_scale()
 
+func setup_video_atlas_turntable(id: String, atlas_tex: Texture2D, hframes: int, vframes: int, frame_count: int, anchor_px: Vector2, crown_h: float, target_h_px: float, root_w_px: float):
+	_ensure_node_refs()
+	_ensure_unique_materials()
+	_hide_ghost_sprites()
+	if not atlas_tex:
+		push_error("Missing video atlas texture for " + id)
+		return
+
+	plant_id = id
+	is_turntable = true
+	is_video_atlas = true
+	video_atlas_tex = atlas_tex
+	video_hframes = max(1, hframes)
+	video_vframes = max(1, vframes)
+	video_frame_count = max(1, frame_count)
+	current_video_frame = 0
+	current_sector_deg = 0
+	prev_sector_deg = 0
+	transition_progress = 1.0
+
+	var cell_w: float = float(atlas_tex.get_width()) / float(video_hframes)
+	var cell_h: float = float(atlas_tex.get_height()) / float(video_vframes)
+
+	root_anchor = anchor_px
+	root_uv_y = clampf(anchor_px.y / max(cell_h, 1.0), 0.05, 1.0)
+	desired_height_px = target_h_px
+	meta_root_width = root_w_px
+
+	_cached_raw_w = max(24.0, cell_w)
+	_cached_raw_h = max(24.0, crown_h)
+	_cached_base_scale = (target_h_px / _cached_raw_h) if target_h_px > 0.0 else 1.0
+	_cached_base_rw = root_w_px if root_w_px > 0.0 else 22.0
+	_textures_ready = true
+
+	var init_uv_range := Vector2(0.0, 1.0 / float(video_vframes))
+
+	if sprite_red:
+		sprite_red.visible = false
+		sprite_red.texture = null
+	if sprite_blue:
+		sprite_blue.visible = false
+		sprite_blue.texture = null
+	if sprite_green:
+		sprite_green.visible = true
+		sprite_green.texture = atlas_tex
+		sprite_green.hframes = video_hframes
+		sprite_green.vframes = video_vframes
+		sprite_green.frame = 0
+		sprite_green.centered = false
+		sprite_green.offset = -root_anchor
+		sprite_green.position = Vector2.ZERO
+		if sprite_green.material:
+			var gmat = sprite_green.material as ShaderMaterial
+			gmat.set_shader_parameter("root_uv_y", root_uv_y)
+			gmat.set_shader_parameter("crossfade_alpha", 1.0)
+			gmat.set_shader_parameter("tint_color", Color.WHITE)
+			gmat.set_shader_parameter("uv_y_range", init_uv_range)
+
+	set_xray_alpha(current_xray_alpha)
+
+	for shadow in [sun_shadow, lantern_shadow, incense_shadow]:
+		if not shadow:
+			continue
+		shadow.texture = atlas_tex
+		shadow.hframes = video_hframes
+		shadow.vframes = video_vframes
+		shadow.frame = 0
+		shadow.centered = false
+		shadow.offset = -root_anchor
+		if shadow.material:
+			var smat = shadow.material as ShaderMaterial
+			smat.set_shader_parameter("tRed", null)
+			smat.set_shader_parameter("tGreen", atlas_tex)
+			smat.set_shader_parameter("tBlue", null)
+			smat.set_shader_parameter("root_uv_y", root_uv_y)
+			smat.set_shader_parameter("uv_y_range", init_uv_range)
+
+	_apply_effective_scale()
+
 func update_turntable_orbit(orbit_deg: float, delta: float = 0.016, force_instant: bool = false):
+	if is_video_atlas:
+		if not video_atlas_tex or video_frame_count <= 0:
+			return
+		var eff_deg_v: float = fposmod(orbit_deg + base_yaw_deg, 360.0)
+		var step_v: float = 360.0 / float(video_frame_count)
+		var f_idx: int = int(round(eff_deg_v / step_v)) % video_frame_count
+		current_video_frame = f_idx
+		current_sector_deg = int(round(float(f_idx) * step_v)) % 360
+		var row_idx: int = int(floor(float(f_idx) / float(max(video_hframes, 1))))
+		var row_h: float = 1.0 / float(max(video_vframes, 1))
+		var uv_range := Vector2(float(row_idx) * row_h, float(row_idx + 1) * row_h)
+		if sprite_green:
+			sprite_green.frame = f_idx
+			if sprite_green.material:
+				(sprite_green.material as ShaderMaterial).set_shader_parameter("uv_y_range", uv_range)
+		for shadow in [sun_shadow, lantern_shadow, incense_shadow]:
+			if shadow:
+				shadow.frame = f_idx
+				if shadow.material:
+					(shadow.material as ShaderMaterial).set_shader_parameter("uv_y_range", uv_range)
+		_apply_effective_scale()
+		if caption_prefix != "":
+			set_lab_caption("%s [Video 36F: %03d deg]" % [caption_prefix, current_sector_deg])
+		return
+
 	if not is_turntable or turntable_frames.is_empty():
 		return
 

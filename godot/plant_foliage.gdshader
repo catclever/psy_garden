@@ -7,6 +7,7 @@ uniform float occlusion_darken = 0.0;
 uniform vec3 shadow_ambient_color : source_color = vec3(0.28, 0.34, 0.42);
 uniform float xray_alpha : hint_range(0.15, 1.0) = 1.0;
 uniform float crossfade_alpha : hint_range(0.0, 1.0) = 1.0;
+uniform vec2 uv_y_range = vec2(0.0, 1.0);
 
 void fragment() {
 	vec4 tex_color = texture(TEXTURE, UV);
@@ -14,7 +15,8 @@ void fragment() {
 	float alpha = tex_color.a;
 
 	// Canopy shadow reception
-	float h_norm = clamp((root_uv_y - UV.y) / max(root_uv_y, 0.01), 0.0, 1.0);
+	float local_uv_y = clamp((UV.y - uv_y_range.x) / max(uv_y_range.y - uv_y_range.x, 0.0001), 0.0, 1.0);
+	float h_norm = clamp((root_uv_y - local_uv_y) / max(root_uv_y, 0.01), 0.0, 1.0);
 	float in_shadow = 0.0;
 	if (occlusion_darken > 0.01) {
 		in_shadow = 1.0 - smoothstep(occlusion_height - 0.15, occlusion_height + 0.10, h_norm);
@@ -28,7 +30,8 @@ void fragment() {
 }
 
 void light() {
-	float h_norm = clamp((root_uv_y - UV.y) / max(root_uv_y, 0.01), 0.0, 1.0);
+	float local_uv_y = clamp((UV.y - uv_y_range.x) / max(uv_y_range.y - uv_y_range.x, 0.0001), 0.0, 1.0);
+	float h_norm = clamp((root_uv_y - local_uv_y) / max(root_uv_y, 0.01), 0.0, 1.0);
 	float in_shadow = 0.0;
 	if (occlusion_darken > 0.01) {
 		in_shadow = 1.0 - smoothstep(occlusion_height - 0.15, occlusion_height + 0.10, h_norm);
