@@ -23,7 +23,7 @@ var generation_id: int = 0
 var manifest_loaded_once: bool = false
 
 const MAX_CONCURRENT_HTTP: int = 8
-const LAB_ASSET_VER: String = "044"
+const LAB_ASSET_VER: String = "045"
 var _http_pool: Array = []
 var _http_busy: Dictionary = {}
 var _http_queue: Array = []
@@ -84,6 +84,12 @@ var _video_meta_loading: bool = false
 var _pending_url_video_lab: bool = false
 var btn_video_lab: Button = null
 
+var video_gallery_active: bool = false
+var video_gallery_index: Dictionary = {}
+var _video_gallery_loading: bool = false
+var _pending_url_video_gallery: bool = false
+var btn_video_gallery: Button = null
+
 func _ready():
 	mouse_lantern.global_position = Vector2(680, 420)
 	ground_canvas = Node2D.new()
@@ -101,10 +107,14 @@ func _ready():
 			_pending_url_lab = true
 		elif lab_str == "video36":
 			_pending_url_video_lab = true
+		elif lab_str == "video_gallery":
+			_pending_url_video_gallery = true
 	if _pending_url_lab:
 		call_deferred("enter_turntable_lab")
 	elif _pending_url_video_lab:
 		call_deferred("enter_video_turntable_lab")
+	elif _pending_url_video_gallery:
+		call_deferred("enter_video_gallery")
 	else:
 		generate_demo_layout()
 	call_deferred("_load_manifest")
@@ -172,7 +182,7 @@ func _refresh_courtyard_projection():
 				p.set_perspective_scale(proj["depth_scale"])
 			if p.is_turntable and p.has_method("update_turntable_orbit"):
 				p.update_turntable_orbit(orbit_angle_deg, 0.0, false)
-	if turntable_lab_active or video_lab_active:
+	if turntable_lab_active or video_lab_active or video_gallery_active:
 		_update_lab_status_label()
 	if ground_canvas:
 		ground_canvas.queue_redraw()
@@ -304,7 +314,7 @@ func _process(delta):
 			_syncing_orbit_ui = false
 		_refresh_courtyard_projection()
 
-	if turntable_lab_active or video_lab_active:
+	if turntable_lab_active or video_lab_active or video_gallery_active:
 		for p in active_plants:
 			if is_instance_valid(p) and p.is_turntable and p.has_method("update_turntable_orbit"):
 				p.update_turntable_orbit(orbit_angle_deg, delta, false)
@@ -687,7 +697,7 @@ func _load_manifest():
 func _parse_and_activate_manifest(json_text: String):
 	var parsed = JSON.parse_string(json_text)
 	if not (parsed is Dictionary) or not (parsed.get("plants") is Array):
-		if fleet_status_label and not turntable_lab_active and not video_lab_active:
+		if fleet_status_label and not turntable_lab_active and not video_lab_active and not video_gallery_active:
 			fleet_status_label.text = "Fleet: manifest parse error"
 		return
 	manifest_records.clear()
@@ -696,7 +706,7 @@ func _parse_and_activate_manifest(json_text: String):
 			if rec.get("enabled", true) and rec.get("true_color", true):
 				manifest_records.append(rec)
 
-	if turntable_lab_active or _pending_url_lab or video_lab_active or _pending_url_video_lab:
+	if turntable_lab_active or _pending_url_lab or video_lab_active or _pending_url_video_lab or video_gallery_active or _pending_url_video_gallery:
 		if not manifest_records.is_empty():
 			manifest_loaded_once = true
 		return
@@ -950,6 +960,8 @@ func _ready_ui():
 			exit_turntable_lab(false)
 		if video_lab_active:
 			exit_video_turntable_lab(false)
+		if video_gallery_active:
+			exit_video_gallery(false)
 		generate_random_garden()
 	)
 	$HUD/MarginContainer/VBoxContainer/BtnDemoLayout.pressed.connect(func():
@@ -957,6 +969,8 @@ func _ready_ui():
 			exit_turntable_lab(false)
 		if video_lab_active:
 			exit_video_turntable_lab(false)
+		if video_gallery_active:
+			exit_video_gallery(false)
 		generate_demo_layout()
 	)
 
@@ -1009,6 +1023,13 @@ func _ready_ui():
 	btn_video_lab.pressed.connect(_on_video_lab_pressed)
 	vbox.add_child(btn_video_lab)
 
+	btn_video_gallery = Button.new()
+	btn_video_gallery.name = "BtnVideoGallery"
+	btn_video_gallery.text = "Video 36F Gallery: OFF"
+	btn_video_gallery.custom_minimum_size.y = 24
+	btn_video_gallery.pressed.connect(_on_video_gallery_pressed)
+	vbox.add_child(btn_video_gallery)
+
 	fleet_status_label = Label.new()
 	fleet_status_label.name = "FleetStatusLabel"
 	fleet_status_label.text = "Fleet: loading manifest..."
@@ -1024,7 +1045,9 @@ func _transition_mode_name() -> String:
 func _update_lab_status_label():
 	if not fleet_status_label:
 		return
-	if video_lab_active:
+	if video_gallery_active:
+		fleet_status_label.text = "Video 36F Gallery: %d species | orbit %d deg" % [active_plants.size(), int(round(orbit_angle_deg))]
+	elif video_lab_active:
 		fleet_status_label.text = "Video 36F Lab: 1-View vs 8-Way vs 36F | orbit %d deg" % int(round(orbit_angle_deg))
 	elif turntable_lab_active:
 		fleet_status_label.text = "3A Lab: %d-Way | %s | orbit %d deg" % [turntable_sector_count, _transition_mode_name(), int(round(orbit_angle_deg))]
@@ -1106,6 +1129,11 @@ func enter_video_turntable_lab():
 		_pending_url_lab = false
 		if btn_turntable_lab:
 			btn_turntable_lab.text = "3A Turntable Lab: OFF"
+	if video_gallery_active:
+		video_gallery_active = false
+		_pending_url_video_gallery = false
+		if btn_video_gallery:
+			btn_video_gallery.text = "Video 36F Gallery: OFF"
 	video_lab_active = true
 	_pending_url_video_lab = false
 	if btn_video_lab:
@@ -1154,6 +1182,89 @@ func exit_video_turntable_lab(restore_garden: bool = true):
 			fleet_status_label.text = "Fleet: 10 fallback species"
 	if restore_garden:
 		generate_random_garden(36)
+
+func _on_video_gallery_pressed():
+	if video_gallery_active:
+		exit_video_gallery(true)
+	else:
+		enter_video_gallery()
+
+func enter_video_gallery():
+	if turntable_lab_active:
+		turntable_lab_active = false
+		_pending_url_lab = false
+		if btn_turntable_lab:
+			btn_turntable_lab.text = "3A Turntable Lab: OFF"
+	if video_lab_active:
+		video_lab_active = false
+		_pending_url_video_lab = false
+		if btn_video_lab:
+			btn_video_lab.text = "Video 36F Lab: OFF"
+	video_gallery_active = true
+	_pending_url_video_gallery = false
+	if btn_video_gallery:
+		btn_video_gallery.text = "Video 36F Gallery: ON"
+
+	if not video_gallery_index.is_empty():
+		_populate_video_gallery()
+		return
+
+	if fleet_status_label:
+		fleet_status_label.text = "Video 36F Gallery: loading index..."
+
+	if not _video_gallery_loading:
+		_video_gallery_loading = true
+		_load_json_asset("assets/turntable_lab/video36_index.json", func(parsed):
+			_video_gallery_loading = false
+			if parsed is Dictionary and parsed.get("species") is Array:
+				video_gallery_index = parsed
+				if video_gallery_active:
+					_populate_video_gallery()
+					return
+			if fleet_status_label and video_gallery_active:
+				fleet_status_label.text = "Video 36F Gallery: index load failed"
+		)
+
+func exit_video_gallery(restore_garden: bool = true):
+	video_gallery_active = false
+	_pending_url_video_gallery = false
+	if btn_video_gallery:
+		btn_video_gallery.text = "Video 36F Gallery: OFF"
+	if fleet_status_label:
+		if not manifest_records.is_empty():
+			fleet_status_label.text = "Fleet: %d species loaded" % manifest_records.size()
+		else:
+			fleet_status_label.text = "Fleet: 10 fallback species"
+	if restore_garden:
+		generate_random_garden(36)
+
+func _populate_video_gallery():
+	clear_garden()
+	var species_list: Array = video_gallery_index.get("species", [])
+	var slots: Array = [
+		Vector2(-210.0, -140.0),
+		Vector2(210.0, -140.0),
+		Vector2(-210.0, 145.0),
+		Vector2(210.0, 145.0)
+	]
+	var extra_total: int = max(1, species_list.size() - slots.size())
+	for idx in range(species_list.size()):
+		var sp = species_list[idx]
+		if not (sp is Dictionary):
+			continue
+		var c_pos: Vector2
+		if idx < slots.size():
+			c_pos = slots[idx]
+		else:
+			var ang: float = (float(idx - slots.size()) / float(extra_total)) * TAU
+			c_pos = Vector2(cos(ang) * 290.0, sin(ang) * 290.0)
+		var target_h: float = float(sp.get("gallery_height_px", 150.0))
+		var cap: String = str(sp.get("label_ascii", sp.get("plant_id", "Plant")))
+		_spawn_video_atlas_lab_plant(sp, c_pos, target_h, 0.0, cap)
+
+	_update_lab_status_label()
+	if ground_canvas:
+		ground_canvas.queue_redraw()
 
 func _populate_video_turntable_lab():
 	clear_garden()
@@ -1234,6 +1345,11 @@ func enter_turntable_lab():
 		_pending_url_video_lab = false
 		if btn_video_lab:
 			btn_video_lab.text = "Video 36F Lab: OFF"
+	if video_gallery_active:
+		video_gallery_active = false
+		_pending_url_video_gallery = false
+		if btn_video_gallery:
+			btn_video_gallery.text = "Video 36F Gallery: OFF"
 	turntable_lab_active = true
 	_pending_url_lab = false
 	if btn_turntable_lab:

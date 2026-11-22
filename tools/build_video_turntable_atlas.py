@@ -55,8 +55,8 @@ def _split_rgba_hue_layers(rgba_img: Image.Image) -> tuple[Image.Image, Image.Im
     )
 
 
-def key_white_background_rgba(rgb_frame: np.ndarray) -> np.ndarray:
-    """Border-connected flood-fill white background keying + soft edge de-matting."""
+def key_white_background_rgba(rgb_frame: np.ndarray, key_mode: str = "pockets") -> np.ndarray:
+    """Border-connected flood-fill white background keying + optional interior pocket removal + soft edge de-matting."""
     h, w, _ = rgb_frame.shape
     side = min(h, w)
     y0 = (h - side) // 2
@@ -80,21 +80,37 @@ def key_white_background_rgba(rgb_frame: np.ndarray) -> np.ndarray:
 
     ext_bg = np.isin(labeled_bg, list(border_labels)) if border_labels else np.zeros((side, side), dtype=bool)
 
-    # Seeded removal for pure-white holes enclosed between overlapping stems/petioles
-    # (never triggers inside cream-green watercolor leaf stripes, which stay r_min <= 237)
-    enclosed_core = (r_min >= 240) & (chroma <= 16) & (~ext_bg)
-    labeled_enc, num_enc = ndimage.label(enclosed_core, structure=np.ones((3, 3), dtype=np.int32))
-    if num_enc > 0:
-        enc_counts = np.bincount(labeled_enc.ravel())
-        valid_enc = np.where(enc_counts[1:] >= 3)[0] + 1
-        if len(valid_enc) > 0:
-            enc_seeds = np.isin(labeled_enc, valid_enc)
-            enclosed_bg = ndimage.binary_propagation(
-                enc_seeds,
-                mask=((r_min > 230) & (chroma < 22) & (~ext_bg)),
-                structure=np.ones((3, 3), dtype=bool),
-            )
-            ext_bg = ext_bg | enclosed_bg
+    if key_mode == "pockets":
+        # Seeded removal for pure-white holes enclosed between overlapping stems/petioles
+        # (safe when interior leaf stripes stay r_min <= 237)
+        enclosed_core = (r_min >= 240) & (chroma <= 16) & (~ext_bg)
+        labeled_enc, num_enc = ndimage.label(enclosed_core, structure=np.ones((3, 3), dtype=np.int32))
+        if num_enc > 0:
+            enc_counts = np.bincount(labeled_enc.ravel())
+            valid_enc = np.where(enc_counts[1:] >= 3)[0] + 1
+            if len(valid_enc) > 0:
+                enc_seeds = np.isin(labeled_enc, valid_enc)
+                enclosed_bg = ndimage.binary_propagation(
+                    enc_seeds,
+                    mask=((r_min > 230) & (chroma < 22) & (~ext_bg)),
+                    structure=np.ones((3, 3), dtype=bool),
+                )
+                ext_bg = ext_bg | enclosed_bg
+    elif key_mode == "strict_pockets":
+        # Protect watercolor white/lavender petals while clearing larger pure-white background gaps between branches
+        enclosed_core = (r_min >= 249) & (chroma <= 5) & (~ext_bg)
+        labeled_enc, num_enc = ndimage.label(enclosed_core, structure=np.ones((3, 3), dtype=np.int32))
+        if num_enc > 0:
+            enc_counts = np.bincount(labeled_enc.ravel())
+            valid_enc = np.where(enc_counts[1:] >= 24)[0] + 1
+            if len(valid_enc) > 0:
+                enc_seeds = np.isin(labeled_enc, valid_enc)
+                enclosed_bg = ndimage.binary_propagation(
+                    enc_seeds,
+                    mask=((r_min >= 244) & (chroma <= 9) & (~ext_bg)),
+                    structure=np.ones((3, 3), dtype=bool),
+                )
+                ext_bg = ext_bg | enclosed_bg
 
     # Gently absorb slightly off-white halo connected to ext_bg (both outer silhouette and stem pockets)
     soft_white = (r_min > 218) & (chroma < 28)
@@ -201,17 +217,65 @@ def build_video_atlas(
     second_half_end: int = -1,
     reverse_first_half: bool = False,
     reverse_second_half: bool = False,
+    stitch_segments: list[Path] | None = None,
     path_prefix: str | None = None,
+    key_mode: str = "pockets",
+    plant_id: str = "plant_0000",
+    display_name: str = "孔雀竹芋",
+    label_ascii: str = "Calathea",
+    plant_type: str = "groundcover",
+    root_width: float = 22.0,
+    lab_height: float = 150.0,
 ) -> dict:
     import imageio.v3 as iio
 
-    frames1 = iio.imread(str(input_mp4), plugin="FFMPEG")
-    n1 = len(frames1)
-    if n1 < 8:
-        raise RuntimeError(f"Expected >= 8 frames in {input_mp4}, got {n1}")
-
     selected_frames: list[np.ndarray] = []
-    if stitch_second_half is not None:
+    if stitch_segments is not None and len(stitch_segments) >= 2:
+        k_seg = len(stitch_segments)
+        base_c, rem_c = divmod(frame_count, k_seg)
+        seg_counts = [base_c + (1 if idx < rem_c else 0) for idx in range(k_seg)]
+
+        all_indices: list[int] = []
+        seg_stats_list: list[dict] = []
+        seam_boundaries: list[int] = []
+        total_raw_frames = 0
+
+        for seg_idx, seg_path in enumerate(stitch_segments):
+            seg_frames = iio.imread(str(seg_path), plugin="FFMPEG")
+            n_seg = len(seg_frames)
+            if n_seg < 8:
+                raise RuntimeError(f"Expected >= 8 frames in segment {seg_path}, got {n_seg}")
+            idx_seg, st_seg = _sample_segment_indices(seg_frames, seg_counts[seg_idx], sampling)
+            if seg_idx > 0:
+                seam_boundaries.append(len(selected_frames))
+            selected_frames.extend(seg_frames[k] for k in idx_seg)
+            all_indices.extend(int(total_raw_frames + k) for k in idx_seg)
+            st_seg["segment_path"] = str(seg_path)
+            st_seg["sampled_count"] = len(idx_seg)
+            seg_stats_list.append(st_seg)
+            total_raw_frames += n_seg
+
+        indices = all_indices
+        median_raw_diff = round(float(np.mean([s["median_raw_diff"] for s in seg_stats_list])), 3)
+        max_raw_diff = round(float(max(s["max_raw_diff"] for s in seg_stats_list)), 3)
+        cut_spike_ratio = round(float(max(s["cut_spike_ratio"] for s in seg_stats_list)), 2)
+        n_frames = int(total_raw_frames)
+        seam_diffs = [
+            round(float(np.abs(selected_frames[b].astype(np.float32) - selected_frames[b - 1].astype(np.float32)).mean()), 3)
+            for b in seam_boundaries
+        ]
+        extra_meta = {
+            "stitched": True,
+            "stitch_mode": f"{k_seg}_segments",
+            "segment_stats": seg_stats_list,
+            "seam_diffs": seam_diffs,
+            "loop_seam_diff": round(float(np.abs(selected_frames[0].astype(np.float32) - selected_frames[-1].astype(np.float32)).mean()), 3),
+        }
+    elif stitch_second_half is not None:
+        frames1 = iio.imread(str(input_mp4), plugin="FFMPEG")
+        n1 = len(frames1)
+        if n1 < 8:
+            raise RuntimeError(f"Expected >= 8 frames in {input_mp4}, got {n1}")
         frames2_all = iio.imread(str(stitch_second_half), plugin="FFMPEG")
         end2 = len(frames2_all) if second_half_end < 0 else min(len(frames2_all), second_half_end)
         seg2 = frames2_all[max(0, second_half_start) : end2]
@@ -240,6 +304,10 @@ def build_video_atlas(
             "loop_seam_diff": round(float(np.abs(selected_frames[0].astype(np.float32) - selected_frames[-1].astype(np.float32)).mean()), 3),
         }
     else:
+        frames1 = iio.imread(str(input_mp4), plugin="FFMPEG")
+        n1 = len(frames1)
+        if n1 < 8:
+            raise RuntimeError(f"Expected >= 8 frames in {input_mp4}, got {n1}")
         n_frames = n1
         indices, stats = _sample_segment_indices(frames1, frame_count, sampling)
         if reverse_spin:
@@ -258,7 +326,7 @@ def build_video_atlas(
     raw_metrics: list[dict] = []
 
     for frame_rgb in selected_frames:
-        rgba = key_white_background_rgba(frame_rgb)
+        rgba = key_white_background_rgba(frame_rgb, key_mode=key_mode)
         processed_rgba.append(rgba)
 
         alpha = rgba[:, :, 3]
@@ -303,21 +371,37 @@ def build_video_atlas(
     cell_anchor_x = cell_size // 2  # 110
     cell_anchor_y = cell_size - 8   # 212
 
+    bboxes: list[tuple[int, int, int, int] | None] = []
+    shrink = 1.0
     for i in range(frame_count):
-        rgba = processed_rgba[i]
-        sm = smoothed[i]
-        alpha = rgba[:, :, 3]
+        alpha = processed_rgba[i][:, :, 3]
         ys, xs = np.where(alpha > 8)
         if len(xs) == 0:
+            bboxes.append(None)
             continue
+        fx0, fy0, fx1, fy1 = int(xs.min()), int(ys.min()), int(xs.max()) + 1, int(ys.max()) + 1
+        bboxes.append((fx0, fy0, fx1, fy1))
+        sm = smoothed[i]
+        des_s = target_crown_h / max(sm["crown_h"], 24.0)
+        left_allow = float(cell_anchor_x - 4) / max(sm["rx"] - float(fx0), 12.0)
+        right_allow = float(cell_size - 4 - cell_anchor_x) / max(float(fx1) - sm["rx"], 12.0)
+        top_allow = float(cell_anchor_y - 4) / max(sm["ry"] - float(fy0), 12.0)
+        shrink = min(shrink, left_allow / des_s, right_allow / des_s, top_allow / des_s)
 
-        x0, y0, x1, y1 = int(xs.min()), int(ys.min()), int(xs.max()) + 1, int(ys.max()) + 1
+    effective_crown_h = round(max(48.0, target_crown_h * max(shrink, 0.25)), 2)
+
+    for i in range(frame_count):
+        bbox = bboxes[i]
+        if bbox is None:
+            continue
+        rgba = processed_rgba[i]
+        sm = smoothed[i]
+        x0, y0, x1, y1 = bbox
         crop_pil = Image.fromarray(rgba[y0:y1, x0:x1], mode="RGBA")
         local_rx = sm["rx"] - float(x0)
         local_ry = sm["ry"] - float(y0)
 
-        max_w_cell = float(cell_size - 8)
-        scale = min(target_crown_h / max(sm["crown_h"], 24.0), max_w_cell / max(sm["fg_w"], 24.0))
+        scale = effective_crown_h / max(sm["crown_h"], 24.0)
         nw = max(1, int(round(crop_pil.width * scale)))
         nh = max(1, int(round(crop_pil.height * scale)))
         resized = crop_pil.resize((nw, nh), Image.Resampling.LANCZOS)
@@ -359,9 +443,10 @@ def build_video_atlas(
     resolved_prefix = _infer_path_prefix(out_dir, path_prefix)
     metadata = {
         "generated_at": int(time.time()),
-        "plant_id": "plant_0000",
-        "label_ascii": "Calathea",
-        "display_name": "孔雀竹芋",
+        "plant_id": plant_id,
+        "label_ascii": label_ascii or plant_id,
+        "display_name": display_name or label_ascii or plant_id,
+        "plant_type": plant_type,
         "atlas_file": "atlas_36.webp",
         "path_prefix": resolved_prefix,
         "hframes": hframes,
@@ -373,9 +458,10 @@ def build_video_atlas(
         "atlas_h": atlas_h,
         "root_anchor_px": [float(cell_anchor_x), float(cell_anchor_y)],
         "root_uv_y": round(float(cell_anchor_y) / float(cell_size), 4),
-        "crown_h": float(target_crown_h),
-        "root_width": 22.0,
-        "default_lab_height_px": 150.0,
+        "crown_h": float(effective_crown_h),
+        "root_width": float(root_width),
+        "default_lab_height_px": float(lab_height),
+        "key_mode": key_mode,
         "reverse_spin": bool(reverse_spin),
         "sampling_mode": sampling,
         "median_raw_diff": round(median_raw_diff, 3),
@@ -406,7 +492,15 @@ def main() -> int:
     parser.add_argument("--second-half-end", type=int, default=-1)
     parser.add_argument("--reverse-first-half", action="store_true")
     parser.add_argument("--reverse-second-half", action="store_true")
+    parser.add_argument("--stitch-segments", nargs="+", type=Path, default=None, help="Multiple sequential MP4 segments (e.g. 4 quarters)")
     parser.add_argument("--path-prefix", default=None)
+    parser.add_argument("--key-mode", choices=["pockets", "strict_pockets", "border_only"], default="pockets")
+    parser.add_argument("--plant-id", default="plant_0000")
+    parser.add_argument("--display-name", default="孔雀竹芋")
+    parser.add_argument("--label-ascii", default="Calathea")
+    parser.add_argument("--plant-type", default="groundcover")
+    parser.add_argument("--root-width", type=float, default=22.0)
+    parser.add_argument("--lab-height", type=float, default=150.0)
     args = parser.parse_args()
 
     build_video_atlas(
@@ -422,7 +516,15 @@ def main() -> int:
         second_half_end=args.second_half_end,
         reverse_first_half=args.reverse_first_half,
         reverse_second_half=args.reverse_second_half,
+        stitch_segments=args.stitch_segments,
         path_prefix=args.path_prefix,
+        key_mode=args.key_mode,
+        plant_id=args.plant_id,
+        display_name=args.display_name,
+        label_ascii=args.label_ascii,
+        plant_type=args.plant_type,
+        root_width=args.root_width,
+        lab_height=args.lab_height,
     )
     return 0
 
