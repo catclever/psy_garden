@@ -184,14 +184,14 @@ class TestGodotVideoGallery045(unittest.TestCase):
             self.assertEqual(non_ascii, [], f"Non-ASCII found in {path.name}: {non_ascii[:10]}")
 
         garden_src = GARDEN_PATH.read_text(encoding="utf-8")
-        self.assertIn('const LAB_ASSET_VER: String = "045"', garden_src)
+        self.assertIn('const LAB_ASSET_VER: String = "046"', garden_src)
 
         demo_html = LIGHT_DEMO_HTML.read_text(encoding="utf-8")
-        self.assertIn("v=045", demo_html, "Expected cache buster v=045 in light_demo.html")
-        self.assertIn('"045"', demo_html, 'Expected q.set("v", "045") in light_demo.html')
+        self.assertIn("v=046", demo_html, "Expected cache buster v=046 in light_demo.html")
+        self.assertIn('"046"', demo_html, 'Expected q.set("v", "046") in light_demo.html')
 
         res = subprocess.run(
-            ["git", "diff", "--name-only", "src/styles.css", "src/assets/plants/manifest.json"],
+            ["git", "diff", "--name-only", "src/styles.css", "src/assets/plants/manifest.json", "tools/root_anchor_calibrator.py"],
             cwd=REPO_ROOT,
             capture_output=True,
             text=True,
@@ -220,9 +220,31 @@ class TestGodotVideoGallery045(unittest.TestCase):
             self.assertEqual(meta.get("vframes"), 6)
             self.assertEqual(meta.get("frame_count"), 36)
             self.assertGreater(int(sp.get("webp_bytes", 0)), 50000)
+
+            if req_id in ("plant_0003", "plant_0005", "plant_0177"):
+                pt = meta.get("pivot_tracking")
+                self.assertIsInstance(pt, dict, f"Missing pivot_tracking in {meta_path}")
+                if req_id == "plant_0005":
+                    self.assertEqual(pt.get("modes", {}).get("woody_shaft", 0), 36)
+                    self.assertLess(float(pt.get("rx_med_err_px", 99.0)), 8.0)
+                    self.assertLess(float(pt.get("ry_med_err_px", 99.0)), 10.0)
+                    anchor_px = meta.get("root_anchor_px", [110.0, 212.0])
+                    self.assertLess(float(anchor_px[1]), 212.0)
+
             with Image.open(atlas_path) as im:
                 self.assertEqual(im.size, (1320, 1320))
                 self.assertEqual(im.mode, "RGBA")
+                if req_id == "plant_0005":
+                    alpha_band = im.getchannel("A")
+                    for row_idx in range(6):
+                        bot_y = (row_idx + 1) * 220 - 1
+                        row_strip = list(alpha_band.crop((0, bot_y, 1320, bot_y + 1)).getdata())
+                        clipped_px = sum(1 for a in row_strip if a > 8)
+                        self.assertEqual(
+                            clipped_px,
+                            0,
+                            f"Found {clipped_px} bottom-clipped pixels on plant_0005 row {row_idx} (y={bot_y})",
+                        )
 
     def test_godot_video_gallery_headless_verify(self):
         self.assertTrue(os.path.exists(GODOT_BIN), f"Godot 4 binary not found at {GODOT_BIN}")

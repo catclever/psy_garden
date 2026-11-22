@@ -1,5 +1,5 @@
 {
-  "generated_at": 1795339668,
+  "generated_at": 1795357307,
   "plant_id": "plant_0005",
   "label_ascii": "Podocarpus",
   "display_name": "羅漢松",
@@ -15,10 +15,10 @@
   "atlas_h": 1320,
   "root_anchor_px": [
     110.0,
-    212.0
+    198.0
   ],
-  "root_uv_y": 0.9636,
-  "crown_h": 135.15,
+  "root_uv_y": 0.9,
+  "crown_h": 164.3,
   "root_width": 80.0,
   "default_lab_height_px": 185.0,
   "key_mode": "pockets",
@@ -66,7 +66,17 @@
     61,
     66
   ],
-  "webp_bytes": 457096,
+  "webp_bytes": 675028,
+  "pivot_tracking": {
+    "modes": {
+      "woody_shaft": 36
+    },
+    "rx_amp_px": 45.91,
+    "rx_med_err_px": 3.06,
+    "ry_med_err_px": 5.01,
+    "max_below_root_px": 49.19,
+    "const_raw_crown_h": 527.68
+  },
   "stitched": true,
   "first_half_stats": {
     "segment_frames": 72,

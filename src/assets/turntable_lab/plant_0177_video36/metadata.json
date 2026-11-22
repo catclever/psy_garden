@@ -1,5 +1,5 @@
 {
-  "generated_at": 1795315923,
+  "generated_at": 1795357345,
   "plant_id": "plant_0177",
   "label_ascii": "Datura",
   "display_name": "曼陀罗",
@@ -66,7 +66,17 @@
     264,
     270
   ],
-  "webp_bytes": 680042,
+  "webp_bytes": 674604,
+  "pivot_tracking": {
+    "modes": {
+      "calibrator": 36
+    },
+    "rx_amp_px": 18.61,
+    "rx_med_err_px": 2.65,
+    "ry_med_err_px": 1.39,
+    "max_below_root_px": 4.57,
+    "const_raw_crown_h": 545.54
+  },
   "stitched": true,
   "stitch_mode": "4_segments",
   "segment_stats": [

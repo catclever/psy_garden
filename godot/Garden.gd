@@ -23,7 +23,7 @@ var generation_id: int = 0
 var manifest_loaded_once: bool = false
 
 const MAX_CONCURRENT_HTTP: int = 8
-const LAB_ASSET_VER: String = "045"
+const LAB_ASSET_VER: String = "046"
 var _http_pool: Array = []
 var _http_busy: Dictionary = {}
 var _http_queue: Array = []

@@ -1,5 +1,5 @@
 {
-  "generated_at": 1795329920,
+  "generated_at": 1795357331,
   "plant_id": "plant_0003",
   "label_ascii": "Poppy",
   "display_name": "虞美人",
@@ -15,10 +15,10 @@
   "atlas_h": 1320,
   "root_anchor_px": [
     110.0,
-    212.0
+    206.0
   ],
-  "root_uv_y": 0.9636,
-  "crown_h": 159.24,
+  "root_uv_y": 0.9364,
+  "crown_h": 165.54,
   "root_width": 38.0,
   "default_lab_height_px": 115.0,
   "key_mode": "pockets",
@@ -66,7 +66,17 @@
     61,
     66
   ],
-  "webp_bytes": 549354,
+  "webp_bytes": 583642,
+  "pivot_tracking": {
+    "modes": {
+      "calibrator": 36
+    },
+    "rx_amp_px": 4.23,
+    "rx_med_err_px": 17.62,
+    "ry_med_err_px": 1.13,
+    "max_below_root_px": 24.82,
+    "const_raw_crown_h": 544.8
+  },
   "stitched": true,
   "first_half_stats": {
     "segment_frames": 72,

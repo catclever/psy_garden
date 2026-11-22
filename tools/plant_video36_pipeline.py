@@ -32,7 +32,12 @@ TOOLS_DIR = Path(__file__).resolve().parent
 if str(TOOLS_DIR) not in sys.path:
     sys.path.insert(0, str(TOOLS_DIR))
 
-from build_video_turntable_atlas import _split_rgba_hue_layers, build_video_atlas, key_white_background_rgba
+from build_video_turntable_atlas import (
+    _split_rgba_hue_layers,
+    build_video_atlas,
+    detect_turntable_frame_root,
+    key_white_background_rgba,
+)
 from generate_video_turntable import (
     _crop_fg,
     _ensure_api_key_silently,
@@ -236,6 +241,7 @@ def _calibrate_and_align_16x9(
     rgba_img: Image.Image,
     target_crown_h: float = 540.0,
     override_anchor_uv: list[float] | None = None,
+    plant_type: str = "",
 ) -> tuple[Image.Image, Image.Image, list[float]]:
     arr = np.array(rgba_img.convert("RGBA"), dtype=np.uint8)
     alpha = arr[:, :, 3]
@@ -247,9 +253,11 @@ def _calibrate_and_align_16x9(
     if override_anchor_uv is not None:
         anchor_uv = [float(override_anchor_uv[0]), float(override_anchor_uv[1])]
     else:
-        red_l, green_l, blue_l = _split_rgba_hue_layers(fg_rgba)
-        cal = calibrate_root_anchor(red_l, green_l, blue_l)
-        anchor_uv = [float(cal["root_anchor"][0]), float(cal["root_anchor"][1])]
+        det = detect_turntable_frame_root(np.array(fg_rgba, dtype=np.uint8), plant_type=plant_type)
+        anchor_uv = [
+            round(float(det["rx"]) / max(fg_rgba.width, 1), 4),
+            round(float(det["ry"]) / max(fg_rgba.height, 1), 4),
+        ]
 
     # Composite foreground onto pure white before 16:9 placement
     fg_white = Image.new("RGB", fg_rgba.size, (255, 255, 255))
@@ -485,7 +493,7 @@ def run_prep_stage(args: argparse.Namespace, rec: dict, run_dir: Path) -> dict:
 
     ref_000_path = run_dir / "ref_000.png"
     ref_000_sq_path = run_dir / "ref_000_sq.png"
-    frame0, sq0, anchor0 = _calibrate_and_align_16x9(front_rgba, target_crown_h=540.0)
+    frame0, sq0, anchor0 = _calibrate_and_align_16x9(front_rgba, target_crown_h=540.0, plant_type=ptype)
     frame0.save(ref_000_path)
     sq0.save(ref_000_sq_path)
 
@@ -562,7 +570,7 @@ def run_prep_stage(args: argparse.Namespace, rec: dict, run_dir: Path) -> dict:
         right_rgba, right_bg = _extract_clean_rgba(Image.open(ref_090_raw), white_key_mode="border_only")
         ref_090_path = run_dir / "ref_090.png"
         ref_090_sq_path = run_dir / "ref_090_sq.png"
-        frame90, sq90, anchor90 = _calibrate_and_align_16x9(right_rgba, target_crown_h=540.0)
+        frame90, sq90, anchor90 = _calibrate_and_align_16x9(right_rgba, target_crown_h=540.0, plant_type=ptype)
         frame90.save(ref_090_path)
         sq90.save(ref_090_sq_path)
 

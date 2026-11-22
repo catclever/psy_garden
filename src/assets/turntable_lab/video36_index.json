@@ -1,5 +1,5 @@
 {
-  "updated_at": 1795339668,
+  "updated_at": 1795357345,
   "species": [
     {
       "plant_id": "plant_0000",
@@ -32,12 +32,12 @@
       "frame_count": 36,
       "root_anchor_px": [
         110.0,
-        212.0
+        206.0
       ],
-      "crown_h": 159.24,
+      "crown_h": 165.54,
       "root_width": 38.0,
       "gallery_height_px": 115.0,
-      "webp_bytes": 549354
+      "webp_bytes": 583642
     },
     {
       "plant_id": "plant_0005",
@@ -51,12 +51,12 @@
       "frame_count": 36,
       "root_anchor_px": [
         110.0,
-        212.0
+        198.0
       ],
-      "crown_h": 135.15,
+      "crown_h": 164.3,
       "root_width": 80.0,
       "gallery_height_px": 185.0,
-      "webp_bytes": 457096
+      "webp_bytes": 675028
     },
     {
       "plant_id": "plant_0177",
@@ -75,7 +75,7 @@
       "crown_h": 188.0,
       "root_width": 60.0,
       "gallery_height_px": 135.0,
-      "webp_bytes": 680042
+      "webp_bytes": 674604
     }
   ]
 }

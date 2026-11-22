@@ -168,6 +168,114 @@ def key_white_background_rgba(rgb_frame: np.ndarray, key_mode: str = "pockets") 
     return rgba
 
 
+def detect_turntable_frame_root(rgba: np.ndarray, plant_type: str = "") -> dict:
+    """Detect frame root anchor, prioritizing strict brown woody trunk shaft on trees/shrubs."""
+    h, w, _ = rgba.shape
+    a = rgba[:, :, 3]
+    fg = a > 38
+    ys, xs = np.where(fg)
+    if len(xs) == 0:
+        return {
+            "rx": w * 0.5,
+            "ry": h * 0.9,
+            "top_y": 0.0,
+            "bot_y": float(max(0, h - 1)),
+            "fg_w": float(w),
+            "conf": 0.1,
+            "mode": "empty",
+        }
+
+    top_y, bot_y = int(ys.min()), int(ys.max())
+    min_x, max_x = int(xs.min()), int(xs.max())
+    vis_h = max(1, bot_y - top_y + 1)
+    vis_w = max(1, max_x - min_x + 1)
+    fg_area = int(fg.sum())
+
+    if plant_type.lower() in ("tree", "shrub", "bonsai"):
+        r = rgba[:, :, 0].astype(np.int16)
+        g = rgba[:, :, 1].astype(np.int16)
+        b = rgba[:, :, 2].astype(np.int16)
+        # Strict brown/umber woody bark mask; rejects green foliage and bright red blossoms
+        woody = fg & (r >= g + 5) & ((r - g) <= 55) & (r >= b + 10) & (r <= 185) & (g <= 165)
+
+        x_lo = int(min_x + 0.14 * vis_w)
+        x_hi = int(max_x - 0.14 * vis_w)
+        y55 = int(top_y + 0.55 * vis_h)
+        y85 = int(top_y + 0.85 * vis_h)
+        y72 = int(top_y + 0.72 * vis_h)
+
+        woody_shaft = np.zeros_like(woody)
+        woody_shaft[y55 : y85 + 1, x_lo : x_hi + 1] = woody[y55 : y85 + 1, x_lo : x_hi + 1]
+        woody_bot = np.zeros_like(woody)
+        woody_bot[y72 : bot_y + 1, x_lo : x_hi + 1] = woody[y72 : bot_y + 1, x_lo : x_hi + 1]
+
+        if int(woody_shaft.sum()) >= max(150, int(0.008 * fg_area)) and int(woody_bot.sum()) >= max(80, int(0.004 * fg_area)):
+            col_hist = woody_shaft.sum(axis=0).astype(np.float64)
+            col_smooth = ndimage.gaussian_filter1d(col_hist, sigma=max(6.0, 0.03 * vis_w))
+            col_peak = float(np.argmax(col_smooth))
+            sy, sx = np.where(woody_shaft)
+            in_shaft_corr = np.abs(sx - col_peak) <= max(28.0, 0.18 * vis_w)
+            in_shaft_count = int(in_shaft_corr.sum())
+            rx = float(np.median(sx[in_shaft_corr])) if in_shaft_count >= 30 else col_peak
+
+            wy, wx = np.where(woody_bot)
+            in_bot_corr = np.abs(wx - rx) <= max(35.0, 0.22 * vis_w)
+            ry = float(np.percentile(wy[in_bot_corr], 97.5)) if int(in_bot_corr.sum()) >= 20 else float(np.percentile(wy, 97.5))
+            conf = float(min(3.0, in_shaft_count / 200.0))
+            return {
+                "rx": rx,
+                "ry": ry,
+                "top_y": float(top_y),
+                "bot_y": float(bot_y),
+                "fg_w": float(vis_w),
+                "conf": conf,
+                "mode": "woody_shaft",
+            }
+
+    pil_rgba = Image.fromarray(rgba, mode="RGBA")
+    red_img, green_img, blue_img = _split_rgba_hue_layers(pil_rgba)
+    cal = calibrate_root_anchor(red_img, green_img, blue_img)
+    return {
+        "rx": float(cal["root_x"]),
+        "ry": float(cal["root_y"]),
+        "top_y": float(top_y),
+        "bot_y": float(bot_y),
+        "fg_w": float(vis_w),
+        "conf": 1.0,
+        "mode": "calibrator",
+    }
+
+
+def _fit_periodic_huber(
+    vals: list[float],
+    weights: list[float],
+    harmonics: int = 1,
+    iters: int = 12,
+) -> tuple[np.ndarray, np.ndarray]:
+    """Fit a closed 360-deg Fourier curve via weighted Huber IRLS for rigid-pivot lock."""
+    n = len(vals)
+    theta = np.linspace(0.0, 2.0 * np.pi, n, endpoint=False)
+    cols = [np.ones(n, dtype=np.float64)]
+    for k in range(1, harmonics + 1):
+        cols.append(np.cos(k * theta))
+        cols.append(np.sin(k * theta))
+    design = np.column_stack(cols)
+    y = np.asarray(vals, dtype=np.float64)
+    w0 = np.maximum(np.asarray(weights, dtype=np.float64), 1e-3)
+    w = w0.copy()
+    coef = np.zeros(design.shape[1], dtype=np.float64)
+    for _ in range(iters):
+        sqw = np.sqrt(w)
+        coef, *_ = np.linalg.lstsq(design * sqw[:, None], y * sqw, rcond=None)
+        res = y - design @ coef
+        mad = float(np.median(np.abs(res)))
+        scale = max(1.4826 * mad, 1.5)
+        abs_res = np.abs(res)
+        huber = np.where(abs_res <= 1.5 * scale, 1.0, (1.5 * scale) / np.maximum(abs_res, 1e-6))
+        w = np.maximum(w0 * huber, 1e-3)
+    return design @ coef, coef
+
+
 def _sample_segment_indices(frames_seg: np.ndarray, count: int, sampling: str) -> tuple[list[int], dict]:
     n = len(frames_seg)
     if n < 2:
@@ -328,37 +436,28 @@ def build_video_atlas(
     for frame_rgb in selected_frames:
         rgba = key_white_background_rgba(frame_rgb, key_mode=key_mode)
         processed_rgba.append(rgba)
+        raw_metrics.append(detect_turntable_frame_root(rgba, plant_type=plant_type))
 
-        alpha = rgba[:, :, 3]
-        ys, xs = np.where(alpha > 38)
-        if len(xs) == 0:
-            h_s, w_s = alpha.shape
-            raw_metrics.append({"rx": w_s * 0.5, "ry": h_s * 0.9, "top_y": 0.0, "crown_h": float(h_s), "fg_w": float(w_s)})
-            continue
+    raw_rxs = [m["rx"] for m in raw_metrics]
+    raw_rys = [m["ry"] for m in raw_metrics]
+    raw_tops = [m["top_y"] for m in raw_metrics]
+    raw_confs = [m["conf"] for m in raw_metrics]
 
-        top_y = float(ys.min())
-        min_x = float(xs.min())
-        max_x = float(xs.max())
-        fg_w = max(24.0, max_x - min_x + 1.0)
+    fit_rx, coef_rx = _fit_periodic_huber(raw_rxs, raw_confs, harmonics=1)
+    fit_ry, coef_ry = _fit_periodic_huber(raw_rys, raw_confs, harmonics=1)
+    raw_crown_hs = [max(24.0, float(fit_ry[i] - raw_tops[i])) for i in range(frame_count)]
+    const_crown_h = float(np.median(raw_crown_hs))
 
-        pil_rgba = Image.fromarray(rgba, mode="RGBA")
-        red_img, green_img, blue_img = _split_rgba_hue_layers(pil_rgba)
-        cal = calibrate_root_anchor(red_img, green_img, blue_img)
-        rx = float(cal["root_x"])
-        ry = float(cal["root_y"])
-        crown_h = max(24.0, ry - top_y)
-        raw_metrics.append({"rx": rx, "ry": ry, "top_y": top_y, "crown_h": crown_h, "fg_w": fg_w})
-
-    # Circular 3-tap temporal smoothing on (rx, ry, crown_h)
     smoothed = []
     for i in range(frame_count):
-        prev_m = raw_metrics[(i - 1) % frame_count]
-        curr_m = raw_metrics[i]
-        next_m = raw_metrics[(i + 1) % frame_count]
-        srx = 0.25 * prev_m["rx"] + 0.50 * curr_m["rx"] + 0.25 * next_m["rx"]
-        sry = 0.25 * prev_m["ry"] + 0.50 * curr_m["ry"] + 0.25 * next_m["ry"]
-        sch = 0.25 * prev_m["crown_h"] + 0.50 * curr_m["crown_h"] + 0.25 * next_m["crown_h"]
-        smoothed.append({"rx": srx, "ry": sry, "crown_h": sch, "fg_w": curr_m["fg_w"]})
+        smoothed.append(
+            {
+                "rx": float(fit_rx[i]),
+                "ry": float(fit_ry[i]),
+                "crown_h": const_crown_h,
+                "fg_w": raw_metrics[i]["fg_w"],
+            }
+        )
 
     hframes, vframes = 6, 6
     atlas_w = hframes * cell_size
@@ -368,27 +467,64 @@ def build_video_atlas(
     contact_sheet = Image.new("RGB", (atlas_w, atlas_h), (111, 102, 75))
     cs_draw = ImageDraw.Draw(contact_sheet)
 
-    cell_anchor_x = cell_size // 2  # 110
-    cell_anchor_y = cell_size - 8   # 212
-
     bboxes: list[tuple[int, int, int, int] | None] = []
-    shrink = 1.0
     for i in range(frame_count):
         alpha = processed_rgba[i][:, :, 3]
         ys, xs = np.where(alpha > 8)
         if len(xs) == 0:
             bboxes.append(None)
+        else:
+            bboxes.append((int(xs.min()), int(ys.min()), int(xs.max()) + 1, int(ys.max()) + 1))
+
+    max_below_raw = max(
+        (max(0.0, float(bbox[3]) - smoothed[i]["ry"]) for i, bbox in enumerate(bboxes) if bbox is not None),
+        default=0.0,
+    )
+    est_below_px = max_below_raw * (target_crown_h / max(const_crown_h, 24.0))
+    cell_anchor_x = cell_size // 2  # 110
+    if est_below_px > 6.0:
+        max_above_raw = max(
+            (max(24.0, smoothed[i]["ry"] - float(bbox[1])) for i, bbox in enumerate(bboxes) if bbox is not None),
+            default=const_crown_h,
+        )
+        below_ratio = max_below_raw / max(max_above_raw + max_below_raw, 1.0)
+        needed_below_px = int(math.ceil(below_ratio * (cell_size - 8))) + 4
+        cell_anchor_y = int(np.clip(cell_size - max(8, needed_below_px), int(cell_size * 0.76), cell_size - 8))
+    else:
+        cell_anchor_y = cell_size - 8  # 212
+
+    shrink = 1.0
+    for i in range(frame_count):
+        bbox = bboxes[i]
+        if bbox is None:
             continue
-        fx0, fy0, fx1, fy1 = int(xs.min()), int(ys.min()), int(xs.max()) + 1, int(ys.max()) + 1
-        bboxes.append((fx0, fy0, fx1, fy1))
+        fx0, fy0, fx1, fy1 = bbox
         sm = smoothed[i]
         des_s = target_crown_h / max(sm["crown_h"], 24.0)
         left_allow = float(cell_anchor_x - 4) / max(sm["rx"] - float(fx0), 12.0)
         right_allow = float(cell_size - 4 - cell_anchor_x) / max(float(fx1) - sm["rx"], 12.0)
         top_allow = float(cell_anchor_y - 4) / max(sm["ry"] - float(fy0), 12.0)
         shrink = min(shrink, left_allow / des_s, right_allow / des_s, top_allow / des_s)
+        if float(fy1) > sm["ry"]:
+            bottom_allow = float(cell_size - 4 - cell_anchor_y) / max(float(fy1) - sm["ry"], 1.0)
+            shrink = min(shrink, bottom_allow / des_s)
 
     effective_crown_h = round(max(48.0, target_crown_h * max(shrink, 0.25)), 2)
+
+    mode_counts: dict[str, int] = {}
+    for m in raw_metrics:
+        md = str(m["mode"])
+        mode_counts[md] = mode_counts.get(md, 0) + 1
+    rx_errs = np.abs(np.asarray(raw_rxs, dtype=np.float64) - fit_rx)
+    ry_errs = np.abs(np.asarray(raw_rys, dtype=np.float64) - fit_ry)
+    pivot_tracking = {
+        "modes": mode_counts,
+        "rx_amp_px": round(float(math.hypot(coef_rx[1], coef_rx[2])), 2),
+        "rx_med_err_px": round(float(np.median(rx_errs)), 2),
+        "ry_med_err_px": round(float(np.median(ry_errs)), 2),
+        "max_below_root_px": round(float(max_below_raw), 2),
+        "const_raw_crown_h": round(float(const_crown_h), 2),
+    }
 
     for i in range(frame_count):
         bbox = bboxes[i]
@@ -470,6 +606,7 @@ def build_video_atlas(
         "source_frames_total": int(n_frames),
         "sampled_indices": indices,
         "webp_bytes": int(atlas_path.stat().st_size),
+        "pivot_tracking": pivot_tracking,
         **extra_meta,
     }
     meta_path = out_dir / "metadata.json"
