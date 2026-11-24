@@ -312,6 +312,17 @@ def _infer_path_prefix(out_dir: Path, explicit_prefix: str | None) -> str:
         return "assets/turntable_lab/plant_0000_video36"
 
 
+def _mask_16x9_corner_watermark(frame_rgb: np.ndarray) -> np.ndarray:
+    """Whiten extreme bottom-right corner badge on landscape frames (e.g. Google Flow watermark)."""
+    arr = np.array(frame_rgb, copy=True)
+    h, w = arr.shape[:2]
+    if w >= int(h * 1.35):
+        y0 = int(round(h * 0.87))
+        x0 = int(round(w * 0.85))
+        arr[y0:, x0:, :3] = 255
+    return arr
+
+
 def build_video_atlas(
     input_mp4: Path,
     out_dir: Path,
@@ -334,6 +345,8 @@ def build_video_atlas(
     plant_type: str = "groundcover",
     root_width: float = 22.0,
     lab_height: float = 150.0,
+    mask_corner_watermark: bool = True,
+    published: bool = True,
 ) -> dict:
     import imageio.v3 as iio
 
@@ -434,7 +447,8 @@ def build_video_atlas(
     raw_metrics: list[dict] = []
 
     for frame_rgb in selected_frames:
-        rgba = key_white_background_rgba(frame_rgb, key_mode=key_mode)
+        clean_rgb = _mask_16x9_corner_watermark(frame_rgb) if mask_corner_watermark else frame_rgb
+        rgba = key_white_background_rgba(clean_rgb, key_mode=key_mode)
         processed_rgba.append(rgba)
         raw_metrics.append(detect_turntable_frame_root(rgba, plant_type=plant_type))
 
@@ -606,6 +620,7 @@ def build_video_atlas(
         "source_frames_total": int(n_frames),
         "sampled_indices": indices,
         "webp_bytes": int(atlas_path.stat().st_size),
+        "published": bool(published),
         "pivot_tracking": pivot_tracking,
         **extra_meta,
     }

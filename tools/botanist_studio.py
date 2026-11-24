@@ -37,7 +37,15 @@ VIDEO36_FILE_ALLOWLIST = {
     'atlas_36.webp',
     'ref_000.png',
     'ref_180.png',
+    'flow_prompts.txt',
+    'flow_prompts.json',
 }
+VIDEO36_MP4_SLOTS = {
+    'half_a': 'half_a_0_180.mp4',
+    'half_b': 'half_b_180_360.mp4',
+    'single_360': 'single_360.mp4',
+}
+MAX_VIDEO36_MP4_BYTES = 120 * 1024 * 1024
 
 def refresh_plant_manifest():
     try:
@@ -368,13 +376,28 @@ def _collect_video36_list() -> dict:
         ai = rec.get('ai_analysis') if isinstance(rec.get('ai_analysis'), dict) else {}
         prep_meta = _safe_read_json(os.path.join(VIDEO36_RUNS_DIR, pid, 'prep_meta.json'))
         video_summary = _safe_read_json(os.path.join(VIDEO36_RUNS_DIR, pid, 'video_run_summary.json'))
+        flow_prompts = _safe_read_json(os.path.join(VIDEO36_RUNS_DIR, pid, 'flow_prompts.json'))
+        if flow_prompts is None and prep_meta is not None:
+            try:
+                import plant_video36_pipeline
+
+                flow_prompts = plant_video36_pipeline.build_flow_prompts(prep_meta)
+            except Exception:
+                flow_prompts = None
+
+        run_dir_pid = os.path.join(VIDEO36_RUNS_DIR, pid)
+        mp4_slots = {
+            slot: os.path.isfile(os.path.join(run_dir_pid, fname))
+            for slot, fname in VIDEO36_MP4_SLOTS.items()
+        }
+
         atlas_dir = os.path.join(TURNTABLE_LAB_DIR, f'{pid}_video36')
         atlas_meta = _safe_read_json(os.path.join(atlas_dir, 'metadata.json'))
         atlas_webp = os.path.join(atlas_dir, 'atlas_36.webp')
 
         has_atlas = atlas_meta is not None and os.path.isfile(atlas_webp)
         has_prep = prep_meta is not None
-        has_video = video_summary is not None
+        has_video = video_summary is not None or (mp4_slots['half_a'] and mp4_slots['half_b']) or mp4_slots['single_360']
         published = bool(has_atlas and atlas_meta.get('published') is not False and pid in published_set)
 
         files_map = {}
@@ -419,6 +442,8 @@ def _collect_video36_list() -> dict:
                 'published': published,
                 'prep_meta': prep_meta,
                 'video_summary': video_summary,
+                'flow_prompts': flow_prompts,
+                'mp4_slots': mp4_slots,
                 'atlas_meta': atlas_meta,
                 'files': files_map,
                 'active_job': active_by_pid.get(pid) or latest_by_pid.get(pid),
@@ -476,13 +501,16 @@ def _start_video36_job(
     key_mode: str = 'auto',
     force: bool = False,
     mirror_q0_for_270: bool = False,
+    draft: bool = False,
 ) -> dict:
     if not _is_safe_path_segment(plant_id):
         raise ValueError('Invalid plant_id')
     if stages not in ('prep', 'video', 'atlas', 'all'):
         raise ValueError('Invalid stages')
-    if mode not in ('2half', '4quarter'):
+    if mode not in ('2half', '4quarter', 'single360'):
         raise ValueError('Invalid mode')
+    if mode == 'single360' and stages in ('video', 'all'):
+        raise ValueError('single360 mode requires uploading single_360.mp4 then running atlas')
     if key_mode not in ('auto', 'pockets', 'strict_pockets', 'border_only'):
         raise ValueError('Invalid key_mode')
 
@@ -504,6 +532,8 @@ def _start_video36_job(
         ]
         if force:
             args_list.append('--force')
+        if draft:
+            args_list.append('--draft')
         if mirror_q0_for_270 and mode == '4quarter':
             args_list.append('--mirror-q0-for-270')
 
@@ -556,6 +586,69 @@ def _publish_video36_asset(plant_id: str, published: bool) -> dict:
         'plant_id': plant_id,
         'published': bool(published),
         'index_species_count': len(idx_data.get('species') or []),
+    }
+
+
+def _save_uploaded_video36_mp4(
+    plant_id: str,
+    slot: str,
+    raw_bytes: bytes,
+    auto_atlas: bool = False,
+    key_mode: str = 'auto',
+) -> dict:
+    if not _is_safe_path_segment(plant_id):
+        raise ValueError('Invalid plant_id')
+    if slot not in VIDEO36_MP4_SLOTS:
+        raise ValueError(f'Invalid MP4 slot: {slot}')
+    if not raw_bytes:
+        raise ValueError('Empty upload body')
+    if len(raw_bytes) > MAX_VIDEO36_MP4_BYTES:
+        raise ValueError('Uploaded file exceeds 120 MB limit')
+
+    runs_real = os.path.realpath(VIDEO36_RUNS_DIR)
+    target_dir = os.path.join(VIDEO36_RUNS_DIR, plant_id)
+    os.makedirs(target_dir, exist_ok=True)
+    real_dir = os.path.realpath(target_dir)
+    if real_dir != runs_real and not real_dir.startswith(runs_real + os.sep):
+        raise ValueError('Unsafe upload directory')
+
+    filename = VIDEO36_MP4_SLOTS[slot]
+    out_path = os.path.join(real_dir, filename)
+    with open(out_path, 'wb') as f:
+        f.write(raw_bytes)
+
+    mp4_slots = {
+        s: os.path.isfile(os.path.join(real_dir, fn))
+        for s, fn in VIDEO36_MP4_SLOTS.items()
+    }
+    if slot == 'single_360':
+        ready_for_atlas = mp4_slots['single_360']
+        rec_mode = 'single360'
+    else:
+        ready_for_atlas = mp4_slots['half_a'] and mp4_slots['half_b']
+        rec_mode = '2half'
+
+    auto_job = None
+    if auto_atlas and ready_for_atlas:
+        auto_job = _start_video36_job(
+            plant_id=plant_id,
+            stages='atlas',
+            mode=rec_mode,
+            key_mode=key_mode,
+            force=True,
+            draft=True,
+        )
+
+    return {
+        'status': 'success',
+        'plant_id': plant_id,
+        'slot': slot,
+        'filename': filename,
+        'bytes': len(raw_bytes),
+        'mp4_slots': mp4_slots,
+        'ready_for_atlas': ready_for_atlas,
+        'recommended_mode': rec_mode,
+        'auto_job': auto_job,
     }
 
 
@@ -1454,6 +1547,43 @@ HTML_CONTENT = """
             gap: 8px;
             flex-wrap: wrap;
         }
+        .v36-flow-box {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            font-size: 12px;
+        }
+        .v36-flow-row {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .v36-flow-btn {
+            background: #161b22;
+            color: #c9d1d9;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            padding: 4px 9px;
+            font-size: 11px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .v36-flow-btn:hover {
+            border-color: #58a6ff;
+            color: #ffffff;
+        }
+        .v36-flow-btn.is-ready {
+            border-color: rgba(62, 180, 95, 0.7);
+            color: #7ee787;
+        }
         .v36-log-box {
             background: #05070a;
             border: 1px solid #30363d;
@@ -1629,6 +1759,7 @@ HTML_CONTENT = """
                         <label style="color:#8b949e;">旋转模式 (--mode)</label>
                         <select id="v36ModeSelect">
                             <option value="2half">2half (常规 0→180→360 双半圈)</option>
+                            <option value="single360">single360 (单段 360° Flow 旋转)</option>
                             <option value="4quarter">4quarter (宽幅四象限防压扁)</option>
                         </select>
                     </div>
@@ -1649,6 +1780,36 @@ HTML_CONTENT = """
                         <input type="checkbox" id="v36ForceChk" />
                         <span>强制覆盖重算 (--force)</span>
                     </label>
+                </div>
+                <div class="v36-flow-box">
+                    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
+                        <span style="font-weight:600; color:#58a6ff;">🎬 Google Flow 外部投喂 & MP4 回流</span>
+                        <label style="display:flex; align-items:center; gap:5px; font-size:11px; color:#8b949e; cursor:pointer;">
+                            <input type="checkbox" id="v36AutoAtlasChk" checked />
+                            <span>传齐后自动切片 Atlas (草稿态)</span>
+                        </label>
+                    </div>
+                    <div class="v36-flow-row">
+                        <a id="v36DlFrontBtn" class="v36-flow-btn" download="000_front.png" href="#">⬇ 0° 正面图</a>
+                        <a id="v36DlRearBtn" class="v36-flow-btn" download="180_rear.png" href="#">⬇ 180° 背面图</a>
+                        <button type="button" class="v36-flow-btn" onclick="copyFlowPrompt('half_a')">📋 复制 Half A 提示词</button>
+                        <button type="button" class="v36-flow-btn" onclick="copyFlowPrompt('half_b')">📋 复制 Half B 提示词</button>
+                        <button type="button" class="v36-flow-btn" onclick="copyFlowPrompt('single_360')">📋 复制 单段 360° 提示词</button>
+                    </div>
+                    <div class="v36-flow-row">
+                        <label class="v36-flow-btn" id="v36LblHalfA" style="cursor:pointer;">
+                            ⬆ Half A (.mp4) <span id="v36SlotHalfA">未上传</span>
+                            <input type="file" accept="video/mp4" style="display:none;" onchange="uploadVideo36Mp4('half_a', this)" />
+                        </label>
+                        <label class="v36-flow-btn" id="v36LblHalfB" style="cursor:pointer;">
+                            ⬆ Half B (.mp4) <span id="v36SlotHalfB">未上传</span>
+                            <input type="file" accept="video/mp4" style="display:none;" onchange="uploadVideo36Mp4('half_b', this)" />
+                        </label>
+                        <label class="v36-flow-btn" id="v36LblSingle360" style="cursor:pointer;">
+                            ⬆ 单段 360° (.mp4) <span id="v36SlotSingle360">未上传</span>
+                            <input type="file" accept="video/mp4" style="display:none;" onchange="uploadVideo36Mp4('single_360', this)" />
+                        </label>
+                    </div>
                 </div>
                 <div class="v36-run-row">
                     <button type="button" class="btn-restore" onclick="runVideo36Stage('prep')">1. Prep (备图+轮廓锁)</button>
@@ -2099,9 +2260,12 @@ HTML_CONTENT = """
                     ? `<span class="badge-disabled card-disabled-badge" title="已在花园中停用，仅在造物工坊保留">🚫 不使用</span>`
                     : '';
                 const v36Info = video36ById[variant.plant_name];
+                const prepIouVal = v36Info && v36Info.prep_meta ? Number(v36Info.prep_meta.mirror_silhouette_iou) : null;
                 const v36TagHtml = (v36Info && v36Info.has_atlas)
                     ? `<span class="badge-v36" style="margin-top:4px;" title="已生成 36 帧转盘 (${v36Info.published ? '已发布到花园' : '未发布'})">${v36Info.published ? '🔄 36F 已发布' : '🔄 36F 未发布'}</span>`
-                    : ((v36Info && (v36Info.has_prep || v36Info.has_video)) ? `<span class="badge-v36" style="margin-top:4px; opacity:0.75;">⏳ 36F 半成品</span>` : '');
+                    : ((v36Info && v36Info.has_prep)
+                        ? `<span class="badge-v36" style="margin-top:4px; opacity:0.88; ${prepIouVal !== null && prepIouVal >= 0.78 ? 'color:#7ee787; border-color:rgba(62,180,95,0.5);' : ''}">🪞 Prep${prepIouVal !== null ? ' IoU ' + prepIouVal.toFixed(2) : ''}</span>`
+                        : ((v36Info && v36Info.has_video) ? `<span class="badge-v36" style="margin-top:4px; opacity:0.75;">⏳ 36F 半成品</span>` : ''));
                 const safePlantIdArg = String(variant.plant_name).replace(/'/g, "");
 
                 card.innerHTML = `
@@ -3032,6 +3196,32 @@ HTML_CONTENT = """
                 pubBtn.className = 'btn-reslice';
             }
 
+            const slots = item.mp4_slots || {};
+            const files = item.files || {};
+            const dlFront = document.getElementById('v36DlFrontBtn');
+            const dlRear = document.getElementById('v36DlRearBtn');
+            if (dlFront) {
+                dlFront.href = files['ref_000.png'] || '#';
+                dlFront.download = `${item.plant_id}_000_front.png`;
+                dlFront.style.opacity = files['ref_000.png'] ? '1' : '0.45';
+                dlFront.style.pointerEvents = files['ref_000.png'] ? 'auto' : 'none';
+            }
+            if (dlRear) {
+                dlRear.href = files['ref_180.png'] || '#';
+                dlRear.download = `${item.plant_id}_180_rear.png`;
+                dlRear.style.opacity = files['ref_180.png'] ? '1' : '0.45';
+                dlRear.style.pointerEvents = files['ref_180.png'] ? 'auto' : 'none';
+            }
+            const updateSlotBadge = (lblId, txtId, ok) => {
+                const lbl = document.getElementById(lblId);
+                const sp = document.getElementById(txtId);
+                if (sp) sp.innerText = ok ? '✓ 已上传' : '未上传';
+                if (lbl) lbl.classList.toggle('is-ready', Boolean(ok));
+            };
+            updateSlotBadge('v36LblHalfA', 'v36SlotHalfA', slots.half_a);
+            updateSlotBadge('v36LblHalfB', 'v36SlotHalfB', slots.half_b);
+            updateSlotBadge('v36LblSingle360', 'v36SlotSingle360', slots.single_360);
+
             const atlasUrl = (item.files && item.files['atlas_36.webp']) || '';
             if (atlasUrl) {
                 const img = new Image();
@@ -3144,6 +3334,63 @@ HTML_CONTENT = """
                 renderVideo36JobStatus(body);
                 startVideo36JobPoll(body.job_id);
             }).catch(err => alert('网络错误: ' + err));
+        }
+
+        function copyFlowPrompt(slot) {
+            if (!activeVideo36PlantId) return;
+            const item = video36ById[activeVideo36PlantId];
+            const prompts = (item && item.flow_prompts) || {};
+            const txt = prompts[slot];
+            if (!txt) {
+                alert('请先运行 Stage 1 Prep 生成首尾图与专属提示词！');
+                return;
+            }
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(txt).then(() => {
+                    const stEl = document.getElementById('v36JobStatusText');
+                    if (stEl) {
+                        stEl.innerText = `📋 已复制 ${slot} 提示词`;
+                        stEl.style.color = '#7ee787';
+                    }
+                }).catch(() => prompt('请手动复制提示词:', txt));
+            } else {
+                prompt('请手动复制提示词:', txt);
+            }
+        }
+
+        function uploadVideo36Mp4(slot, inputEl) {
+            if (!activeVideo36PlantId || !inputEl || !inputEl.files || !inputEl.files[0]) return;
+            const file = inputEl.files[0];
+            const autoAtlas = document.getElementById('v36AutoAtlasChk') && document.getElementById('v36AutoAtlasChk').checked ? '1' : '0';
+            const keyMode = (document.getElementById('v36KeyModeSelect') && document.getElementById('v36KeyModeSelect').value) || 'auto';
+            const url = `/api/video36/upload_mp4?plant_id=${encodeURIComponent(activeVideo36PlantId)}&slot=${encodeURIComponent(slot)}&auto_atlas=${autoAtlas}&key_mode=${encodeURIComponent(keyMode)}`;
+            fetch(url, {
+                method: 'POST',
+                headers: {'Content-Type': 'video/mp4'},
+                body: file,
+            }).then(res => res.json().then(body => ({ ok: res.ok, body }))).then(({ ok, body }) => {
+                inputEl.value = '';
+                if (!ok) {
+                    alert('上传 MP4 失败: ' + (body.error || '未知错误'));
+                    return;
+                }
+                loadVideo36List();
+                if (body.auto_job && body.auto_job.job_id) {
+                    renderVideo36JobStatus(body.auto_job);
+                    startVideo36JobPoll(body.auto_job.job_id);
+                } else {
+                    const stEl = document.getElementById('v36JobStatusText');
+                    if (stEl) {
+                        stEl.innerText = body.ready_for_atlas
+                            ? `✅ ${slot} 上传完成，已满足 Atlas 切片条件`
+                            : `✅ ${slot} 上传完成，等待另一段配对 MP4`;
+                        stEl.style.color = '#7ee787';
+                    }
+                }
+            }).catch(err => {
+                inputEl.value = '';
+                alert('上传失败: ' + err);
+            });
         }
 
         function toggleVideo36Publish() {
@@ -3323,6 +3570,8 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
                 self.send_header('Content-type', 'video/mp4')
             elif low.endswith('.json'):
                 self.send_header('Content-type', 'application/json; charset=utf-8')
+            elif low.endswith('.txt'):
+                self.send_header('Content-type', 'text/plain; charset=utf-8')
             self.end_headers()
             with open(file_path, 'rb') as f:
                 try:
@@ -3377,6 +3626,34 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
                 self._send_json(400, {'status': 'error', 'error': str(ve)})
             except FileNotFoundError as fnf:
                 self._send_json(404, {'status': 'error', 'error': str(fnf)})
+            except Exception as e:
+                traceback.print_exc()
+                self._send_json(500, {'status': 'error', 'error': str(e)})
+            return
+
+        if parsed_path == '/api/video36/upload_mp4':
+            qs = urllib.parse.parse_qs(urllib.parse.urlparse(self.path).query)
+            content_length = int(self.headers.get('Content-Length', 0))
+            if content_length <= 0:
+                self._send_json(400, {'status': 'error', 'error': 'Empty upload body'})
+                return
+            if content_length > MAX_VIDEO36_MP4_BYTES:
+                self._send_json(413, {'status': 'error', 'error': 'File exceeds 120 MB limit'})
+                return
+            raw_bytes = self.rfile.read(content_length)
+            try:
+                res = _save_uploaded_video36_mp4(
+                    plant_id=str((qs.get('plant_id') or [''])[0]),
+                    slot=str((qs.get('slot') or [''])[0]),
+                    raw_bytes=raw_bytes,
+                    auto_atlas=str((qs.get('auto_atlas') or ['0'])[0]).lower() in ('1', 'true', 'yes'),
+                    key_mode=str((qs.get('key_mode') or ['auto'])[0]),
+                )
+                self._send_json(200, res)
+            except ValueError as ve:
+                self._send_json(400, {'status': 'error', 'error': str(ve)})
+            except RuntimeError as re_err:
+                self._send_json(409, {'status': 'error', 'error': str(re_err)})
             except Exception as e:
                 traceback.print_exc()
                 self._send_json(500, {'status': 'error', 'error': str(e)})

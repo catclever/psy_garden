@@ -1,0 +1,24 @@
+# Curated Tier-1 16-species batch for 360-degree 36F prep & Google Flow workflow
+# Trees (4)
+plant_0134  # 银杏 Ginkgo biloba (canopy)
+plant_0065  # 鸡爪槭 Acer palmatum (canopy)
+plant_0128  # 水杉 Metasequoia glyptostroboides (canopy)
+plant_0013  # 王族海棠 Malus 'Royalty' (canopy)
+
+# Shrubs (4)
+plant_0019  # 沙漠玫瑰 Adenium obesum (bush)
+plant_0038  # 狹葉薰衣草 Lavandula angustifolia (bush)
+plant_0126  # 紫藤属 Wisteria (canopy)
+plant_0050  # 金琥 Echinocactus grusonii (bush)
+
+# Flowers (4)
+plant_0114  # 仙客来 Cyclamen persicum (bush)
+plant_0018  # 黃扇鳶尾 Dietes bicolor (bush)
+plant_0054  # 鐵筷子屬 Helleborus orientalis (bush)
+plant_0099  # 红翠雀花 Delphinium cardinale (slender)
+
+# Groundcovers (4)
+plant_0014  # 月影 Echeveria elegans (carpet)
+plant_0125  # 南美三角酢浆草 Oxalis triangularis (carpet)
+plant_0130  # 含羞草 Mimosa pudica (carpet)
+plant_0184  # 熊童子 Cotyledon tomentosa (bush)

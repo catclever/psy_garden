@@ -18,6 +18,7 @@ import argparse
 import base64
 import json
 import math
+import re
 import shutil
 import sys
 import time
@@ -59,8 +60,22 @@ KNOWN_LABELS = {
     "plant_0003": "Poppy",
     "plant_0005": "Podocarpus",
     "plant_0013": "Crabapple",
+    "plant_0014": "Mexican Snowball",
+    "plant_0018": "Fortnight Lily",
     "plant_0019": "Desert Rose",
+    "plant_0038": "Lavender",
+    "plant_0050": "Golden Barrel Cactus",
+    "plant_0054": "Hellebore",
+    "plant_0065": "Japanese Maple",
+    "plant_0099": "Scarlet Larkspur",
+    "plant_0114": "Cyclamen",
+    "plant_0125": "Purple Shamrock",
+    "plant_0126": "Wisteria",
+    "plant_0128": "Dawn Redwood",
+    "plant_0130": "Sensitive Plant",
+    "plant_0134": "Ginkgo",
     "plant_0177": "Datura",
+    "plant_0184": "Bears Paw",
 }
 
 DEFAULT_HEIGHT_BY_TYPE = {
@@ -253,11 +268,18 @@ def _calibrate_and_align_16x9(
     if override_anchor_uv is not None:
         anchor_uv = [float(override_anchor_uv[0]), float(override_anchor_uv[1])]
     else:
-        det = detect_turntable_frame_root(np.array(fg_rgba, dtype=np.uint8), plant_type=plant_type)
+        fg_arr = np.array(fg_rgba, dtype=np.uint8)
+        det = detect_turntable_frame_root(fg_arr, plant_type=plant_type)
         anchor_uv = [
             round(float(det["rx"]) / max(fg_rgba.width, 1), 4),
             round(float(det["ry"]) / max(fg_rgba.height, 1), 4),
         ]
+        # Wide-base spherical / cushion specimens (e.g. barrel cactus) can pull root detectors toward side spines
+        if abs(anchor_uv[0] - 0.5) > 0.18:
+            bot_mask = fg_arr[int(fg_rgba.height * 0.88) :, :, 3] > 12
+            _, bot_xs = np.where(bot_mask)
+            if len(bot_xs) > 0 and float(bot_xs.max() - bot_xs.min()) / max(fg_rgba.width, 1) > 0.35:
+                anchor_uv[0] = round(float(bot_xs.mean()) / max(fg_rgba.width, 1), 4)
 
     # Composite foreground onto pure white before 16:9 placement
     fg_white = Image.new("RGB", fg_rgba.size, (255, 255, 255))
@@ -467,6 +489,126 @@ def _make_4views_comparison_jpg(view_paths: list[Path], titles: list[str], out_j
     panel.save(out_jpg, quality=92)
 
 
+def build_flow_prompts(prep_meta: dict) -> dict[str, str]:
+    """Build Google Flow / Omni Start-End video prompts tailored to a prepped plant."""
+    pid = str(prep_meta.get("plant_id") or "")
+    sci = str(prep_meta.get("scientific_name") or "").strip()
+    label = str(prep_meta.get("label_ascii") or pid).strip()
+    ptype = str(prep_meta.get("plant_type") or "shrub").strip()
+    species_desc = f"{sci} ({label}, {ptype})" if sci else f"{label} ({ptype})"
+
+    half_a = (
+        f"One single continuous unbroken locked-camera 180-degree 3D studio turntable half-turn animation of this full-volume "
+        f"three-dimensional {species_desc} plant (rendered in crisp botanical watercolor and fine dark ink line art) on a pure "
+        "solid #FFFFFF seamless white background, with ZERO cuts, ZERO jump cuts, ZERO cross-dissolves, and ZERO pauses. "
+        "Treat the plant as a solid, deeply three-dimensional radial specimen whose branches, leaves, and blossoms extend outward "
+        "in all 360 horizontal directions around its central stem—NOT a flat 2D paper cutout or cardboard sheet. Use the first "
+        "image (0-degree front view) as the starting frame and the second image (180-degree rear view) as the final frame. "
+        "Right from the very first frame, smoothly rotate the entire 3D plant clockwise when viewed from above at a steady "
+        "constant angular velocity around its fixed bottom-center trunk or stem axis until arriving "
+        "cleanly at the exact 180-degree rear view on the final frame. As it rotates through its 90-degree right-side profile "
+        "at mid-clip, branches and foliage sweep out in rich 3D parallax toward and away from the camera, maintaining a wide, "
+        "full, lush 3D rounded crown silhouette (about 65% to 90% as wide as the front view)—NEVER flatten, thin out, or turn "
+        "edge-on like a thin 2D flat plane. Rigid 3D physical rotation only: never fade, morph-dissolve, or cut. Locked static "
+        "tripod camera, zero camera pan, zero zoom, zero floor shadows, zero turntable pedestal, completely rigid foliage with "
+        "zero wind sway, exact botanical watercolor and fine dark ink outline style on every frame. Silent video."
+    )
+    half_b = (
+        f"One single continuous unbroken locked-camera 180-degree 3D studio turntable continuation half-turn animation of this "
+        f"full-volume three-dimensional {species_desc} plant (rendered in crisp botanical watercolor and fine dark ink line art) "
+        "on a pure solid #FFFFFF seamless white background, with ZERO cuts, ZERO jump cuts, ZERO cross-dissolves, and ZERO "
+        "pauses. Treat the plant as a solid, deeply three-dimensional radial specimen whose branches, leaves, and blossoms extend "
+        "outward in all 360 horizontal directions around its central stem—NOT a flat 2D paper cutout or cardboard sheet. Use the "
+        "first image (180-degree rear view) as the starting frame and the second image (0-degree front view) as the final frame. "
+        "Right from the very first frame, continue rotating in the exact same clockwise direction when viewed from above at a "
+        "steady constant angular velocity around its fixed bottom-center trunk or stem axis until "
+        "arriving cleanly at the exact 0-degree front view on the final frame. As it rotates through its 270-degree left-side "
+        "profile at mid-clip, branches and foliage sweep out in rich 3D parallax toward and away from the camera, maintaining a "
+        "wide, full, lush 3D rounded crown silhouette (about 65% to 90% as wide as the front view)—NEVER flatten, thin out, or "
+        "turn edge-on like a thin 2D flat plane, and NEVER reverse direction or bounce back. Rigid 3D physical continuation "
+        "only: never fade, morph-dissolve, or cut. Locked static tripod camera, zero camera pan, zero zoom, zero floor shadows, "
+        "zero turntable pedestal, completely rigid foliage with zero wind sway, exact botanical watercolor and fine dark ink "
+        "outline style on every frame. Silent video."
+    )
+    single_360 = (
+        f"One single continuous unbroken locked-camera 360-degree full revolution studio turntable animation of this full-volume "
+        f"three-dimensional {species_desc} plant (rendered in crisp botanical watercolor and fine dark ink line art) on a pure "
+        "solid #FFFFFF seamless white background, with ZERO cuts, ZERO jump cuts, ZERO cross-dissolves, and ZERO pauses. "
+        "Use the provided 0-degree front view as both the exact starting frame and exact final loop frame. Right from the very "
+        "first frame, smoothly rotate the entire 3D plant clockwise when viewed from above at a steady uniform angular velocity "
+        "around its fixed bottom-center trunk or stem axis, completing one full 360-degree revolution through the 90-degree right "
+        "profile, 180-degree rear view, and 270-degree left profile before returning seamlessly to the exact 0-degree front view "
+        "on the final frame—NEVER reverse direction, bounce back, flatten into a 2D card, or sway in wind. Locked static tripod "
+        "camera, zero pan, zero zoom, zero floor shadows, zero turntable pedestal, pure solid #FFFFFF background. Silent video."
+    )
+    return {"half_a": half_a, "half_b": half_b, "single_360": single_360}
+
+
+def write_flow_prompt_files(prep_meta: dict, run_dir: Path) -> dict:
+    run_dir.mkdir(parents=True, exist_ok=True)
+    prompts = build_flow_prompts(prep_meta)
+    json_path = run_dir / "flow_prompts.json"
+    txt_path = run_dir / "flow_prompts.txt"
+    json_path.write_text(json.dumps(prompts, ensure_ascii=False, indent=2), encoding="utf-8")
+
+    pid = str(prep_meta.get("plant_id") or "")
+    zh = str(prep_meta.get("display_name") or pid)
+    sci = str(prep_meta.get("scientific_name") or "")
+    iou = prep_meta.get("mirror_silhouette_iou", "")
+    lines = [
+        f"=== {zh} ({pid}) {sci} | IoU={iou} | key_mode={prep_meta.get('resolved_key_mode', 'pockets')} ===",
+        "",
+        "[1] Half A (000_front.png -> 180_rear.png)",
+        prompts["half_a"],
+        "",
+        "[2] Half B (180_rear.png -> 000_front.png)",
+        prompts["half_b"],
+        "",
+        "[3] Single 360 Loop Test (Start=000_front.png, Optional End=000_front.png)",
+        prompts["single_360"],
+        "",
+    ]
+    txt_path.write_text("\n".join(lines), encoding="utf-8")
+    return {
+        "prompts": prompts,
+        "flow_prompts_json": str(json_path),
+        "flow_prompts_txt": str(txt_path),
+    }
+
+
+def export_flow_bundle(
+    plant_id: str,
+    run_dir: Path,
+    prep_meta: dict,
+    export_root: Path | None = None,
+) -> Path:
+    """Copy ready-to-upload Flow start/end frames, check sheet, and prompts into a friendly folder."""
+    root = export_root if export_root is not None else (RUNS_ROOT.parent / "flow_export")
+    raw_name = str(prep_meta.get("display_name") or prep_meta.get("label_ascii") or plant_id).strip()
+    safe_name = re.sub(r"[^\w\u4e00-\u9fff-]+", "_", raw_name).strip("_") or plant_id
+    bundle_dir = root / f"{plant_id}_{safe_name}"
+    bundle_dir.mkdir(parents=True, exist_ok=True)
+
+    txt_src = run_dir / "flow_prompts.txt"
+    if not txt_src.exists():
+        write_flow_prompt_files(prep_meta, run_dir)
+
+    copy_map = [
+        (run_dir / "ref_000.png", bundle_dir / "000_front.png"),
+        (run_dir / "ref_180.png", bundle_dir / "180_rear.png"),
+        (run_dir / "ref_000_vs_180_check.jpg", bundle_dir / "check_000_vs_180.jpg"),
+        (txt_src, bundle_dir / "prompts.txt"),
+    ]
+    if (run_dir / "ref_090.png").exists():
+        copy_map.append((run_dir / "ref_090.png", bundle_dir / "090_right.png"))
+    if (run_dir / "ref_270.png").exists():
+        copy_map.append((run_dir / "ref_270.png", bundle_dir / "270_left.png"))
+    for src, dst in copy_map:
+        if src.exists():
+            shutil.copy2(src, dst)
+    return bundle_dir
+
+
 def run_prep_stage(args: argparse.Namespace, rec: dict, run_dir: Path) -> dict:
     run_dir.mkdir(parents=True, exist_ok=True)
     ai = rec.get("ai_analysis") or {}
@@ -618,6 +760,11 @@ def run_prep_stage(args: argparse.Namespace, rec: dict, run_dir: Path) -> dict:
                 "check_4views_jpg": str(check_4views_jpg),
             }
         )
+
+    prep_meta["qc_status"] = "PASS" if mirror_iou >= 0.78 else "REVIEW"
+    prompt_info = write_flow_prompt_files(prep_meta, run_dir)
+    prep_meta["flow_prompts_json"] = prompt_info["flow_prompts_json"]
+    prep_meta["flow_prompts_txt"] = prompt_info["flow_prompts_txt"]
 
     (run_dir / "prep_meta.json").write_text(json.dumps(prep_meta, ensure_ascii=False, indent=2), encoding="utf-8")
     print(json.dumps(prep_meta, ensure_ascii=False, indent=2))
@@ -937,39 +1084,9 @@ def _run_2half_video_stage(args: argparse.Namespace, prep_meta: dict, run_dir: P
         uri_000, mime_000 = _upload_and_wait(client, prep_meta["ref_000"], "image/png", omni_mod.normalize_file_uri)
         uri_180, mime_180 = _upload_and_wait(client, prep_meta["ref_180"], "image/png", omni_mod.normalize_file_uri)
 
-    prompt_a = (
-        f"One single continuous unbroken locked-camera 180-degree 3D studio turntable half-turn animation of this full-volume "
-        f"three-dimensional {species_desc} plant (rendered in crisp botanical watercolor and fine dark ink line art) on a pure "
-        "solid #FFFFFF seamless white background, with ZERO cuts, ZERO jump cuts, ZERO cross-dissolves, and ZERO pauses. "
-        "Treat the plant as a solid, deeply three-dimensional radial specimen whose branches, leaves, and blossoms extend outward "
-        "in all 360 horizontal directions around its central stem—NOT a flat 2D paper cutout or cardboard sheet. Use the first "
-        "image (0-degree front view) as the starting frame and the second image (180-degree rear view) as the final frame. "
-        "Right from the very first frame, smoothly rotate the entire 3D plant clockwise when viewed from above at a steady "
-        "constant angular velocity (60 degrees per second) around its fixed bottom-center trunk or stem axis until arriving "
-        "cleanly at the exact 180-degree rear view on the final frame. As it rotates through its 90-degree right-side profile "
-        "at mid-clip, branches and foliage sweep out in rich 3D parallax toward and away from the camera, maintaining a wide, "
-        "full, lush 3D rounded crown silhouette (about 65% to 90% as wide as the front view)—NEVER flatten, thin out, or turn "
-        "edge-on like a thin 2D flat plane. Rigid 3D physical rotation only: never fade, morph-dissolve, or cut. Locked static "
-        "tripod camera, zero camera pan, zero zoom, zero floor shadows, zero turntable pedestal, completely rigid foliage with "
-        "zero wind sway, exact botanical watercolor and fine dark ink outline style on every frame. Silent video."
-    )
-    prompt_b = (
-        f"One single continuous unbroken locked-camera 180-degree 3D studio turntable continuation half-turn animation of this "
-        f"full-volume three-dimensional {species_desc} plant (rendered in crisp botanical watercolor and fine dark ink line art) "
-        "on a pure solid #FFFFFF seamless white background, with ZERO cuts, ZERO jump cuts, ZERO cross-dissolves, and ZERO "
-        "pauses. Treat the plant as a solid, deeply three-dimensional radial specimen whose branches, leaves, and blossoms extend "
-        "outward in all 360 horizontal directions around its central stem—NOT a flat 2D paper cutout or cardboard sheet. Use the "
-        "first image (180-degree rear view) as the starting frame and the second image (0-degree front view) as the final frame. "
-        "Right from the very first frame, continue rotating in the exact same clockwise direction when viewed from above at a "
-        "steady constant angular velocity (60 degrees per second) around its fixed bottom-center trunk or stem axis until "
-        "arriving cleanly at the exact 0-degree front view on the final frame. As it rotates through its 270-degree left-side "
-        "profile at mid-clip, branches and foliage sweep out in rich 3D parallax toward and away from the camera, maintaining a "
-        "wide, full, lush 3D rounded crown silhouette (about 65% to 90% as wide as the front view)—NEVER flatten, thin out, or "
-        "turn edge-on like a thin 2D flat plane, and NEVER reverse direction or bounce back. Rigid 3D physical continuation "
-        "only: never fade, morph-dissolve, or cut. Locked static tripod camera, zero camera pan, zero zoom, zero floor shadows, "
-        "zero turntable pedestal, completely rigid foliage with zero wind sway, exact botanical watercolor and fine dark ink "
-        "outline style on every frame. Silent video."
-    )
+    flow_prompts = build_flow_prompts(prep_meta)
+    prompt_a = flow_prompts["half_a"]
+    prompt_b = flow_prompts["half_b"]
 
     id_a, elapsed_a = (None, 0.0)
     if need_a:
@@ -1038,6 +1155,8 @@ def run_video_stage(args: argparse.Namespace, prep_meta: dict, run_dir: Path) ->
         )
     )
 
+    if getattr(args, "mode", "2half") == "single360":
+        raise ValueError("single360 mode uses external/Flow single_360.mp4; run --stages atlas --mode single360 after uploading")
     if getattr(args, "mode", "2half") == "2half":
         return _run_2half_video_stage(args, prep_meta, run_dir, client, omni_mod, species_desc)
 
@@ -1246,6 +1365,7 @@ def run_atlas_stage(args: argparse.Namespace, prep_meta: dict, run_dir: Path) ->
     out_dir = LAB_ROOT / f"{args.plant_id}_video36"
     resolved_key = prep_meta["resolved_key_mode"] if args.key_mode == "auto" else args.key_mode
     mode = getattr(args, "mode", prep_meta.get("mode", "2half"))
+    published = not bool(getattr(args, "draft", False))
 
     if mode == "4quarter":
         q_stems = ("q0_0_90", "q1_90_180", "q2_180_270", "q3_270_360")
@@ -1279,6 +1399,30 @@ def run_atlas_stage(args: argparse.Namespace, prep_meta: dict, run_dir: Path) ->
             plant_type=prep_meta["plant_type"],
             root_width=float(prep_meta["root_width"]),
             lab_height=float(prep_meta["gallery_height_px"]),
+            published=published,
+        )
+    elif mode == "single360":
+        single_mp4 = run_dir / "single_360.mp4"
+        if not single_mp4.exists():
+            raise FileNotFoundError(f"Missing {single_mp4}; upload or generate single_360.mp4 first")
+        meta = build_video_atlas(
+            input_mp4=single_mp4,
+            out_dir=out_dir,
+            reverse_spin=bool(getattr(args, "reverse_first_half", False)),
+            frame_count=36,
+            cell_size=220,
+            target_crown_h=188.0,
+            sampling="arclength",
+            stitch_second_half=None,
+            path_prefix=f"assets/turntable_lab/{args.plant_id}_video36",
+            key_mode=resolved_key,
+            plant_id=args.plant_id,
+            display_name=prep_meta["display_name"],
+            label_ascii=prep_meta["label_ascii"],
+            plant_type=prep_meta["plant_type"],
+            root_width=float(prep_meta["root_width"]),
+            lab_height=float(prep_meta["gallery_height_px"]),
+            published=published,
         )
     else:
         half_a_mp4 = run_dir / "half_a_0_180.mp4"
@@ -1306,6 +1450,7 @@ def run_atlas_stage(args: argparse.Namespace, prep_meta: dict, run_dir: Path) ->
             plant_type=prep_meta["plant_type"],
             root_width=float(prep_meta["root_width"]),
             lab_height=float(prep_meta["gallery_height_px"]),
+            published=published,
         )
 
     rebuild_video36_index()
@@ -1313,9 +1458,9 @@ def run_atlas_stage(args: argparse.Namespace, prep_meta: dict, run_dir: Path) ->
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="End-to-end 360-deg Video Turntable Atlas Pipeline (4quarter / 2half)")
+    parser = argparse.ArgumentParser(description="End-to-end 360-deg Video Turntable Atlas Pipeline (4quarter / 2half / single360)")
     parser.add_argument("--plant-id", required=True, help="Manifest plant ID, e.g. plant_0005")
-    parser.add_argument("--mode", choices=["4quarter", "2half"], default="2half")
+    parser.add_argument("--mode", choices=["4quarter", "2half", "single360"], default="2half")
     parser.add_argument("--stages", choices=["all", "prep", "video", "atlas"], default="all")
     parser.add_argument("--front-image", type=Path, default=None)
     parser.add_argument("--right-image", type=Path, default=None, help="Explicit 90-deg right-side image")
@@ -1328,6 +1473,7 @@ def main() -> int:
     parser.add_argument("--resolution", default="720p")
     parser.add_argument("--timeout", type=int, default=300)
     parser.add_argument("--force", action="store_true")
+    parser.add_argument("--draft", action="store_true", help="Mark generated atlas as published=False draft in metadata.json")
     parser.add_argument("--segment", choices=["all", "q0", "q1", "q2", "q3", "a", "b"], default="all")
     parser.add_argument("--half", choices=["both", "a", "b"], default="both", help="2half alias for --segment")
     parser.add_argument("--mirror-q0-for-270", action="store_true", help="Use horizontally flipped chained Q0 end frame as Q2 270-deg guide")
