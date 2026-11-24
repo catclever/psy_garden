@@ -184,11 +184,11 @@ class TestGodotVideoGallery045(unittest.TestCase):
             self.assertEqual(non_ascii, [], f"Non-ASCII found in {path.name}: {non_ascii[:10]}")
 
         garden_src = GARDEN_PATH.read_text(encoding="utf-8")
-        self.assertIn('const LAB_ASSET_VER: String = "046"', garden_src)
+        self.assertIn('const LAB_ASSET_VER: String = "047"', garden_src)
 
         demo_html = LIGHT_DEMO_HTML.read_text(encoding="utf-8")
-        self.assertIn("v=046", demo_html, "Expected cache buster v=046 in light_demo.html")
-        self.assertIn('"046"', demo_html, 'Expected q.set("v", "046") in light_demo.html')
+        self.assertIn("v=047", demo_html, "Expected cache buster v=047 in light_demo.html")
+        self.assertIn('"047"', demo_html, 'Expected q.set("v", "047") in light_demo.html')
 
         res = subprocess.run(
             ["git", "diff", "--name-only", "src/styles.css", "src/assets/plants/manifest.json", "tools/root_anchor_calibrator.py"],

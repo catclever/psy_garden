@@ -21,9 +21,10 @@ var footprints_visible: bool = true
 var placed_footprints: Array = []
 var generation_id: int = 0
 var manifest_loaded_once: bool = false
+var _initial_garden_auto_seeded: bool = false
 
 const MAX_CONCURRENT_HTTP: int = 8
-const LAB_ASSET_VER: String = "046"
+const LAB_ASSET_VER: String = "047"
 var _http_pool: Array = []
 var _http_busy: Dictionary = {}
 var _http_queue: Array = []
@@ -90,6 +91,21 @@ var _video_gallery_loading: bool = false
 var _pending_url_video_gallery: bool = false
 var btn_video_gallery: Button = null
 
+var video36_by_id: Dictionary = {}
+var _manifest_by_id: Dictionary = {}
+var _next_plant_uid: int = 1
+var selected_plant = null
+var planting_species_id: String = ""
+var _planting_preview_pos: Vector2 = Vector2.ZERO
+var _planting_preview_valid: bool = false
+var _planting_preview_fp_w: float = 24.0
+var _planting_preview_fp_h: float = 14.0
+var _left_press_active: bool = false
+var _left_press_start_ms: int = 0
+var _left_press_pos: Vector2 = Vector2.ZERO
+var _left_long_press_fired: bool = false
+var _js_bridge_callback = null
+
 func _ready():
 	mouse_lantern.global_position = Vector2(680, 420)
 	ground_canvas = Node2D.new()
@@ -100,6 +116,7 @@ func _ready():
 	ground_canvas.draw.connect(_draw_zen_ground)
 	_ready_ui()
 	_init_http_pool()
+	_init_js_bridge()
 	if OS.has_feature("web"):
 		var lab_param = JavaScriptBridge.eval("(function(){try{return new URLSearchParams(window.location.search).get(\"lab\")||new URLSearchParams(window.top.location.search).get(\"lab\")||\"\";}catch(e){return \"\";}})()", true)
 		var lab_str: String = str(lab_param).strip_edges().to_lower()
@@ -117,6 +134,7 @@ func _ready():
 		call_deferred("enter_video_gallery")
 	else:
 		generate_demo_layout()
+	call_deferred("_load_video36_registry")
 	call_deferred("_load_manifest")
 	ground_canvas.queue_redraw()
 
@@ -266,12 +284,45 @@ func _draw_zen_ground():
 		ground_canvas.draw_line(a, b, axis_col, 2.0, true)
 		ground_canvas.draw_circle(b, 3.0, axis_col)
 
+	if planting_species_id != "" and _planting_preview_pos.length_squared() > 1.0:
+		var prev_col: Color = Color(0.35, 0.95, 0.55, 0.85) if _planting_preview_valid else Color(0.95, 0.35, 0.32, 0.88)
+		var fill_col := Color(prev_col.r, prev_col.g, prev_col.b, 0.16)
+		ground_canvas.draw_set_transform(_planting_preview_pos, 0.0, Vector2(1.0, camera_pitch_ratio))
+		ground_canvas.draw_circle(Vector2.ZERO, max(8.0, _planting_preview_fp_w * 0.5), fill_col)
+		ground_canvas.draw_arc(Vector2.ZERO, max(8.0, _planting_preview_fp_w * 0.5), 0.0, TAU, 36, prev_col, 2.0, true)
+		ground_canvas.draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+
 func _unhandled_input(event):
-	if event is InputEventMouseButton:
+	if event is InputEventKey and event.pressed and event.keycode == KEY_ESCAPE:
+		if planting_species_id != "":
+			set_planting_mode("")
+	elif event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_RIGHT:
 			_right_dragging = event.pressed
-	elif event is InputEventMouseMotion and _right_dragging:
-		target_orbit_deg = _wrap_deg_180(target_orbit_deg + event.relative.x * 0.35)
+		elif event.button_index == MOUSE_BUTTON_LEFT:
+			if event.pressed:
+				_left_press_active = true
+				_left_press_start_ms = Time.get_ticks_msec()
+				_left_press_pos = event.position
+				_left_long_press_fired = false
+			elif _left_press_active:
+				_left_press_active = false
+				if not _left_long_press_fired and event.position.distance_to(_left_press_pos) <= 12.0:
+					if planting_species_id != "":
+						var res: Dictionary = plant_species_at_screen_pos(planting_species_id, event.position)
+						_emit_js_event("hand_plant_result", res)
+					else:
+						var held_ms: int = Time.get_ticks_msec() - _left_press_start_ms
+						var hit = pick_plant_at_screen_pos(event.position)
+						_select_plant(hit, held_ms >= 350)
+	elif event is InputEventMouseMotion:
+		if _right_dragging:
+			target_orbit_deg = _wrap_deg_180(target_orbit_deg + event.relative.x * 0.35)
+		elif planting_species_id != "":
+			_planting_preview_pos = event.position
+			_update_planting_preview_validity()
+			if ground_canvas:
+				ground_canvas.queue_redraw()
 
 func compute_lantern_xray_alpha(p, light_pos: Vector2) -> float:
 	if not xray_enabled or not is_instance_valid(p):
@@ -314,10 +365,17 @@ func _process(delta):
 			_syncing_orbit_ui = false
 		_refresh_courtyard_projection()
 
-	if turntable_lab_active or video_lab_active or video_gallery_active:
-		for p in active_plants:
-			if is_instance_valid(p) and p.is_turntable and p.has_method("update_turntable_orbit"):
-				p.update_turntable_orbit(orbit_angle_deg, delta, false)
+	for p in active_plants:
+		if is_instance_valid(p) and p.is_turntable and p.has_method("update_turntable_orbit"):
+			p.update_turntable_orbit(orbit_angle_deg, delta, false)
+
+	if _left_press_active and not _left_long_press_fired and planting_species_id == "":
+		if (Time.get_ticks_msec() - _left_press_start_ms) >= 420:
+			var cur_mouse: Vector2 = get_global_mouse_position()
+			if cur_mouse.distance_to(_left_press_pos) <= 12.0:
+				_left_long_press_fired = true
+				var lp_hit = pick_plant_at_screen_pos(_left_press_pos)
+				_select_plant(lp_hit, true)
 
 	var target_mouse: Vector2
 	if _test_mouse_override.x > -90000.0:
@@ -435,6 +493,8 @@ func _process(delta):
 
 func clear_garden():
 	generation_id += 1
+	_initial_garden_auto_seeded = false
+	selected_plant = null
 	for p in active_plants:
 		if is_instance_valid(p):
 			p.queue_free()
@@ -466,17 +526,17 @@ func update_plant_colors(p=null):
 		if not is_instance_valid(t): continue
 		if t.is_video_atlas:
 			if t.sprite_green and t.sprite_green.material:
-				(t.sprite_green.material as ShaderMaterial).set_shader_parameter("tint_color", Color.WHITE)
+				(t.sprite_green.material as ShaderMaterial).set_shader_parameter("tint_color", t.custom_tint_color)
 			continue
 		for spr in [t.sprite_red, t._prev_red]:
 			if spr and spr.material:
-				(spr.material as ShaderMaterial).set_shader_parameter("tint_color", color_red)
+				(spr.material as ShaderMaterial).set_shader_parameter("tint_color", color_red * t.custom_tint_color)
 		for spr in [t.sprite_green, t._prev_green]:
 			if spr and spr.material:
-				(spr.material as ShaderMaterial).set_shader_parameter("tint_color", color_green)
+				(spr.material as ShaderMaterial).set_shader_parameter("tint_color", color_green * t.custom_tint_color)
 		for spr in [t.sprite_blue, t._prev_blue]:
 			if spr and spr.material:
-				(spr.material as ShaderMaterial).set_shader_parameter("tint_color", color_blue)
+				(spr.material as ShaderMaterial).set_shader_parameter("tint_color", color_blue * t.custom_tint_color)
 
 func can_place_plant(pos: Vector2, fp_w: float, fp_h: float) -> bool:
 	# Avoid HUD top-left panel
@@ -565,10 +625,25 @@ func generate_random_garden(count: int = 36):
 			ground_canvas.queue_redraw()
 		return
 
+	var seeded_recs: Array = []
+	if count >= 12 and not video36_by_id.is_empty():
+		var v_ids: Array = video36_by_id.keys()
+		v_ids.sort()
+		for vid in v_ids:
+			if seeded_recs.size() >= 6:
+				break
+			if _manifest_by_id.has(vid):
+				seeded_recs.append(_manifest_by_id[vid])
+
 	for i in range(count):
-		var b_key: String = bucket_order[i % bucket_order.size()]
-		var pool: Array = buckets[b_key]
-		var rec: Dictionary = pool[randi() % pool.size()]
+		var rec: Dictionary
+		if i < seeded_recs.size():
+			rec = seeded_recs[i]
+		else:
+			var adj_i: int = i - seeded_recs.size()
+			var b_key: String = bucket_order[adj_i % bucket_order.size()]
+			var pool: Array = buckets[b_key]
+			rec = pool[randi() % pool.size()]
 		var metrics: Dictionary = _sample_record_metrics(rec)
 		var fp_w: float = metrics["fp_w"]
 		var target_h: float = metrics["target_h"]
@@ -590,10 +665,15 @@ func generate_random_garden(count: int = 36):
 	if ground_canvas:
 		ground_canvas.queue_redraw()
 
-func spawn_manifest_plant(rec: Dictionary, pos: Vector2, target_h: float, root_w: float, fp_w: float, fp_h: float, depth_scale: float = 1.0):
+func spawn_manifest_plant(rec: Dictionary, pos: Vector2, target_h: float, root_w: float, fp_w: float, fp_h: float, depth_scale: float = 1.0, extra: Dictionary = {}):
 	var p = plant_scene.instantiate()
 	var rec_id: String = str(rec.get("name", rec.get("id", "unknown")))
 	p.plant_id = rec_id
+	p.plant_uid = str(extra.get("uid", "inst_%d" % _next_plant_uid))
+	_next_plant_uid += 1
+	p.golden_sentence = str(extra.get("golden_sentence", ""))
+	if extra.has("tint_hex") and str(extra.get("tint_hex", "")) != "":
+		p.custom_tint_color = Color.from_string(str(extra["tint_hex"]), Color.WHITE)
 	p.skip_auto_load = true
 	p.desired_height_px = target_h
 	p.meta_root_width = root_w
@@ -605,10 +685,16 @@ func spawn_manifest_plant(rec: Dictionary, pos: Vector2, target_h: float, root_w
 	p.courtyard_pos = screen_to_courtyard(pos)
 	p.has_courtyard_pos = true
 	p.perspective_scale = depth_scale
+	var raw_h: float = max(float(rec.get("height", 250.0)), 1.0)
 	p.set_meta("gen_id", generation_id)
+	p.set_meta("manifest_raw_h", raw_h)
 	y_sort.add_child(p)
 	p.set_ground_pitch(camera_pitch_ratio)
 	active_plants.append(p)
+
+	if video36_by_id.has(rec_id):
+		_attach_video36_to_plant(p, video36_by_id[rec_id], raw_h, target_h, root_w, extra)
+		return p
 
 	var path_prefix: String = str(rec.get("path_prefix", ""))
 	var layer_files = rec.get("layer_files", [])
@@ -640,7 +726,7 @@ func spawn_manifest_plant(rec: Dictionary, pos: Vector2, target_h: float, root_w
 			loaded_textures[slot] = tex
 			remaining[0] -= 1
 			if remaining[0] == 0:
-				if is_instance_valid(p) and my_gen_id == generation_id:
+				if is_instance_valid(p) and my_gen_id == generation_id and not p.is_video_atlas:
 					if loaded_textures["red"] or loaded_textures["green"] or loaded_textures["blue"]:
 						p.setup_with_textures(
 							rec_id,
@@ -657,6 +743,83 @@ func spawn_manifest_plant(rec: Dictionary, pos: Vector2, target_h: float, root_w
 		)
 
 	return p
+
+func _attach_video36_to_plant(p, vmeta: Dictionary, raw_h: float, target_h: float, root_w: float, extra: Dictionary = {}):
+	if not is_instance_valid(p):
+		return
+	p.is_turntable = true
+	p.is_video_atlas = true
+	if extra.has("base_yaw_deg"):
+		p.base_yaw_deg = float(extra["base_yaw_deg"])
+	else:
+		p.base_yaw_deg = randf_range(0.0, 360.0)
+	p.caption_prefix = str(extra.get("caption_prefix", ""))
+
+	var path_prefix: String = str(vmeta.get("path_prefix", "assets/turntable_lab/%s_video36" % p.plant_id))
+	var atlas_file: String = str(vmeta.get("atlas_file", "atlas_36.webp"))
+	var hf: int = int(vmeta.get("hframes", 6))
+	var vf: int = int(vmeta.get("vframes", 6))
+	var fc: int = int(vmeta.get("frame_count", 36))
+	var atlas_crown_h: float = float(vmeta.get("crown_h", 188.0))
+	var raw_anchor = vmeta.get("root_anchor_px", [110.0, 212.0])
+	var anchor_px := Vector2(110.0, 212.0)
+	if raw_anchor is Array and raw_anchor.size() >= 2:
+		anchor_px = Vector2(float(raw_anchor[0]), float(raw_anchor[1]))
+	var atlas_root_w: float = root_w * (atlas_crown_h / max(raw_h, 1.0))
+
+	var my_gen_id: int = generation_id
+	_load_layer_texture(path_prefix, atlas_file, func(tex: Texture2D):
+		if is_instance_valid(p) and my_gen_id == generation_id and tex != null:
+			p.setup_video_atlas_turntable(p.plant_id, tex, hf, vf, fc, anchor_px, atlas_crown_h, target_h, atlas_root_w)
+			p.update_turntable_orbit(orbit_angle_deg, 0.0, true)
+			p.set_ground_pitch(camera_pitch_ratio)
+			if p.has_courtyard_pos:
+				var cur_proj: Dictionary = project_courtyard_point(p.courtyard_pos)
+				p.global_position = cur_proj["screen_pos"]
+				p.set_perspective_scale(cur_proj["depth_scale"])
+			p.show_footprint_ring = footprints_visible
+			update_plant_colors(p)
+	)
+
+func _upgrade_active_plants_to_video36():
+	if turntable_lab_active or video_lab_active or video_gallery_active:
+		return
+	if video36_by_id.is_empty():
+		return
+	var upgraded_any: bool = false
+	for p in active_plants:
+		if not is_instance_valid(p):
+			continue
+		if p.is_video_atlas:
+			upgraded_any = true
+			continue
+		if not video36_by_id.has(p.plant_id) or not _manifest_by_id.has(p.plant_id):
+			continue
+		var raw_h: float = float(p.get_meta("manifest_raw_h")) if p.has_meta("manifest_raw_h") else 250.0
+		var target_h: float = p.desired_height_px if p.desired_height_px > 0.0 else 130.0
+		var root_w: float = p.meta_root_width if p.meta_root_width > 0.0 else 24.0
+		_attach_video36_to_plant(p, video36_by_id[p.plant_id], raw_h, target_h, root_w, {})
+		upgraded_any = true
+	if not upgraded_any and _initial_garden_auto_seeded and not manifest_records.is_empty():
+		_initial_garden_auto_seeded = false
+		generate_random_garden(36)
+	else:
+		_initial_garden_auto_seeded = false
+
+func _load_video36_registry():
+	_load_json_asset("assets/turntable_lab/video36_index.json", func(parsed):
+		if parsed is Dictionary and parsed.get("species") is Array:
+			video_gallery_index = parsed
+			video36_by_id.clear()
+			for sp in parsed["species"]:
+				if sp is Dictionary and sp.has("plant_id"):
+					video36_by_id[str(sp["plant_id"])] = sp
+			if video_gallery_active:
+				_populate_video_gallery()
+			else:
+				_upgrade_active_plants_to_video36()
+			_emit_js_event("video36_ready", {"ids": video36_by_id.keys()})
+	)
 
 func _load_manifest():
 	if OS.has_feature("web"):
@@ -701,10 +864,14 @@ func _parse_and_activate_manifest(json_text: String):
 			fleet_status_label.text = "Fleet: manifest parse error"
 		return
 	manifest_records.clear()
+	_manifest_by_id.clear()
 	for rec in parsed["plants"]:
 		if rec is Dictionary:
 			if rec.get("enabled", true) and rec.get("true_color", true):
 				manifest_records.append(rec)
+				var pid: String = str(rec.get("name", rec.get("id", "")))
+				if pid != "":
+					_manifest_by_id[pid] = rec
 
 	if turntable_lab_active or _pending_url_lab or video_lab_active or _pending_url_video_lab or video_gallery_active or _pending_url_video_gallery:
 		if not manifest_records.is_empty():
@@ -716,7 +883,9 @@ func _parse_and_activate_manifest(json_text: String):
 
 	if not manifest_loaded_once and not manifest_records.is_empty():
 		manifest_loaded_once = true
+		var need_post_seed_36f: bool = video36_by_id.is_empty()
 		generate_random_garden(36)
+		_initial_garden_auto_seeded = need_post_seed_36f
 
 func _load_layer_texture(path_prefix: String, file_name: String, callback: Callable):
 	var cache_key: String = path_prefix + "/" + file_name
@@ -956,6 +1125,8 @@ func _ready_ui():
 	cb.color_changed.connect(func(c): color_blue = c; update_plant_colors())
 
 	$HUD/MarginContainer/VBoxContainer/BtnRandomLayout.pressed.connect(func():
+		if planting_species_id != "":
+			set_planting_mode("")
 		if turntable_lab_active:
 			exit_turntable_lab(false)
 		if video_lab_active:
@@ -965,6 +1136,8 @@ func _ready_ui():
 		generate_random_garden()
 	)
 	$HUD/MarginContainer/VBoxContainer/BtnDemoLayout.pressed.connect(func():
+		if planting_species_id != "":
+			set_planting_mode("")
 		if turntable_lab_active:
 			exit_turntable_lab(false)
 		if video_lab_active:
@@ -1124,6 +1297,8 @@ func _on_video_lab_pressed():
 		enter_video_turntable_lab()
 
 func enter_video_turntable_lab():
+	if planting_species_id != "":
+		set_planting_mode("")
 	if turntable_lab_active:
 		turntable_lab_active = false
 		_pending_url_lab = false
@@ -1190,6 +1365,8 @@ func _on_video_gallery_pressed():
 		enter_video_gallery()
 
 func enter_video_gallery():
+	if planting_species_id != "":
+		set_planting_mode("")
 	if turntable_lab_active:
 		turntable_lab_active = false
 		_pending_url_lab = false
@@ -1340,6 +1517,8 @@ func _spawn_video_atlas_lab_plant(meta: Dictionary, c_pos: Vector2, target_h: fl
 	return p
 
 func enter_turntable_lab():
+	if planting_species_id != "":
+		set_planting_mode("")
 	if video_lab_active:
 		video_lab_active = false
 		_pending_url_video_lab = false
@@ -1646,3 +1825,245 @@ func set_weather_dark():
 	sun_length_slider.value = 0.0
 	if ground_canvas:
 		ground_canvas.queue_redraw()
+
+func _exit_all_labs(restore_garden: bool = true):
+	if turntable_lab_active:
+		exit_turntable_lab(restore_garden)
+		restore_garden = false
+	if video_lab_active:
+		exit_video_turntable_lab(restore_garden)
+		restore_garden = false
+	if video_gallery_active:
+		exit_video_gallery(restore_garden)
+
+func _build_plant_payload(p) -> Dictionary:
+	if not is_instance_valid(p):
+		return {}
+	var rec: Dictionary = _manifest_by_id.get(p.plant_id, {})
+	var ai = rec.get("ai_analysis", {})
+	var bot_h = ai.get("botanical_height_m", null) if ai is Dictionary else null
+	return {
+		"uid": p.plant_uid,
+		"plant_id": p.plant_id,
+		"display_name": str(rec.get("display_name", p.plant_id)),
+		"scientific_name": str(ai.get("scientific_name", "")) if ai is Dictionary else "",
+		"plant_type": str(ai.get("plant_type", "")) if ai is Dictionary else "",
+		"growth_habit": str(ai.get("growth_habit", "")) if ai is Dictionary else "",
+		"botanical_height_m": bot_h,
+		"brief": str(ai.get("brief", "")) if ai is Dictionary else "",
+		"is_video36": p.is_video_atlas,
+		"screen_x": round(p.global_position.x * 10.0) / 10.0,
+		"screen_y": round(p.global_position.y * 10.0) / 10.0,
+		"courtyard_x": round(p.courtyard_pos.x * 10.0) / 10.0,
+		"courtyard_y": round(p.courtyard_pos.y * 10.0) / 10.0,
+		"visual_height": round(p.visual_height * 10.0) / 10.0,
+		"fp_w": round(p.fp_w * 10.0) / 10.0,
+		"fp_h": round(p.fp_h * 10.0) / 10.0,
+		"golden_sentence": p.golden_sentence,
+	}
+
+func pick_plant_at_screen_pos(screen_pos: Vector2):
+	var best = null
+	var best_y: float = -1e9
+	for p in active_plants:
+		if not is_instance_valid(p):
+			continue
+		if p.has_method("hit_test_screen") and p.hit_test_screen(screen_pos):
+			if p.global_position.y > best_y:
+				best_y = p.global_position.y
+				best = p
+	return best
+
+func _select_plant(p, is_long_press: bool = false):
+	if is_instance_valid(selected_plant) and selected_plant != p:
+		selected_plant.is_selected = false
+	selected_plant = p if is_instance_valid(p) else null
+	if selected_plant != null:
+		selected_plant.is_selected = true
+		var ev_type: String = "plant_long_press" if is_long_press else "plant_selected"
+		_emit_js_event(ev_type, _build_plant_payload(selected_plant))
+	else:
+		_emit_js_event("selection_cleared", {})
+
+func set_planting_mode(species_id: String):
+	var clean_id: String = species_id.strip_edges()
+	if clean_id != "":
+		_initial_garden_auto_seeded = false
+	if clean_id != "" and (turntable_lab_active or video_lab_active or video_gallery_active):
+		_exit_all_labs(true)
+	planting_species_id = clean_id
+	if clean_id != "" and is_instance_valid(selected_plant):
+		selected_plant.is_selected = false
+		selected_plant = null
+	if clean_id != "" and _manifest_by_id.has(clean_id):
+		var m: Dictionary = _sample_record_metrics(_manifest_by_id[clean_id])
+		var ds: float = get_depth_scale(_planting_preview_pos.y if _planting_preview_pos.length_squared() > 1.0 else COURTYARD_CENTER.y)
+		_planting_preview_fp_w = max(10.0, float(m["fp_w"]) * ds)
+		_planting_preview_fp_h = max(6.0, _planting_preview_fp_w * camera_pitch_ratio)
+	else:
+		_planting_preview_fp_w = 24.0
+		_planting_preview_fp_h = 24.0 * camera_pitch_ratio
+	_update_planting_preview_validity()
+	if ground_canvas:
+		ground_canvas.queue_redraw()
+	_emit_js_event("planting_mode_changed", {"plant_id": planting_species_id})
+
+func _update_planting_preview_validity():
+	if planting_species_id == "" or not _manifest_by_id.has(planting_species_id):
+		_planting_preview_valid = false
+		return
+	if _planting_preview_pos.length_squared() <= 1.0:
+		_planting_preview_valid = false
+		return
+	var m: Dictionary = _sample_record_metrics(_manifest_by_id[planting_species_id])
+	var ds: float = get_depth_scale(_planting_preview_pos.y)
+	_planting_preview_fp_w = max(10.0, float(m["fp_w"]) * ds)
+	_planting_preview_fp_h = max(6.0, _planting_preview_fp_w * camera_pitch_ratio)
+	_planting_preview_valid = can_place_plant(_planting_preview_pos, _planting_preview_fp_w, _planting_preview_fp_h)
+
+func plant_species_at_screen_pos(species_id: String, screen_pos: Vector2, extra: Dictionary = {}) -> Dictionary:
+	_initial_garden_auto_seeded = false
+	var clean_id: String = species_id.strip_edges()
+	if not _manifest_by_id.has(clean_id):
+		return {"ok": false, "reason": "unknown_species", "plant_id": clean_id}
+	var rec: Dictionary = _manifest_by_id[clean_id]
+	var metrics: Dictionary = _sample_record_metrics(rec)
+	var target_h: float = float(metrics["target_h"])
+	if extra.has("height_px") and float(extra["height_px"]) > 10.0:
+		target_h = clampf(float(extra["height_px"]), 35.0, 230.0)
+	var raw_h: float = max(float(rec.get("height", 250.0)), 1.0)
+	var root_w: float = float(metrics["root_w"])
+	var fp_w: float = max(10.0, root_w * (target_h / raw_h))
+	var depth_s: float = get_depth_scale(screen_pos.y)
+	var eff_fp_w: float = max(10.0, fp_w * depth_s)
+	var eff_fp_h: float = max(6.0, eff_fp_w * camera_pitch_ratio)
+	if not bool(extra.get("force", false)) and not can_place_plant(screen_pos, eff_fp_w, eff_fp_h):
+		return {"ok": false, "reason": "collision", "plant_id": clean_id}
+	var p = spawn_manifest_plant(rec, screen_pos, target_h, root_w, eff_fp_w, eff_fp_h, depth_s, extra)
+	placed_footprints.append({"pos": screen_pos, "fp_w": eff_fp_w, "fp_h": eff_fp_h})
+	if ground_canvas:
+		ground_canvas.queue_redraw()
+	var payload: Dictionary = _build_plant_payload(p)
+	payload["ok"] = true
+	_emit_js_event("plant_placed", payload)
+	return payload
+
+func plant_species_auto(species_id: String, extra: Dictionary = {}) -> Dictionary:
+	var clean_id: String = species_id.strip_edges()
+	if not _manifest_by_id.has(clean_id):
+		return {"ok": false, "reason": "unknown_species", "plant_id": clean_id}
+	if turntable_lab_active or video_lab_active or video_gallery_active:
+		_exit_all_labs(true)
+	if extra.has("courtyard_x") and extra.has("courtyard_y"):
+		var cpt := Vector2(float(extra["courtyard_x"]), float(extra["courtyard_y"]))
+		var proj: Dictionary = project_courtyard_point(cpt)
+		return plant_species_at_screen_pos(clean_id, proj["screen_pos"], extra)
+	var scatter_limit: float = COURTYARD_HALF_SIZE - 35.0
+	for _attempt in range(120):
+		var w_pt := Vector2(randf_range(-scatter_limit, scatter_limit), randf_range(-scatter_limit, scatter_limit))
+		var proj: Dictionary = project_courtyard_point(w_pt)
+		var pos: Vector2 = proj["screen_pos"]
+		if pos.x < 110.0 or pos.x > 1350.0 or pos.y < 130.0 or pos.y > 855.0:
+			continue
+		var res: Dictionary = plant_species_at_screen_pos(clean_id, pos, extra)
+		if res.get("ok", false):
+			return res
+	return {"ok": false, "reason": "no_open_spot", "plant_id": clean_id}
+
+func _init_js_bridge():
+	if not OS.has_feature("web"):
+		return
+	_js_bridge_callback = JavaScriptBridge.create_callback(_on_js_bridge_command)
+	var win = JavaScriptBridge.get_interface("window")
+	if win:
+		win.__psyGardenGodotCommand = _js_bridge_callback
+	_emit_js_event("godot_ready", {"version": LAB_ASSET_VER})
+
+func _on_js_bridge_command(args: Array):
+	if args.is_empty():
+		return
+	var raw = args[0]
+	var cmd_str: String = str(raw) if raw is String else JSON.stringify(raw)
+	handle_bridge_command(cmd_str)
+
+func _emit_js_event(event_type: String, payload: Dictionary = {}):
+	if not OS.has_feature("web"):
+		return
+	var envelope := {"source": "psy_garden_godot", "type": event_type, "payload": payload}
+	var b64: String = Marshalls.utf8_to_base64(JSON.stringify(envelope))
+	var js: String = "(function(){try{var bin=atob('%s');var bytes=new Uint8Array(bin.length);for(var i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);var msg=JSON.parse(new TextDecoder().decode(bytes));if(window.__psyGardenOnGodotEvent)window.__psyGardenOnGodotEvent(msg);if(window.parent&&window.parent!==window)window.parent.postMessage(msg,'*');}catch(e){console.error('Bridge emit error',e);}})()" % b64
+	JavaScriptBridge.eval(js, true)
+
+func handle_bridge_command(cmd_json: String) -> Dictionary:
+	var parsed = JSON.parse_string(cmd_json)
+	if not (parsed is Dictionary):
+		return {"ok": false, "reason": "invalid_json"}
+	var cmd_type: String = str(parsed.get("type", "")).strip_edges()
+	var payload_raw = parsed.get("payload", {})
+	var payload: Dictionary = payload_raw if payload_raw is Dictionary else {}
+	if cmd_type == "set_planting_mode":
+		var pid: String = str(payload.get("plant_id", ""))
+		set_planting_mode(pid)
+		return {"ok": true, "planting_species_id": planting_species_id}
+	elif cmd_type == "spawn_plant":
+		var pid: String = str(payload.get("plant_id", ""))
+		return plant_species_auto(pid, payload)
+	elif cmd_type == "clear_garden":
+		_exit_all_labs(false)
+		set_planting_mode("")
+		clear_garden()
+		_emit_js_event("garden_cleared", {})
+		return {"ok": true, "plant_count": 0}
+	elif cmd_type == "random_garden":
+		_exit_all_labs(false)
+		set_planting_mode("")
+		var cnt: int = clampi(int(payload.get("count", 36)), 1, 80)
+		generate_random_garden(cnt)
+		_emit_js_event("garden_randomized", {"plant_count": active_plants.size()})
+		return {"ok": true, "plant_count": active_plants.size()}
+	elif cmd_type == "enter_video_gallery":
+		set_planting_mode("")
+		enter_video_gallery()
+		return {"ok": true, "mode": "video_gallery"}
+	elif cmd_type == "exit_video_gallery":
+		exit_video_gallery(true)
+		return {"ok": true, "mode": "regular"}
+	elif cmd_type == "set_orbit":
+		var ang: float = float(payload.get("angle_deg", 0.0))
+		_set_orbit_target(ang, bool(payload.get("snap", true)))
+		return {"ok": true, "orbit_deg": target_orbit_deg}
+	elif cmd_type == "set_weather":
+		var preset: String = str(payload.get("preset", "day")).to_lower()
+		if preset == "sunset":
+			set_weather_sunset()
+		elif preset == "night":
+			set_weather_night()
+		elif preset == "dark":
+			set_weather_dark()
+		else:
+			set_weather_day()
+		return {"ok": true, "preset": preset}
+	elif cmd_type == "get_state":
+		var mode_str: String = "regular"
+		if video_gallery_active:
+			mode_str = "video_gallery"
+		elif video_lab_active:
+			mode_str = "video_lab"
+		elif turntable_lab_active:
+			mode_str = "turntable_lab"
+		var plants_out: Array = []
+		for p in active_plants:
+			if is_instance_valid(p):
+				plants_out.append(_build_plant_payload(p))
+		var snap := {
+			"ok": true,
+			"orbit_deg": orbit_angle_deg,
+			"mode": mode_str,
+			"plant_count": plants_out.size(),
+			"planting_species_id": planting_species_id,
+			"video36_ids": video36_by_id.keys(),
+			"plants": plants_out,
+		}
+		_emit_js_event("state_snapshot", snap)
+		return snap
+	return {"ok": false, "reason": "unknown_command", "type": cmd_type}

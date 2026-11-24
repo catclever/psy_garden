@@ -13,14 +13,31 @@ import urllib.parse
 import shutil
 import time
 import re
+from pathlib import Path
 
 PORT = int(os.environ.get("PORT", 18087))
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CANDIDATES_DIR = os.path.join(PROJECT_ROOT, 'tools', 'candidates')
 TRASH_DIR = os.path.join(PROJECT_ROOT, 'tools', 'trash')
 PLANTS_DIR = os.path.join(PROJECT_ROOT, 'src', 'assets', 'plants')
+MANIFEST_JSON_PATH = os.path.join(PLANTS_DIR, 'manifest.json')
+VIDEO36_RUNS_DIR = os.path.join(CANDIDATES_DIR, 'video36_runs')
+TURNTABLE_LAB_DIR = os.path.join(PROJECT_ROOT, 'src', 'assets', 'turntable_lab')
+VIDEO36_INDEX_PATH = os.path.join(TURNTABLE_LAB_DIR, 'video36_index.json')
 CONFIRMED_CANDIDATES_FILE = os.path.join(PROJECT_ROOT, 'tools', 'confirmed_candidates.json')
 CONFIRMED_PLANTS_FILE = os.path.join(PROJECT_ROOT, 'tools', 'confirmed_plants.json')
+
+VIDEO36_JOBS = {}
+VIDEO36_JOBS_LOCK = threading.Lock()
+VIDEO36_FILE_ALLOWLIST = {
+    'ref_000_vs_180_check.jpg',
+    'ref_4views_check.jpg',
+    'raw_preview_36.jpg',
+    'video_36_contact_sheet.jpg',
+    'atlas_36.webp',
+    'ref_000.png',
+    'ref_180.png',
+}
 
 def refresh_plant_manifest():
     try:
@@ -228,6 +245,318 @@ def run_build_asset(input_path, plant_name, variant_id, display_name=None):
         return True
         
     raise Exception(f"切片脚本执行失败:\n[uv]: {result.stderr}\n[python3]: {result2.stderr}")
+
+
+def _safe_read_json(path: str):
+    if not path or not os.path.isfile(path):
+        return None
+    try:
+        with open(path, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+            return data if isinstance(data, dict) else None
+    except Exception:
+        return None
+
+
+def _resolve_video36_python_cmd(args_list: list[str]) -> list[str]:
+    pipeline_script = os.path.join(PROJECT_ROOT, 'tools', 'plant_video36_pipeline.py')
+    has_deps = True
+    for mod in ('google.genai', 'PIL', 'numpy', 'scipy', 'imageio'):
+        try:
+            __import__(mod)
+        except Exception:
+            has_deps = False
+            break
+    if has_deps:
+        return [sys.executable, pipeline_script, *args_list]
+    return [
+        'uv',
+        'run',
+        '--offline',
+        '--with',
+        'google-genai>=2.30.1',
+        '--with',
+        'pillow',
+        '--with',
+        'numpy',
+        '--with',
+        'scipy',
+        '--with',
+        'imageio[ffmpeg]',
+        'python',
+        pipeline_script,
+        *args_list,
+    ]
+
+
+def _resolve_video36_file_path(plant_id: str, filename: str) -> str | None:
+    if not _is_safe_path_segment(plant_id) or not _is_safe_path_segment(filename):
+        return None
+    if filename not in VIDEO36_FILE_ALLOWLIST:
+        return None
+    candidates = [
+        (TURNTABLE_LAB_DIR, os.path.join(TURNTABLE_LAB_DIR, f'{plant_id}_video36', filename)),
+        (VIDEO36_RUNS_DIR, os.path.join(VIDEO36_RUNS_DIR, plant_id, filename)),
+    ]
+    for base_dir, cand in candidates:
+        real_base = os.path.realpath(base_dir)
+        real_cand = os.path.realpath(cand)
+        if real_cand.startswith(real_base + os.sep) and os.path.isfile(real_cand):
+            return real_cand
+    return None
+
+
+def _serialize_video36_job(job: dict) -> dict:
+    return {
+        'job_id': job['job_id'],
+        'plant_id': job['plant_id'],
+        'stages': job['stages'],
+        'mode': job['mode'],
+        'key_mode': job['key_mode'],
+        'status': job['status'],
+        'started_at': job['started_at'],
+        'ended_at': job['ended_at'],
+        'returncode': job['returncode'],
+        'log_tail': list(job['logs'][-80:]),
+    }
+
+
+def _collect_video36_list() -> dict:
+    manifest_data = _safe_read_json(MANIFEST_JSON_PATH) or {}
+    manifest_plants = {}
+    for rec in manifest_data.get('plants') or []:
+        if not isinstance(rec, dict):
+            continue
+        pid = rec.get('name') or rec.get('id')
+        if pid and rec.get('enabled', True):
+            manifest_plants[str(pid)] = rec
+
+    index_data = _safe_read_json(VIDEO36_INDEX_PATH) or {}
+    published_ids = [
+        str(sp.get('plant_id'))
+        for sp in (index_data.get('species') or [])
+        if isinstance(sp, dict) and sp.get('plant_id')
+    ]
+    published_set = set(published_ids)
+
+    all_ids = set(manifest_plants.keys())
+    if os.path.isdir(VIDEO36_RUNS_DIR):
+        for entry in os.listdir(VIDEO36_RUNS_DIR):
+            if _is_safe_path_segment(entry) and os.path.isdir(os.path.join(VIDEO36_RUNS_DIR, entry)):
+                all_ids.add(entry)
+    if os.path.isdir(TURNTABLE_LAB_DIR):
+        for entry in os.listdir(TURNTABLE_LAB_DIR):
+            if entry.endswith('_video36') and '_opt' not in entry and os.path.isdir(os.path.join(TURNTABLE_LAB_DIR, entry)):
+                pid = entry[:-len('_video36')]
+                if _is_safe_path_segment(pid):
+                    all_ids.add(pid)
+
+    with VIDEO36_JOBS_LOCK:
+        active_by_pid = {}
+        latest_by_pid = {}
+        for job in VIDEO36_JOBS.values():
+            pid = job['plant_id']
+            if job['status'] == 'running':
+                active_by_pid[pid] = _serialize_video36_job(job)
+            prev = latest_by_pid.get(pid)
+            if prev is None or job['started_at'] >= prev['started_at']:
+                latest_by_pid[pid] = _serialize_video36_job(job)
+
+    items = []
+    for pid in sorted(all_ids):
+        rec = manifest_plants.get(pid, {})
+        ai = rec.get('ai_analysis') if isinstance(rec.get('ai_analysis'), dict) else {}
+        prep_meta = _safe_read_json(os.path.join(VIDEO36_RUNS_DIR, pid, 'prep_meta.json'))
+        video_summary = _safe_read_json(os.path.join(VIDEO36_RUNS_DIR, pid, 'video_run_summary.json'))
+        atlas_dir = os.path.join(TURNTABLE_LAB_DIR, f'{pid}_video36')
+        atlas_meta = _safe_read_json(os.path.join(atlas_dir, 'metadata.json'))
+        atlas_webp = os.path.join(atlas_dir, 'atlas_36.webp')
+
+        has_atlas = atlas_meta is not None and os.path.isfile(atlas_webp)
+        has_prep = prep_meta is not None
+        has_video = video_summary is not None
+        published = bool(has_atlas and atlas_meta.get('published') is not False and pid in published_set)
+
+        files_map = {}
+        for fname in sorted(VIDEO36_FILE_ALLOWLIST):
+            if _resolve_video36_file_path(pid, fname) is not None:
+                files_map[fname] = f'/api/video36/file/{pid}/{fname}'
+
+        thumb_url = ''
+        layers = rec.get('layer_files') or []
+        if layers and rec.get('path_prefix'):
+            green = next((l for l in layers if l.get('slot') == 'green'), layers[0])
+            if green and green.get('file'):
+                thumb_url = f"/assets/{rec['path_prefix'].lstrip('/')}/{green['file']}"
+
+        display_name = (
+            (atlas_meta or {}).get('display_name')
+            or (prep_meta or {}).get('display_name')
+            or rec.get('display_name')
+            or pid
+        )
+        label_ascii = (
+            (atlas_meta or {}).get('label_ascii')
+            or (prep_meta or {}).get('label_ascii')
+            or pid
+        )
+        plant_type = (
+            (atlas_meta or {}).get('plant_type')
+            or (prep_meta or {}).get('plant_type')
+            or ai.get('plant_type')
+            or 'shrub'
+        )
+        items.append(
+            {
+                'plant_id': pid,
+                'display_name': display_name,
+                'label_ascii': label_ascii,
+                'plant_type': plant_type,
+                'thumb_url': thumb_url,
+                'has_prep': has_prep,
+                'has_video': has_video,
+                'has_atlas': has_atlas,
+                'published': published,
+                'prep_meta': prep_meta,
+                'video_summary': video_summary,
+                'atlas_meta': atlas_meta,
+                'files': files_map,
+                'active_job': active_by_pid.get(pid) or latest_by_pid.get(pid),
+            }
+        )
+
+    items.sort(key=lambda x: (0 if x['has_atlas'] else (1 if x['has_prep'] else 2), x['plant_id']))
+    return {
+        'updated_at': index_data.get('updated_at'),
+        'published_ids': published_ids,
+        'items': items,
+    }
+
+
+def _video36_job_worker(job_id: str, cmd: list[str], cwd: str):
+    try:
+        proc = subprocess.Popen(
+            cmd,
+            cwd=cwd,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            text=True,
+            bufsize=1,
+        )
+        if proc.stdout is not None:
+            for line in proc.stdout:
+                clean_line = line.rstrip('\r\n')
+                with VIDEO36_JOBS_LOCK:
+                    job = VIDEO36_JOBS.get(job_id)
+                    if job is not None:
+                        job['logs'].append(clean_line)
+                        if len(job['logs']) > 400:
+                            del job['logs'][:-400]
+        rc = proc.wait()
+        with VIDEO36_JOBS_LOCK:
+            job = VIDEO36_JOBS.get(job_id)
+            if job is not None:
+                job['returncode'] = int(rc)
+                job['ended_at'] = time.time()
+                job['status'] = 'succeeded' if rc == 0 else 'failed'
+    except Exception as exc:
+        with VIDEO36_JOBS_LOCK:
+            job = VIDEO36_JOBS.get(job_id)
+            if job is not None:
+                job['logs'].append(f'ERROR: {exc}')
+                job['returncode'] = -1
+                job['ended_at'] = time.time()
+                job['status'] = 'failed'
+
+
+def _start_video36_job(
+    plant_id: str,
+    stages: str,
+    mode: str,
+    key_mode: str = 'auto',
+    force: bool = False,
+    mirror_q0_for_270: bool = False,
+) -> dict:
+    if not _is_safe_path_segment(plant_id):
+        raise ValueError('Invalid plant_id')
+    if stages not in ('prep', 'video', 'atlas', 'all'):
+        raise ValueError('Invalid stages')
+    if mode not in ('2half', '4quarter'):
+        raise ValueError('Invalid mode')
+    if key_mode not in ('auto', 'pockets', 'strict_pockets', 'border_only'):
+        raise ValueError('Invalid key_mode')
+
+    with VIDEO36_JOBS_LOCK:
+        for existing in VIDEO36_JOBS.values():
+            if existing['plant_id'] == plant_id and existing['status'] == 'running':
+                raise RuntimeError(f'Job already running for {plant_id}: {existing["job_id"]}')
+
+        job_id = f'{plant_id}_{int(time.time() * 1000)}'
+        args_list = [
+            '--plant-id',
+            plant_id,
+            '--stages',
+            stages,
+            '--mode',
+            mode,
+            '--key-mode',
+            key_mode,
+        ]
+        if force:
+            args_list.append('--force')
+        if mirror_q0_for_270 and mode == '4quarter':
+            args_list.append('--mirror-q0-for-270')
+
+        cmd = _resolve_video36_python_cmd(args_list)
+        job = {
+            'job_id': job_id,
+            'plant_id': plant_id,
+            'stages': stages,
+            'mode': mode,
+            'key_mode': key_mode,
+            'status': 'running',
+            'started_at': time.time(),
+            'ended_at': None,
+            'returncode': None,
+            'logs': [f'$ {" ".join(cmd)}'],
+        }
+        VIDEO36_JOBS[job_id] = job
+
+    t = threading.Thread(
+        target=_video36_job_worker,
+        args=(job_id, cmd, os.path.join(PROJECT_ROOT, 'tools')),
+        daemon=True,
+    )
+    t.start()
+    return _serialize_video36_job(job)
+
+
+def _publish_video36_asset(plant_id: str, published: bool) -> dict:
+    if not _is_safe_path_segment(plant_id):
+        raise ValueError('Invalid plant_id')
+    atlas_dir = os.path.join(TURNTABLE_LAB_DIR, f'{plant_id}_video36')
+    meta_path = os.path.join(atlas_dir, 'metadata.json')
+    if not os.path.isfile(meta_path):
+        raise FileNotFoundError(f'Missing metadata.json for {plant_id}')
+    with open(meta_path, 'r', encoding='utf-8') as f:
+        meta = json.load(f)
+    meta['published'] = bool(published)
+    with open(meta_path, 'w', encoding='utf-8') as f:
+        json.dump(meta, f, ensure_ascii=False, indent=2)
+
+    import plant_video36_pipeline
+
+    out_path = plant_video36_pipeline.rebuild_video36_index(
+        lab_root=Path(TURNTABLE_LAB_DIR),
+        manifest_path=Path(MANIFEST_JSON_PATH),
+    )
+    idx_data = _safe_read_json(str(out_path)) or {}
+    return {
+        'status': 'success',
+        'plant_id': plant_id,
+        'published': bool(published),
+        'index_species_count': len(idx_data.get('species') or []),
+    }
 
 
 HTML_CONTENT = """
@@ -929,6 +1258,216 @@ HTML_CONTENT = """
         .tag-green { background: #23863622; color: #7ee787; border: 1px solid #23863655; }
         .tag-blue { background: #1f6feb22; color: #79c0ff; border: 1px solid #1f6feb55; }
         .tag-default { background: #30363d; color: #c9d1d9; }
+
+        /* 360° Turntable Workbench Badges & Native Modal Dialog */
+        .badge-v36 {
+            background: rgba(242, 204, 96, 0.22);
+            color: #f2cc60;
+            border: 1px solid rgba(242, 204, 96, 0.55);
+            font-size: 10px;
+            padding: 1px 6px;
+            border-radius: 10px;
+            display: inline-block;
+            font-weight: 600;
+        }
+        .btn-v36-open {
+            background: rgba(242, 204, 96, 0.14);
+            color: #f2cc60;
+            border: 1px solid rgba(242, 204, 96, 0.4);
+            border-radius: 12px;
+            font-size: 11px;
+            padding: 3px 10px;
+            cursor: pointer;
+            margin-top: 4px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .btn-v36-open:hover {
+            background: rgba(242, 204, 96, 0.28);
+            border-color: #f2cc60;
+        }
+
+        dialog#video36Dialog {
+            margin: auto;
+            padding: 22px;
+            width: min(980px, 95vw);
+            max-height: 90dvh;
+            background: #161b22;
+            color: #c9d1d9;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            box-shadow: 0 20px 56px rgba(0, 0, 0, 0.85);
+            flex-direction: column;
+            gap: 14px;
+            opacity: 0;
+            transition-property: opacity, transform, display, overlay;
+            transition-duration: 0.26s;
+            transition-timing-function: ease-out;
+            transition-behavior: allow-discrete;
+        }
+        dialog#video36Dialog:modal {
+            overscroll-behavior: contain;
+        }
+        dialog#video36Dialog::backdrop {
+            background-color: rgba(0, 0, 0, 0);
+            overflow: hidden;
+            overscroll-behavior: contain;
+            transition-property: background-color, display, overlay;
+            transition-duration: 0.26s;
+            transition-timing-function: ease-out;
+            transition-behavior: allow-discrete;
+        }
+        @media (prefers-reduced-motion: no-preference) {
+            dialog#video36Dialog {
+                transform: scale(0.95);
+            }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            dialog#video36Dialog,
+            dialog#video36Dialog::backdrop {
+                transition-duration: 0.1s;
+            }
+        }
+        dialog#video36Dialog[open]:where(:not([data-closing])) {
+            display: flex;
+            opacity: 1;
+            @starting-style {
+                opacity: 0;
+            }
+            @media (prefers-reduced-motion: no-preference) {
+                transform: scale(1);
+                @starting-style {
+                    transform: scale(0.95);
+                }
+            }
+            &::backdrop {
+                background-color: rgba(0, 0, 0, 0.78);
+                @starting-style {
+                    background-color: rgba(0, 0, 0, 0);
+                }
+            }
+        }
+        .v36-body {
+            display: flex;
+            gap: 20px;
+            overflow-y: auto;
+            flex: 1;
+            min-height: 0;
+        }
+        .v36-left {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .v36-right {
+            flex: 1.25;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            min-width: 0;
+        }
+        .v36-stage-tabs {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .v36-tab-btn {
+            background: #0d1117;
+            color: #8b949e;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            padding: 5px 10px;
+            font-size: 11px;
+            cursor: pointer;
+        }
+        .v36-tab-btn.active {
+            background: #21262d;
+            color: #f2cc60;
+            border-color: #f2cc60;
+        }
+        .v36-preview-frame {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            min-height: 290px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            gap: 8px;
+        }
+        .v36-preview-frame img {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 6px;
+            object-fit: contain;
+        }
+        .v36-spin-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            font-size: 12px;
+        }
+        .v36-spin-controls input[type="range"] {
+            flex: 1;
+            accent-color: #f2cc60;
+        }
+        .v36-metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+        .v36-metric-card {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            padding: 8px;
+            font-size: 11px;
+        }
+        .v36-metric-card .lbl { color: #8b949e; }
+        .v36-metric-card .val { color: #c9d1d9; font-weight: 700; font-size: 13px; margin-top: 2px; font-family: monospace; }
+        .v36-config-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 10px;
+            font-size: 12px;
+        }
+        .v36-config-grid select {
+            width: 100%;
+            background: #161b22;
+            color: #c9d1d9;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            padding: 5px 8px;
+            margin-top: 4px;
+        }
+        .v36-run-row {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .v36-log-box {
+            background: #05070a;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            padding: 8px 10px;
+            font-family: monospace;
+            font-size: 11px;
+            line-height: 1.45;
+            color: #8b949e;
+            height: 150px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            margin: 0;
+        }
     </style>
 </head>
 <body>
@@ -964,6 +1503,7 @@ HTML_CONTENT = """
                         <button type="button" class="filter-pill active" data-filter="all" onclick="setAssetFilter('all')">全部</button>
                         <button type="button" class="filter-pill" data-filter="enabled" onclick="setAssetFilter('enabled')">✅ 使用中</button>
                         <button type="button" class="filter-pill" data-filter="disabled" onclick="setAssetFilter('disabled')">🚫 不使用</button>
+                        <button type="button" class="filter-pill" data-filter="video36" onclick="setAssetFilter('video36')">🔄 360° 转盘</button>
                     </div>
                 </div>
                 <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
@@ -1009,6 +1549,7 @@ HTML_CONTENT = """
                     <div id="layerModalSubtitle" style="color:#8b949e; font-size:12px; margin-top:4px;"></div>
                 </div>
                 <div style="display:flex; align-items:center; gap:10px;">
+                    <button id="modalOpenVideo36Btn" class="btn-v36-open" style="font-size:12px; padding:6px 12px; margin-top:0;">🔄 36F工坊</button>
                     <button id="modalResliceAssetBtn" class="btn-reslice">🎨 重新切片(升级真彩)</button>
                     <button id="modalToggleEnabledBtn" class="btn-toggle-disabled" style="padding:6px 12px; border-radius:6px; font-size:12px;">🚫 设为不使用</button>
                     <button id="modalRemoveAssetBtn" class="btn-danger" style="padding:6px 12px; border-radius:6px; font-size:12px;">移出资产</button>
@@ -1047,11 +1588,88 @@ HTML_CONTENT = """
         </div>
     </div>
 
+    <!-- Modal: 360° Video Turntable Workbench (native modal dialog) -->
+    <dialog id="video36Dialog" closedby="any" aria-labelledby="video36DialogTitle">
+        <div class="modal-header" style="margin-bottom:0;">
+            <div>
+                <h2 id="video36DialogTitle" style="margin:0; color:#f2cc60; font-size:18px;">🔄 360° 立体转盘工坊</h2>
+                <div id="v36Subtitle" style="color:#8b949e; font-size:12px; margin-top:4px;"></div>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+                <button type="button" id="v36PublishBtn" class="btn-reslice" onclick="toggleVideo36Publish()">🌐 发布到花园 36F</button>
+                <button type="button" id="v36CloseBtn" class="modal-close-btn" aria-label="关闭 360° 工坊">&times;</button>
+            </div>
+        </div>
+        <div class="v36-body">
+            <div class="v36-left">
+                <div class="v36-stage-tabs" id="v36ViewTabs">
+                    <button type="button" class="v36-tab-btn active" data-view="turntable" onclick="setVideo36PreviewMode('turntable')">🔄 360° 动态转盘</button>
+                    <button type="button" class="v36-tab-btn" data-view="iou" onclick="setVideo36PreviewMode('iou')">🪞 0°/180° 轮廓锁</button>
+                    <button type="button" class="v36-tab-btn" data-view="sheet" onclick="setVideo36PreviewMode('sheet')">🧩 36帧拼版</button>
+                    <button type="button" class="v36-tab-btn" data-view="raw" onclick="setVideo36PreviewMode('raw')">🎬 原视频抽帧</button>
+                </div>
+                <div class="v36-preview-frame" id="v36PreviewFrame">
+                    <canvas id="v36Canvas" width="260" height="260" style="border-radius:6px; background:#6f664b;"></canvas>
+                    <img id="v36StaticImg" style="display:none;" alt="360° 阶段预览" />
+                    <div id="v36SpinControls" class="v36-spin-controls">
+                        <button type="button" id="v36SpinPlayBtn" class="v36-tab-btn" onclick="toggleVideo36AutoSpin()">⏸ 暂停</button>
+                        <input type="range" id="v36AngleSlider" min="0" max="350" step="10" value="0" oninput="onVideo36SliderChange(this.value)" />
+                        <span id="v36AngleReadout" style="font-family:monospace; color:#f2cc60; min-width:56px; text-align:right;">F00 000°</span>
+                    </div>
+                    <label style="display:flex; align-items:center; gap:6px; font-size:12px; color:#8b949e; cursor:pointer; user-select:none;">
+                        <input type="checkbox" id="v36ShowPivotChk" checked onchange="drawVideo36Frame()" />
+                        <span>🎯 显示根部枢轴红点 & 占地椭圆</span>
+                    </label>
+                </div>
+            </div>
+            <div class="v36-right">
+                <div class="v36-metrics-grid" id="v36MetricsGrid"></div>
+                <div class="v36-config-grid">
+                    <div>
+                        <label style="color:#8b949e;">旋转模式 (--mode)</label>
+                        <select id="v36ModeSelect">
+                            <option value="2half">2half (常规 0→180→360 双半圈)</option>
+                            <option value="4quarter">4quarter (宽幅四象限防压扁)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label style="color:#8b949e;">抠图策略 (--key-mode)</label>
+                        <select id="v36KeyModeSelect">
+                            <option value="auto">auto (自动识别白花/暗腔)</option>
+                            <option value="pockets">pockets (穿透树冠镂空)</option>
+                            <option value="strict_pockets">strict_pockets (保护白色花瓣)</option>
+                            <option value="border_only">border_only (仅外圈)</option>
+                        </select>
+                    </div>
+                    <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
+                        <input type="checkbox" id="v36Mirror270Chk" />
+                        <span>4quarter 镜像 Q0 导引 270°</span>
+                    </label>
+                    <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
+                        <input type="checkbox" id="v36ForceChk" />
+                        <span>强制覆盖重算 (--force)</span>
+                    </label>
+                </div>
+                <div class="v36-run-row">
+                    <button type="button" class="btn-restore" onclick="runVideo36Stage('prep')">1. Prep (备图+轮廓锁)</button>
+                    <button type="button" class="btn-restore" onclick="runVideo36Stage('video')">2. Video (生成视频)</button>
+                    <button type="button" class="btn-restore" onclick="runVideo36Stage('atlas')">3. Atlas (切片+枢轴锁)</button>
+                    <button type="button" class="btn-reslice" onclick="runVideo36Stage('all')">🚀 一键 All</button>
+                </div>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-size:12px; color:#8b949e;">实时执行日志 & 状态: <strong id="v36JobStatusText" style="color:#c9d1d9;">空闲</strong></span>
+                </div>
+                <pre id="v36LogBox" class="v36-log-box">等待选择操作阶段...</pre>
+            </div>
+        </div>
+    </dialog>
+
     <script>
         let currentLeftTab = 'candidates';
         let confirmedCandidates = {};
         let selectedAssets = {};
         let allAssets = [];
+        let video36ById = {};
         let currentAssetFilter = 'all';
         let activeModalVariant = null;
         let modalLayerFilters = [];
@@ -1367,20 +1985,46 @@ HTML_CONTENT = """
             loadAssets();
         }
 
-        function loadAssets() {
-            return fetch('/api/assets')
+        function loadVideo36List() {
+            return fetch('/api/video36/list')
                 .then(res => res.json())
-                .then(assets => {
-                    allAssets = Array.isArray(assets) ? assets : [];
-                    const enabledCount = allAssets.filter(v => v.enabled !== false).length;
-                    document.getElementById('assetsTotalCount').innerText = `${enabledCount} 启用 / ${allAssets.length} 资产`;
+                .then(data => {
+                    video36ById = {};
+                    const items = Array.isArray(data && data.items) ? data.items : [];
+                    items.forEach(item => {
+                        if (item && item.plant_id) {
+                            video36ById[item.plant_id] = item;
+                        }
+                    });
                     renderAssetsGallery();
-                    if (allAssets.some(v => v.status === 'ai_analyzing')) {
-                        startAiStatusPolling();
+                    if (activeVideo36PlantId && video36ById[activeVideo36PlantId]) {
+                        renderVideo36DialogContent(video36ById[activeVideo36PlantId]);
                     }
                 }).catch(err => {
-                    console.error("加载资产失败:", err);
+                    console.error("加载 360° 转盘列表失败:", err);
                 });
+        }
+
+        function loadAssets() {
+            return Promise.all([
+                fetch('/api/assets').then(res => res.json()),
+                fetch('/api/video36/list').then(res => res.json()).catch(() => ({ items: [] })),
+            ]).then(([assets, v36Data]) => {
+                allAssets = Array.isArray(assets) ? assets : [];
+                video36ById = {};
+                const v36Items = Array.isArray(v36Data && v36Data.items) ? v36Data.items : [];
+                v36Items.forEach(item => {
+                    if (item && item.plant_id) video36ById[item.plant_id] = item;
+                });
+                const enabledCount = allAssets.filter(v => v.enabled !== false).length;
+                document.getElementById('assetsTotalCount').innerText = `${enabledCount} 启用 / ${allAssets.length} 资产`;
+                renderAssetsGallery();
+                if (allAssets.some(v => v.status === 'ai_analyzing')) {
+                    startAiStatusPolling();
+                }
+            }).catch(err => {
+                console.error("加载资产失败:", err);
+            });
         }
 
         function renderAssetsGallery() {
@@ -1394,8 +2038,10 @@ HTML_CONTENT = """
 
             const filteredAssets = allAssets.filter(variant => {
                 const isDisabled = (variant.enabled === false);
+                const v36 = video36ById[variant.plant_name];
                 if (currentAssetFilter === 'enabled') return !isDisabled;
                 if (currentAssetFilter === 'disabled') return isDisabled;
+                if (currentAssetFilter === 'video36') return Boolean(v36 && (v36.has_atlas || v36.has_prep || v36.has_video));
                 return true;
             });
 
@@ -1452,6 +2098,11 @@ HTML_CONTENT = """
                 const disabledBadgeHtml = isDisabled
                     ? `<span class="badge-disabled card-disabled-badge" title="已在花园中停用，仅在造物工坊保留">🚫 不使用</span>`
                     : '';
+                const v36Info = video36ById[variant.plant_name];
+                const v36TagHtml = (v36Info && v36Info.has_atlas)
+                    ? `<span class="badge-v36" style="margin-top:4px;" title="已生成 36 帧转盘 (${v36Info.published ? '已发布到花园' : '未发布'})">${v36Info.published ? '🔄 36F 已发布' : '🔄 36F 未发布'}</span>`
+                    : ((v36Info && (v36Info.has_prep || v36Info.has_video)) ? `<span class="badge-v36" style="margin-top:4px; opacity:0.75;">⏳ 36F 半成品</span>` : '');
+                const safePlantIdArg = String(variant.plant_name).replace(/'/g, "");
 
                 card.innerHTML = `
                     ${colorBadgeHtml}
@@ -1460,10 +2111,14 @@ HTML_CONTENT = """
                     <div class="img-container">${imagesHtml}</div>
                     <div class="title" style="margin-top:2px;">${titleHtml}</div>
                     <div class="subtitle" style="margin-top:2px;">Variant: ${variant.variant_id}</div>
-                    <div style="margin-top:6px;">
+                    ${v36TagHtml}
+                    <div style="margin-top:6px; display:flex; flex-direction:column; align-items:center; gap:4px;">
                         <span class="layer-badge-btn" onclick="event.stopPropagation(); openLayerModal(${variantDataStr})">
                             🧩 ${variant.layers.length} 个独立图层 ↗
                         </span>
+                        <button type="button" class="btn-v36-open" onclick="event.stopPropagation(); openVideo36Workbench('${safePlantIdArg}')">
+                            🔄 36F工坊
+                        </button>
                     </div>
                 `;
 
@@ -1585,6 +2240,14 @@ HTML_CONTENT = """
                 removeBtn.onclick = () => {
                     closeLayerModal();
                     removeAsset(variant.plant_name, variant.variant_id, titleText);
+                };
+            }
+
+            const v36ModalBtn = document.getElementById('modalOpenVideo36Btn');
+            if (v36ModalBtn) {
+                v36ModalBtn.onclick = () => {
+                    closeLayerModal();
+                    openVideo36Workbench(variant.plant_name);
                 };
             }
 
@@ -1772,7 +2435,6 @@ HTML_CONTENT = """
                         ${fpBlock}
                     </div>
                 `;
-            }
             }
         }
 
@@ -2102,6 +2764,406 @@ HTML_CONTENT = """
             });
         }
         
+        let activeVideo36PlantId = null;
+        let v36PreviewMode = 'turntable';
+        let v36AtlasImage = null;
+        let v36CurrentMeta = null;
+        let v36AngleDeg = 0;
+        let v36AutoSpin = true;
+        let v36SpinTimer = null;
+        let v36JobPollTimer = null;
+        let v36CurrentJobId = null;
+
+        let _v36SupportsDisplayTransition;
+        function v36CanTransitionDisplay() {
+            if (_v36SupportsDisplayTransition !== undefined) return _v36SupportsDisplayTransition;
+            if (!window.CSS || !window.CSS.supports || !window.CSS.supports('transition-behavior', 'allow-discrete') || !document.body) {
+                return false;
+            }
+            const probe = document.createElement('div');
+            probe.style.cssText = 'transition: display 1s allow-discrete !important; display: block;';
+            document.body.appendChild(probe);
+            getComputedStyle(probe).display;
+            probe.style.display = 'none';
+            _v36SupportsDisplayTransition = getComputedStyle(probe).display === 'block';
+            probe.remove();
+            return _v36SupportsDisplayTransition;
+        }
+        function v36SupportsTopLayerExit() {
+            return Boolean(window.CSS && window.CSS.supports && window.CSS.supports('overlay', 'auto') && v36CanTransitionDisplay());
+        }
+        async function closeTopLayerDialog(dialogEl) {
+            if (!dialogEl || !dialogEl.open) return;
+            if (!v36SupportsTopLayerExit()) {
+                dialogEl.setAttribute('data-closing', '');
+                const animations = dialogEl.getAnimations ? dialogEl.getAnimations({ subtree: true }) : [];
+                if (animations.length > 0) {
+                    await Promise.race([
+                        Promise.allSettled(animations.map(a => a.finished)),
+                        new Promise(r => setTimeout(r, 1500)),
+                    ]);
+                }
+                if (!dialogEl.hasAttribute('data-closing')) return;
+                dialogEl.removeAttribute('data-closing');
+            }
+            dialogEl.close();
+        }
+
+        const v36DialogEl = document.getElementById('video36Dialog');
+        if (v36DialogEl) {
+            if (!('closedBy' in HTMLDialogElement.prototype)) {
+                const isOutsideDialog = (e, dlg) => {
+                    const r = dlg.getBoundingClientRect();
+                    return e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom;
+                };
+                let pressedOutside = false;
+                v36DialogEl.addEventListener('pointerdown', e => {
+                    pressedOutside = isOutsideDialog(e, v36DialogEl);
+                });
+                v36DialogEl.addEventListener('pointerup', e => {
+                    if (pressedOutside && isOutsideDialog(e, v36DialogEl)) {
+                        closeTopLayerDialog(v36DialogEl);
+                    }
+                });
+            }
+            v36DialogEl.addEventListener('cancel', e => {
+                if (e.cancelable) {
+                    e.preventDefault();
+                    closeTopLayerDialog(v36DialogEl);
+                }
+            });
+            v36DialogEl.addEventListener('close', () => {
+                v36DialogEl.returnValue = '';
+                stopVideo36SpinTimer();
+                stopVideo36JobPoll();
+            });
+        }
+        const v36CloseBtn = document.getElementById('v36CloseBtn');
+        if (v36CloseBtn && v36DialogEl) {
+            v36CloseBtn.addEventListener('click', () => closeTopLayerDialog(v36DialogEl));
+        }
+
+        function stopVideo36SpinTimer() {
+            if (v36SpinTimer) {
+                clearInterval(v36SpinTimer);
+                v36SpinTimer = null;
+            }
+        }
+        function startVideo36SpinTimer() {
+            stopVideo36SpinTimer();
+            if (!v36AutoSpin || v36PreviewMode !== 'turntable') return;
+            v36SpinTimer = setInterval(() => {
+                v36AngleDeg = (v36AngleDeg + 10) % 360;
+                const slider = document.getElementById('v36AngleSlider');
+                if (slider) slider.value = String(v36AngleDeg);
+                drawVideo36Frame();
+            }, 130);
+        }
+        function stopVideo36JobPoll() {
+            if (v36JobPollTimer) {
+                clearInterval(v36JobPollTimer);
+                v36JobPollTimer = null;
+            }
+        }
+
+        function drawVideo36Frame() {
+            const canvas = document.getElementById('v36Canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const cw = canvas.width;
+            const ch = canvas.height;
+            ctx.fillStyle = '#6f664b';
+            ctx.fillRect(0, 0, cw, ch);
+
+            const frameIdx = Math.round(v36AngleDeg / 10) % 36;
+            const readout = document.getElementById('v36AngleReadout');
+            if (readout) {
+                readout.innerText = `F${String(frameIdx).padStart(2, '0')} ${String(frameIdx * 10).padStart(3, '0')}°`;
+            }
+
+            if (!v36AtlasImage || !v36AtlasImage.complete || v36AtlasImage.naturalWidth <= 0) {
+                ctx.fillStyle = '#c9d1d9';
+                ctx.font = '12px sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText('尚无 36F 图集，可先运行左侧/右侧管线生成', cw / 2, ch / 2);
+                return;
+            }
+
+            const hf = (v36CurrentMeta && v36CurrentMeta.hframes) || 6;
+            const vf = (v36CurrentMeta && v36CurrentMeta.vframes) || 6;
+            const cellW = v36AtlasImage.naturalWidth / hf;
+            const cellH = v36AtlasImage.naturalHeight / vf;
+            const col = frameIdx % hf;
+            const row = Math.floor(frameIdx / hf);
+
+            ctx.drawImage(v36AtlasImage, col * cellW, row * cellH, cellW, cellH, 0, 0, cw, ch);
+
+            const showPivot = document.getElementById('v36ShowPivotChk')?.checked;
+            if (showPivot) {
+                const anchor = (v36CurrentMeta && v36CurrentMeta.root_anchor_px) || [cellW * 0.5, cellH - 8];
+                const ax = (anchor[0] / cellW) * cw;
+                const ay = (anchor[1] / cellH) * ch;
+
+                ctx.strokeStyle = 'rgba(165, 195, 145, 0.75)';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(12, ay);
+                ctx.lineTo(cw - 12, ay);
+                ctx.stroke();
+
+                const rwPx = ((v36CurrentMeta && v36CurrentMeta.root_width) || 32) * (cw / 1024);
+                ctx.strokeStyle = 'rgba(130, 236, 158, 0.85)';
+                ctx.lineWidth = 1.5;
+                ctx.beginPath();
+                ctx.ellipse(ax, ay, Math.max(8, rwPx * 0.5), Math.max(5, rwPx * 0.36), 0, 0, Math.PI * 2);
+                ctx.stroke();
+
+                ctx.fillStyle = '#eb3232';
+                ctx.beginPath();
+                ctx.arc(ax, ay, 4, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function setVideo36PreviewMode(mode) {
+            v36PreviewMode = mode || 'turntable';
+            document.querySelectorAll('#v36ViewTabs .v36-tab-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.getAttribute('data-view') === v36PreviewMode);
+            });
+            const canvas = document.getElementById('v36Canvas');
+            const spinCtrl = document.getElementById('v36SpinControls');
+            const staticImg = document.getElementById('v36StaticImg');
+            const item = video36ById[activeVideo36PlantId] || {};
+            const files = item.files || {};
+            const ts = Date.now();
+
+            if (v36PreviewMode === 'turntable') {
+                canvas.style.display = 'block';
+                spinCtrl.style.display = 'flex';
+                staticImg.style.display = 'none';
+                drawVideo36Frame();
+                startVideo36SpinTimer();
+                return;
+            }
+            stopVideo36SpinTimer();
+            canvas.style.display = 'none';
+            spinCtrl.style.display = 'none';
+            staticImg.style.display = 'block';
+
+            let targetUrl = '';
+            if (v36PreviewMode === 'iou') {
+                targetUrl = files['ref_4views_check.jpg'] || files['ref_000_vs_180_check.jpg'] || '';
+            } else if (v36PreviewMode === 'sheet') {
+                targetUrl = files['video_36_contact_sheet.jpg'] || '';
+            } else if (v36PreviewMode === 'raw') {
+                targetUrl = files['raw_preview_36.jpg'] || '';
+            }
+            if (targetUrl) {
+                staticImg.src = targetUrl + '?t=' + ts;
+            } else {
+                staticImg.removeAttribute('src');
+                staticImg.alt = '当前阶段尚未产出预览图';
+            }
+        }
+
+        function toggleVideo36AutoSpin() {
+            v36AutoSpin = !v36AutoSpin;
+            const btn = document.getElementById('v36SpinPlayBtn');
+            if (btn) btn.innerText = v36AutoSpin ? '⏸ 暂停' : '▶ 自动旋转';
+            if (v36AutoSpin) startVideo36SpinTimer();
+            else stopVideo36SpinTimer();
+        }
+        function onVideo36SliderChange(val) {
+            v36AutoSpin = false;
+            const btn = document.getElementById('v36SpinPlayBtn');
+            if (btn) btn.innerText = '▶ 自动旋转';
+            stopVideo36SpinTimer();
+            v36AngleDeg = parseInt(val, 10) || 0;
+            drawVideo36Frame();
+        }
+
+        function renderVideo36DialogContent(item) {
+            if (!item) return;
+            const titleEl = document.getElementById('video36DialogTitle');
+            const subEl = document.getElementById('v36Subtitle');
+            titleEl.innerText = `🔄 ${item.display_name || item.plant_id} (${item.plant_id}) · 360° 转盘工坊`;
+            subEl.innerText = `物种类型: ${item.plant_type || 'shrub'} | 阶段进度: Prep=${item.has_prep ? '✓' : '-'} · Video=${item.has_video ? '✓' : '-'} · Atlas=${item.has_atlas ? '✓' : '-'}`;
+
+            const prep = item.prep_meta || {};
+            const atlas = item.atlas_meta || {};
+            const pt = atlas.pivot_tracking || {};
+            v36CurrentMeta = atlas;
+
+            const modeSel = document.getElementById('v36ModeSelect');
+            if (prep.mode && (prep.mode === '2half' || prep.mode === '4quarter')) {
+                modeSel.value = prep.mode;
+            }
+
+            const iou = prep.mirror_silhouette_iou;
+            const iouText = iou !== undefined ? `${Number(iou).toFixed(4)} ${iou >= 0.78 ? '✓' : '⚠ <0.78'}` : '--';
+            const iouColor = iou === undefined ? '#c9d1d9' : (iou >= 0.78 ? '#7ee787' : '#f85149');
+            const spikeText = atlas.cut_spike_ratio !== undefined ? `${atlas.cut_spike_ratio}×` : '--';
+            const pivotErr = pt.rx_med_err_px !== undefined ? `${pt.rx_med_err_px} / ${pt.ry_med_err_px} px` : '--';
+            const anchorText = atlas.root_anchor_px ? `[${atlas.root_anchor_px[0]}, ${atlas.root_anchor_px[1]}]` : '--';
+            const webpKb = atlas.webp_bytes ? `${Math.round(atlas.webp_bytes / 1024)} KB` : '--';
+            const modeLabel = pt.modes ? Object.keys(pt.modes).map(k => `${k}:${pt.modes[k]}`).join(' ') : (prep.mode || '--');
+
+            document.getElementById('v36MetricsGrid').innerHTML = `
+                <div class="v36-metric-card"><div class="lbl">镜像轮廓 IoU</div><div class="val" style="color:${iouColor}">${iouText}</div></div>
+                <div class="v36-metric-card"><div class="lbl">最大跳变 Spike</div><div class="val">${spikeText}</div></div>
+                <div class="v36-metric-card"><div class="lbl">WebP 体积</div><div class="val">${webpKb}</div></div>
+                <div class="v36-metric-card"><div class="lbl">枢轴误差 (rx/ry)</div><div class="val">${pivotErr}</div></div>
+                <div class="v36-metric-card"><div class="lbl">单元格锚点 (px)</div><div class="val">${anchorText}</div></div>
+                <div class="v36-metric-card"><div class="lbl">定位模式</div><div class="val">${modeLabel}</div></div>
+            `;
+
+            const pubBtn = document.getElementById('v36PublishBtn');
+            pubBtn.disabled = !item.has_atlas;
+            if (!item.has_atlas) {
+                pubBtn.innerText = '📦 尚未生成 Atlas';
+                pubBtn.className = 'btn-reslice-secondary';
+            } else if (item.published) {
+                pubBtn.innerText = '✅ 已发布庭院 (点击下架)';
+                pubBtn.className = 'btn-toggle-disabled is-disabled-state';
+                pubBtn.style.padding = '6px 12px';
+                pubBtn.style.borderRadius = '6px';
+            } else {
+                pubBtn.innerText = '🌐 发布到花园 36F';
+                pubBtn.className = 'btn-reslice';
+            }
+
+            const atlasUrl = (item.files && item.files['atlas_36.webp']) || '';
+            if (atlasUrl) {
+                const img = new Image();
+                img.onload = () => {
+                    v36AtlasImage = img;
+                    drawVideo36Frame();
+                };
+                img.src = atlasUrl + '?t=' + Date.now();
+            } else {
+                v36AtlasImage = null;
+                drawVideo36Frame();
+            }
+
+            if (item.active_job) {
+                renderVideo36JobStatus(item.active_job);
+                if (item.active_job.status === 'running') {
+                    startVideo36JobPoll(item.active_job.job_id);
+                }
+            }
+            setVideo36PreviewMode(v36PreviewMode);
+        }
+
+        function renderVideo36JobStatus(job) {
+            const stEl = document.getElementById('v36JobStatusText');
+            const logEl = document.getElementById('v36LogBox');
+            if (stEl) {
+                const map = { running: '⏳ 运行中...', succeeded: '✅ 已完成', failed: '❌ 失败' };
+                stEl.innerText = `${map[job.status] || job.status} (${job.stages} / ${job.mode})`;
+                stEl.style.color = job.status === 'succeeded' ? '#7ee787' : (job.status === 'failed' ? '#f85149' : '#f2cc60');
+            }
+            if (logEl && Array.isArray(job.log_tail)) {
+                logEl.innerText = job.log_tail.join('\\n') || '(无日志输出)';
+                logEl.scrollTop = logEl.scrollHeight;
+            }
+        }
+
+        function startVideo36JobPoll(jobId) {
+            stopVideo36JobPoll();
+            v36CurrentJobId = jobId;
+            v36JobPollTimer = setInterval(() => {
+                fetch(`/api/video36/jobs/${encodeURIComponent(jobId)}`)
+                    .then(r => r.json())
+                    .then(job => {
+                        renderVideo36JobStatus(job);
+                        if (job.status !== 'running') {
+                            stopVideo36JobPoll();
+                            loadVideo36List();
+                        }
+                    })
+                    .catch(() => {});
+            }, 1500);
+        }
+
+        function openVideo36Workbench(plantId) {
+            activeVideo36PlantId = plantId;
+            v36AngleDeg = 0;
+            v36AutoSpin = true;
+            const btn = document.getElementById('v36SpinPlayBtn');
+            if (btn) btn.innerText = '⏸ 暂停';
+            const stEl = document.getElementById('v36JobStatusText');
+            if (stEl) {
+                stEl.innerText = '空闲';
+                stEl.style.color = '#c9d1d9';
+            }
+            document.getElementById('v36LogBox').innerText = '就绪，请选择阶段或一键生成...';
+
+            const assetFallback = allAssets.find(a => a.plant_name === plantId);
+            const item = video36ById[plantId] || {
+                plant_id: plantId,
+                display_name: (assetFallback && assetFallback.display_name) || plantId,
+                plant_type: (assetFallback && assetFallback.ai_analysis && assetFallback.ai_analysis.plant_type) || 'shrub',
+                has_prep: false,
+                has_video: false,
+                has_atlas: false,
+                published: false,
+                files: {},
+            };
+            renderVideo36DialogContent(item);
+            loadVideo36List();
+            if (v36DialogEl && !v36DialogEl.open) {
+                v36DialogEl.removeAttribute('data-closing');
+                v36DialogEl.showModal();
+            }
+            startVideo36SpinTimer();
+        }
+
+        function runVideo36Stage(stages) {
+            if (!activeVideo36PlantId) return;
+            const mode = document.getElementById('v36ModeSelect').value;
+            const keyMode = document.getElementById('v36KeyModeSelect').value;
+            const mirror270 = document.getElementById('v36Mirror270Chk').checked;
+            const force = document.getElementById('v36ForceChk').checked;
+
+            fetch('/api/video36/run', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    plant_id: activeVideo36PlantId,
+                    stages: stages,
+                    mode: mode,
+                    key_mode: keyMode,
+                    mirror_q0_for_270: mirror270,
+                    force: force,
+                }),
+            }).then(res => res.json().then(body => ({ ok: res.ok, body }))).then(({ ok, body }) => {
+                if (!ok) {
+                    alert('启动失败: ' + (body.error || '未知错误'));
+                    return;
+                }
+                renderVideo36JobStatus(body);
+                startVideo36JobPoll(body.job_id);
+            }).catch(err => alert('网络错误: ' + err));
+        }
+
+        function toggleVideo36Publish() {
+            if (!activeVideo36PlantId) return;
+            const item = video36ById[activeVideo36PlantId];
+            if (!item || !item.has_atlas) return;
+            const nextPublished = !item.published;
+            fetch('/api/video36/publish', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ plant_id: activeVideo36PlantId, published: nextPublished }),
+            }).then(res => res.json()).then(res => {
+                if (res.status === 'success') {
+                    loadVideo36List();
+                } else {
+                    alert('切换发布状态失败: ' + (res.error || ''));
+                }
+            }).catch(err => alert('网络错误: ' + err));
+        }
+
         loadData();
     </script>
 </body>
@@ -2112,14 +3174,24 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
     def log_message(self, format, *args):
         return
 
+    def _send_json(self, status_code: int, payload: dict):
+        body = json.dumps(payload, ensure_ascii=False).encode('utf-8')
+        self.send_response(status_code)
+        self.send_header('Content-type', 'application/json; charset=utf-8')
+        self.end_headers()
+        self.wfile.write(body)
+
     def do_GET(self):
-        if self.path == '/':
+        parsed_path = urllib.parse.urlparse(self.path).path
+        unquoted_path = urllib.parse.unquote(parsed_path)
+
+        if parsed_path == '/':
             self.send_response(200)
             self.send_header('Content-type', 'text/html; charset=utf-8')
             self.end_headers()
             self.wfile.write(HTML_CONTENT.encode('utf-8'))
             
-        elif self.path == '/api/candidates':
+        elif parsed_path == '/api/candidates':
             os.makedirs(CANDIDATES_DIR, exist_ok=True)
             files = [
                 f for f in os.listdir(CANDIDATES_DIR)
@@ -2132,7 +3204,7 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(json.dumps(files).encode('utf-8'))
 
-        elif self.path == '/api/trash':
+        elif parsed_path == '/api/trash':
             os.makedirs(TRASH_DIR, exist_ok=True)
             files = [f for f in os.listdir(TRASH_DIR) if f.lower().endswith(('.png', '.jpg', '.jpeg')) and not f.startswith('.')]
             self.send_response(200)
@@ -2140,13 +3212,47 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(json.dumps(files).encode('utf-8'))
             
-        elif self.path in ('/api/confirmed_candidates', '/api/confirmed_plants'):
+        elif parsed_path in ('/api/confirmed_candidates', '/api/confirmed_plants'):
             self.send_response(200)
             self.send_header('Content-type', 'application/json; charset=utf-8')
             self.end_headers()
             self.wfile.write(json.dumps(get_confirmed_candidates()).encode('utf-8'))
 
-        elif self.path == '/api/assets':
+        elif parsed_path == '/api/video36/list':
+            self._send_json(200, _collect_video36_list())
+
+        elif parsed_path == '/api/video36/jobs':
+            with VIDEO36_JOBS_LOCK:
+                jobs = [_serialize_video36_job(j) for j in VIDEO36_JOBS.values()]
+            jobs.sort(key=lambda j: j['started_at'], reverse=True)
+            self._send_json(200, {'jobs': jobs})
+
+        elif parsed_path.startswith('/api/video36/jobs/'):
+            job_id = unquoted_path[len('/api/video36/jobs/'):]
+            if not _is_safe_path_segment(job_id):
+                self._send_json(400, {'status': 'error', 'error': 'Invalid job_id'})
+                return
+            with VIDEO36_JOBS_LOCK:
+                job = VIDEO36_JOBS.get(job_id)
+                serialized = _serialize_video36_job(job) if job is not None else None
+            if serialized is None:
+                self._send_json(404, {'status': 'error', 'error': 'Job not found'})
+            else:
+                self._send_json(200, serialized)
+
+        elif unquoted_path.startswith('/api/video36/file/'):
+            rel = unquoted_path[len('/api/video36/file/'):]
+            parts = rel.split('/')
+            if len(parts) != 2 or not _is_safe_path_segment(parts[0]) or not _is_safe_path_segment(parts[1]) or parts[1] not in VIDEO36_FILE_ALLOWLIST:
+                self._send_json(400, {'status': 'error', 'error': 'Invalid video36 file path'})
+                return
+            file_path = _resolve_video36_file_path(parts[0], parts[1])
+            if file_path is None:
+                self._send_json(404, {'status': 'error', 'error': 'File not found'})
+                return
+            self._serve_file(file_path)
+
+        elif parsed_path == '/api/assets':
             os.makedirs(PLANTS_DIR, exist_ok=True)
             variants = []
             for plant_name in os.listdir(PLANTS_DIR):
@@ -2180,18 +3286,18 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(json.dumps(variants).encode('utf-8'))
             
-        elif self.path.startswith('/tools/candidates/'):
-            filename = self.path.split('/')[-1]
+        elif parsed_path.startswith('/tools/candidates/'):
+            filename = parsed_path.split('/')[-1]
             file_path = os.path.join(CANDIDATES_DIR, filename)
             self._serve_file(file_path)
 
-        elif self.path.startswith('/tools/trash/'):
-            filename = self.path.split('/')[-1]
+        elif parsed_path.startswith('/tools/trash/'):
+            filename = parsed_path.split('/')[-1]
             file_path = os.path.join(TRASH_DIR, filename)
             self._serve_file(file_path)
             
-        elif self.path.startswith('/assets/'):
-            file_path = os.path.join(PROJECT_ROOT, 'src', self.path.lstrip('/'))
+        elif parsed_path.startswith('/assets/'):
+            file_path = os.path.join(PROJECT_ROOT, 'src', parsed_path.lstrip('/'))
             self._serve_file(file_path)
                 
         else:
@@ -2206,10 +3312,17 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
 
         if os.path.exists(file_path) and os.path.isfile(file_path):
             self.send_response(200)
-            if file_path.lower().endswith('.png'):
+            low = file_path.lower()
+            if low.endswith('.png'):
                 self.send_header('Content-type', 'image/png')
-            elif file_path.lower().endswith(('.jpg', '.jpeg')):
+            elif low.endswith(('.jpg', '.jpeg')):
                 self.send_header('Content-type', 'image/jpeg')
+            elif low.endswith('.webp'):
+                self.send_header('Content-type', 'image/webp')
+            elif low.endswith('.mp4'):
+                self.send_header('Content-type', 'video/mp4')
+            elif low.endswith('.json'):
+                self.send_header('Content-type', 'application/json; charset=utf-8')
             self.end_headers()
             with open(file_path, 'rb') as f:
                 try:
@@ -2221,7 +3334,55 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
             self.end_headers()
             
     def do_POST(self):
-        if self.path == '/api/delete_candidate':
+        parsed_path = urllib.parse.urlparse(self.path).path
+
+        if parsed_path == '/api/video36/run':
+            content_length = int(self.headers.get('Content-Length', 0))
+            post_data = self.rfile.read(content_length)
+            try:
+                data = json.loads(post_data.decode('utf-8'))
+                if not isinstance(data, dict):
+                    raise ValueError('Invalid JSON object')
+                job = _start_video36_job(
+                    plant_id=str(data.get('plant_id', '')),
+                    stages=str(data.get('stages', 'all')),
+                    mode=str(data.get('mode', '2half')),
+                    key_mode=str(data.get('key_mode', 'auto')),
+                    force=bool(data.get('force', False)),
+                    mirror_q0_for_270=bool(data.get('mirror_q0_for_270', False)),
+                )
+                self._send_json(202, {'status': 'accepted', **job})
+            except ValueError as ve:
+                self._send_json(400, {'status': 'error', 'error': str(ve)})
+            except RuntimeError as re_err:
+                self._send_json(409, {'status': 'error', 'error': str(re_err)})
+            except Exception as e:
+                traceback.print_exc()
+                self._send_json(500, {'status': 'error', 'error': str(e)})
+            return
+
+        if parsed_path == '/api/video36/publish':
+            content_length = int(self.headers.get('Content-Length', 0))
+            post_data = self.rfile.read(content_length)
+            try:
+                data = json.loads(post_data.decode('utf-8'))
+                if not isinstance(data, dict) or 'published' not in data:
+                    raise ValueError('Invalid publish payload')
+                res = _publish_video36_asset(
+                    plant_id=str(data.get('plant_id', '')),
+                    published=bool(data.get('published')),
+                )
+                self._send_json(200, res)
+            except ValueError as ve:
+                self._send_json(400, {'status': 'error', 'error': str(ve)})
+            except FileNotFoundError as fnf:
+                self._send_json(404, {'status': 'error', 'error': str(fnf)})
+            except Exception as e:
+                traceback.print_exc()
+                self._send_json(500, {'status': 'error', 'error': str(e)})
+            return
+
+        if parsed_path == '/api/delete_candidate':
             content_length = int(self.headers['Content-Length'])
             post_data = self.rfile.read(content_length)
             
@@ -2682,10 +3843,14 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
                 self.end_headers()
                 self.wfile.write(json.dumps({"status": "error", "error": str(e)}).encode('utf-8'))
 
+class ThreadingStudioServer(socketserver.ThreadingTCPServer):
+    allow_reuse_address = True
+    daemon_threads = True
+
+
 if __name__ == "__main__":
     handler = RequestHandler
-    socketserver.TCPServer.allow_reuse_address = True
-    with socketserver.TCPServer(("", PORT), handler) as httpd:
+    with ThreadingStudioServer(("", PORT), handler) as httpd:
         print(f"\\n🌱 Botanist Studio V2 (造物审查终端) 已启动！")
         print(f"🌐 请在浏览器中打开: http://localhost:{PORT}")
         print(f"⚠️ 按 Ctrl+C 停止服务\\n")

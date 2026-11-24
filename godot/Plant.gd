@@ -46,6 +46,15 @@ var sub_sector_norm: float = 0.0
 var caption_prefix: String = ""
 var caption_label: Label = null
 
+var plant_uid: String = ""
+var golden_sentence: String = ""
+var custom_tint_color: Color = Color.WHITE
+var is_selected: bool = false:
+	set(value):
+		if is_selected != value:
+			is_selected = value
+			queue_redraw()
+
 var _prev_red: Sprite2D = null
 var _prev_green: Sprite2D = null
 var _prev_blue: Sprite2D = null
@@ -143,11 +152,14 @@ func _ensure_ghost_sprites():
 		move_child(_prev_blue, target_idx + 2)
 
 func _draw():
-	if not show_footprint_ring:
-		return
-	draw_set_transform(Vector2.ZERO, 0.0, Vector2(1.0, ground_pitch_ratio))
-	draw_arc(Vector2.ZERO, fp_w * 0.5, 0.0, TAU, 36, Color(0.55, 0.92, 0.65, 0.52), 1.5, true)
-	draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+	if show_footprint_ring:
+		draw_set_transform(Vector2.ZERO, 0.0, Vector2(1.0, ground_pitch_ratio))
+		draw_arc(Vector2.ZERO, fp_w * 0.5, 0.0, TAU, 36, Color(0.55, 0.92, 0.65, 0.52), 1.5, true)
+		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
+	if is_selected:
+		draw_set_transform(Vector2.ZERO, 0.0, Vector2(1.0, ground_pitch_ratio))
+		draw_arc(Vector2.ZERO, fp_w * 0.5 + 3.0, 0.0, TAU, 40, Color(0.98, 0.86, 0.45, 0.92), 2.2, true)
+		draw_set_transform(Vector2.ZERO, 0.0, Vector2.ONE)
 
 func set_perspective_scale(p_scale: float):
 	perspective_scale = clampf(p_scale, 0.35, 2.5)
@@ -171,6 +183,20 @@ func set_xray_alpha(alpha_val: float):
 	for spr in [sprite_red, sprite_green, sprite_blue, _prev_red, _prev_green, _prev_blue]:
 		if spr and spr.material:
 			(spr.material as ShaderMaterial).set_shader_parameter("xray_alpha", current_xray_alpha)
+
+func set_custom_tint(col: Color):
+	custom_tint_color = col
+	if is_video_atlas and sprite_green and sprite_green.material:
+		(sprite_green.material as ShaderMaterial).set_shader_parameter("tint_color", col)
+
+func hit_test_screen(screen_pos: Vector2) -> bool:
+	var hw: float = max(visual_width * 0.42, fp_w * 0.65)
+	var top_reach: float = max(visual_height * 1.02, 24.0)
+	var bot_reach: float = max(14.0, fp_h * 0.75)
+	if abs(screen_pos.x - global_position.x) > hw:
+		return false
+	var dy: float = screen_pos.y - global_position.y
+	return dy >= -top_reach and dy <= bot_reach
 
 func set_lab_caption(text_str: String):
 	if caption_label == null:
@@ -510,7 +536,7 @@ func setup_video_atlas_turntable(id: String, atlas_tex: Texture2D, hframes: int,
 			var gmat = sprite_green.material as ShaderMaterial
 			gmat.set_shader_parameter("root_uv_y", root_uv_y)
 			gmat.set_shader_parameter("crossfade_alpha", 1.0)
-			gmat.set_shader_parameter("tint_color", Color.WHITE)
+			gmat.set_shader_parameter("tint_color", custom_tint_color)
 			gmat.set_shader_parameter("uv_y_range", init_uv_range)
 
 	set_xray_alpha(current_xray_alpha)

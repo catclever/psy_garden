@@ -13,6 +13,7 @@
             overflow: hidden;
             background-color: #000;
             font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+            color: #fdf6e7;
         }
         iframe {
             width: 100%;
@@ -31,6 +32,14 @@
             gap: 10px;
             pointer-events: none;
         }
+        .overlay-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+            pointer-events: auto;
+        }
         .btn-back-dom {
             pointer-events: auto;
             display: inline-flex;
@@ -44,6 +53,8 @@
             font-size: 13px;
             font-weight: 500;
             text-decoration: none;
+            cursor: pointer;
+            font-family: inherit;
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
@@ -54,6 +65,15 @@
             border-color: rgba(255, 218, 130, 0.85);
             box-shadow: 0 0 16px rgba(255, 210, 120, 0.35);
             transform: translateY(-1px);
+        }
+        .btn-catalog-trigger {
+            border-color: rgba(154, 232, 178, 0.45);
+            background: rgba(22, 34, 24, 0.78);
+        }
+        .btn-catalog-trigger:hover {
+            background: rgba(34, 58, 38, 0.92);
+            border-color: rgba(154, 232, 178, 0.88);
+            box-shadow: 0 0 16px rgba(130, 224, 160, 0.28);
         }
         .legend-pill {
             pointer-events: none;
@@ -68,19 +88,810 @@
             -webkit-backdrop-filter: blur(8px);
             box-shadow: 0 2px 12px rgba(0, 0, 0, 0.28);
         }
+
+        /* Hand-planting status banner */
+        .planting-banner {
+            position: fixed;
+            top: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 25;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: rgba(24, 38, 26, 0.88);
+            border: 1px solid rgba(136, 230, 162, 0.6);
+            color: #eef8ef;
+            font-size: 13px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.45);
+        }
+        .planting-banner[hidden] {
+            display: none;
+        }
+        .btn-exit-planting {
+            background: rgba(255, 255, 255, 0.14);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.28);
+            border-radius: 999px;
+            padding: 3px 10px;
+            font-size: 12px;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        .btn-exit-planting:hover {
+            background: rgba(255, 110, 96, 0.35);
+            border-color: rgba(255, 140, 130, 0.75);
+        }
+
+        /* Popover polyfill hidden guard */
+        @supports not selector(:popover-open) {
+            [popover]:not(.\:popover-open) {
+                display: none;
+            }
+        }
+
+        /* Top-layer non-modal dialogs with discrete entry & exit transitions */
+        dialog.zen-panel {
+            margin: 0;
+            color: #fdf6e7;
+            background: rgba(22, 18, 14, 0.86);
+            border: 1px solid rgba(255, 232, 186, 0.28);
+            border-radius: 16px;
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            box-shadow: 0 18px 48px rgba(0, 0, 0, 0.62);
+            overscroll-behavior: contain;
+            opacity: 0;
+            transition-property: opacity, transform, display, overlay;
+            transition-duration: 0.24s;
+            transition-timing-function: ease-out;
+            transition-behavior: allow-discrete;
+        }
+        @media (prefers-reduced-motion: reduce) {
+            dialog.zen-panel {
+                transition-duration: 0.08s;
+            }
+        }
+        :is(dialog.zen-panel:popover-open, dialog.zen-panel.\:popover-open):where(:not([data-closing])) {
+            display: flex;
+            opacity: 1;
+            @starting-style {
+                opacity: 0;
+            }
+        }
+
+        /* Catalog & Hand-planting non-modal drawer (right side) */
+        #catalogDrawer {
+            position: fixed;
+            top: 96px;
+            right: 18px;
+            left: auto;
+            bottom: 18px;
+            width: min(390px, calc(100vw - 36px));
+            max-height: calc(100dvh - 114px);
+            flex-direction: column;
+            padding: 16px;
+            gap: 12px;
+            overflow: hidden;
+        }
+        @media (prefers-reduced-motion: no-preference) {
+            #catalogDrawer {
+                transform: translateX(16px);
+            }
+            :is(#catalogDrawer:popover-open, #catalogDrawer.\:popover-open):where(:not([data-closing])) {
+                transform: translateX(0);
+                @starting-style {
+                    transform: translateX(16px);
+                }
+            }
+        }
+        .panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            border-bottom: 1px solid rgba(255, 232, 186, 0.16);
+            padding-bottom: 10px;
+        }
+        .panel-title {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 600;
+            color: #fdf6e7;
+        }
+        .panel-close {
+            width: 28px;
+            height: 28px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 232, 186, 0.22);
+            background: rgba(255, 255, 255, 0.06);
+            color: #fdf6e7;
+            font-size: 14px;
+            line-height: 1;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .panel-close:hover {
+            background: rgba(255, 255, 255, 0.16);
+        }
+        .catalog-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .catalog-search-row {
+            display: flex;
+            gap: 6px;
+        }
+        .catalog-search {
+            flex: 1;
+            min-width: 0;
+            padding: 7px 11px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 232, 186, 0.22);
+            background: rgba(10, 9, 8, 0.65);
+            color: #fdf6e7;
+            font-size: 13px;
+            font-family: inherit;
+        }
+        .catalog-action-btn {
+            padding: 6px 10px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 232, 186, 0.22);
+            background: rgba(45, 36, 26, 0.78);
+            color: #fdf6e7;
+            font-size: 12px;
+            cursor: pointer;
+            font-family: inherit;
+            white-space: nowrap;
+        }
+        .catalog-action-btn:hover {
+            border-color: rgba(255, 218, 130, 0.68);
+        }
+        .filter-pills {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .filter-pill {
+            padding: 4px 10px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 232, 186, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+            color: rgba(253, 246, 231, 0.8);
+            font-size: 11px;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        .filter-pill.is-active {
+            background: rgba(132, 224, 160, 0.2);
+            border-color: rgba(132, 224, 160, 0.72);
+            color: #d9ffe4;
+            font-weight: 600;
+        }
+        .catalog-grid {
+            flex: 1;
+            min-height: 0;
+            overflow-y: auto;
+            overscroll-behavior: contain;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(106px, 1fr));
+            gap: 8px;
+            padding-right: 4px;
+            align-content: start;
+        }
+        .species-card {
+            position: relative;
+            background: rgba(14, 12, 10, 0.72);
+            border: 1px solid rgba(255, 232, 186, 0.16);
+            border-radius: 10px;
+            padding: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            text-align: center;
+            color: #fdf6e7;
+            font-family: inherit;
+            transition: border-color 0.18s ease, transform 0.15s ease, background 0.18s ease;
+        }
+        .species-card:hover {
+            border-color: rgba(154, 232, 178, 0.75);
+            background: rgba(28, 36, 26, 0.85);
+            transform: translateY(-1px);
+        }
+        .species-card.is-planting {
+            border-color: rgba(255, 214, 122, 0.92);
+            box-shadow: 0 0 0 1px rgba(255, 214, 122, 0.45);
+            background: rgba(54, 42, 22, 0.86);
+        }
+        .species-thumb {
+            width: 72px;
+            height: 72px;
+            border-radius: 8px;
+            background: radial-gradient(circle, rgba(255, 246, 220, 0.08), rgba(0, 0, 0, 0.35));
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .species-thumb img {
+            max-width: 92%;
+            max-height: 92%;
+            object-fit: contain;
+        }
+        .species-thumb-atlas {
+            width: 66px;
+            height: 66px;
+            background-repeat: no-repeat;
+            background-size: 600% 600%;
+            background-position: 0% 0%;
+        }
+        .badge-360 {
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            padding: 1px 5px;
+            border-radius: 999px;
+            font-size: 9px;
+            font-weight: 700;
+            background: rgba(236, 186, 74, 0.92);
+            color: #1c1406;
+        }
+        .species-zh {
+            font-size: 12px;
+            font-weight: 600;
+            line-height: 1.2;
+        }
+        .species-sci {
+            font-size: 10px;
+            color: rgba(253, 246, 231, 0.62);
+            font-style: italic;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
+        }
+
+        /* Non-modal Plant Inspector Card (bottom-right) */
+        #plantInspector {
+            position: fixed;
+            bottom: 18px;
+            right: 18px;
+            top: auto;
+            left: auto;
+            width: min(340px, calc(100vw - 36px));
+            flex-direction: column;
+            padding: 14px 16px;
+            gap: 10px;
+        }
+        @media (prefers-reduced-motion: no-preference) {
+            #plantInspector {
+                transform: translateY(10px);
+            }
+            :is(#plantInspector:popover-open, #plantInspector.\:popover-open):where(:not([data-closing])) {
+                transform: translateY(0);
+                @starting-style {
+                    transform: translateY(10px);
+                }
+            }
+        }
+        .inspector-meta-tags {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .inspector-pill {
+            padding: 2px 8px;
+            border-radius: 999px;
+            font-size: 11px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 232, 186, 0.2);
+            color: rgba(253, 246, 231, 0.9);
+        }
+        .inspector-pill.is-360 {
+            background: rgba(236, 186, 74, 0.18);
+            border-color: rgba(236, 186, 74, 0.68);
+            color: #ffe299;
+        }
+        .inspector-metrics {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+            margin: 0;
+        }
+        .inspector-metric {
+            background: rgba(10, 9, 8, 0.56);
+            border: 1px solid rgba(255, 232, 186, 0.12);
+            border-radius: 8px;
+            padding: 6px 8px;
+        }
+        .inspector-metric dt {
+            font-size: 10px;
+            color: rgba(253, 246, 231, 0.62);
+        }
+        .inspector-metric dd {
+            margin: 2px 0 0 0;
+            font-size: 12px;
+            font-weight: 600;
+            color: #e6f4e4;
+        }
+        .inspector-brief {
+            margin: 0;
+            font-size: 12px;
+            line-height: 1.5;
+            color: rgba(253, 246, 231, 0.85);
+        }
+        .inspector-golden {
+            margin: 0;
+            padding: 8px 10px;
+            border-left: 2px solid rgba(255, 218, 130, 0.85);
+            background: rgba(255, 218, 130, 0.08);
+            border-radius: 0 8px 8px 0;
+            font-size: 12px;
+            line-height: 1.5;
+            color: #ffeec7;
+        }
+        .inspector-golden[hidden] {
+            display: none;
+        }
     </style>
 </head>
 <body>
     <div class="floating-overlay">
-        <a id="btn-back-dom" href="index.html" class="btn-back-dom">🌿 返回 DOM 图鉴手植版 · 383种</a>
+        <div class="overlay-actions">
+            <button type="button" id="btn-open-catalog" class="btn-back-dom btn-catalog-trigger" aria-controls="catalogDrawer" aria-expanded="false">🌱 植物图鉴与手植</button>
+            <a id="btn-back-dom" href="index.html" class="btn-back-dom">🌿 返回 DOM 图鉴手植版 · 383种</a>
+        </div>
         <div class="legend-pill">🏮 Godot 2.5D 动态光影舱 · 移动鼠标体验手电筒单向量柔影与树冠遮挡</div>
     </div>
-    <iframe id="godot-frame" src="godot_web/index.html?v=046" title="Godot 4 2.5D Zen Lighting Engine"></iframe>
+
+    <div id="plantingBanner" class="planting-banner" role="status" aria-live="polite" hidden>
+        <span id="plantingBannerText">🌱 手植模式：点击庭院空地落子</span>
+        <button type="button" id="btn-exit-planting" class="btn-exit-planting">退出手植 (Esc)</button>
+    </div>
+
+    <!-- Non-modal Catalog & Hand-Planting Drawer -->
+    <dialog id="catalogDrawer" class="zen-panel" popover="manual" aria-labelledby="catalogTitle">
+        <div class="panel-header">
+            <div>
+                <h2 id="catalogTitle" class="panel-title">🌿 植物图鉴与手植 <span id="catalogCountText" style="font-size:12px;color:rgba(253,246,231,0.62);font-weight:normal;"></span></h2>
+            </div>
+            <button type="button" id="btn-close-catalog" class="panel-close" aria-label="关闭植物图鉴">&times;</button>
+        </div>
+        <div class="catalog-controls">
+            <div class="catalog-search-row">
+                <input id="catalogSearch" type="search" class="catalog-search" placeholder="搜索中文名 / 学名..." autocomplete="off" aria-label="搜索植物" />
+                <button type="button" id="btn-catalog-random" class="catalog-action-btn" title="重新生成 36 株混编庭院">🎲 随机</button>
+                <button type="button" id="btn-catalog-clear" class="catalog-action-btn" title="清空庭院所有植物">🧹 清空</button>
+            </div>
+            <div id="catalogFilters" class="filter-pills" role="group" aria-label="植物筛选">
+                <button type="button" class="filter-pill is-active" data-filter="video36">✨ 360° 36F</button>
+                <button type="button" class="filter-pill" data-filter="all">全部</button>
+                <button type="button" class="filter-pill" data-filter="tree">🌳 乔木</button>
+                <button type="button" class="filter-pill" data-filter="shrub">🌿 灌木</button>
+                <button type="button" class="filter-pill" data-filter="flower">🌸 花卉</button>
+                <button type="button" class="filter-pill" data-filter="groundcover">🌱 地被</button>
+            </div>
+        </div>
+        <div id="catalogGrid" class="catalog-grid"></div>
+    </dialog>
+
+    <!-- Non-modal Plant Inspector Card -->
+    <dialog id="plantInspector" class="zen-panel" popover="manual" aria-labelledby="inspectorTitle">
+        <div class="panel-header">
+            <div>
+                <h2 id="inspectorTitle" class="panel-title">🌱 植物详情</h2>
+                <div id="inspectorSci" style="font-size:11px;color:rgba(253,246,231,0.68);font-style:italic;margin-top:2px;"></div>
+            </div>
+            <button type="button" id="btn-close-inspector" class="panel-close" aria-label="关闭植物详情">&times;</button>
+        </div>
+        <div id="inspectorTags" class="inspector-meta-tags"></div>
+        <dl class="inspector-metrics">
+            <div class="inspector-metric">
+                <dt>自然株高</dt>
+                <dd id="inspectorBotH">--</dd>
+            </div>
+            <div class="inspector-metric">
+                <dt>庭院株高</dt>
+                <dd id="inspectorGameH">--</dd>
+            </div>
+            <div class="inspector-metric">
+                <dt>占地椭圆</dt>
+                <dd id="inspectorFootprint">--</dd>
+            </div>
+        </dl>
+        <p id="inspectorBrief" class="inspector-brief"></p>
+        <blockquote id="inspectorGolden" class="inspector-golden" hidden></blockquote>
+    </dialog>
+
+    <iframe id="godot-frame" src="godot_web/index.html?v=047" title="Godot 4 2.5D Zen Lighting Engine"></iframe>
     <script>
         (function () {
             var q = new URLSearchParams(window.location.search);
-            q.set("v", "046");
-            document.getElementById("godot-frame").src = "godot_web/index.html?" + q.toString();
+            q.set("v", "047");
+            var frame = document.getElementById("godot-frame");
+            frame.src = "godot_web/index.html?" + q.toString();
+
+            var catalogDrawer = document.getElementById("catalogDrawer");
+            var plantInspector = document.getElementById("plantInspector");
+
+            // Conditional popover polyfill load when native Popover API is missing
+            if (!Object.hasOwn(HTMLElement.prototype, "popover")) {
+                import("https://unpkg.com/@oddbird/popover-polyfill@latest/dist/popover.min.js").catch(function () {});
+            }
+
+            var supportsDisplayTransition;
+            function canTransitionDisplay() {
+                if (supportsDisplayTransition !== undefined) return supportsDisplayTransition;
+                if (!window.CSS || !window.CSS.supports || !window.CSS.supports("transition-behavior", "allow-discrete") || !document.body) {
+                    return false;
+                }
+                var probe = document.createElement("div");
+                probe.style.cssText = "transition: display 1s allow-discrete !important; display: block;";
+                document.body.appendChild(probe);
+                getComputedStyle(probe).display;
+                probe.style.display = "none";
+                supportsDisplayTransition = getComputedStyle(probe).display === "block";
+                probe.remove();
+                return supportsDisplayTransition;
+            }
+            function supportsTopLayerExit() {
+                return Boolean(window.CSS && window.CSS.supports && window.CSS.supports("overlay", "auto") && canTransitionDisplay());
+            }
+            function openPanel(el) {
+                el.removeAttribute("data-closing");
+                try {
+                    if (typeof el.showPopover === "function") el.showPopover();
+                    else el.classList.add(":popover-open");
+                } catch (e) {}
+            }
+            async function closeTopLayerPopover(el) {
+                var isOpen = (el.matches && el.matches(":popover-open")) || el.classList.contains(":popover-open");
+                if (!isOpen) return;
+                if (!supportsTopLayerExit()) {
+                    el.setAttribute("data-closing", "");
+                    var animations = el.getAnimations ? el.getAnimations({ subtree: true }) : [];
+                    if (animations.length > 0) {
+                        await Promise.race([
+                            Promise.allSettled(animations.map(function (a) { return a.finished; })),
+                            new Promise(function (r) { setTimeout(r, 350); }),
+                        ]);
+                    }
+                    if (!el.hasAttribute("data-closing")) return;
+                    el.removeAttribute("data-closing");
+                }
+                try {
+                    if (typeof el.hidePopover === "function") el.hidePopover();
+                    else el.classList.remove(":popover-open");
+                } catch (e) {}
+            }
+
+            // Bidirectional Bridge for UI + External Route 2 Game Loop
+            var godotReady = false;
+            var pendingCommands = [];
+            var listeners = new Map();
+            var pendingStateResolvers = [];
+
+            function dispatchBridgeCommand(type, payload) {
+                var msg = JSON.stringify({ type: type, payload: payload || {} });
+                try {
+                    var cw = frame.contentWindow;
+                    if (godotReady && cw && typeof cw.__psyGardenGodotCommand === "function") {
+                        cw.__psyGardenGodotCommand(msg);
+                        return true;
+                    }
+                } catch (err) {}
+                pendingCommands.push(msg);
+                return false;
+            }
+
+            function flushPendingCommands() {
+                if (!godotReady) return;
+                try {
+                    var cw = frame.contentWindow;
+                    if (!cw || typeof cw.__psyGardenGodotCommand !== "function") return;
+                    while (pendingCommands.length > 0) {
+                        cw.__psyGardenGodotCommand(pendingCommands.shift());
+                    }
+                } catch (err) {}
+            }
+
+            function emitToSubscribers(type, payload, rawMsg) {
+                var set = listeners.get(type);
+                if (set) {
+                    set.forEach(function (fn) {
+                        try { fn(payload, rawMsg); } catch (e) {}
+                    });
+                }
+                var wildcard = listeners.get("*");
+                if (wildcard) {
+                    wildcard.forEach(function (fn) {
+                        try { fn(rawMsg); } catch (e) {}
+                    });
+                }
+                window.dispatchEvent(new CustomEvent("psygarden:event", { detail: rawMsg }));
+            }
+
+            window.addEventListener("message", function (event) {
+                var data = event.data;
+                if (!data || data.source !== "psy_garden_godot") return;
+                if (data.type === "godot_ready") {
+                    godotReady = true;
+                    flushPendingCommands();
+                } else if (data.type === "state_snapshot") {
+                    while (pendingStateResolvers.length > 0) {
+                        var resolve = pendingStateResolvers.shift();
+                        resolve(data.payload);
+                    }
+                }
+                emitToSubscribers(data.type, data.payload || {}, data);
+            });
+
+            window.PsyGardenBridge = {
+                isReady: function () { return godotReady; },
+                send: function (type, payload) { return dispatchBridgeCommand(type, payload || {}); },
+                on: function (eventType, handler) {
+                    if (!listeners.has(eventType)) listeners.set(eventType, new Set());
+                    listeners.get(eventType).add(handler);
+                    return function () { listeners.get(eventType).delete(handler); };
+                },
+                spawnPlant: function (opts) { return dispatchBridgeCommand("spawn_plant", opts || {}); },
+                setPlantingMode: function (plantId) { return dispatchBridgeCommand("set_planting_mode", { plant_id: plantId || "" }); },
+                clearGarden: function () { return dispatchBridgeCommand("clear_garden", {}); },
+                randomGarden: function (count) { return dispatchBridgeCommand("random_garden", { count: count || 36 }); },
+                setOrbit: function (angleDeg, snap) { return dispatchBridgeCommand("set_orbit", { angle_deg: angleDeg || 0, snap: snap !== false }); },
+                setWeather: function (preset) { return dispatchBridgeCommand("set_weather", { preset: preset || "day" }); },
+                getState: function () {
+                    return new Promise(function (resolve) {
+                        pendingStateResolvers.push(resolve);
+                        dispatchBridgeCommand("get_state", {});
+                    });
+                },
+            };
+
+            // Catalog state
+            var manifestById = new Map();
+            var catalogSpecies = [];
+            var video36Map = new Map();
+            var activeFilter = "video36";
+            var searchText = "";
+            var activePlantingId = "";
+            var catalogLoaded = false;
+
+            var TYPE_LABELS = { tree: "🌳 乔木", shrub: "🌿 灌木", flower: "🌸 花卉", groundcover: "🌱 地被" };
+            var HABIT_LABELS = { canopy: "伞冠型", bush: "丛生型", slender: "直立修长", carpet: "铺地蔓延" };
+
+            async function ensureCatalogData() {
+                if (catalogLoaded) return;
+                try {
+                    var results = await Promise.all([
+                        fetch("assets/plants/manifest.json").then(function (r) { return r.json(); }),
+                        fetch("assets/turntable_lab/video36_index.json?v=047").then(function (r) { return r.ok ? r.json() : { species: [] }; }).catch(function () { return { species: [] }; }),
+                    ]);
+                    var man = results[0];
+                    var v36 = results[1];
+                    video36Map.clear();
+                    (v36.species || []).forEach(function (sp) {
+                        if (sp && sp.plant_id) video36Map.set(sp.plant_id, sp);
+                    });
+                    catalogSpecies = [];
+                    manifestById.clear();
+                    (man.plants || []).forEach(function (rec) {
+                        if (!rec || rec.enabled === false || rec.true_color === false) return;
+                        manifestById.set(rec.name, rec);
+                        catalogSpecies.push(rec);
+                    });
+                    catalogSpecies.sort(function (a, b) {
+                        var av = video36Map.has(a.name) ? 1 : 0;
+                        var bv = video36Map.has(b.name) ? 1 : 0;
+                        if (av !== bv) return bv - av;
+                        return String(a.display_name || a.name).localeCompare(String(b.display_name || b.name), "zh-CN");
+                    });
+                    catalogLoaded = true;
+                    renderCatalogGrid();
+                } catch (err) {
+                    console.error("Failed to load plant catalog", err);
+                }
+            }
+
+            function pickThumbUrl(rec) {
+                var v36 = video36Map.get(rec.name);
+                if (v36) {
+                    return { isAtlas: true, src: (v36.path_prefix + "/" + (v36.atlas_file || "atlas_36.webp") + "?v=047") };
+                }
+                var layers = rec.layer_files || [];
+                var green = layers.find(function (l) { return l.slot === "green"; }) || layers[0];
+                if (green) {
+                    return { isAtlas: false, src: (rec.path_prefix + "/" + green.file) };
+                }
+                return { isAtlas: false, src: "" };
+            }
+
+            function renderCatalogGrid() {
+                var grid = document.getElementById("catalogGrid");
+                var qLower = searchText.trim().toLowerCase();
+                var items = catalogSpecies.filter(function (rec) {
+                    var ai = rec.ai_analysis || {};
+                    var ptype = ai.plant_type || "shrub";
+                    if (activeFilter === "video36" && !video36Map.has(rec.name)) return false;
+                    if (activeFilter !== "all" && activeFilter !== "video36" && ptype !== activeFilter) return false;
+                    if (qLower) {
+                        var hay = (rec.name + " " + (rec.display_name || "") + " " + (ai.scientific_name || "")).toLowerCase();
+                        if (hay.indexOf(qLower) === -1) return false;
+                    }
+                    return true;
+                });
+
+                document.getElementById("catalogCountText").textContent = "(" + items.length + " / " + catalogSpecies.length + " 种，360° " + video36Map.size + " 种)";
+                grid.innerHTML = "";
+                if (items.length === 0) {
+                    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:rgba(253,246,231,0.55);padding:24px;font-size:13px;">没有匹配的植物</div>';
+                    return;
+                }
+
+                items.forEach(function (rec) {
+                    var ai = rec.ai_analysis || {};
+                    var v36 = video36Map.get(rec.name);
+                    var btn = document.createElement("button");
+                    btn.type = "button";
+                    btn.className = "species-card" + (activePlantingId === rec.name ? " is-planting" : "");
+                    var thumb = pickThumbUrl(rec);
+                    var thumbHtml = thumb.isAtlas
+                        ? '<div class="species-thumb-atlas" style="background-image:url(\'' + thumb.src + '\')"></div>'
+                        : '<img loading="lazy" src="' + thumb.src + '" alt="" />';
+                    var badgeHtml = v36 ? '<span class="badge-360">360°</span>' : "";
+                    btn.innerHTML =
+                        badgeHtml +
+                        '<div class="species-thumb">' + thumbHtml + "</div>" +
+                        '<div class="species-zh">' + (rec.display_name || rec.name) + "</div>" +
+                        '<div class="species-sci">' + (ai.scientific_name || rec.name) + "</div>";
+                    btn.addEventListener("click", function () {
+                        if (activePlantingId === rec.name) {
+                            window.PsyGardenBridge.setPlantingMode("");
+                        } else {
+                            window.PsyGardenBridge.setPlantingMode(rec.name);
+                        }
+                    });
+                    grid.appendChild(btn);
+                });
+            }
+
+            // UI handlers
+            var btnOpenCatalog = document.getElementById("btn-open-catalog");
+            var btnCloseCatalog = document.getElementById("btn-close-catalog");
+            var btnCloseInspector = document.getElementById("btn-close-inspector");
+            var plantingBanner = document.getElementById("plantingBanner");
+            var plantingBannerText = document.getElementById("plantingBannerText");
+
+            btnOpenCatalog.addEventListener("click", function () {
+                var isOpen = (catalogDrawer.matches && catalogDrawer.matches(":popover-open")) || catalogDrawer.classList.contains(":popover-open");
+                if (isOpen) {
+                    closeTopLayerPopover(catalogDrawer);
+                    btnOpenCatalog.setAttribute("aria-expanded", "false");
+                } else {
+                    ensureCatalogData();
+                    openPanel(catalogDrawer);
+                    btnOpenCatalog.setAttribute("aria-expanded", "true");
+                }
+            });
+            btnCloseCatalog.addEventListener("click", function () {
+                closeTopLayerPopover(catalogDrawer);
+                btnOpenCatalog.setAttribute("aria-expanded", "false");
+            });
+            btnCloseInspector.addEventListener("click", function () {
+                closeTopLayerPopover(plantInspector);
+            });
+            document.getElementById("btn-exit-planting").addEventListener("click", function () {
+                window.PsyGardenBridge.setPlantingMode("");
+            });
+            document.getElementById("btn-catalog-random").addEventListener("click", function () {
+                window.PsyGardenBridge.randomGarden(36);
+            });
+            document.getElementById("btn-catalog-clear").addEventListener("click", function () {
+                window.PsyGardenBridge.clearGarden();
+                closeTopLayerPopover(plantInspector);
+            });
+            document.getElementById("catalogSearch").addEventListener("input", function (e) {
+                searchText = e.target.value || "";
+                renderCatalogGrid();
+            });
+            document.getElementById("catalogFilters").addEventListener("click", function (e) {
+                var pill = e.target.closest(".filter-pill");
+                if (!pill) return;
+                activeFilter = pill.getAttribute("data-filter") || "all";
+                document.querySelectorAll("#catalogFilters .filter-pill").forEach(function (el) {
+                    el.classList.toggle("is-active", el === pill);
+                });
+                renderCatalogGrid();
+            });
+
+            document.addEventListener("keydown", function (e) {
+                if (e.key === "Escape" && activePlantingId) {
+                    window.PsyGardenBridge.setPlantingMode("");
+                }
+            });
+
+            // Godot -> Web Inspector & Planting UI updates
+            window.PsyGardenBridge.on("planting_mode_changed", function (payload) {
+                activePlantingId = (payload && payload.plant_id) || "";
+                if (activePlantingId) {
+                    var rec = manifestById.get(activePlantingId);
+                    var zh = (rec && rec.display_name) || activePlantingId;
+                    plantingBannerText.textContent = "🌱 手植【" + zh + "】：在庭院空白处点击落子（绿圈可种 / 红圈避让）";
+                    plantingBanner.hidden = false;
+                } else {
+                    plantingBanner.hidden = true;
+                }
+                renderCatalogGrid();
+            });
+
+            window.PsyGardenBridge.on("hand_plant_result", function (payload) {
+                if (payload && !payload.ok && payload.reason === "collision") {
+                    plantingBannerText.textContent = "⚠️ 该位置与已有植物占地椭圆或香炉太近，请换个空地试试";
+                }
+            });
+
+            function showPlantInspector(payload) {
+                if (!payload || !payload.plant_id) return;
+                ensureCatalogData();
+                var rec = manifestById.get(payload.plant_id) || {};
+                var ai = rec.ai_analysis || {};
+                var zh = payload.display_name || rec.display_name || payload.plant_id;
+                var sci = payload.scientific_name || ai.scientific_name || payload.plant_id;
+                var ptype = payload.plant_type || ai.plant_type || "";
+                var habit = payload.growth_habit || ai.growth_habit || "";
+                var botArr = payload.botanical_height_m || ai.botanical_height_m;
+                var brief = payload.brief || ai.brief || "";
+
+                document.getElementById("inspectorTitle").textContent = "🌱 " + zh;
+                document.getElementById("inspectorSci").textContent = sci;
+
+                var tagsHtml = "";
+                if (payload.is_video36 || video36Map.has(payload.plant_id)) {
+                    tagsHtml += '<span class="inspector-pill is-360">✨ 360° 36F 立体转盘</span>';
+                }
+                if (ptype) {
+                    tagsHtml += '<span class="inspector-pill">' + (TYPE_LABELS[ptype] || ptype) + "</span>";
+                }
+                if (habit) {
+                    tagsHtml += '<span class="inspector-pill">' + (HABIT_LABELS[habit] || habit) + "</span>";
+                }
+                document.getElementById("inspectorTags").innerHTML = tagsHtml;
+
+                document.getElementById("inspectorBotH").textContent =
+                    (Array.isArray(botArr) && botArr.length >= 2) ? (botArr[0] + "–" + botArr[1] + " m") : "--";
+                document.getElementById("inspectorGameH").textContent =
+                    payload.visual_height ? (Math.round(payload.visual_height) + " px") : "--";
+                document.getElementById("inspectorFootprint").textContent =
+                    (payload.fp_w && payload.fp_h) ? (Math.round(payload.fp_w) + "×" + Math.round(payload.fp_h) + " px") : "--";
+                document.getElementById("inspectorBrief").textContent = brief || "点击植物可切换视角并查看 2.5D 光影层次。";
+
+                var goldenEl = document.getElementById("inspectorGolden");
+                if (payload.golden_sentence) {
+                    goldenEl.textContent = "「" + payload.golden_sentence + "」";
+                    goldenEl.hidden = false;
+                } else {
+                    goldenEl.hidden = true;
+                }
+                openPanel(plantInspector);
+            }
+
+            window.PsyGardenBridge.on("plant_selected", showPlantInspector);
+            window.PsyGardenBridge.on("plant_long_press", showPlantInspector);
+            window.PsyGardenBridge.on("selection_cleared", function () {
+                closeTopLayerPopover(plantInspector);
+            });
+
+            ensureCatalogData();
         })();
     </script>
 </body>

@@ -1195,17 +1195,21 @@ def run_video_stage(args: argparse.Namespace, prep_meta: dict, run_dir: Path) ->
     return summary
 
 
-def rebuild_video36_index() -> Path:
+def rebuild_video36_index(lab_root: Path | None = None, manifest_path: Path | None = None) -> Path:
+    resolved_lab_root = lab_root or LAB_ROOT
+    resolved_manifest_path = manifest_path or MANIFEST_PATH
     manifest_by_id = {}
-    if MANIFEST_PATH.exists():
-        m_data = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
+    if resolved_manifest_path.exists():
+        m_data = json.loads(resolved_manifest_path.read_text(encoding="utf-8"))
         manifest_by_id = {p.get("name"): p for p in m_data.get("plants", []) if p.get("name")}
 
     species = []
-    for meta_file in sorted(LAB_ROOT.glob("plant_*_video36/metadata.json")):
+    for meta_file in sorted(resolved_lab_root.glob("plant_*_video36/metadata.json")):
         if "_opt" in meta_file.parent.name:
             continue
         meta = json.loads(meta_file.read_text(encoding="utf-8"))
+        if meta.get("published") is False:
+            continue
         pid = str(meta.get("plant_id") or meta_file.parent.name.replace("_video36", ""))
         rec = manifest_by_id.get(pid, {})
         ai = rec.get("ai_analysis") or {}
@@ -1230,7 +1234,8 @@ def rebuild_video36_index() -> Path:
             }
         )
 
-    out_path = LAB_ROOT / "video36_index.json"
+    resolved_lab_root.mkdir(parents=True, exist_ok=True)
+    out_path = resolved_lab_root / "video36_index.json"
     payload = {"updated_at": int(time.time()), "species": species}
     out_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"Updated {out_path} with {len(species)} species: {[s['plant_id'] for s in species]}")
